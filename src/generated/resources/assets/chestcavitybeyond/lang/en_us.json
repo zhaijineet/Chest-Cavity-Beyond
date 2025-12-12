@@ -1,0 +1,17 @@
+{
+  "attribute.chestcavitybeyond.breath_capacity": "Breath Capacity",
+  "attribute.chestcavitybeyond.breath_recovery": "Breath Recovery",
+  "attribute.chestcavitybeyond.defense": "Defense",
+  "attribute.chestcavitybeyond.detoxification": "Detoxification",
+  "attribute.chestcavitybeyond.digestion": "Digestion",
+  "attribute.chestcavitybeyond.endurance": "Endurance",
+  "attribute.chestcavitybeyond.filtration": "Filtration",
+  "attribute.chestcavitybeyond.health": "Health",
+  "attribute.chestcavitybeyond.metabolism": "Metabolism",
+  "attribute.chestcavitybeyond.nerves": "Nerves",
+  "attribute.chestcavitybeyond.nutrition": "Nutrition",
+  "attribute.chestcavitybeyond.water_breath": "Water Breath",
+  "item.chestcavitybeyond.chest_opener": "Chest Opener",
+  "item.chestcavitybeyond.heart": "Heart",
+  "itemGroup.chestcavitybeyond": "Chest Cavity Beyond"
+}

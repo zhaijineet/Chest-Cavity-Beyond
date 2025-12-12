@@ -1,0 +1,17 @@
+{
+  "attribute.chestcavitybeyond.breath_capacity": "肺活量",
+  "attribute.chestcavitybeyond.breath_recovery": "呼吸效率",
+  "attribute.chestcavitybeyond.defense": "防御",
+  "attribute.chestcavitybeyond.detoxification": "解毒效率",
+  "attribute.chestcavitybeyond.digestion": "消化效率",
+  "attribute.chestcavitybeyond.endurance": "耐力",
+  "attribute.chestcavitybeyond.filtration": "血液过滤效率",
+  "attribute.chestcavitybeyond.health": "健康",
+  "attribute.chestcavitybeyond.metabolism": "新陈代谢效率",
+  "attribute.chestcavitybeyond.nerves": "神经效率",
+  "attribute.chestcavitybeyond.nutrition": "营养获取效率",
+  "attribute.chestcavitybeyond.water_breath": "水下呼吸",
+  "item.chestcavitybeyond.chest_opener": "开胸器",
+  "item.chestcavitybeyond.heart": "心脏",
+  "itemGroup.chestcavitybeyond": "胸腔"
+}

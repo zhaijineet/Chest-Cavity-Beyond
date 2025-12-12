@@ -1,0 +1,48 @@
+package net.zhaiji.chestcavitybeyond.register;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
+
+public class InitAttribute {
+    public static final DeferredRegister<Attribute> ATTRIBUTE = DeferredRegister.create(BuiltInRegistries.ATTRIBUTE, ChestCavityBeyond.MOD_ID);
+    // 健康
+    public static final Holder<Attribute> HEALTH = registerRangedAttribute("health");
+    // 神经效率
+    public static final Holder<Attribute> NERVES = registerRangedAttribute("nerves");
+    // 防御
+    public static final Holder<Attribute> DEFENSE = registerRangedAttribute("defense");
+    // 消化效率
+    public static final Holder<Attribute> DIGESTION = registerRangedAttribute("digestion");
+    // 营养获取效率
+    public static final Holder<Attribute> NUTRITION = registerRangedAttribute("nutrition");
+    // 耐力
+    public static final Holder<Attribute> ENDURANCE = registerRangedAttribute("endurance");
+    // 新陈代谢效率
+    public static final Holder<Attribute> METABOLISM = registerRangedAttribute("metabolism");
+    // 肺活量
+    public static final Holder<Attribute> BREATH_CAPACITY = registerRangedAttribute("breath_capacity");
+    // 呼吸效率
+    public static final Holder<Attribute> BREATH_RECOVERY = registerRangedAttribute("breath_recovery");
+    // 水下呼吸
+    public static final Holder<Attribute> WATER_BREATH = registerRangedAttribute("water_breath");
+    // 解毒效率
+    public static final Holder<Attribute> DETOXIFICATION = registerRangedAttribute("detoxification");
+    // 血液过滤效率
+    public static final Holder<Attribute> FILTRATION = registerRangedAttribute("filtration");
+
+    public static Holder<Attribute> registerRangedAttribute(String name) {
+        return ATTRIBUTE.register(
+                name,
+                () -> new RangedAttribute(
+                        "attribute." + "chestcavitybeyond." + name,
+                        0,
+                        Integer.MIN_VALUE,
+                        Integer.MAX_VALUE
+                ).setSyncable(true)
+        );
+    }
+}
