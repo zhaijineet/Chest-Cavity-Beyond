@@ -22,6 +22,11 @@ public abstract class FoodDataMixin implements IFoodData {
     private int foodLevel;
     @Unique
     private ChestCavityData data;
+    /**
+     * 剩余新陈代谢缓存
+     */
+    @Unique
+    private double metabolismRemainder;
 
     @Unique
     @Override
@@ -72,16 +77,15 @@ public abstract class FoodDataMixin implements IFoodData {
     )
     public void chestCavityBeyond$tick(Player player, CallbackInfo ci) {
         double metabolism = data.getDifferenceValue(InitAttribute.METABOLISM);
-        // 我不理解，为什么回血有时候会突破检测下限，
         if (metabolism != 0 && (foodLevel >= 18 || foodLevel <= 0)) {
             double addTimer = MathUtil.getDirectScale(metabolism);
             if (metabolism > 0) {
-                data.metabolismRemainder += addTimer;
+                metabolismRemainder += addTimer;
             } else {
-                data.metabolismRemainder -= 1 - addTimer;
+                metabolismRemainder -= 1 - addTimer;
             }
-            tickTimer += (int) data.metabolismRemainder;
-            data.metabolismRemainder %= 1;
+            tickTimer += (int) metabolismRemainder;
+            metabolismRemainder %= 1;
         }
     }
 

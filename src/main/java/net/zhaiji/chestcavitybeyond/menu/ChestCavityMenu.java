@@ -62,7 +62,7 @@ public class ChestCavityMenu extends AbstractContainerMenu {
             }
             // 因为moveItemStackTo使用shrink减少物品数量，所以当选择的是胸腔槽位时，需要额外更新属性
             if (index < 27 && container instanceof ChestCavityData data) {
-                OrganAttributeUtil.updateOrganAttributeModifier(data.getOwner(), itemstack, itemstack1);
+                OrganAttributeUtil.updateOrganAttributeModifier(data, data.getOwner(), index, itemstack, itemstack1);
             }
         }
         return itemstack;

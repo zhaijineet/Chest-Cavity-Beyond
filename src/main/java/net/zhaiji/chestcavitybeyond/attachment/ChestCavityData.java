@@ -26,11 +26,6 @@ public class ChestCavityData extends ItemStackHandler {
     public double oxygenRemainder;
 
     /**
-     * 剩余新陈代谢缓存
-     */
-    public double metabolismRemainder;
-
-    /**
      * 由于player的特殊性，每次进入游戏都会触发初始化，所以需要加个初始化标记
      */
     private boolean init = false;
@@ -82,7 +77,7 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public void resetAttributeModifier() {
         for (int i = 0; i < getSlots(); i++) {
-            OrganAttributeUtil.updateOrganAttributeModifier(owner, ItemStack.EMPTY, getStackInSlot(i));
+            OrganAttributeUtil.updateOrganAttributeModifier(this, owner, i, ItemStack.EMPTY, getStackInSlot(i));
         }
     }
 
@@ -185,7 +180,7 @@ public class ChestCavityData extends ItemStackHandler {
     public void setStackInSlot(int slot, ItemStack stack) {
         ItemStack oldStack = getStackInSlot(slot).copy();
         super.setStackInSlot(slot, stack);
-        OrganAttributeUtil.updateOrganAttributeModifier(owner, oldStack, stack);
+        OrganAttributeUtil.updateOrganAttributeModifier(this, owner, slot, oldStack, stack);
         ChestCavityUtil.organRemoved(this, owner, slot, oldStack);
         ChestCavityUtil.organAdded(this, owner, slot, stack);
     }
@@ -195,7 +190,7 @@ public class ChestCavityData extends ItemStackHandler {
         ItemStack removeStack = super.extractItem(slot, amount, simulate);
         if (!simulate) {
             ItemStack addStack = getStackInSlot(slot);
-            OrganAttributeUtil.updateOrganAttributeModifier(owner, removeStack, addStack);
+            OrganAttributeUtil.updateOrganAttributeModifier(this, owner, slot, removeStack, addStack);
             ChestCavityUtil.organRemoved(this, owner, slot, removeStack);
             ChestCavityUtil.organAdded(this, owner, slot, addStack);
         }

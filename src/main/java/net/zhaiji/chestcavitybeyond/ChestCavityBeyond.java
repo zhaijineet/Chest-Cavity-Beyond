@@ -24,6 +24,12 @@ public class ChestCavityBeyond {
         CommonEventManager.init(modEventBus, NeoForge.EVENT_BUS);
     }
 
+    /**
+     * 获取模组标识符
+     *
+     * @param name 名字
+     * @return 标识符
+     */
     public static ResourceLocation of(String name) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }

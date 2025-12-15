@@ -23,8 +23,8 @@ public class InitItem {
     public static final Supplier<Item> HEART = ITEM.register(
             "heart",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -33,10 +33,10 @@ public class InitItem {
     public static final Supplier<Item> LUNG = ITEM.register(
             "lung",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(1));
-                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(1));
-                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -45,9 +45,9 @@ public class InitItem {
     public static final Supplier<Item> SPINE = ITEM.register(
             "spine",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(1));
-                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(0.5));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
                     .build()
     );
@@ -56,8 +56,8 @@ public class InitItem {
     public static final Supplier<Item> STOMACH = ITEM.register(
             "stomach",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -66,8 +66,8 @@ public class InitItem {
     public static final Supplier<Item> INTESTINE = ITEM.register(
             "intestine",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -76,8 +76,8 @@ public class InitItem {
     public static final Supplier<Item> KIDNEY = ITEM.register(
             "kidney",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -86,8 +86,8 @@ public class InitItem {
     public static final Supplier<Item> SPLEEN = ITEM.register(
             "spleen",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -96,8 +96,8 @@ public class InitItem {
     public static final Supplier<Item> LIVER = ITEM.register(
             "liver",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -106,8 +106,8 @@ public class InitItem {
     public static final Supplier<Item> APPENDIX = ITEM.register(
             "appendix",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -116,8 +116,8 @@ public class InitItem {
     public static final Supplier<Item> RIB = ITEM.register(
             "rib",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -126,9 +126,9 @@ public class InitItem {
     public static final Supplier<Item> MUSCLE = ITEM.register(
             "muscle",
             () -> OrganFactory.builder()
-                    .modifiers(modifiers -> {
-                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(1));
-                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(1));
+                    .organModifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );

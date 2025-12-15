@@ -17,6 +17,7 @@ import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -52,13 +53,26 @@ public class ChestCavityUtil {
     }
 
     /**
+     * 创建胸腔槽位上下文
+     *
+     * @param data   胸腔数据 (可能为null)
+     * @param entity 胸腔主人 (可能为null)
+     * @param index  位置索引
+     * @param stack  对应物品
+     * @return 胸腔槽位上下文
+     */
+    public static ChestCavitySlotContext createContext(@Nullable ChestCavityData data, @Nullable LivingEntity entity, int index, ItemStack stack) {
+        return new ChestCavitySlotContext(data, entity, getSlotId(index), index, stack);
+    }
+
+    /**
      * 获取器官提供的属性
      *
-     * @param stack 器官
+     * @param context 胸腔槽位上下文
      * @return 器官提供的属性
      */
-    public static Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ItemStack stack) {
-        return getOrganCap(stack).getAttributeModifiers();
+    public static Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ChestCavitySlotContext context) {
+        return getOrganCap(context.stack()).getAttributeModifiers(context);
     }
 
     /**
@@ -66,7 +80,7 @@ public class ChestCavityUtil {
      */
     public static void organTick(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        getOrganCap(stack).tick(new ChestCavitySlotContext(data, entity, getSlotId(index), index, stack));
+        getOrganCap(stack).tick(createContext(data, entity, index, stack));
     }
 
     /**
@@ -74,7 +88,7 @@ public class ChestCavityUtil {
      */
     public static void organAdded(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        getOrganCap(stack).organAdded(new ChestCavitySlotContext(data, entity, getSlotId(index), index, stack));
+        getOrganCap(stack).organAdded(createContext(data, entity, index, stack));
     }
 
     /**
@@ -82,7 +96,7 @@ public class ChestCavityUtil {
      */
     public static void organRemoved(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        getOrganCap(stack).organRemoved(new ChestCavitySlotContext(data, entity, getSlotId(index), index, stack));
+        getOrganCap(stack).organRemoved(createContext(data, entity, index, stack));
     }
 
     /**

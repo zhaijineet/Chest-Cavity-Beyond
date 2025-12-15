@@ -14,9 +14,10 @@ public interface IOrgan {
     /**
      * 获取器官提供的属性
      *
+     * @param context 胸腔槽位上下文
      * @return 器官提供的属性
      */
-    default Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers() {
+    default Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ChestCavitySlotContext context) {
         return HashMultimap.create();
     }
 

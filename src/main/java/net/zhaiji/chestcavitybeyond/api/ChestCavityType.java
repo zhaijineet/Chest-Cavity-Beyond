@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
@@ -131,8 +132,12 @@ public class ChestCavityType {
         // 由于同种器官返回的修饰符相同，所以此处使用ArrayListMultimap
         Multimap<Holder<Attribute>, AttributeModifier> modifierMultimap = ArrayListMultimap.create();
         Map<Holder<Attribute>, Double> defaultMap = new HashMap<>();
-        for (Item item : organs) {
-            modifierMultimap.putAll(ChestCavityUtil.getOrganCap(item.getDefaultInstance()).getAttributeModifiers());
+        for (int i = 0; i < organs.size(); i++) {
+            ItemStack organ = organs.get(i).getDefaultInstance();
+            modifierMultimap.putAll(
+                    ChestCavityUtil.getOrganCap(organ)
+                            .getAttributeModifiers(new ChestCavitySlotContext(null, null, ChestCavityUtil.getSlotId(i), i, organ))
+            );
         }
         for (Holder<Attribute> attribute : modifierMultimap.keySet()) {
             double value = calculateValue(entityType, attribute, modifierMultimap.get(attribute));
