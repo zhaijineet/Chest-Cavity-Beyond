@@ -48,7 +48,6 @@ public class ChestCavityData extends ItemStackHandler {
         super(count);
         if (attachmentHolder instanceof LivingEntity entity) {
             this.owner = entity;
-            // TODO 解决type为null的问题
             type = ChestCavityManager.getType(entity);
             // TODO 将周期写入配置
             filtrationPeriod = 60;
@@ -61,8 +60,6 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public void init() {
         if (init) return;
-        // TODO 解决type为null的问题
-        if (type == null) return;
         NonNullList<Item> organs = type.getOrgans();
         for (int i = 0; i < getSlots(); i++) {
             setStackInSlot(i, organs.get(i).getDefaultInstance());
@@ -83,8 +80,9 @@ public class ChestCavityData extends ItemStackHandler {
      * 器官tick
      */
     public void tick() {
-        applyFiltration();
         applyHealth();
+        applyFiltration();
+        applyHydrophobia();
         for (int i = 0; i < stacks.size(); i++) {
             ItemStack stack = stacks.get(i);
             ChestCavityUtil.organTick(this, owner, i, stack);
@@ -98,7 +96,7 @@ public class ChestCavityData extends ItemStackHandler {
         double health = getCurrentValue(InitAttribute.HEALTH);
         if (health <= 0) {
             // TODO 还没把器官属性缺失伤害类型注册
-            // 这里是测试
+            // 这里用凋零类型测试
             owner.hurt(owner.damageSources().wither(), 1);
         }
     }
@@ -125,6 +123,13 @@ public class ChestCavityData extends ItemStackHandler {
         if (filtration < 0 && owner.tickCount % filtrationPeriod == filtrationTickOffset && !(owner instanceof Player player && player.getAbilities().invulnerable)) {
             owner.addEffect(new MobEffectInstance(MobEffects.POISON, (int) (30 * MathUtil.getInverseScale(filtration))));
         }
+    }
+
+    /**
+     * 应用恐水效果
+     */
+    private void applyHydrophobia() {
+        //TODO
     }
 
     /**
@@ -162,8 +167,6 @@ public class ChestCavityData extends ItemStackHandler {
      * @return 默认属性值
      */
     public double getDefaultValue(Holder<Attribute> attribute) {
-        // TODO 解决type为null的问题
-        if (type == null) return 0;
         return type.getDefaultAttributes(owner.getType()).getOrDefault(attribute, 0D);
     }
 

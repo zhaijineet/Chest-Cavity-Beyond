@@ -21,6 +21,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitCreativeModeTab.CHEST_CAVITY_BEYOND_TAB_TRANSLATABLE, "Chest Cavity Beyond");
 
         add(InitItem.CHEST_OPENER.get(), "Chest Opener");
+
         add(InitItem.HEART.get(), "Heart");
         add(InitItem.SPINE.get(), "Spine");
         add(InitItem.LUNG.get(), "Lung");
@@ -64,6 +65,22 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitItem.FISH_MUSCLE.get(), "Fish Muscle");
         add(InitItem.SMALL_FISH_MUSCLE.get(), "Small Fish Muscle");
 
+        add(InitItem.SALTWATER_HEART.get(), "Saltwater Heart");
+        add(InitItem.SALTWATER_LUNG.get(), "Saltwater Lung");
+        add(InitItem.SALTWATER_MUSCLE.get(), "Saltwater Muscle");
+
+        add(InitItem.FIREPROOF_HEART.get(), "Fireproof Heart");
+        add(InitItem.FIREPROOF_LUNG.get(), "Fireproof Lung");
+        add(InitItem.FIREPROOF_SPINE.get(), "Fireproof Spine");
+        add(InitItem.FIREPROOF_STOMACH.get(), "Fireproof Stomach");
+        add(InitItem.FIREPROOF_INTESTINE.get(), "Fireproof Intestine");
+        add(InitItem.FIREPROOF_KIDNEY.get(), "Fireproof Kidney");
+        add(InitItem.FIREPROOF_SPLEEN.get(), "Fireproof Spleen");
+        add(InitItem.FIREPROOF_LIVER.get(), "Fireproof Liver");
+        add(InitItem.FIREPROOF_APPENDIX.get(), "Fireproof Appendix");
+        add(InitItem.FIREPROOF_RIB.get(), "Fireproof Rib");
+        add(InitItem.FIREPROOF_MUSCLE.get(), "Fireproof Muscle");
+
         add(InitAttribute.HEALTH.value().getDescriptionId(), "Health");
         add(InitAttribute.NERVES.value().getDescriptionId(), "Nerves");
         add(InitAttribute.DEFENSE.value().getDescriptionId(), "Defense");
@@ -78,12 +95,18 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitAttribute.FILTRATION.value().getDescriptionId(), "Filtration");
         add(InitAttribute.STRENGTH.value().getDescriptionId(), "Strength");
         add(InitAttribute.SPEED.value().getDescriptionId(), "Speed");
+        add(InitAttribute.FIRE_RESISTANCE.value().getDescriptionId(), "Fire Resistance");
+        add(InitAttribute.WATER_ALLERGY.value().getDescriptionId(), "Water Allergy");
+        add(InitAttribute.HYDROPHOBIA.value().getDescriptionId(), "Hydrophobia");
+        add(InitAttribute.PROJECTILE_DODGE.value().getDescriptionId(), "Projectile Dodge");
+        add(InitAttribute.LEAPING.value().getDescriptionId(), "Leaping");
     }
 
     public void Chinese() {
         add(InitCreativeModeTab.CHEST_CAVITY_BEYOND_TAB_TRANSLATABLE, "胸腔");
 
         add(InitItem.CHEST_OPENER.get(), "开胸器");
+
         add(InitItem.HEART.get(), "心脏");
         add(InitItem.SPINE.get(), "脊柱");
         add(InitItem.LUNG.get(), "肺脏");
@@ -126,6 +149,21 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitItem.SMALL_AQUATIC_MUSCLE.get(), "小型水生生物肌肉");
         add(InitItem.FISH_MUSCLE.get(), "鱼类肌肉");
         add(InitItem.SMALL_FISH_MUSCLE.get(), "小型鱼类肌肉");
+        add(InitItem.SALTWATER_HEART.get(), "盐水型心脏");
+        add(InitItem.SALTWATER_LUNG.get(), "盐水型肺脏");
+        add(InitItem.SALTWATER_MUSCLE.get(), "盐水型肌肉");
+
+        add(InitItem.FIREPROOF_HEART.get(), "抗火生物心脏");
+        add(InitItem.FIREPROOF_LUNG.get(), "抗火生物肺脏");
+        add(InitItem.FIREPROOF_SPINE.get(), "抗火生物脊柱");
+        add(InitItem.FIREPROOF_STOMACH.get(), "抗火生物胃");
+        add(InitItem.FIREPROOF_INTESTINE.get(), "抗火生物肠子");
+        add(InitItem.FIREPROOF_KIDNEY.get(), "抗火生物肾脏");
+        add(InitItem.FIREPROOF_SPLEEN.get(), "抗火生物脾脏");
+        add(InitItem.FIREPROOF_LIVER.get(), "抗火生物肝脏");
+        add(InitItem.FIREPROOF_APPENDIX.get(), "抗火生物阑尾");
+        add(InitItem.FIREPROOF_RIB.get(), "抗火生物肋骨");
+        add(InitItem.FIREPROOF_MUSCLE.get(), "抗火生物肌肉");
 
         add(InitAttribute.HEALTH.value().getDescriptionId(), "健康");
         add(InitAttribute.NERVES.value().getDescriptionId(), "神经效率");
@@ -141,6 +179,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitAttribute.FILTRATION.value().getDescriptionId(), "血液过滤效率");
         add(InitAttribute.STRENGTH.value().getDescriptionId(), "力量");
         add(InitAttribute.SPEED.value().getDescriptionId(), "速度");
+        add(InitAttribute.FIRE_RESISTANCE.value().getDescriptionId(), "火焰抗性");
+        add(InitAttribute.WATER_ALLERGY.value().getDescriptionId(), "水过敏");
+        add(InitAttribute.HYDROPHOBIA.value().getDescriptionId(), "恐水");
+        add(InitAttribute.PROJECTILE_DODGE.value().getDescriptionId(), "弹射物闪避");
+        add(InitAttribute.LEAPING.value().getDescriptionId(), "跳跃力");
     }
 
     @Override

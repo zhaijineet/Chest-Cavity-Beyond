@@ -177,6 +177,16 @@ public class OrganAttributeUtil {
     }
 
     /**
+     * 检测目标是否水过敏
+     *
+     * @param entity 目标实体
+     * @return 是否水过敏
+     */
+    public static boolean isWaterAllergy(LivingEntity entity) {
+        return ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.WATER_ALLERGY) > 0;
+    }
+
+    /**
      * 更新健康附带的属性（最大生命值）
      *
      * @param data   胸腔数据

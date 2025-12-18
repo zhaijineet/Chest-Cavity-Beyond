@@ -393,7 +393,7 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
-                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.1));
+                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createMultipliedBaseModifier(id, 0.1));
                     })
                     .build()
     );
@@ -405,7 +405,7 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.25));
-                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.05));
+                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createMultipliedBaseModifier(id, 0.05));
                     })
                     .build()
     );
@@ -417,7 +417,7 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.25));
-                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.075));
+                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createMultipliedBaseModifier(id, 0.075));
                     })
                     .build()
     );
@@ -429,7 +429,171 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.25));
-                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.025));
+                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createMultipliedBaseModifier(id, 0.025));
+                    })
+                    .build()
+    );
+
+    // 盐水型心脏
+    public static final Supplier<Item> SALTWATER_HEART = ITEM.register(
+            "saltwater_heart",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, -1));
+                    })
+                    .build()
+    );
+
+    // 盐水型肺脏
+    public static final Supplier<Item> SALTWATER_LUNG = ITEM.register(
+            "saltwater_lung",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, -1));
+                    })
+                    .build()
+    );
+
+    // 盐水型肌肉
+    public static final Supplier<Item> SALTWATER_MUSCLE = ITEM.register(
+            "saltwater_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createMultipliedBaseModifier(id, 0.05));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, -0.5));
+                    })
+                    .build()
+    );
+
+    // 抗火生物心脏
+    public static final Supplier<Item> FIREPROOF_HEART = ITEM.register(
+            "fireproof_heart",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物肺脏
+    public static final Supplier<Item> FIREPROOF_LUNG = ITEM.register(
+            "fireproof_lung",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物脊柱
+    public static final Supplier<Item> FIREPROOF_SPINE = ITEM.register(
+            "fireproof_spine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.375));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物胃
+    public static final Supplier<Item> FIREPROOF_STOMACH = ITEM.register(
+            "fireproof_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物肠子
+    public static final Supplier<Item> FIREPROOF_INTESTINE = ITEM.register(
+            "fireproof_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物肾脏
+    public static final Supplier<Item> FIREPROOF_KIDNEY = ITEM.register(
+            "fireproof_kidney",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物脾脏
+    public static final Supplier<Item> FIREPROOF_SPLEEN = ITEM.register(
+            "fireproof_spleen",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物肝脏
+    public static final Supplier<Item> FIREPROOF_LIVER = ITEM.register(
+            "fireproof_liver",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物阑尾
+    public static final Supplier<Item> FIREPROOF_APPENDIX = ITEM.register(
+            "fireproof_appendix",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物肋骨
+    public static final Supplier<Item> FIREPROOF_RIB = ITEM.register(
+            "fireproof_rib",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 抗火生物肌肉
+    public static final Supplier<Item> FIREPROOF_MUSCLE = ITEM.register(
+            "fireproof_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );

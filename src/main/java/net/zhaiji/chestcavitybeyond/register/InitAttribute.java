@@ -37,6 +37,17 @@ public class InitAttribute {
     public static final Holder<Attribute> STRENGTH = registerRangedAttribute("strength");
     // 速度
     public static final Holder<Attribute> SPEED = registerRangedAttribute("speed");
+    // 火焰抗性
+    public static final Holder<Attribute> FIRE_RESISTANCE = registerRangedAttribute("fire_resistance");
+    // 水过敏
+    // TODO 水过敏伤害没有应用函数计算进行增减，后续考虑进行计算
+    public static final Holder<Attribute> WATER_ALLERGY = registerRangedAttribute("water_allergy");
+    // 恐水
+    public static final Holder<Attribute> HYDROPHOBIA = registerRangedAttribute("hydrophobia");
+    // 弹射物闪避
+    public static final Holder<Attribute> PROJECTILE_DODGE = registerRangedAttribute("projectile_dodge");
+    // 跳跃力
+    public static final Holder<Attribute> LEAPING = registerRangedAttribute("leaping");
 
     public static Holder<Attribute> registerRangedAttribute(String name) {
         return ATTRIBUTE.register(

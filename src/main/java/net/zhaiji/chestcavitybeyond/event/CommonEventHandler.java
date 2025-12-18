@@ -1,5 +1,7 @@
 package net.zhaiji.chestcavitybeyond.event;
 
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -96,9 +98,22 @@ public class CommonEventHandler {
      */
     public static void handlerLivingDamageEvent$Pre(LivingDamageEvent.Pre event) {
         ChestCavityData data = ChestCavityUtil.getData(event.getEntity());
-        double defense = data.getDifferenceValue(InitAttribute.DEFENSE);
         double damage = event.getOriginalDamage();
-        damage *= MathUtil.getAttenuationScale(damage, defense);
+        DamageSource source = event.getSource();
+        boolean flag = false;
+        // 应用火焰伤害修改
+        if (source.is(DamageTypeTags.IS_FIRE)) {
+            double fireResistance = data.getDifferenceValue(InitAttribute.FIRE_RESISTANCE);
+            damage *= MathUtil.getAttenuationScale(damage, fireResistance);
+            flag = true;
+        }
+
+        // 当以上伤害类型都未检测通过时，应用防御减伤
+        // 这样对吗？应该不太对，之后在重新理清楚逻辑
+        if (!flag) {
+            double defense = data.getDifferenceValue(InitAttribute.DEFENSE);
+            damage *= MathUtil.getAttenuationScale(damage, defense);
+        }
         // TODO 未检测伤害类型
         event.setNewDamage((float) damage);
     }
@@ -124,7 +139,7 @@ public class CommonEventHandler {
      * @param event 实体tick之后事件
      */
     public static void handlerEntityTickEvent$Post(EntityTickEvent.Post event) {
-        if (event.getEntity() instanceof LivingEntity entity) {
+        if (event.getEntity() instanceof LivingEntity entity && !entity.level().isClientSide()) {
             ChestCavityUtil.getData(entity).tick();
         }
     }

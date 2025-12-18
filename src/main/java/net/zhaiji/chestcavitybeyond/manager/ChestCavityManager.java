@@ -115,7 +115,7 @@ public class ChestCavityManager {
         ChestCavityType type = ENTITY_CHEST_CAVITY_TYPE_MAP.get(entity.getType());
         if (type == null) {
             EntityType<?> entityType = entity.getType();
-            // 找不到实体类型所属的胸腔类型，就注册一套新的人类器官给他
+            // 找不到实体类型所属的胸腔类型，就注册一套新的人类器官给它
             registerEntity(entityType, HUMAN);
             return HUMAN;
         }

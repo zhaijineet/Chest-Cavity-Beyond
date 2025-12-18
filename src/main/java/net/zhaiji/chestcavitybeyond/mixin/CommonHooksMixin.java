@@ -62,8 +62,8 @@ public abstract class CommonHooksMixin {
             }
             if (factor != 0) {
                 refill *= 1 + factor / 2;
-                // 如果因子为负数，则代表回复低下，增加额外惩罚
-                if (!isInvulnerable && factor < 0 && (entity.isSprinting() || entity.isSwimming())) {
+                // 如果因子为负数，则代表回复低下，在疾跑状态增加额外惩罚
+                if (!isInvulnerable && factor < 0 && entity.isSprinting()) {
                     refill -= 4;
                 }
                 // residueOxygen为小数缓存
@@ -90,12 +90,15 @@ public abstract class CommonHooksMixin {
             LivingDrownEvent drownEvent = new LivingDrownEvent(entity);
             if (!NeoForge.EVENT_BUS.post(drownEvent).isCanceled() && drownEvent.isDrowning()) {
                 entity.setAirSupply(0);
-                Vec3 vec3 = entity.getDeltaMovement();
-                for (int i = 0; i < drownEvent.getBubbleCount(); ++i) {
-                    double d2 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
-                    double d3 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
-                    double d4 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
-                    entity.level().addParticle(ParticleTypes.BUBBLE, entity.getX() + d2, entity.getY() + d3, entity.getZ() + d4, vec3.x, vec3.y, vec3.z);
+                // 只在水中才会出现粒子效果
+                if (!isAir) {
+                    Vec3 vec3 = entity.getDeltaMovement();
+                    for (int i = 0; i < drownEvent.getBubbleCount(); ++i) {
+                        double d2 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
+                        double d3 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
+                        double d4 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
+                        entity.level().addParticle(ParticleTypes.BUBBLE, entity.getX() + d2, entity.getY() + d3, entity.getZ() + d4, vec3.x, vec3.y, vec3.z);
+                    }
                 }
                 if (drownEvent.getDamageAmount() > 0) {
                     entity.hurt(entity.damageSources().drown(), drownEvent.getDamageAmount());

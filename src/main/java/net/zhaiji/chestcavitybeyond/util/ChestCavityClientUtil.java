@@ -28,17 +28,15 @@ public class ChestCavityClientUtil {
         if (attributeModifiers == null || attributeModifiers.isEmpty()) return;
         //暂时用着,之后再换
         attributeModifiers.forEach((attribute, modifier) -> {
-            AttributeModifier.Operation operation = modifier.operation();
-            String valueString = modifier.amount() + switch (modifier.operation()) {
-                case ADD_VALUE -> "点";
-                case ADD_MULTIPLIED_BASE -> "倍";
-                case ADD_MULTIPLIED_TOTAL -> "最终倍率";
+            String valueString = switch (modifier.operation()) {
+                case ADD_VALUE -> modifier.amount() + "点";
+                case ADD_MULTIPLIED_BASE -> modifier.amount() * 100 + "%倍率";
+                case ADD_MULTIPLIED_TOTAL -> modifier.amount() * 100 + "%最终倍率";
             };
             tooltipComponents.add(Component.literal("提供" + valueString + Component.translatable(attribute.value().getDescriptionId()).getString()));
         });
         if (isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) || isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT)) {
             // TODO
-
         } else {
             // TODO
         }
