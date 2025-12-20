@@ -98,6 +98,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitAttribute.FIRE_RESISTANCE.value().getDescriptionId(), "Fire Resistance");
         add(InitAttribute.WATER_ALLERGY.value().getDescriptionId(), "Water Allergy");
         add(InitAttribute.HYDROPHOBIA.value().getDescriptionId(), "Hydrophobia");
+        add(InitAttribute.ENDER.value().getDescriptionId(), "Ender");
         add(InitAttribute.PROJECTILE_DODGE.value().getDescriptionId(), "Projectile Dodge");
         add(InitAttribute.LEAPING.value().getDescriptionId(), "Leaping");
     }
@@ -182,6 +183,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(InitAttribute.FIRE_RESISTANCE.value().getDescriptionId(), "火焰抗性");
         add(InitAttribute.WATER_ALLERGY.value().getDescriptionId(), "水过敏");
         add(InitAttribute.HYDROPHOBIA.value().getDescriptionId(), "恐水");
+        add(InitAttribute.ENDER.value().getDescriptionId(), "末影");
         add(InitAttribute.PROJECTILE_DODGE.value().getDescriptionId(), "弹射物闪避");
         add(InitAttribute.LEAPING.value().getDescriptionId(), "跳跃力");
     }

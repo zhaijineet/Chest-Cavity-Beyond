@@ -22,6 +22,7 @@ import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MathUtil;
+import net.zhaiji.chestcavitybeyond.util.TeleportUtil;
 
 public class CommonEventHandler {
     /**
@@ -107,9 +108,21 @@ public class CommonEventHandler {
             damage *= MathUtil.getAttenuationScale(damage, fireResistance);
             flag = true;
         }
+        // 应用溺水伤害修改
+        if (source.is(DamageTypeTags.IS_DROWNING)) {
+            double ender = data.getCurrentValue(InitAttribute.ENDER);
+            if (ender > 0) {
+                // TODO 尝试循环次数写入配置
+                for (int i = 0; i < 16; i++) {
+                    if (TeleportUtil.randomTeleport(event.getEntity())) {
+                        break;
+                    }
+                }
+            }
+        }
 
         // 当以上伤害类型都未检测通过时，应用防御减伤
-        // 这样对吗？应该不太对，之后在重新理清楚逻辑
+        // TODO 这样对吗？应该不太对，之后在重新理清楚逻辑
         if (!flag) {
             double defense = data.getDifferenceValue(InitAttribute.DEFENSE);
             damage *= MathUtil.getAttenuationScale(damage, defense);

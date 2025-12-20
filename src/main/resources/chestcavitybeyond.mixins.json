@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "CommonHooksMixin",
+    "EnderManMixin",
     "FoodDataMixin",
     "LivingBreatheEventMixin",
     "LivingEntityMixin",
