@@ -134,6 +134,7 @@ public class OrganAttributeUtil {
         updateNerves(data, entity);
         updateStrength(data, entity);
         updateSpeed(data, entity);
+        updateLeaping(data, entity);
     }
 
     /**
@@ -188,9 +189,6 @@ public class OrganAttributeUtil {
 
     /**
      * 更新健康附带的属性（最大生命值）
-     *
-     * @param data   胸腔数据
-     * @param entity 目标实体
      */
     public static void updateHealth(ChestCavityData data, LivingEntity entity) {
         double health = data.getDifferenceValue(InitAttribute.HEALTH);
@@ -199,9 +197,6 @@ public class OrganAttributeUtil {
 
     /**
      * 更新神经效率附带的属性（移动速度，攻击速度）
-     *
-     * @param data   胸腔数据
-     * @param entity 目标实体
      */
     public static void updateNerves(ChestCavityData data, LivingEntity entity) {
         double nerves = data.getDifferenceValue(InitAttribute.NERVES);
@@ -218,25 +213,48 @@ public class OrganAttributeUtil {
 
     /**
      * 更新力量附带的属性（攻击力）
-     *
-     * @param data   胸腔数据
-     * @param entity 目标实体
      */
     public static void updateStrength(ChestCavityData data, LivingEntity entity) {
         double strength = data.getDifferenceValue(InitAttribute.STRENGTH);
-        double factor = strength != 0 ? MathUtil.getDirectScale(strength) : 0;
-        updateAttributeModifier(entity, Attributes.ATTACK_DAMAGE, createAddValueModifier("strength", strength >= 0 ? factor : -factor));
+        double factor = strength >= 0 ? MathUtil.getDirectScale(strength) : MathUtil.getLog10Scale(strength);
+        updateAttributeModifier(
+                entity,
+                Attributes.ATTACK_DAMAGE,
+                strength >= 0
+                        ? createAddValueModifier("strength", factor)
+                        : createMultipliedBaseModifier("strength", -factor)
+        );
     }
 
     /**
-     * 更新神经效率附带的属性（移动速度）
-     *
-     * @param data   胸腔数据
-     * @param entity 目标实体
+     * 更新速度附带的属性（移动速度）
      */
     public static void updateSpeed(ChestCavityData data, LivingEntity entity) {
         double speed = data.getDifferenceValue(InitAttribute.SPEED);
         double factor = MathUtil.getLog10Scale(speed) / 2;
         updateAttributeModifier(entity, Attributes.MOVEMENT_SPEED, createMultipliedBaseModifier("speed", speed >= 0 ? factor : -factor));
+    }
+
+    /**
+     * 更新跳跃附带的属性（跳跃力度，安全掉落距离）
+     */
+    public static void updateLeaping(ChestCavityData data, LivingEntity entity) {
+        double leaping = data.getDifferenceValue(InitAttribute.LEAPING);
+        double jumpStrengthFactor = MathUtil.getLog10Scale(leaping);
+        double safeFallDistanceFactor = MathUtil.getDirectScale(leaping);
+        updateAttributeModifier(
+                entity,
+                Attributes.JUMP_STRENGTH,
+                leaping >= 0
+                        ? createAddValueModifier("leaping", jumpStrengthFactor)
+                        : createMultipliedBaseModifier("leaping", -jumpStrengthFactor)
+        );
+        updateAttributeModifier(
+                entity,
+                Attributes.SAFE_FALL_DISTANCE,
+                leaping >= 0
+                        ? createMultipliedBaseModifier("leaping", safeFallDistanceFactor / 4)
+                        : createMultipliedBaseModifier("leaping", safeFallDistanceFactor - 1)
+        );
     }
 }

@@ -1,0 +1,6 @@
+// 1.21.1	2025-12-28T06:21:07.4701686	Tags for minecraft:damage_type mod id chestcavitybeyond
+06cb24876437a39ea517672cfca61a4e745fa490 data/minecraft/tags/damage_type/bypasses_armor.json
+06cb24876437a39ea517672cfca61a4e745fa490 data/minecraft/tags/damage_type/bypasses_resistance.json
+06cb24876437a39ea517672cfca61a4e745fa490 data/minecraft/tags/damage_type/bypasses_shield.json
+06cb24876437a39ea517672cfca61a4e745fa490 data/minecraft/tags/damage_type/bypasses_wolf_armor.json
+06cb24876437a39ea517672cfca61a4e745fa490 data/minecraft/tags/damage_type/no_knockback.json

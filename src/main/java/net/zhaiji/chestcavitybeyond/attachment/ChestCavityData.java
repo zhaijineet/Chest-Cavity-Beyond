@@ -17,6 +17,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityManager;
+import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
@@ -144,9 +145,7 @@ public class ChestCavityData extends ItemStackHandler {
     private void applyHealth() {
         double health = getCurrentValue(InitAttribute.HEALTH);
         if (health <= 0) {
-            // TODO 还没把器官属性缺失伤害类型注册
-            // 这里用凋零类型测试
-            owner.hurt(owner.damageSources().wither(), 1);
+            owner.hurt(DamageSourceManager.organLoss(owner.level()), 2);
         }
     }
 
@@ -219,6 +218,13 @@ public class ChestCavityData extends ItemStackHandler {
         ItemStack oldStack = getStackInSlot(slot);
         super.setStackInSlot(slot, stack);
         ChestCavityUtil.changeOrgan(this, owner, slot, oldStack, stack);
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        ItemStack removeStack = super.extractItem(slot, amount, simulate);
+        if (!simulate) ChestCavityUtil.changeOrgan(this, owner, slot, removeStack, getStackInSlot(slot));
+        return removeStack;
     }
 
     @Override

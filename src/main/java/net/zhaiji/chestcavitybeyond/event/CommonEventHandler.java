@@ -144,6 +144,7 @@ public class CommonEventHandler {
         if (source.is(DamageTypeTags.IS_DROWNING)) {
             double ender = data.getCurrentValue(InitAttribute.ENDER);
             if (ender > 0) OrganSkillUtil.randomTeleport(event.getEntity());
+            flag = true;
         }
 
         // 当以上伤害类型都未检测通过时，应用防御减伤

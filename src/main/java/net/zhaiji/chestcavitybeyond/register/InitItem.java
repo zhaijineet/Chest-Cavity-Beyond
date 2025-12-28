@@ -412,7 +412,7 @@ public class InitItem {
                     .build()
     );
 
-    // 水生生物肌肉
+    // 鱼类肌肉
     public static final Supplier<Item> FISH_MUSCLE = ITEM.register(
             "fish_muscle",
             () -> OrganFactory.builder()
@@ -424,7 +424,7 @@ public class InitItem {
                     .build()
     );
 
-    // 小型水生生物肌肉
+    // 小型鱼类肌肉
     public static final Supplier<Item> SMALL_FISH_MUSCLE = ITEM.register(
             "small_fish_muscle",
             () -> OrganFactory.builder()
@@ -726,6 +726,145 @@ public class InitItem {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 力量型肌肉
+    public static final Supplier<Item> BRUTE_MUSCLE = ITEM.register(
+            "brute_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                    })
+                    .build()
+    );
+
+    // 速度型肌肉
+    public static final Supplier<Item> SWIFT_MUSCLE = ITEM.register(
+            "swift_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                    })
+                    .build()
+    );
+
+
+    // 弹跳型肌肉
+    public static final Supplier<Item> LEAPING_MUSCLE = ITEM.register(
+            "leaping_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.LEAPING, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 食肉动物胃
+    public static final Supplier<Item> CARNIVORE_STOMACH = ITEM.register(
+            "carnivore_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                        modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 小型食肉动物胃
+    public static final Supplier<Item> SMALL_CARNIVORE_STOMACH = ITEM.register(
+            "small_carnivore_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 食肉动物肠子
+    public static final Supplier<Item> CARNIVORE_INTESTINE = ITEM.register(
+            "carnivore_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                        modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 小型食肉动物肠子
+    public static final Supplier<Item> SMALL_CARNIVORE_INTESTINE = ITEM.register(
+            "small_carnivore_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 食草动物胃
+    public static final Supplier<Item> HERBIVORE_STOMACH = ITEM.register(
+            "herbivore_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                    })
+                    .build()
+    );
+
+    // 小型食草动物胃
+    public static final Supplier<Item> SMALL_HERBIVORE_STOMACH = ITEM.register(
+            "small_herbivore_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                    })
+                    .build()
+    );
+
+    // 食草动物肠子
+    public static final Supplier<Item> HERBIVORE_INTESTINE = ITEM.register(
+            "herbivore_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                    })
+                    .build()
+    );
+
+    // 小型食草动物肠子
+    public static final Supplier<Item> SMALL_HERBIVORE_INTESTINE = ITEM.register(
+            "small_herbivore_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                    })
+                    .build()
+    );
+
+    // 食草动物瘤胃
+    public static final Supplier<Item> HERBIVORE_RUMEN = ITEM.register(
+            "herbivore_rumen",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, -0.5));
+                        modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.graze(player);
+                        }
                     })
                     .build()
     );

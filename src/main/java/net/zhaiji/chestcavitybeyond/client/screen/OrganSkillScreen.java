@@ -44,7 +44,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 public class OrganSkillScreen extends Screen {
-    // TODO 当前关于器官技能的检测太粗糙了，后续考虑更改
     public static int selectedSlot = -1;
     public static int selected = -1;
     private final List<Integer> indices = new ArrayList<>();

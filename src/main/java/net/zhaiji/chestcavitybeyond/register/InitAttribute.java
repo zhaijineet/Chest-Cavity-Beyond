@@ -45,7 +45,7 @@ public class InitAttribute {
     // 末影
     public static final Holder<Attribute> ENDER = registerRangedAttribute("ender");
     // 弹射物闪避
-    // 拥有末影属性才能触发
+    // 拥有末影属性才能触发?
     public static final Holder<Attribute> PROJECTILE_DODGE = registerRangedAttribute("projectile_dodge");
     // 跳跃力
     public static final Holder<Attribute> LEAPING = registerRangedAttribute("leaping");
