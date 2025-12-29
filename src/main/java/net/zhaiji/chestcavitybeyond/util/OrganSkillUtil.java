@@ -21,9 +21,9 @@ public class OrganSkillUtil {
     /**
      * 食草的基本食物属性
      */
-    public static final FoodProperties GRASS_FOOD = new FoodProperties.Builder()
-            .nutrition(2)
-            .saturationModifier(0.5F)
+    private static final FoodProperties GRASS_FOOD = new FoodProperties.Builder()
+            .nutrition(1)
+            .saturationModifier(0.2F)
             .build();
 
     /**
@@ -70,12 +70,26 @@ public class OrganSkillUtil {
         if (blockHitResult.getType() == HitResult.Type.BLOCK) {
             BlockPos pos = blockHitResult.getBlockPos();
             BlockState state = level.getBlockState(pos);
-            if (state.is(Blocks.GRASS_BLOCK)) {
+            if (state.is(Blocks.SHORT_GRASS)) {
+                player.getFoodData().eat(GRASS_FOOD);
+                level.destroyBlock(pos, false);
+            } else if (state.is(Blocks.TALL_GRASS)) {
+                player.getFoodData().eat(GRASS_FOOD);
+                player.getFoodData().eat(GRASS_FOOD);
+                level.destroyBlock(pos, false);
+            } else if (state.is(Blocks.GRASS_BLOCK)) {
                 player.getFoodData().eat(GRASS_FOOD);
                 player.gameEvent(GameEvent.EAT);
                 level.levelEvent(2001, pos, Block.getId(state));
-                level.setBlock(blockHitResult.getBlockPos(), Blocks.DIRT.defaultBlockState(), 2);
+                level.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2);
             }
         }
+    }
+
+    /**
+     * 自爆
+     */
+    public static void explosion(Player player, double creepy) {
+        player.level().explode(null, player.getX(), player.getY(), player.getZ(), (float) (3 * creepy), Level.ExplosionInteraction.NONE);
     }
 }

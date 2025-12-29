@@ -125,6 +125,7 @@ public class ChestCavityData extends ItemStackHandler {
         for (int i = 0; i < getSlots(); i++) {
             OrganAttributeUtil.updateOrganAttributeModifier(this, owner, i, ItemStack.EMPTY, getStackInSlot(i));
         }
+        OrganAttributeUtil.updateDefaultModifier(this, owner);
     }
 
     /**

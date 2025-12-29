@@ -32,7 +32,7 @@ public abstract class EnderManMixin extends Monster {
                     target = "Lnet/minecraft/world/level/Level;isDay()Z"
             )
     )
-    public boolean chestCavityBeyond$aiStep(boolean original) {
+    public boolean chestCavityBeyond$customServerAiStep(boolean original) {
         return original && ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER) > 0;
     }
 
@@ -46,7 +46,7 @@ public abstract class EnderManMixin extends Monster {
     }
 
     @Mixin(EnderMan.EndermanLookForPlayerGoal.class)
-    public static class EndermanLookForPlayerGoalMixin {
+    public abstract static class EndermanLookForPlayerGoalMixin {
         @Shadow
         @Final
         private EnderMan enderman;

@@ -14,6 +14,7 @@ import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 
 import java.util.Collection;
+import java.util.Map;
 
 public class OrganAttributeUtil {
     /**
@@ -185,6 +186,15 @@ public class OrganAttributeUtil {
      */
     public static boolean isWaterAllergy(LivingEntity entity) {
         return ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.WATER_ALLERGY) > 0;
+    }
+
+    /**
+     * 更新胸腔类型的默认属性调整修饰符
+     */
+    public static void updateDefaultModifier(ChestCavityData data, LivingEntity entity) {
+        for (Map.Entry<Holder<Attribute>, AttributeModifier> entry : data.getType().getDefaultModifier(entity.getType()).entrySet()) {
+            updateAttributeModifier(entity, entry.getKey(), entry.getValue());
+        }
     }
 
     /**

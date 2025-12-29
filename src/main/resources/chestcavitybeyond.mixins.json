@@ -4,9 +4,12 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "CommonHooksMixin",
+    "CreeperMixin",
+    "CreeperMixin$SwellGoalMixin",
     "EnderManMixin",
     "EnderManMixin$EndermanLookForPlayerGoalMixin",
     "FoodDataMixin",
+    "IronGolemMixin",
     "LivingBreatheEventMixin",
     "LivingEntityMixin",
     "MobEffectInstanceMixin",

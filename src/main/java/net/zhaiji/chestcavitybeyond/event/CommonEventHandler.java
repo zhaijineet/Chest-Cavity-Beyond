@@ -129,7 +129,8 @@ public class CommonEventHandler {
      * @param event 实体受伤前事件
      */
     public static void handlerLivingDamageEvent$Pre(LivingDamageEvent.Pre event) {
-        ChestCavityData data = ChestCavityUtil.getData(event.getEntity());
+        LivingEntity entity = event.getEntity();
+        ChestCavityData data = ChestCavityUtil.getData(entity);
         double damage = event.getOriginalDamage();
         DamageSource source = event.getSource();
         boolean flag = false;
@@ -146,6 +147,16 @@ public class CommonEventHandler {
             if (ender > 0) OrganSkillUtil.randomTeleport(event.getEntity());
             flag = true;
         }
+
+//        // 应用发射效果，这里的位置难以起效，感觉得mixin到livingentity里
+//        if (source.getEntity() instanceof LivingEntity sourceEntity) {
+//            double launch = ChestCavityUtil.getData(sourceEntity).getCurrentValue(InitAttribute.LAUNCH);
+//            if (launch > 0) {
+//                double knockbackResistance = data.getCurrentValue(Attributes.KNOCKBACK_RESISTANCE);
+//                double yAdd = Math.max(0.0, launch - knockbackResistance);
+//                entity.setDeltaMovement(sourceEntity.getDeltaMovement().add(0.0, 0.4F * yAdd, 0.0));
+//            }
+//        }
 
         // 当以上伤害类型都未检测通过时，应用防御减伤
         // TODO 这样对吗？应该不太对，之后在重新理清楚逻辑

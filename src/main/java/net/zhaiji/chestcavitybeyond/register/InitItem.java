@@ -868,4 +868,31 @@ public class InitItem {
                     })
                     .build()
     );
+
+    // 苦力怕阑尾
+    public static final Supplier<Item> CREEPER_APPENDIX = ITEM.register(
+            "creeper_appendix",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.EXPLOSIVE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.explosion(player, context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
+                        }
+                    })
+                    .build()
+    );
+
+    // 苦力怕阑尾
+    public static final Supplier<Item> CREEPER_LEAF = ITEM.register(
+            "creeper_leaf",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.PHOTOSYNTHESIS, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
 }

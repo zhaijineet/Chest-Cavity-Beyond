@@ -61,6 +61,14 @@ public class InitAttribute {
     public static final Holder<Attribute> SCAVENGER_DIGESTION = registerRangedAttribute("scavenger_digestion");
     // 腐食营养
     public static final Holder<Attribute> SCAVENGER_NUTRITION = registerRangedAttribute("scavenger_nutrition");
+    // 爆炸
+    public static final Holder<Attribute> EXPLOSIVE = registerRangedAttribute("explosive");
+    // 光合作用
+    public static final Holder<Attribute> PHOTOSYNTHESIS = registerRangedAttribute("photosynthesis");
+    // 发射
+    public static final Holder<Attribute> LAUNCH = registerRangedAttribute("launch");
+    // 铁修复
+    public static final Holder<Attribute> IRON_REPAIR = registerRangedAttribute("iron_repair");
 
 
     public static Holder<Attribute> registerRangedAttribute(String name) {

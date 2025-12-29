@@ -116,6 +116,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SMALL_HERBIVORE_INTESTINE, "Small Herbivore Intestine");
         addItem(InitItem.HERBIVORE_RUMEN, "Herbivore Rumen");
 
+        addItem(InitItem.CREEPER_APPENDIX, "Creeper Appendix");
+        addItem(InitItem.CREEPER_LEAF, "Creeper Leaf");
+
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
         addAttribute(InitAttribute.DEFENSE, "Defense");
@@ -141,6 +144,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.HERBIVOROUS_NUTRITION, "Herbivorous Nutrition");
         addAttribute(InitAttribute.SCAVENGER_DIGESTION, "Scavenger Digestion");
         addAttribute(InitAttribute.SCAVENGER_NUTRITION, "Scavenger Nutrition");
+        addAttribute(InitAttribute.EXPLOSIVE, "Explosive");
+        addAttribute(InitAttribute.PHOTOSYNTHESIS, "Photosynthesis");
+        addAttribute(InitAttribute.LAUNCH, "Launch");
+        addAttribute(InitAttribute.IRON_REPAIR, "Iron Repair");
 
         addDamageType(InitDamageType.ORGAN_LOSS, "%1$s died from organ loss");
     }
@@ -237,6 +244,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SMALL_HERBIVORE_INTESTINE, "小型食草动物肠子");
         addItem(InitItem.HERBIVORE_RUMEN, "食草动物瘤胃");
 
+        addItem(InitItem.CREEPER_APPENDIX, "苦力怕阑尾");
+        addItem(InitItem.CREEPER_LEAF, "苦力怕叶");
+
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
         addAttribute(InitAttribute.DEFENSE, "防御");
@@ -262,6 +272,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.HERBIVOROUS_NUTRITION, "草食营养");
         addAttribute(InitAttribute.SCAVENGER_DIGESTION, "腐食消化");
         addAttribute(InitAttribute.SCAVENGER_NUTRITION, "腐食营养");
+        addAttribute(InitAttribute.EXPLOSIVE, "爆炸");
+        addAttribute(InitAttribute.PHOTOSYNTHESIS, "光合作用");
+        addAttribute(InitAttribute.LAUNCH, "发射");
+        addAttribute(InitAttribute.IRON_REPAIR, "铁修复");
 
         addDamageType(InitDamageType.ORGAN_LOSS, "%1$s死于器官缺失");
     }

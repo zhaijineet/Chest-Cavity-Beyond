@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-28T07:51:15.7944725	Item Models: chestcavitybeyond
+// 1.21.1	2025-12-29T15:19:19.4705217	Item Models: chestcavitybeyond
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
 00cca18ba2522d946fc1b3aae5088e80327ed5fd assets/chestcavitybeyond/models/item/animal_heart.json
 2774a5ea950050eb83c792d720e8a40243767dbb assets/chestcavitybeyond/models/item/animal_intestine.json
@@ -16,6 +16,8 @@ e7caae4abd9d279fde804333de002c7d0588dab6 assets/chestcavitybeyond/models/item/aq
 7dc3ffeba6c9b5a9df2e4309b662860b55e35378 assets/chestcavitybeyond/models/item/carnivore_intestine.json
 39603d00553bac554ae4092576330038bce3b815 assets/chestcavitybeyond/models/item/carnivore_stomach.json
 3d4d2320ce6ed627d1a715a8c72f90ee2fae530e assets/chestcavitybeyond/models/item/chest_opener.json
+49694af597d2a3570421178211169509b15ba16c assets/chestcavitybeyond/models/item/creeper_appendix.json
+0dec4e74918691036b8b8eb2eaedfbb46c4ad8e9 assets/chestcavitybeyond/models/item/creeper_leaf.json
 4c85398c89588becdb7b29fcac623bf662af182d assets/chestcavitybeyond/models/item/ender_appendix.json
 d45097cbc24f029656aaa6bb07cda9b30f6b4af8 assets/chestcavitybeyond/models/item/ender_heart.json
 bb27b5926983355888709c625abe80085f9fc218 assets/chestcavitybeyond/models/item/ender_intestine.json

@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.Tags;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.mixinapi.IFoodData;
@@ -37,6 +38,11 @@ public abstract class FoodDataMixin implements IFoodData {
      */
     @Unique
     private double metabolismRemainder;
+    /**
+     * 光合作用计时器
+     */
+    @Unique
+    private double photosynthesisTimer;
 
     @Shadow
     protected abstract void add(int foodLevel, float saturationLevel);
@@ -119,6 +125,9 @@ public abstract class FoodDataMixin implements IFoodData {
 
     /**
      * 根据{@link InitAttribute#METABOLISM}属性，修改Timer的累计速度，影响消耗饥饿回复生命值的速度
+     * <p>
+     * 根据{@link InitAttribute#PHOTOSYNTHESIS}属性，新增在白天可以进行光合作用增加饥饿值和饱食度
+     * </p>
      */
     @Inject(
             method = "tick",
@@ -135,6 +144,20 @@ public abstract class FoodDataMixin implements IFoodData {
             }
             tickTimer += (int) metabolismRemainder;
             metabolismRemainder %= 1;
+        }
+        double photosynthesis = data.getCurrentValue(InitAttribute.PHOTOSYNTHESIS);
+        Level level = player.level();
+        // 白天且能看见天空时
+        if (photosynthesis > 0 && level.isDay() && level.canSeeSky(player.getOnPos())) {
+            photosynthesisTimer += photosynthesis;
+            if (photosynthesisTimer >= 800) {
+                photosynthesisTimer = 0;
+                if (foodLevel < 20) {
+                    add(1, 0);
+                } else {
+                    add(0, 1);
+                }
+            }
         }
     }
 
