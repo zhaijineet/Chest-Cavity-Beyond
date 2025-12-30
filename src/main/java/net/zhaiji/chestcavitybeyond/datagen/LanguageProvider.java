@@ -7,10 +7,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
-import net.zhaiji.chestcavitybeyond.register.InitAttribute;
-import net.zhaiji.chestcavitybeyond.register.InitCreativeModeTab;
-import net.zhaiji.chestcavitybeyond.register.InitDamageType;
-import net.zhaiji.chestcavitybeyond.register.InitItem;
+import net.zhaiji.chestcavitybeyond.register.*;
 
 public class LanguageProvider extends net.neoforged.neoforge.common.data.LanguageProvider {
     public static final String EN_US = "en_us";
@@ -119,6 +116,24 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.CREEPER_APPENDIX, "Creeper Appendix");
         addItem(InitItem.CREEPER_LEAF, "Creeper Leaf");
 
+        addItem(InitItem.ROTTEN_HEART, "Rotten Heart");
+        addItem(InitItem.ROTTEN_SPINE, "Rotten Spine");
+        addItem(InitItem.ROTTEN_LUNG, "Rotten Lung");
+        addItem(InitItem.ROTTEN_STOMACH, "Rotten Stomach");
+        addItem(InitItem.ROTTEN_INTESTINE, "Rotten Intestine");
+        addItem(InitItem.ROTTEN_KIDNEY, "Rotten Kidney");
+        addItem(InitItem.ROTTEN_SPLEEN, "Rotten Spleen");
+        addItem(InitItem.ROTTEN_LIVER, "Rotten Liver");
+        addItem(InitItem.ROTTEN_APPENDIX, "Rotten Appendix");
+        addItem(InitItem.ROTTEN_RIB, "Rotten Rib");
+        addItem(InitItem.ROTTEN_MUSCLE, "Rotten Muscle");
+
+        addItem(InitItem.GOLEM_CORE, "Golem Core");
+        addItem(InitItem.GOLEM_CABLE, "Golem Cable");
+        addItem(InitItem.INNER_FURNACE, "Inner Furnace");
+        addItem(InitItem.PISTON_MUSCLE, "Piston Muscle");
+        addItem(InitItem.GOLEM_ARMOR_PLATE, "Golem Armor Plate");
+
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
         addAttribute(InitAttribute.DEFENSE, "Defense");
@@ -148,6 +163,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.PHOTOSYNTHESIS, "Photosynthesis");
         addAttribute(InitAttribute.LAUNCH, "Launch");
         addAttribute(InitAttribute.IRON_REPAIR, "Iron Repair");
+        addAttribute(InitAttribute.FURNACE_POWER, "Furnace Power");
+
+        addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
         addDamageType(InitDamageType.ORGAN_LOSS, "%1$s died from organ loss");
     }
@@ -247,6 +265,24 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.CREEPER_APPENDIX, "苦力怕阑尾");
         addItem(InitItem.CREEPER_LEAF, "苦力怕叶");
 
+        addItem(InitItem.ROTTEN_HEART, "腐烂心脏");
+        addItem(InitItem.ROTTEN_SPINE, "腐烂脊柱");
+        addItem(InitItem.ROTTEN_LUNG, "腐烂肺脏");
+        addItem(InitItem.ROTTEN_STOMACH, "腐烂胃");
+        addItem(InitItem.ROTTEN_INTESTINE, "腐烂肠子");
+        addItem(InitItem.ROTTEN_KIDNEY, "腐烂肾脏");
+        addItem(InitItem.ROTTEN_SPLEEN, "腐烂脾脏");
+        addItem(InitItem.ROTTEN_LIVER, "腐烂肝脏");
+        addItem(InitItem.ROTTEN_APPENDIX, "腐烂阑尾");
+        addItem(InitItem.ROTTEN_RIB, "腐烂肋骨");
+        addItem(InitItem.ROTTEN_MUSCLE, "腐烂肌肉");
+
+        addItem(InitItem.GOLEM_CORE, "傀儡核心");
+        addItem(InitItem.GOLEM_CABLE, "傀儡电缆");
+        addItem(InitItem.INNER_FURNACE, "熔炉内核");
+        addItem(InitItem.PISTON_MUSCLE, "活塞型肌肉");
+        addItem(InitItem.GOLEM_ARMOR_PLATE, "傀儡装甲板");
+
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
         addAttribute(InitAttribute.DEFENSE, "防御");
@@ -276,6 +312,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.PHOTOSYNTHESIS, "光合作用");
         addAttribute(InitAttribute.LAUNCH, "发射");
         addAttribute(InitAttribute.IRON_REPAIR, "铁修复");
+        addAttribute(InitAttribute.FURNACE_POWER, "熔炉之力");
+
+        addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 
         addDamageType(InitDamageType.ORGAN_LOSS, "%1$s死于器官缺失");
     }

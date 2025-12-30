@@ -38,13 +38,13 @@ public class TeleportUtil {
     /**
      * @see OrganSkillUtil#randomTeleport
      */
-    public static boolean randomTeleport(LivingEntity entity) {
+    public static boolean randomTeleport(LivingEntity entity, double ender) {
         Level level = entity.level();
-        if (level.isClientSide() || !entity.isAlive()) return false;
-        // TODO 玩家的随机传送应该距离更近,受末影属性影响？
-        double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 64;
-        double y = entity.getY() + (double) (entity.getRandom().nextInt(64) - 32);
-        double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 64;
+        if (level.isClientSide() || !entity.isAlive() || ender <= 0) return false;
+        double distance = MathUtil.getDirectScale(ender);
+        double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * distance;
+        double y = entity.getY() + (entity.getRandom().nextInt((int) distance) - distance / 2);
+        double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * distance;
         BlockPos.MutableBlockPos mutableblockpos = new BlockPos.MutableBlockPos(x, y, z);
         while (mutableblockpos.getY() > level.getMinBuildHeight() && !level.getBlockState(mutableblockpos).blocksMotion()) {
             mutableblockpos.move(Direction.DOWN);
@@ -71,9 +71,9 @@ public class TeleportUtil {
     /**
      * 主动传送
      */
-    public static void teleport(Player player) {
+    public static void teleport(Player player, double ender) {
         Level level = player.level();
-        Optional<Vec3> pos = teleportPosition(level, player);
+        Optional<Vec3> pos = teleportPosition(level, player, ender);
         if (pos.isPresent()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 Optional<Vec3> eventPos = teleportEvent(player, pos.get());
@@ -97,15 +97,14 @@ public class TeleportUtil {
     /**
      * 传送位置
      */
-    private static Optional<Vec3> teleportPosition(Level level, Player player) {
+    private static Optional<Vec3> teleportPosition(Level level, Player player, double ender) {
         @Nullable
         BlockPos targetPos = null;
         double floorHeight = 0;
 
         Vec3 lookAngle = player.getLookAngle().normalize();
         Vec3 from = player.getEyePosition();
-        // TODO 距离应该可以改变
-        Vec3 to = from.add(lookAngle.scale(15));
+        Vec3 to = from.add(lookAngle.scale(ender));
         ClipContext clipContext = new ClipContext(
                 from,
                 to,

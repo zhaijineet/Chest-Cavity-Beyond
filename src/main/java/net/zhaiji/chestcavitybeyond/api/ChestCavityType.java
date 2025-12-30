@@ -40,12 +40,12 @@ public class ChestCavityType {
      * @param entityType 实体类型
      * @param modifiers  修饰符集合
      */
-    private static void calculateValue(EntityType<?> entityType, Holder<Attribute> attribute, Collection<AttributeModifier> modifiers, Map<Holder<Attribute>, Double> defaultMap, Map<Holder<Attribute>, AttributeModifier> modifierMap) {
+    private static void calculateValue(EntityType<? extends LivingEntity> entityType, Holder<Attribute> attribute, Collection<AttributeModifier> modifiers, Map<Holder<Attribute>, Double> defaultMap, Map<Holder<Attribute>, AttributeModifier> modifierMap) {
         double value = 0;
         double baseValue = 0;
         boolean hasAttribute = false;
         if (DefaultAttributes.hasSupplier(entityType)) {
-            AttributeSupplier attributeSupplier = DefaultAttributes.getSupplier((EntityType<? extends LivingEntity>) entityType);
+            AttributeSupplier attributeSupplier = DefaultAttributes.getSupplier(entityType);
             if (attributeSupplier.hasAttribute(attribute)) {
                 hasAttribute = true;
                 value = baseValue = attributeSupplier.getValue(attribute);
@@ -136,7 +136,7 @@ public class ChestCavityType {
      * @param entityType 实体类型
      * @return 胸腔类型
      */
-    public ChestCavityType builder(EntityType<?> entityType) {
+    public ChestCavityType builder(EntityType<? extends LivingEntity> entityType) {
         Multimap<Holder<Attribute>, AttributeModifier> modifierMultimap = HashMultimap.create();
         Map<Holder<Attribute>, Double> attributeMap = new HashMap<>();
         Map<Holder<Attribute>, AttributeModifier> modifierMap = new HashMap<>();

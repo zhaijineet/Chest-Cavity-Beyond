@@ -12,6 +12,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
+import net.zhaiji.chestcavitybeyond.api.event.RegisterChestCavityEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityManager;
@@ -51,6 +53,7 @@ public class CommonEventHandler {
      */
     public static void handlerFMLLoadCompleteEvent(FMLLoadCompleteEvent event) {
         ChestCavityManager.registerEntity(EntityType.PLAYER, ChestCavityManager.HUMAN);
+        NeoForge.EVENT_BUS.post(new RegisterChestCavityEvent());
     }
 
     /**
@@ -116,8 +119,9 @@ public class CommonEventHandler {
         if (isProjectile || isWaterPotion) {
             LivingEntity entity = event.getEntity();
             ChestCavityData data = ChestCavityUtil.getData(entity);
-            if (data.getCurrentValue(InitAttribute.PROJECTILE_DODGE) > 0 && data.getCurrentValue(InitAttribute.ENDER) > 0) {
-                OrganSkillUtil.randomTeleport(entity);
+            double ender = data.getCurrentValue(InitAttribute.ENDER);
+            if (data.getCurrentValue(InitAttribute.PROJECTILE_DODGE) > 0 && ender > 0) {
+                OrganSkillUtil.randomTeleport(entity, ender);
                 event.setCanceled(true);
             }
         }
@@ -144,19 +148,9 @@ public class CommonEventHandler {
         // 应用溺水伤害修改
         if (source.is(DamageTypeTags.IS_DROWNING)) {
             double ender = data.getCurrentValue(InitAttribute.ENDER);
-            if (ender > 0) OrganSkillUtil.randomTeleport(event.getEntity());
+            if (ender > 0) OrganSkillUtil.randomTeleport(event.getEntity(), ender);
             flag = true;
         }
-
-//        // 应用发射效果，这里的位置难以起效，感觉得mixin到livingentity里
-//        if (source.getEntity() instanceof LivingEntity sourceEntity) {
-//            double launch = ChestCavityUtil.getData(sourceEntity).getCurrentValue(InitAttribute.LAUNCH);
-//            if (launch > 0) {
-//                double knockbackResistance = data.getCurrentValue(Attributes.KNOCKBACK_RESISTANCE);
-//                double yAdd = Math.max(0.0, launch - knockbackResistance);
-//                entity.setDeltaMovement(sourceEntity.getDeltaMovement().add(0.0, 0.4F * yAdd, 0.0));
-//            }
-//        }
 
         // 当以上伤害类型都未检测通过时，应用防御减伤
         // TODO 这样对吗？应该不太对，之后在重新理清楚逻辑

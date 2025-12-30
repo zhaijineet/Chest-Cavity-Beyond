@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.Unique;
 public abstract class MobEffectInstanceMixin implements IMobEffectInstance {
     @Shadow
     private int duration;
+    @Shadow
+    private int amplifier;
 
     @Shadow
     public abstract Holder<MobEffect> getEffect();
@@ -27,5 +29,11 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstance {
     @Override
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    @Unique
+    @Override
+    public void setAmplifier(int amplifier) {
+        this.amplifier = amplifier;
     }
 }

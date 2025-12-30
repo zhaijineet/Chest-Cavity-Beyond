@@ -47,16 +47,20 @@ public class ClientEventHandler {
         Minecraft minecraft = Minecraft.getInstance();
         Options options = minecraft.options;
         Player player = event.getEntity();
+        TooltipsKeyContext keyContext = new TooltipsKeyContext(
+                ChestCavityClientUtil.isKeyDown(options.keyShift),
+                ChestCavityClientUtil.isKeyDown(options.keySprint)
+        );
+        // player为null的情况，可能是正在检索物品
+        // 此时需要将所有tooltips显示，以便通过物品提示寻找物品
         if (player == null) {
             player = minecraft.player;
+            keyContext = new TooltipsKeyContext(true, true);
         }
         organ.organTooltip(
                 ChestCavityUtil.getData(player),
                 event.getItemStack(),
-                new TooltipsKeyContext(
-                        ChestCavityClientUtil.isKeyDown(options.keyShift),
-                        ChestCavityClientUtil.isKeyDown(options.keySprint)
-                ),
+                keyContext,
                 event.getContext(),
                 event.getToolTip(),
                 event.getFlags()

@@ -633,6 +633,7 @@ public class InitItem {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.625));
                         modifiers.put(InitAttribute.PROJECTILE_DODGE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .build()
     );
@@ -702,7 +703,7 @@ public class InitItem {
                     })
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
-                            OrganSkillUtil.teleport(player);
+                            OrganSkillUtil.teleport(player, context.data().getCurrentValue(InitAttribute.ENDER));
                         }
                     })
                     .build()
@@ -892,6 +893,193 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.PHOTOSYNTHESIS, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 腐烂心脏
+    public static final Supplier<Item> ROTTEN_HEART = ITEM.register(
+            "rotten_heart",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂肺脏
+    public static final Supplier<Item> ROTTEN_LUNG = ITEM.register(
+            "rotten_lung",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂脊柱
+    public static final Supplier<Item> ROTTEN_SPINE = ITEM.register(
+            "rotten_spine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 腐烂胃
+    public static final Supplier<Item> ROTTEN_STOMACH = ITEM.register(
+            "rotten_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.SCAVENGER_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 腐烂肠子
+    public static final Supplier<Item> ROTTEN_INTESTINE = ITEM.register(
+            "rotten_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.SCAVENGER_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 腐烂肾脏
+    public static final Supplier<Item> ROTTEN_KIDNEY = ITEM.register(
+            "rotten_kidney",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂脾脏
+    public static final Supplier<Item> ROTTEN_SPLEEN = ITEM.register(
+            "rotten_spleen",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂肝脏
+    public static final Supplier<Item> ROTTEN_LIVER = ITEM.register(
+            "rotten_liver",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂阑尾
+    public static final Supplier<Item> ROTTEN_APPENDIX = ITEM.register(
+            "rotten_appendix",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂肋骨
+    public static final Supplier<Item> ROTTEN_RIB = ITEM.register(
+            "rotten_rib",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 腐烂肌肉
+    public static final Supplier<Item> ROTTEN_MUSCLE = ITEM.register(
+            "rotten_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 傀儡核心
+    public static final Supplier<Item> GOLEM_CORE = ITEM.register(
+            "golem_core",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 傀儡电缆
+    public static final Supplier<Item> GOLEM_CABLE = ITEM.register(
+            "golem_cable",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, -0.5));
+                    })
+                    .build()
+    );
+
+    // 熔炉内核
+    public static final Supplier<Item> INNER_FURNACE = ITEM.register(
+            "inner_furnace",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.FURNACE_POWER, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
+                        }
+                    })
+                    .build()
+    );
+
+    // 活塞型肌肉
+    public static final Supplier<Item> PISTON_MUSCLE = ITEM.register(
+            "piston_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.LAUNCH, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 傀儡装甲板
+    public static final Supplier<Item> GOLEM_ARMOR_PLATE = ITEM.register(
+            "golem_armor_plate",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                        modifiers.put(InitAttribute.IRON_REPAIR, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, -0.5));
+                    })
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
+                        }
                     })
                     .build()
     );

@@ -16,6 +16,9 @@ public abstract class ShulkerMixin extends AbstractGolem {
         super(entityType, level);
     }
 
+    /**
+     * 没有末影属性不允许传送
+     */
     @ModifyExpressionValue(
             method = "tick",
             at = @At(
@@ -29,7 +32,7 @@ public abstract class ShulkerMixin extends AbstractGolem {
     }
 
     /**
-     * TODO 随机传送距离应该受末影属性影响
+     * 没有末影属性不允许传送
      */
     @ModifyExpressionValue(
             method = "teleportSomewhere",

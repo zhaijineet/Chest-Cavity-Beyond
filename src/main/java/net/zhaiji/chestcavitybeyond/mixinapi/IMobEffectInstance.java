@@ -11,4 +11,10 @@ public interface IMobEffectInstance {
      * @param duration 持续时间
      */
     void setDuration(int duration);
+
+    /**
+     * 设置实例等级
+     * @param amplifier 实例等级
+     */
+    void setAmplifier(int amplifier);
 }

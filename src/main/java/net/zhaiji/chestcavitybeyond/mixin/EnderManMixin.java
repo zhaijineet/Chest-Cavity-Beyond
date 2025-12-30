@@ -9,11 +9,14 @@ import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.event.CommonEventHandler;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
+import net.zhaiji.chestcavitybeyond.util.TeleportUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnderMan.class)
 public abstract class EnderManMixin extends Monster {
@@ -22,8 +25,19 @@ public abstract class EnderManMixin extends Monster {
     }
 
     /**
+     * 随机传送距离应该受末影属性影响
+     */
+    @Inject(
+            method = "teleport()Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void chestCavityBeyond$customServerAiStep(CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(TeleportUtil.randomTeleport(this, ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER)));
+    }
+
+    /**
      * 改变传送条件，检测是否能够传送
-     * TODO 随机传送距离应该受末影属性影响
      */
     @ModifyExpressionValue(
             method = "customServerAiStep",

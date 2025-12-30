@@ -13,7 +13,7 @@ import java.util.Map;
 public class ChestCavityManager {
     public static final List<ChestCavityType> CHEST_CAVITY_TYPES = new ArrayList<>();
 
-    public static final Map<EntityType<?>, ChestCavityType> ENTITY_CHEST_CAVITY_TYPE_MAP = new HashMap<>();
+    public static final Map<EntityType<? extends LivingEntity>, ChestCavityType> ENTITY_CHEST_CAVITY_TYPE_MAP = new HashMap<>();
 
     public static final ChestCavityType HUMAN = register("human")
             .setFirstRow(0, InitItem.MUSCLE.get())
@@ -114,7 +114,7 @@ public class ChestCavityManager {
     public static ChestCavityType getType(LivingEntity entity) {
         ChestCavityType type = ENTITY_CHEST_CAVITY_TYPE_MAP.get(entity.getType());
         if (type == null) {
-            EntityType<?> entityType = entity.getType();
+            EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
             // 找不到实体类型所属的胸腔类型，就注册一套新的人类器官给它
             registerEntity(entityType, HUMAN);
             return HUMAN;
@@ -128,7 +128,7 @@ public class ChestCavityManager {
      * @param entityType      实体类型
      * @param chestCavityType 胸腔类型
      */
-    public static void registerEntity(EntityType<?> entityType, ChestCavityType chestCavityType) {
+    public static void registerEntity(EntityType<? extends LivingEntity> entityType, ChestCavityType chestCavityType) {
         ENTITY_CHEST_CAVITY_TYPE_MAP.computeIfAbsent(entityType, chestCavityType::builder);
     }
 
