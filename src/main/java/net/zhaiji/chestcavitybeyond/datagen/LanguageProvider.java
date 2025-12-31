@@ -164,6 +164,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.LAUNCH, "Launch");
         addAttribute(InitAttribute.IRON_REPAIR, "Iron Repair");
         addAttribute(InitAttribute.FURNACE_POWER, "Furnace Power");
+        addAttribute(InitAttribute.WITHERED, "Withered");
 
         addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
@@ -313,6 +314,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.LAUNCH, "发射");
         addAttribute(InitAttribute.IRON_REPAIR, "铁修复");
         addAttribute(InitAttribute.FURNACE_POWER, "熔炉之力");
+        addAttribute(InitAttribute.WITHERED, "凋零化");
 
         addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 

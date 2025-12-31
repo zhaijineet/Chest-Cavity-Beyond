@@ -5,9 +5,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -94,16 +96,26 @@ public class CommonEventHandler {
     }
 
     /**
-     * 应用实体解毒效率属性的更改
+     * 应用实体解毒效率和凋零化的更改
      *
-     * @param event 效果添加事件
+     * @param event 效果能否适用事件
      */
-    public static void handlerMobEffectEvent$Added(MobEffectEvent.Added event) {
+    public static void handlerMobEffectEvent$Applicable(MobEffectEvent.Applicable event) {
         ChestCavityData data = ChestCavityUtil.getData(event.getEntity());
-        double difference = data.getDifferenceValue(InitAttribute.DETOXIFICATION);
+        double detoxification = data.getDifferenceValue(InitAttribute.DETOXIFICATION);
+        double withered = data.getDifferenceValue(InitAttribute.WITHERED);
+        if (detoxification == 0 && withered == 0) return;
         MobEffectInstance instance = event.getEffectInstance();
-        if (difference != 0 && instance instanceof IMobEffectInstance mobEffectInstance && mobEffectInstance.isHarmful()) {
-            mobEffectInstance.setDuration(instance.mapDuration(duration -> (int) (duration * MathUtil.getInverseScale(difference))));
+        if (instance instanceof IMobEffectInstance mobEffectInstance && mobEffectInstance.isHarmful()) {
+            double scale = 1;
+            scale *= MathUtil.getInverseScale(detoxification);
+            if (instance.is(MobEffects.WITHER)) {
+                scale *= MathUtil.getInverseScale(withered);
+            }
+            double finalScale = scale;
+            int duration = instance.mapDuration(oldDuration -> (int) (oldDuration * finalScale));
+            // if (duration <= 20) event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
+            mobEffectInstance.setDuration(duration);
         }
     }
 
@@ -150,6 +162,21 @@ public class CommonEventHandler {
             double ender = data.getCurrentValue(InitAttribute.ENDER);
             if (ender > 0) OrganSkillUtil.randomTeleport(event.getEntity(), ender);
             flag = true;
+        }
+
+        // 应用凋零化效果
+        if (source.getDirectEntity() instanceof LivingEntity sourceEntity && source.getEntity() == sourceEntity) {
+            ChestCavityData sourceData = ChestCavityUtil.getData(sourceEntity);
+            double withered = sourceData.getCurrentValue(InitAttribute.WITHERED);
+            if (withered > 0) {
+                int duration = (int) (40 * withered);
+                int amplifier = 0;
+                if (sourceData.hasOrgan(Items.NETHER_STAR)) {
+                    duration += 200;
+                    amplifier++;
+                }
+                entity.addEffect(new MobEffectInstance(MobEffects.WITHER, duration, amplifier), sourceEntity);
+            }
         }
 
         // 当以上伤害类型都未检测通过时，应用防御减伤

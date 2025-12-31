@@ -110,22 +110,24 @@ public class OrganSkillUtil {
     public static void ironRepair(Player player, double ironRepair) {
         if (ironRepair <= 0) return;
         ItemStack stack = null;
-        ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (mainHandStack.is(Items.IRON_INGOT)) {
-            stack = mainHandStack;
-        } else if (offHandStack.is(Items.IRON_INGOT)) {
-            stack = offHandStack;
-        }
-        if (stack != null) {
-            float oldHealth = player.getHealth();
-            player.heal((float) (2.5 * ironRepair));
-            if (player.getHealth() > oldHealth) {
-                Level level = player.level();
-                stack.consume(1, player);
-                float pitch = 1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F;
-                level.playSound(null, player.getOnPos(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.is(Items.IRON_INGOT)) {
+                stack = itemStack;
             }
+        }
+        for (ItemStack itemStack : player.getInventory().offhand) {
+            if (itemStack.is(Items.IRON_INGOT)) {
+                stack = itemStack;
+            }
+        }
+        if (stack == null) return;
+        float oldHealth = player.getHealth();
+        player.heal((float) (2.5 * ironRepair));
+        if (player.getHealth() > oldHealth) {
+            Level level = player.level();
+            stack.consume(1, player);
+            float pitch = 1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F;
+            level.playSound(null, player.getOnPos(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
         }
     }
 
@@ -134,47 +136,48 @@ public class OrganSkillUtil {
      */
     public static void furnacePower(Player player, double furnacePower) {
         if (furnacePower <= 0) return;
-        ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-        ItemStack stack = null;
-        int burnTime = 0;
-        if (!mainHandStack.isEmpty()) {
-            burnTime = mainHandStack.getBurnTime(null);
-            if (burnTime > 0) {
-                stack = mainHandStack;
-            }
-        } else if (!offHandStack.isEmpty()) {
-            burnTime = offHandStack.getBurnTime(null);
-            if (burnTime > 0) {
-                stack = offHandStack;
-            }
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.getBurnTime(null) <= 0) {
+            hand = InteractionHand.OFF_HAND;
+            stack = player.getItemInHand(hand);
         }
-        if (stack == null) return;
+        if (stack.getBurnTime(null) <= 0) return;
+        boolean isCrouching = player.isCrouching();
+        int totalDuration = 0;
         int amplifier = Math.max(0, (int) (furnacePower - 1));
-        int duration = burnTime;
-        MobEffectInstance effect = player.getEffect(InitEffect.FURNACE_POWER);
-        boolean hasEffect = effect != null;
-        if (hasEffect) {
-            if (amplifier < effect.getAmplifier()) {
-                duration += effect.getDuration() / (effect.getAmplifier() - amplifier + 1);
-                amplifier = effect.getAmplifier();
-            } else {
-                duration += effect.getDuration();
-            }
-        }
         // TODO 将最大上限时间写入配置
         int maxDuration = 24000;
-        // 当已有effect的情况下，计算时间大于最大值，不进行任何更改
-        if (hasEffect && duration > maxDuration) {
-            return;
-        }
-        player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, Math.min(duration, maxDuration), amplifier));
-        if (stack.hasCraftingRemainingItem()) {
-            ItemStack remaining = stack.getCraftingRemainingItem();
-            if (!player.addItem(remaining)) {
-                player.drop(remaining, false);
+        MobEffectInstance effect = player.getEffect(InitEffect.FURNACE_POWER);
+        if (effect != null) {
+            if (amplifier < effect.getAmplifier()) {
+                totalDuration += effect.getDuration() / (1 + effect.getAmplifier() - amplifier);
+                amplifier = effect.getAmplifier();
+            } else {
+                totalDuration += effect.getDuration();
             }
         }
-        stack.consume(1, player);
+        do {
+            int duration = stack.getBurnTime(null);
+            // 当已有effect的情况下，计算时间大于最大值，不进行任何更改
+            if (totalDuration + duration > maxDuration) {
+                break;
+            }
+            totalDuration += duration;
+            ItemStack remaining = stack.getCraftingRemainingItem();
+            stack.consume(1, player);
+            if (!remaining.isEmpty()) {
+                if (player.getItemInHand(hand).isEmpty()) {
+                    player.setItemInHand(hand, remaining);
+                } else if (!player.addItem(remaining)) {
+                    player.drop(remaining, false);
+                }
+            }
+            // 更新stack，因为有可能为消耗后的剩余物品
+            stack = player.getItemInHand(hand);
+        } while (isCrouching && stack.getBurnTime(null) > 0);
+        if (totalDuration > 0) {
+            player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
+        }
     }
 }

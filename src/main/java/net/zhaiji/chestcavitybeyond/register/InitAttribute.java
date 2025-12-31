@@ -71,6 +71,8 @@ public class InitAttribute {
     public static final Holder<Attribute> IRON_REPAIR = registerRangedAttribute("iron_repair");
     // 熔炉之力
     public static final Holder<Attribute> FURNACE_POWER = registerRangedAttribute("furnace_power");
+    // 凋零化
+    public static final Holder<Attribute> WITHERED = registerRangedAttribute("withered");
 
     public static Holder<Attribute> registerRangedAttribute(String name) {
         return ATTRIBUTE.register(

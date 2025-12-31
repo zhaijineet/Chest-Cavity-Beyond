@@ -12,7 +12,6 @@ import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.TeleportUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,7 +31,7 @@ public abstract class EnderManMixin extends Monster {
             at = @At("HEAD"),
             cancellable = true
     )
-    public void chestCavityBeyond$customServerAiStep(CallbackInfoReturnable<Boolean> cir) {
+    public void chestCavityBeyond$teleport(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(TeleportUtil.randomTeleport(this, ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER)));
     }
 
@@ -51,12 +50,15 @@ public abstract class EnderManMixin extends Monster {
     }
 
     /**
-     * @author zhaijineet
-     * @reason 换回父类逻辑，传送处理交给事件{@link CommonEventHandler#handlerLivingIncomingDamageEvent}
+     * 换回父类逻辑，传送处理交给事件{@link CommonEventHandler#handlerLivingIncomingDamageEvent}
      */
-    @Overwrite
-    public boolean hurt(DamageSource source, float amount) {
-        return super.hurt(source, amount);
+    @Inject(
+            method = "hurt",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void chestCavityBeyond$hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(super.hurt(source, amount));
     }
 
     @Mixin(EnderMan.EndermanLookForPlayerGoal.class)

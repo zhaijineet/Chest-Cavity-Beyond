@@ -30,10 +30,4 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstance {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
-    @Unique
-    @Override
-    public void setAmplifier(int amplifier) {
-        this.amplifier = amplifier;
-    }
 }

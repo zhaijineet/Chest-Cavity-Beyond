@@ -4,6 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +25,8 @@ import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MathUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
 
 public class ChestCavityData extends ItemStackHandler {
     /**
@@ -106,6 +109,45 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public NonNullList<ItemStack> getOrgans() {
         return stacks;
+    }
+
+    /**
+     * 是否拥有某个器官
+     */
+    public boolean hasOrgan(Item item) {
+        for (ItemStack organ : stacks) {
+            if (organ.is(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasOrgan(ItemStack stack) {
+        for (ItemStack organ : stacks) {
+            if (!organ.isEmpty() && ItemStack.isSameItemSameComponents(organ, stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasOrgan(TagKey<Item> tag) {
+        for (ItemStack organ : stacks) {
+            if (!organ.isEmpty() && organ.is(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasOrgan(Predicate<ItemStack> predicate) {
+        for (ItemStack organ : stacks) {
+            if (predicate.test(organ)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

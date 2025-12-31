@@ -18,7 +18,8 @@
     "ShulkerMixin",
     "SnowballMixin",
     "WaterAllergyManager",
-    "WaterAnimalMixin"
+    "WaterAnimalMixin",
+    "WitherSkeletonMixin"
   ],
   "injectors": {
     "defaultRequire": 1

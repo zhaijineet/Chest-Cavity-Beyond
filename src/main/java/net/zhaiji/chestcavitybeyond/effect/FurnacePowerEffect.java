@@ -22,6 +22,6 @@ public class FurnacePowerEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return duration % (100 / amplifier) == 0;
+        return duration % (200 / amplifier) == 0;
     }
 }
