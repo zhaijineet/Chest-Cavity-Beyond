@@ -1083,4 +1083,16 @@ public class InitItem {
                     })
                     .build()
     );
+
+    // 丝腺
+    public static final Supplier<Item> SILK_GLAND = ITEM.register(
+            "silk_gland",
+            () -> OrganFactory.builder()
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.silk(player);
+                        }
+                    })
+                    .build()
+    );
 }

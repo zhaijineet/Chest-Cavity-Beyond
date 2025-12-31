@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.Input;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -17,6 +18,7 @@ import net.zhaiji.chestcavitybeyond.client.screen.ChestCavityScreen;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.client.util.ChestCavityClientUtil;
 import net.zhaiji.chestcavitybeyond.network.server.packet.UseSkillPacket;
+import net.zhaiji.chestcavitybeyond.register.InitEntityType;
 import net.zhaiji.chestcavitybeyond.register.InitMenuType;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import org.lwjgl.glfw.GLFW;
@@ -34,6 +36,13 @@ public class ClientEventHandler {
      */
     public static void handlerRegisterKeyMappingsEvent(RegisterKeyMappingsEvent event) {
         event.register(KeyMappings.OPEN_SKILL_GUI);
+    }
+
+    /**
+     * @param event 注册实体渲染事件
+     */
+    public static void handlerEntityRenderersEvent$RegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(InitEntityType.THROWN_COBWEB.get(), ThrownItemRenderer::new);
     }
 
     /**

@@ -235,8 +235,8 @@ public class TeleportUtil {
         level.gameEvent(GameEvent.TELEPORT, pos, GameEvent.Context.of(entity));
         level.broadcastEntityEvent(entity, (byte) 46);
         if (!entity.isSilent()) {
-            level.playSound(null, entity.xo, entity.yo, entity.zo, SoundEvents.ENDERMAN_TELEPORT, entity.getSoundSource(), 1.0F, 1.0F);
-            entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+            level.playSound(null, entity.xo, entity.yo, entity.zo, SoundEvents.ENDERMAN_TELEPORT, entity.getSoundSource());
+            entity.playSound(SoundEvents.ENDERMAN_TELEPORT);
         }
     }
 }

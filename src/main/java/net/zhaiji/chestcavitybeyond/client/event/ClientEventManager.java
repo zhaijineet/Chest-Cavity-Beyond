@@ -11,6 +11,7 @@ public class ClientEventManager {
     public static void modBusListener(IEventBus modEventBus) {
         modEventBus.addListener(ClientEventHandler::handlerRegisterMenuScreensEvent);
         modEventBus.addListener(ClientEventHandler::handlerRegisterKeyMappingsEvent);
+        modEventBus.addListener(ClientEventHandler::handlerEntityRenderersEvent$RegisterRenderers);
     }
 
     public static void gameBusListener(IEventBus gameBus) {

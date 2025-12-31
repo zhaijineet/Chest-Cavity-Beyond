@@ -15,6 +15,7 @@ public class ChestCavityBeyond {
     public ChestCavityBeyond(IEventBus modEventBus, ModContainer modContainer) {
         // 注册
         InitItem.ITEM.register(modEventBus);
+        InitEntityType.ENTITY_TYPE.register(modEventBus);
         InitCreativeModeTab.CREATIVE_MODE_TAB.register(modEventBus);
         InitAttribute.ATTRIBUTE.register(modEventBus);
         InitAttachmentType.ATTACHMENT_TYPE.register(modEventBus);

@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-30T12:39:44.1500593	Item Models: chestcavitybeyond
+// 1.21.1	2025-12-31T15:50:24.6920615	Item Models: chestcavitybeyond
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
 00cca18ba2522d946fc1b3aae5088e80327ed5fd assets/chestcavitybeyond/models/item/animal_heart.json
 2774a5ea950050eb83c792d720e8a40243767dbb assets/chestcavitybeyond/models/item/animal_intestine.json
@@ -72,6 +72,7 @@ d799c548648041752674dcf05c5d023ac5cc0fda assets/chestcavitybeyond/models/item/ro
 d6c78b70b46c4a667e86de4b7c4a465e7d9e39c0 assets/chestcavitybeyond/models/item/saltwater_heart.json
 cff62d1bcadcc4f0691a8497736ee937c3e3a93c assets/chestcavitybeyond/models/item/saltwater_lung.json
 96b5506f24aa9451fd443341ad376058bb6de526 assets/chestcavitybeyond/models/item/saltwater_muscle.json
+54384047b342ce9527494146641f42d9286a2710 assets/chestcavitybeyond/models/item/silk_gland.json
 c68ee5648675eac78ad46ab1eb494ac4ae7c2906 assets/chestcavitybeyond/models/item/small_animal_appendix.json
 d09e9d7f50a0bda110cd6da859ec73c2dc42bb5a assets/chestcavitybeyond/models/item/small_animal_heart.json
 95392e2ba07795259f6c16a7b05529081faf849e assets/chestcavitybeyond/models/item/small_animal_intestine.json

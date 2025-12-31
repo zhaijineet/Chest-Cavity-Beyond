@@ -2,6 +2,7 @@ package net.zhaiji.chestcavitybeyond.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.zhaiji.chestcavitybeyond.entity.ThrownCobweb;
 import net.zhaiji.chestcavitybeyond.register.InitEffect;
 
 public class OrganSkillUtil {
@@ -127,7 +129,7 @@ public class OrganSkillUtil {
             Level level = player.level();
             stack.consume(1, player);
             float pitch = 1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F;
-            level.playSound(null, player.getOnPos(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
+            level.playSound(null, player.getOnPos().above(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
         }
     }
 
@@ -148,6 +150,7 @@ public class OrganSkillUtil {
         int amplifier = Math.max(0, (int) (furnacePower - 1));
         // TODO 将最大上限时间写入配置
         int maxDuration = 24000;
+        boolean isConsume = false;
         MobEffectInstance effect = player.getEffect(InitEffect.FURNACE_POWER);
         if (effect != null) {
             if (amplifier < effect.getAmplifier()) {
@@ -166,6 +169,7 @@ public class OrganSkillUtil {
             totalDuration += duration;
             ItemStack remaining = stack.getCraftingRemainingItem();
             stack.consume(1, player);
+            isConsume = true;
             if (!remaining.isEmpty()) {
                 if (player.getItemInHand(hand).isEmpty()) {
                     player.setItemInHand(hand, remaining);
@@ -173,11 +177,36 @@ public class OrganSkillUtil {
                     player.drop(remaining, false);
                 }
             }
+
             // 更新stack，因为有可能为消耗后的剩余物品
             stack = player.getItemInHand(hand);
         } while (isCrouching && stack.getBurnTime(null) > 0);
-        if (totalDuration > 0) {
+        if (isConsume) {
+            player.level().playSound(null, player.getOnPos().above(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
             player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
         }
+    }
+
+    /**
+     * 吐丝
+     */
+    public static void silk(Player player) {
+        boolean instabuild = player.getAbilities().instabuild;
+        if (player.getFoodData().getFoodLevel() <= 0 && !instabuild) return;
+        if (!instabuild) {
+            player.getFoodData().addExhaustion(4);
+        }
+        Level level = player.level();
+        level.playSound(
+                null,
+                player.getOnPos().above(),
+                SoundEvents.EGG_THROW,
+                SoundSource.PLAYERS,
+                0.5F,
+                0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
+        );
+        ThrownCobweb thrownCobweb = new ThrownCobweb(player, level);
+        thrownCobweb.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1, 1);
+        level.addFreshEntity(thrownCobweb);
     }
 }

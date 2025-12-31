@@ -148,7 +148,7 @@ public abstract class FoodDataMixin implements IFoodData {
         double photosynthesis = data.getCurrentValue(InitAttribute.PHOTOSYNTHESIS);
         Level level = player.level();
         // 白天且能看见天空时
-        if (photosynthesis > 0 && level.isDay() && level.canSeeSky(player.getOnPos())) {
+        if (photosynthesis > 0 && level.isDay() && level.canSeeSky(player.getOnPos().above())) {
             photosynthesisTimer += photosynthesis;
             if (photosynthesisTimer >= 800) {
                 photosynthesisTimer = 0;
