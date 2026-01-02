@@ -21,6 +21,7 @@ public class ChestCavityBeyond {
         InitAttachmentType.ATTACHMENT_TYPE.register(modEventBus);
         InitMenuType.MENU_TYPE.register(modEventBus);
         InitEffect.EFFECT.register(modEventBus);
+        InitRecipe.RECIPE_SERIALIZERS.register(modEventBus);
 
         // 事件注册管理
         CommonEventManager.init(modEventBus, NeoForge.EVENT_BUS);

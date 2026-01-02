@@ -3,10 +3,13 @@ package net.zhaiji.chestcavitybeyond.api.capability;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
+import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
@@ -26,6 +29,8 @@ public class OrganFactory {
     private static final BiConsumer<ResourceLocation, Multimap<Holder<Attribute>, AttributeModifier>> EMPTY_MODIFIER = (id, modifiers) -> {
     };
     private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
+    };
+    private static final AttackConsumer EMPTY_ATTACK =  (context, target, source, damageContainer)-> {
     };
 
     /**
@@ -51,6 +56,7 @@ public class OrganFactory {
         private Consumer<ChestCavitySlotContext> organRemovedConsumer = EMPTY_CONSUMER;
         private boolean hasSkill = false;
         private Consumer<ChestCavitySlotContext> organSkillConsumer = EMPTY_CONSUMER;
+        private AttackConsumer attackConsumer = EMPTY_ATTACK;
 
         private Builder() {
         }
@@ -117,6 +123,14 @@ public class OrganFactory {
         }
 
         /**
+         * 设置器官拥有者攻击
+         */
+        public Builder attack(AttackConsumer attackConsumer) {
+            this.attackConsumer = attackConsumer;
+            return this;
+        }
+
+        /**
          * 构建
          */
         public Item build() {
@@ -132,7 +146,8 @@ public class OrganFactory {
                             organAddedConsumer,
                             organRemovedConsumer,
                             hasSkill,
-                            organSkillConsumer
+                            organSkillConsumer,
+                            attackConsumer
                     )
             );
             return item;

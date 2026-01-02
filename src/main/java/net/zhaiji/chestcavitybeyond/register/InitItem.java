@@ -1,16 +1,22 @@
 package net.zhaiji.chestcavitybeyond.register;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
 import net.zhaiji.chestcavitybeyond.item.ChestOpenerItem;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
+import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.function.Supplier;
 
@@ -1092,6 +1098,39 @@ public class InitItem {
                         if (context.entity() instanceof Player player) {
                             OrganSkillUtil.silk(player);
                         }
+                    })
+                    .build()
+    );
+
+    // 毒腺
+    public static final Supplier<Item> VENOM_GLAND = ITEM.register(
+            "venom_gland",
+            () -> OrganFactory.builder(
+                            new Item(
+                                    new Item.Properties()
+                                            .stacksTo(1)
+                                            .component(
+                                                    DataComponents.POTION_CONTENTS,
+                                                    ChestCavityUtil.calculatePotionContents(Potions.POISON.value().getEffects())
+                                            )
+                            ) {
+                                @Override
+                                public ItemStack getDefaultInstance() {
+                                    return ChestCavityUtil.attachPotionContents(super.getDefaultInstance(), Potions.POISON.value().getEffects());
+                                }
+                            }
+                    )
+                    .tooltips((data, stack, keyContext, context, tooltipComponents, tooltipFlag) -> {
+                        TooltipUtil.addOrganTooltip(data, stack, keyContext, context, tooltipComponents, tooltipFlag);
+                        PotionContents potioncontents = stack.get(DataComponents.POTION_CONTENTS);
+                        if (potioncontents != null) {
+                            potioncontents.addPotionTooltip(tooltipComponents::add, 1.0F, context.tickRate());
+                        }
+                    })
+                    .attack((context, target, source, damageContainer) -> {
+                        context.stack()
+                                .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
+                                .forEachEffect(target::addEffect);
                     })
                     .build()
     );

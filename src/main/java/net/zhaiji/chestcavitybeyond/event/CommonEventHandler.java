@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
@@ -147,7 +148,7 @@ public class CommonEventHandler {
     public static void handlerLivingDamageEvent$Pre(LivingDamageEvent.Pre event) {
         LivingEntity entity = event.getEntity();
         ChestCavityData data = ChestCavityUtil.getData(entity);
-        double damage = event.getOriginalDamage();
+        double damage = event.getNewDamage();
         DamageSource source = event.getSource();
         boolean flag = false;
         // 应用火焰伤害修改
@@ -187,6 +188,25 @@ public class CommonEventHandler {
         }
         // TODO 未检测伤害类型
         event.setNewDamage((float) damage);
+
+        // 触发所有器官的attack效果
+        if (source.getDirectEntity() instanceof LivingEntity sourceEntity) {
+            ChestCavityData sourceData = ChestCavityUtil.getData(sourceEntity);
+            for (int i = 0; i < 27; i++) {
+                ItemStack organ = sourceData.getStackInSlot(i);
+                ChestCavityUtil.getOrganCap(organ).attack(
+                        ChestCavityUtil.createContext(
+                                sourceData,
+                                sourceEntity,
+                                i,
+                                organ
+                        ),
+                        entity,
+                        source,
+                        event.getContainer()
+                );
+            }
+        }
     }
 
     /**

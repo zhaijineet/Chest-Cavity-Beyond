@@ -5,13 +5,17 @@ import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
+import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
@@ -27,8 +31,9 @@ public class Organ implements IOrgan {
     private final Consumer<ChestCavitySlotContext> organRemovedConsumer;
     private final boolean hasSkill;
     private final Consumer<ChestCavitySlotContext> organSkillConsumer;
+    private final AttackConsumer attackConsumer;
 
-    public Organ(BiConsumer<ResourceLocation, Multimap<Holder<Attribute>, AttributeModifier>> organModifierConsumer, OrganTooltipConsumer organTooltipConsumer, Consumer<ChestCavitySlotContext> organTickConsumer, Consumer<ChestCavitySlotContext> organAddedConsumer, Consumer<ChestCavitySlotContext> organRemovedConsumer, boolean hasSkill, Consumer<ChestCavitySlotContext> organSkillConsumer) {
+    public Organ(BiConsumer<ResourceLocation, Multimap<Holder<Attribute>, AttributeModifier>> organModifierConsumer, OrganTooltipConsumer organTooltipConsumer, Consumer<ChestCavitySlotContext> organTickConsumer, Consumer<ChestCavitySlotContext> organAddedConsumer, Consumer<ChestCavitySlotContext> organRemovedConsumer, boolean hasSkill, Consumer<ChestCavitySlotContext> organSkillConsumer, AttackConsumer attackConsumer) {
         this.organModifierConsumer = organModifierConsumer;
         this.organTooltipConsumer = organTooltipConsumer;
         this.organTickConsumer = organTickConsumer;
@@ -36,6 +41,7 @@ public class Organ implements IOrgan {
         this.organRemovedConsumer = organRemovedConsumer;
         this.hasSkill = hasSkill;
         this.organSkillConsumer = organSkillConsumer;
+        this.attackConsumer = attackConsumer;
     }
 
     @Override
@@ -73,5 +79,10 @@ public class Organ implements IOrgan {
     @Override
     public void organSkill(ChestCavitySlotContext context) {
         organSkillConsumer.accept(context);
+    }
+
+    @Override
+    public void attack(ChestCavitySlotContext context, LivingEntity target, DamageSource source, DamageContainer damageContainer) {
+        attackConsumer.accept(context, target, source, damageContainer);
     }
 }

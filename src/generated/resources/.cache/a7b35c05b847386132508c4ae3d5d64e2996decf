@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-31T15:50:24.6920615	Item Models: chestcavitybeyond
+// 1.21.1	2026-01-02T17:45:32.3164143	Item Models: chestcavitybeyond
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
 00cca18ba2522d946fc1b3aae5088e80327ed5fd assets/chestcavitybeyond/models/item/animal_heart.json
 2774a5ea950050eb83c792d720e8a40243767dbb assets/chestcavitybeyond/models/item/animal_intestine.json
@@ -95,3 +95,4 @@ c7860ceb28528450ec48190047ee4569357a9971 assets/chestcavitybeyond/models/item/sp
 3fe7beb6e6bba83cac483fa8c211b02be2922c08 assets/chestcavitybeyond/models/item/spleen.json
 9b88aaafb7ddf6f80fe64802292021c5e45bb22c assets/chestcavitybeyond/models/item/stomach.json
 56258d626c609762f8c0f8d6e738410ac655325f assets/chestcavitybeyond/models/item/swift_muscle.json
+c6d759d5c9afe051f6a5fdadd17413ee8a5e5403 assets/chestcavitybeyond/models/item/venom_gland.json

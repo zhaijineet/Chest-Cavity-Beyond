@@ -2,13 +2,16 @@ package net.zhaiji.chestcavitybeyond.util;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
@@ -16,10 +19,14 @@ import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
+import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ChestCavityUtil {
     /**
@@ -142,5 +149,26 @@ public class ChestCavityUtil {
      */
     public static void openChestCavity(Player player) {
         openChestCavity(player, player);
+    }
+
+    /**
+     * 为物品附加调整后的PotionContents
+     */
+    public static ItemStack attachPotionContents(ItemStack stack, Iterable<MobEffectInstance> effects) {
+        stack.set(DataComponents.POTION_CONTENTS, calculatePotionContents(effects));
+        return stack;
+    }
+
+    /**
+     * 计算调整后的effects
+     */
+    public static PotionContents calculatePotionContents(Iterable<MobEffectInstance> effects) {
+        List<MobEffectInstance> instances = new ArrayList<>();
+        for (MobEffectInstance effect : effects) {
+            MobEffectInstance temp = new MobEffectInstance(effect);
+            ((IMobEffectInstance) temp).setDuration(temp.mapDuration(duration -> duration / 10));
+            instances.add(temp);
+        }
+        return new PotionContents(Optional.empty(), Optional.empty(), instances);
     }
 }

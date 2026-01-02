@@ -135,6 +135,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.GOLEM_ARMOR_PLATE, "Golem Armor Plate");
 
         addItem(InitItem.SILK_GLAND, "Silk Gland");
+        addItem(InitItem.VENOM_GLAND, "Venom Gland");
 
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
@@ -287,6 +288,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.GOLEM_ARMOR_PLATE, "傀儡装甲板");
 
         addItem(InitItem.SILK_GLAND, "丝腺");
+        addItem(InitItem.VENOM_GLAND, "毒腺");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");

@@ -4,11 +4,14 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -81,5 +84,16 @@ public interface IOrgan {
      * @param context 胸腔槽位上下文
      */
     default void organSkill(ChestCavitySlotContext context) {
+    }
+
+    /**
+     * 器官拥有者攻击
+     *
+     * @param context         胸腔槽位上下文
+     * @param target          攻击目标
+     * @param source          伤害源
+     * @param damageContainer 伤害容器
+     */
+    default void attack(ChestCavitySlotContext context, LivingEntity target, DamageSource source, DamageContainer damageContainer) {
     }
 }
