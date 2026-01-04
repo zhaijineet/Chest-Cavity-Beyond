@@ -5,10 +5,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -208,5 +210,25 @@ public class OrganSkillUtil {
         ThrownCobweb thrownCobweb = new ThrownCobweb(player, level);
         thrownCobweb.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1, 1);
         level.addFreshEntity(thrownCobweb);
+    }
+
+    /**
+     * 吐口水
+     */
+    public static void spit(Player player) {
+        Level level = player.level();
+        LlamaSpit llamaspit = new LlamaSpit(EntityType.LLAMA_SPIT, level);
+        llamaspit.setOwner(player);
+        llamaspit.setPos(player.getX(), player.getEyeY() - 0.5, player.getZ());
+        llamaspit.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1, 1);
+        level.playSound(
+                null,
+                player.getOnPos().above(),
+                SoundEvents.LLAMA_SPIT,
+                player.getSoundSource(),
+                1.0F,
+                1.0F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F
+        );
+        level.addFreshEntity(llamaspit);
     }
 }

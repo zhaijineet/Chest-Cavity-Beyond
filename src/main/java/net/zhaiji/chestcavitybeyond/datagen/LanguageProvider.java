@@ -136,6 +136,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.SILK_GLAND, "Silk Gland");
         addItem(InitItem.VENOM_GLAND, "Venom Gland");
+        addItem(InitItem.ARTHROPOD_HEART, "Arthropod Heart");
+        addItem(InitItem.ARTHROPOD_INTESTINE, "Arthropod Intestine");
+        addItem(InitItem.ARTHROPOD_LUNG, "Arthropod Lung");
+        addItem(InitItem.ARTHROPOD_MUSCLE, "Arthropod Muscle");
+        addItem(InitItem.ARTHROPOD_STOMACH, "Arthropod Stomach");
+        addItem(InitItem.ARTHROPOD_CAECUM, "Arthropod Caecum");
+
+        addItem(InitItem.LLAMA_LUNG, "Llama Lung");
 
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
@@ -289,6 +297,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.SILK_GLAND, "丝腺");
         addItem(InitItem.VENOM_GLAND, "毒腺");
+        addItem(InitItem.ARTHROPOD_HEART, "节肢生物心脏");
+        addItem(InitItem.ARTHROPOD_INTESTINE, "节肢生物肠子");
+        addItem(InitItem.ARTHROPOD_LUNG, "节肢生物肺脏");
+        addItem(InitItem.ARTHROPOD_MUSCLE, "节肢生物肌肉");
+        addItem(InitItem.ARTHROPOD_STOMACH, "节肢生物胃");
+        addItem(InitItem.ARTHROPOD_CAECUM, "节肢生物盲囊");
+
+        addItem(InitItem.LLAMA_LUNG, "羊驼肺脏");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");

@@ -1134,4 +1134,92 @@ public class InitItem {
                     })
                     .build()
     );
+
+    // 节肢生物心脏
+    public static final Supplier<Item> ARTHROPOD_HEART = ITEM.register(
+            "arthropod_heart",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 节肢生物肠子
+    public static final Supplier<Item> ARTHROPOD_INTESTINE = ITEM.register(
+            "arthropod_intestine",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 节肢生物肺脏
+    public static final Supplier<Item> ARTHROPOD_LUNG = ITEM.register(
+            "arthropod_lung",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 节肢生物肌肉
+    public static final Supplier<Item> ARTHROPOD_MUSCLE = ITEM.register(
+            "arthropod_muscle",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                    })
+                    .build()
+    );
+
+    // 节肢生物胃
+    public static final Supplier<Item> ARTHROPOD_STOMACH = ITEM.register(
+            "arthropod_stomach",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                    })
+                    .build()
+    );
+
+    // 节肢生物盲囊
+    public static final Supplier<Item> ARTHROPOD_CAECUM = ITEM.register(
+            "arthropod_caecum",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                    })
+                    .build()
+    );
+
+    // 羊驼肺脏
+    public static final Supplier<Item> LLAMA_LUNG = ITEM.register(
+            "llama_lung",
+            () -> OrganFactory.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                    })
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.spit(player);
+                        }
+                    })
+                    .build()
+    );
 }

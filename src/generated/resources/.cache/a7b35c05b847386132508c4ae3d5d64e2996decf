@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-02T17:45:32.3164143	Item Models: chestcavitybeyond
+// 1.21.1	2026-01-03T21:07:49.309805	Item Models: chestcavitybeyond
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
 00cca18ba2522d946fc1b3aae5088e80327ed5fd assets/chestcavitybeyond/models/item/animal_heart.json
 2774a5ea950050eb83c792d720e8a40243767dbb assets/chestcavitybeyond/models/item/animal_intestine.json
@@ -12,6 +12,12 @@ eb697009f0ae4ad9b9c9eae26ea93f71e29e715a assets/chestcavitybeyond/models/item/an
 9867c9b134bc4b3fc96c90554b83e83f1774b72d assets/chestcavitybeyond/models/item/animal_stomach.json
 88cf3974b484531ec07f9798b8d27b1c0c88c6b2 assets/chestcavitybeyond/models/item/appendix.json
 e7caae4abd9d279fde804333de002c7d0588dab6 assets/chestcavitybeyond/models/item/aquatic_muscle.json
+d3f80898d9d7bfb352984f13780a7812d2888fa9 assets/chestcavitybeyond/models/item/arthropod_caecum.json
+d3aaf0da98f8c4ad23acd43dcffbe47c1f7b5c55 assets/chestcavitybeyond/models/item/arthropod_heart.json
+366c76af8729c7b40c5626b91b37f78164e7227d assets/chestcavitybeyond/models/item/arthropod_intestine.json
+9e528755394e54ad390245c47d7e75964a74a4ba assets/chestcavitybeyond/models/item/arthropod_lung.json
+6b1e9dada46f0202d8976f178346b2b4ba8ad253 assets/chestcavitybeyond/models/item/arthropod_muscle.json
+54b8f93029f2048d16fa9e2b66633da5699af0ff assets/chestcavitybeyond/models/item/arthropod_stomach.json
 605e5541f45576b2d137efca3f5d791f168add5e assets/chestcavitybeyond/models/item/brute_muscle.json
 7dc3ffeba6c9b5a9df2e4309b662860b55e35378 assets/chestcavitybeyond/models/item/carnivore_intestine.json
 39603d00553bac554ae4092576330038bce3b815 assets/chestcavitybeyond/models/item/carnivore_stomach.json
@@ -54,6 +60,7 @@ c68da47400f14a6c0ffd81849507fad0245b9982 assets/chestcavitybeyond/models/item/in
 c2841842a4f3664c97f460bcdf4a81b51f46b33b assets/chestcavitybeyond/models/item/kidney.json
 2f7dd72838acc264f771311f99e4b13b6b12a490 assets/chestcavitybeyond/models/item/leaping_muscle.json
 aae4a93ad3915e1cbf4ca02a949c376ddf3aba05 assets/chestcavitybeyond/models/item/liver.json
+cce30216adb520495c2508714af0f24384848b14 assets/chestcavitybeyond/models/item/llama_lung.json
 5f31cc88d4e25c6b803e3c0e31e9a017ff244723 assets/chestcavitybeyond/models/item/lung.json
 06a4d3939a3d9089e97d9354491f2a66fa2c7586 assets/chestcavitybeyond/models/item/muscle.json
 9a9d40d974f153a47b04a45207cb179cc3d6d987 assets/chestcavitybeyond/models/item/piston_muscle.json
