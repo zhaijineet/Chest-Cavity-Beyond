@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -71,24 +70,24 @@ public class TeleportUtil {
     /**
      * 主动传送
      */
-    public static void teleport(Player player, double ender) {
-        Level level = player.level();
-        Optional<Vec3> pos = teleportPosition(level, player, ender);
+    public static void teleport(LivingEntity entity, double ender) {
+        Level level = entity.level();
+        Optional<Vec3> pos = teleportPosition(level, entity, ender);
         if (pos.isPresent()) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                Optional<Vec3> eventPos = teleportEvent(player, pos.get());
+            if (entity instanceof ServerPlayer serverPlayer) {
+                Optional<Vec3> eventPos = teleportEvent(entity, pos.get());
                 if (eventPos.isPresent()) {
                     Vec3 targetPos = eventPos.get();
-                    player.teleportTo(targetPos.x(), targetPos.y(), targetPos.z());
-                    onTeleportComplete(player, level, targetPos);
+                    entity.teleportTo(targetPos.x(), targetPos.y(), targetPos.z());
+                    onTeleportComplete(entity, level, targetPos);
                     serverPlayer.connection.resetPosition();
-                    player.resetFallDistance();
-                    if (player.isInWall()) {
+                    entity.resetFallDistance();
+                    if (entity.isInWall()) {
                         // 当玩家卡进墙里的时候，改变成游泳动作，预防受伤
-                        player.setPose(Pose.SWIMMING);
+                        entity.setPose(Pose.SWIMMING);
                     }
                 } else {
-                    player.playNotifySound(SoundEvents.DISPENSER_FAIL, player.getSoundSource(), 1F, 1F);
+                    level.playSound(null, entity.blockPosition(), SoundEvents.DISPENSER_FAIL, entity.getSoundSource());
                 }
             }
         }
@@ -97,13 +96,13 @@ public class TeleportUtil {
     /**
      * 传送位置
      */
-    private static Optional<Vec3> teleportPosition(Level level, Player player, double ender) {
+    private static Optional<Vec3> teleportPosition(Level level, LivingEntity entity, double ender) {
         @Nullable
         BlockPos targetPos = null;
         double floorHeight = 0;
 
-        Vec3 lookAngle = player.getLookAngle().normalize();
-        Vec3 from = player.getEyePosition();
+        Vec3 lookAngle = entity.getLookAngle().normalize();
+        Vec3 from = entity.getEyePosition();
         Vec3 to = from.add(lookAngle.scale(ender));
         ClipContext clipContext = new ClipContext(
                 from,
@@ -126,7 +125,7 @@ public class TeleportUtil {
                 targetPos = blockHitResult.getBlockPos();
             } else if (direction == Direction.DOWN) {
                 // 命中位置为方块下方，返回原定位置向下偏移玩家高度，确保不会卡入墙中
-                targetPos = blockHitResult.getBlockPos().below((int) Math.ceil(player.getBbHeight()));
+                targetPos = blockHitResult.getBlockPos().below((int) Math.ceil(entity.getBbHeight()));
             } else {
                 // 命中位置为水平方向，偏移位置到相邻区域
                 targetPos = blockHitResult.getBlockPos().offset(direction.getStepX(), 0, direction.getStepZ());
@@ -172,7 +171,7 @@ public class TeleportUtil {
         }
         if (targetPos == null
             /* 我需要近距离传送，因为我认为音效和粒子是一个很有用的提醒方式
-            || player.blockPosition().distManhattan(targetPos) < 2*/) {
+            || entity.blockPosition().distManhattan(targetPos) < 2*/) {
             return Optional.empty();
         }
         return Optional.of(targetPos.getBottomCenter().add(0, floorHeight, 0));

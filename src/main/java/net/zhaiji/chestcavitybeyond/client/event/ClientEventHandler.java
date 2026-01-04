@@ -12,7 +12,7 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
-import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
+import net.zhaiji.chestcavitybeyond.builder.OrganBuilder;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
 import net.zhaiji.chestcavitybeyond.client.screen.ChestCavityScreen;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
@@ -52,7 +52,7 @@ public class ClientEventHandler {
      */
     public static void handlerItemTooltipEvent(ItemTooltipEvent event) {
         IOrgan organ = ChestCavityUtil.getOrganCap(event.getItemStack());
-        if (organ == OrganFactory.EMPTY_ORGAN) return;
+        if (organ == OrganBuilder.EMPTY_ORGAN) return;
         Minecraft minecraft = Minecraft.getInstance();
         Options options = minecraft.options;
         Player player = event.getEntity();

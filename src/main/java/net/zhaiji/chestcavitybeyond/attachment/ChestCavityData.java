@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
+import net.zhaiji.chestcavitybeyond.api.task.IChestCavityTask;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
@@ -26,6 +27,9 @@ import net.zhaiji.chestcavitybeyond.util.MathUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class ChestCavityData extends ItemStackHandler {
@@ -59,6 +63,8 @@ public class ChestCavityData extends ItemStackHandler {
      * </P>
      */
     private int filtrationTickOffset;
+
+    private List<IChestCavityTask> tasks = new ArrayList<>();
 
     public ChestCavityData(IAttachmentHolder attachmentHolder) {
         super(27);
@@ -180,6 +186,25 @@ public class ChestCavityData extends ItemStackHandler {
             ItemStack stack = stacks.get(i);
             ChestCavityUtil.organTick(this, owner, i, stack);
         }
+        Iterator<IChestCavityTask> iterator = tasks.iterator();
+        while (iterator.hasNext()) {
+            IChestCavityTask task = iterator.next();
+            if (task.canRemove()) {
+                task.onRemoved();
+                iterator.remove();
+            } else {
+                task.tick();
+            }
+        }
+    }
+
+    /**
+     * 添加胸腔任务
+     *
+     * @param task 胸腔任务
+     */
+    public void addTask(IChestCavityTask task) {
+        tasks.add(task);
     }
 
     /**

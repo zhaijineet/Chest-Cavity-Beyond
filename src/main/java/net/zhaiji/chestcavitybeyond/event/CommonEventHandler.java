@@ -24,9 +24,9 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
 import net.zhaiji.chestcavitybeyond.api.event.RegisterChestCavityEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.builder.OrganBuilder;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityManager;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
@@ -44,7 +44,7 @@ public class CommonEventHandler {
      * @param event 注册capability事件
      */
     public static void handlerRegisterCapabilitiesEvent(RegisterCapabilitiesEvent event) {
-        OrganFactory.ORGAN_REGISTRY.forEach(((item, organ) -> {
+        OrganBuilder.ORGAN_REGISTRY.forEach(((item, organ) -> {
             event.registerItem(CapabilityManager.ORGAN, (itemStack, context) -> organ, item);
         }));
     }

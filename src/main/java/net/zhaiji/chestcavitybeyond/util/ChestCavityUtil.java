@@ -15,8 +15,8 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
-import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.builder.OrganBuilder;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
@@ -56,7 +56,7 @@ public class ChestCavityUtil {
      * @return 器官capability
      */
     public static IOrgan getOrganCap(ItemStack stack) {
-        return Objects.requireNonNullElse(stack.getCapability(CapabilityManager.ORGAN), OrganFactory.EMPTY_ORGAN);
+        return Objects.requireNonNullElse(stack.getCapability(CapabilityManager.ORGAN), OrganBuilder.EMPTY_ORGAN);
     }
 
     /**
@@ -166,7 +166,9 @@ public class ChestCavityUtil {
         List<MobEffectInstance> instances = new ArrayList<>();
         for (MobEffectInstance effect : effects) {
             MobEffectInstance temp = new MobEffectInstance(effect);
-            ((IMobEffectInstance) temp).setDuration(temp.mapDuration(duration -> duration / 10));
+            if (!effect.getEffect().value().isInstantenous()) {
+                ((IMobEffectInstance) temp).setDuration(temp.mapDuration(duration -> duration / 10));
+            }
             instances.add(temp);
         }
         return new PotionContents(Optional.empty(), Optional.empty(), instances);

@@ -58,7 +58,7 @@ public class ThrownCobweb extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         if (!level().isClientSide()) {
-            BlockPos pos = result.getEntity().getOnPos().above();
+            BlockPos pos = result.getEntity().blockPosition();
             BlockState state = level().getBlockState(pos);
             if (state.isAir() && getDefaultItem() instanceof BlockItem item) {
                 level().setBlockAndUpdate(pos, item.getBlock().defaultBlockState());

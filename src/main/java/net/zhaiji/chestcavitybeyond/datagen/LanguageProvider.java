@@ -127,6 +127,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.ROTTEN_APPENDIX, "Rotten Appendix");
         addItem(InitItem.ROTTEN_RIB, "Rotten Rib");
         addItem(InitItem.ROTTEN_MUSCLE, "Rotten Muscle");
+        addItem(InitItem.WITHERED_SPINE, "Withered Spine");
+        addItem(InitItem.WITHERED_RIB, "Withered Rib");
+        addItem(InitItem.WRITHING_SOUL_SAND, "Writhing Soul Sand");
 
         addItem(InitItem.GOLEM_CORE, "Golem Core");
         addItem(InitItem.GOLEM_CABLE, "Golem Cable");
@@ -144,6 +147,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.ARTHROPOD_CAECUM, "Arthropod Caecum");
 
         addItem(InitItem.LLAMA_LUNG, "Llama Lung");
+
+        addItem(InitItem.BLAZE_CORE, "Blaze Core");
+        addItem(InitItem.BLAZE_SHELL, "Blaze Shell");
+        addItem(InitItem.ACTIVE_BLAZE_ROD, "Active Blaze Rod");
 
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
@@ -176,6 +183,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.IRON_REPAIR, "Iron Repair");
         addAttribute(InitAttribute.FURNACE_POWER, "Furnace Power");
         addAttribute(InitAttribute.WITHERED, "Withered");
+        addAttribute(InitAttribute.VOMIT_FIREBALL, "Vomit Fireball");
 
         addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
@@ -288,6 +296,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.ROTTEN_APPENDIX, "腐烂阑尾");
         addItem(InitItem.ROTTEN_RIB, "腐烂肋骨");
         addItem(InitItem.ROTTEN_MUSCLE, "腐烂肌肉");
+        addItem(InitItem.WITHERED_SPINE, "凋零脊柱");
+        addItem(InitItem.WITHERED_RIB, "凋零肋骨");
+        addItem(InitItem.WRITHING_SOUL_SAND, "扭曲灵魂沙");
 
         addItem(InitItem.GOLEM_CORE, "傀儡核心");
         addItem(InitItem.GOLEM_CABLE, "傀儡电缆");
@@ -305,6 +316,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.ARTHROPOD_CAECUM, "节肢生物盲囊");
 
         addItem(InitItem.LLAMA_LUNG, "羊驼肺脏");
+
+        addItem(InitItem.BLAZE_CORE, "烈焰核心");
+        addItem(InitItem.BLAZE_SHELL, "烈焰外壳");
+        addItem(InitItem.ACTIVE_BLAZE_ROD, "活性烈焰棒");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
@@ -337,6 +352,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.IRON_REPAIR, "铁修复");
         addAttribute(InitAttribute.FURNACE_POWER, "熔炉之力");
         addAttribute(InitAttribute.WITHERED, "凋零化");
+        addAttribute(InitAttribute.VOMIT_FIREBALL, "呕火");
 
         addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 

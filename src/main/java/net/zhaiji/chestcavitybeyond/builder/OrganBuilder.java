@@ -1,14 +1,14 @@
-package net.zhaiji.chestcavitybeyond.api.capability;
+package net.zhaiji.chestcavitybeyond.builder;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
+import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
+import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 /**
  * 器官工厂类
  */
-public class OrganFactory {
+public class OrganBuilder {
     public static final Map<Item, Organ> ORGAN_REGISTRY = new HashMap<>();
 
     public static final IOrgan EMPTY_ORGAN = new IOrgan() {
@@ -30,7 +30,7 @@ public class OrganFactory {
     };
     private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
     };
-    private static final AttackConsumer EMPTY_ATTACK =  (context, target, source, damageContainer)-> {
+    private static final AttackConsumer EMPTY_ATTACK = (context, target, source, damageContainer) -> {
     };
 
     /**

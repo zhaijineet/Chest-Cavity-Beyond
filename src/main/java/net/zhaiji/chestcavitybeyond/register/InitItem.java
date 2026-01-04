@@ -11,7 +11,8 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
-import net.zhaiji.chestcavitybeyond.api.capability.OrganFactory;
+import net.zhaiji.chestcavitybeyond.api.task.BlazeFireballTask;
+import net.zhaiji.chestcavitybeyond.builder.OrganBuilder;
 import net.zhaiji.chestcavitybeyond.item.ChestOpenerItem;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
@@ -31,7 +32,7 @@ public class InitItem {
     // 心脏
     public static final Supplier<Item> HEART = ITEM.register(
             "heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -41,7 +42,7 @@ public class InitItem {
     // 肺脏
     public static final Supplier<Item> LUNG = ITEM.register(
             "lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -53,7 +54,7 @@ public class InitItem {
     // 脊柱
     public static final Supplier<Item> SPINE = ITEM.register(
             "spine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -64,7 +65,7 @@ public class InitItem {
     // 胃
     public static final Supplier<Item> STOMACH = ITEM.register(
             "stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -74,7 +75,7 @@ public class InitItem {
     // 肠子
     public static final Supplier<Item> INTESTINE = ITEM.register(
             "intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -84,7 +85,7 @@ public class InitItem {
     // 肾脏
     public static final Supplier<Item> KIDNEY = ITEM.register(
             "kidney",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -94,7 +95,7 @@ public class InitItem {
     // 脾脏
     public static final Supplier<Item> SPLEEN = ITEM.register(
             "spleen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -104,7 +105,7 @@ public class InitItem {
     // 肝脏
     public static final Supplier<Item> LIVER = ITEM.register(
             "liver",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -114,7 +115,7 @@ public class InitItem {
     // 阑尾
     public static final Supplier<Item> APPENDIX = ITEM.register(
             "appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -124,7 +125,7 @@ public class InitItem {
     // 肋骨
     public static final Supplier<Item> RIB = ITEM.register(
             "rib",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
@@ -134,7 +135,7 @@ public class InitItem {
     // 肌肉
     public static final Supplier<Item> MUSCLE = ITEM.register(
             "muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -145,7 +146,7 @@ public class InitItem {
     // 动物心脏
     public static final Supplier<Item> ANIMAL_HEART = ITEM.register(
             "animal_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -155,7 +156,7 @@ public class InitItem {
     // 动物肺脏
     public static final Supplier<Item> ANIMAL_LUNG = ITEM.register(
             "animal_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -167,7 +168,7 @@ public class InitItem {
     // 动物脊柱 - 防御特殊处理为0.375
     public static final Supplier<Item> ANIMAL_SPINE = ITEM.register(
             "animal_spine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.375));
@@ -178,7 +179,7 @@ public class InitItem {
     // 动物胃
     public static final Supplier<Item> ANIMAL_STOMACH = ITEM.register(
             "animal_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -188,7 +189,7 @@ public class InitItem {
     // 动物肠子
     public static final Supplier<Item> ANIMAL_INTESTINE = ITEM.register(
             "animal_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -198,7 +199,7 @@ public class InitItem {
     // 动物肾脏
     public static final Supplier<Item> ANIMAL_KIDNEY = ITEM.register(
             "animal_kidney",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -208,7 +209,7 @@ public class InitItem {
     // 动物脾脏
     public static final Supplier<Item> ANIMAL_SPLEEN = ITEM.register(
             "animal_spleen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -218,7 +219,7 @@ public class InitItem {
     // 动物肝脏
     public static final Supplier<Item> ANIMAL_LIVER = ITEM.register(
             "animal_liver",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -228,7 +229,7 @@ public class InitItem {
     // 动物阑尾
     public static final Supplier<Item> ANIMAL_APPENDIX = ITEM.register(
             "animal_appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -238,7 +239,7 @@ public class InitItem {
     // 动物肋骨
     public static final Supplier<Item> ANIMAL_RIB = ITEM.register(
             "animal_rib",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
@@ -248,7 +249,7 @@ public class InitItem {
     // 动物肌肉
     public static final Supplier<Item> ANIMAL_MUSCLE = ITEM.register(
             "animal_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -259,7 +260,7 @@ public class InitItem {
     // 小型动物心脏
     public static final Supplier<Item> SMALL_ANIMAL_HEART = ITEM.register(
             "small_animal_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -269,7 +270,7 @@ public class InitItem {
     // 小型动物肺脏
     public static final Supplier<Item> SMALL_ANIMAL_LUNG = ITEM.register(
             "small_animal_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -281,7 +282,7 @@ public class InitItem {
     // 小型动物脊柱 - 防御特殊处理为0.375，其他属性0.5
     public static final Supplier<Item> SMALL_ANIMAL_SPINE = ITEM.register(
             "small_animal_spine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.375));
@@ -292,7 +293,7 @@ public class InitItem {
     // 小型动物胃
     public static final Supplier<Item> SMALL_ANIMAL_STOMACH = ITEM.register(
             "small_animal_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -302,7 +303,7 @@ public class InitItem {
     // 小型动物肠子
     public static final Supplier<Item> SMALL_ANIMAL_INTESTINE = ITEM.register(
             "small_animal_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -312,7 +313,7 @@ public class InitItem {
     // 小型动物肾脏
     public static final Supplier<Item> SMALL_ANIMAL_KIDNEY = ITEM.register(
             "small_animal_kidney",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -322,7 +323,7 @@ public class InitItem {
     // 小型动物脾脏
     public static final Supplier<Item> SMALL_ANIMAL_SPLEEN = ITEM.register(
             "small_animal_spleen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -332,7 +333,7 @@ public class InitItem {
     // 小型动物肝脏
     public static final Supplier<Item> SMALL_ANIMAL_LIVER = ITEM.register(
             "small_animal_liver",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -342,7 +343,7 @@ public class InitItem {
     // 小型动物阑尾
     public static final Supplier<Item> SMALL_ANIMAL_APPENDIX = ITEM.register(
             "small_animal_appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -352,7 +353,7 @@ public class InitItem {
     // 小型动物肋骨
     public static final Supplier<Item> SMALL_ANIMAL_RIB = ITEM.register(
             "small_animal_rib",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -362,7 +363,7 @@ public class InitItem {
     // 小型动物肌肉
     public static final Supplier<Item> SMALL_ANIMAL_MUSCLE = ITEM.register(
             "small_animal_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -373,7 +374,7 @@ public class InitItem {
     // 鳃
     public static final Supplier<Item> GILLS = ITEM.register(
             "gills",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -385,7 +386,7 @@ public class InitItem {
     // 小型鳃
     public static final Supplier<Item> SMALL_GILLS = ITEM.register(
             "small_gills",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -397,7 +398,7 @@ public class InitItem {
     // 水生生物肌肉
     public static final Supplier<Item> AQUATIC_MUSCLE = ITEM.register(
             "aquatic_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -409,7 +410,7 @@ public class InitItem {
     // 小型水生生物肌肉
     public static final Supplier<Item> SMALL_AQUATIC_MUSCLE = ITEM.register(
             "small_aquatic_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -421,7 +422,7 @@ public class InitItem {
     // 鱼类肌肉
     public static final Supplier<Item> FISH_MUSCLE = ITEM.register(
             "fish_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -433,7 +434,7 @@ public class InitItem {
     // 小型鱼类肌肉
     public static final Supplier<Item> SMALL_FISH_MUSCLE = ITEM.register(
             "small_fish_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -445,7 +446,7 @@ public class InitItem {
     // 盐水型心脏
     public static final Supplier<Item> SALTWATER_HEART = ITEM.register(
             "saltwater_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -457,7 +458,7 @@ public class InitItem {
     // 盐水型肺脏
     public static final Supplier<Item> SALTWATER_LUNG = ITEM.register(
             "saltwater_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -471,7 +472,7 @@ public class InitItem {
     // 盐水型肌肉
     public static final Supplier<Item> SALTWATER_MUSCLE = ITEM.register(
             "saltwater_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -484,7 +485,7 @@ public class InitItem {
     // 抗火生物心脏
     public static final Supplier<Item> FIREPROOF_HEART = ITEM.register(
             "fireproof_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -495,7 +496,7 @@ public class InitItem {
     // 抗火生物肺脏
     public static final Supplier<Item> FIREPROOF_LUNG = ITEM.register(
             "fireproof_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -508,7 +509,7 @@ public class InitItem {
     // 抗火生物脊柱
     public static final Supplier<Item> FIREPROOF_SPINE = ITEM.register(
             "fireproof_spine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.375));
@@ -520,7 +521,7 @@ public class InitItem {
     // 抗火生物胃
     public static final Supplier<Item> FIREPROOF_STOMACH = ITEM.register(
             "fireproof_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -531,7 +532,7 @@ public class InitItem {
     // 抗火生物肠子
     public static final Supplier<Item> FIREPROOF_INTESTINE = ITEM.register(
             "fireproof_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -542,7 +543,7 @@ public class InitItem {
     // 抗火生物肾脏
     public static final Supplier<Item> FIREPROOF_KIDNEY = ITEM.register(
             "fireproof_kidney",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -553,7 +554,7 @@ public class InitItem {
     // 抗火生物脾脏
     public static final Supplier<Item> FIREPROOF_SPLEEN = ITEM.register(
             "fireproof_spleen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -564,7 +565,7 @@ public class InitItem {
     // 抗火生物肝脏
     public static final Supplier<Item> FIREPROOF_LIVER = ITEM.register(
             "fireproof_liver",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -575,7 +576,7 @@ public class InitItem {
     // 抗火生物阑尾
     public static final Supplier<Item> FIREPROOF_APPENDIX = ITEM.register(
             "fireproof_appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -586,7 +587,7 @@ public class InitItem {
     // 抗火生物肋骨
     public static final Supplier<Item> FIREPROOF_RIB = ITEM.register(
             "fireproof_rib",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -597,7 +598,7 @@ public class InitItem {
     // 抗火生物肌肉
     public static final Supplier<Item> FIREPROOF_MUSCLE = ITEM.register(
             "fireproof_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -609,7 +610,7 @@ public class InitItem {
     // 末影心脏
     public static final Supplier<Item> ENDER_HEART = ITEM.register(
             "ender_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 2));
@@ -621,7 +622,7 @@ public class InitItem {
     // 末影肺脏
     public static final Supplier<Item> ENDER_LUNG = ITEM.register(
             "ender_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 1.25));
@@ -634,7 +635,7 @@ public class InitItem {
     // 末影脊柱
     public static final Supplier<Item> ENDER_SPINE = ITEM.register(
             "ender_spine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.625));
@@ -647,7 +648,7 @@ public class InitItem {
     // 末影胃
     public static final Supplier<Item> ENDER_STOMACH = ITEM.register(
             "ender_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -658,7 +659,7 @@ public class InitItem {
     // 末影肠子
     public static final Supplier<Item> ENDER_INTESTINE = ITEM.register(
             "ender_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -669,7 +670,7 @@ public class InitItem {
     // 末影肾脏
     public static final Supplier<Item> ENDER_KIDNEY = ITEM.register(
             "ender_kidney",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -680,7 +681,7 @@ public class InitItem {
     // 末影脾脏
     public static final Supplier<Item> ENDER_SPLEEN = ITEM.register(
             "ender_spleen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -691,7 +692,7 @@ public class InitItem {
     // 末影肝脏
     public static final Supplier<Item> ENDER_LIVER = ITEM.register(
             "ender_liver",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -702,15 +703,13 @@ public class InitItem {
     // 末影阑尾
     public static final Supplier<Item> ENDER_APPENDIX = ITEM.register(
             "ender_appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 8));
                     })
                     .skill(context -> {
-                        if (context.entity() instanceof Player player) {
-                            OrganSkillUtil.teleport(player, context.data().getCurrentValue(InitAttribute.ENDER));
-                        }
+                        OrganSkillUtil.teleport(context.entity(), context.data().getCurrentValue(InitAttribute.ENDER));
                     })
                     .build()
     );
@@ -718,7 +717,7 @@ public class InitItem {
     // 末影肋骨
     public static final Supplier<Item> ENDER_RIB = ITEM.register(
             "ender_rib",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                     })
@@ -728,7 +727,7 @@ public class InitItem {
     // 末影肌肉
     public static final Supplier<Item> ENDER_MUSCLE = ITEM.register(
             "ender_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
@@ -740,7 +739,7 @@ public class InitItem {
     // 力量型肌肉
     public static final Supplier<Item> BRUTE_MUSCLE = ITEM.register(
             "brute_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -751,7 +750,7 @@ public class InitItem {
     // 速度型肌肉
     public static final Supplier<Item> SWIFT_MUSCLE = ITEM.register(
             "swift_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
@@ -763,7 +762,7 @@ public class InitItem {
     // 弹跳型肌肉
     public static final Supplier<Item> LEAPING_MUSCLE = ITEM.register(
             "leaping_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -775,7 +774,7 @@ public class InitItem {
     // 食肉动物胃
     public static final Supplier<Item> CARNIVORE_STOMACH = ITEM.register(
             "carnivore_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -786,7 +785,7 @@ public class InitItem {
     // 小型食肉动物胃
     public static final Supplier<Item> SMALL_CARNIVORE_STOMACH = ITEM.register(
             "small_carnivore_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -797,7 +796,7 @@ public class InitItem {
     // 食肉动物肠子
     public static final Supplier<Item> CARNIVORE_INTESTINE = ITEM.register(
             "carnivore_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -808,7 +807,7 @@ public class InitItem {
     // 小型食肉动物肠子
     public static final Supplier<Item> SMALL_CARNIVORE_INTESTINE = ITEM.register(
             "small_carnivore_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -819,7 +818,7 @@ public class InitItem {
     // 食草动物胃
     public static final Supplier<Item> HERBIVORE_STOMACH = ITEM.register(
             "herbivore_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
@@ -830,7 +829,7 @@ public class InitItem {
     // 小型食草动物胃
     public static final Supplier<Item> SMALL_HERBIVORE_STOMACH = ITEM.register(
             "small_herbivore_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -841,7 +840,7 @@ public class InitItem {
     // 食草动物肠子
     public static final Supplier<Item> HERBIVORE_INTESTINE = ITEM.register(
             "herbivore_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1.25));
@@ -852,7 +851,7 @@ public class InitItem {
     // 小型食草动物肠子
     public static final Supplier<Item> SMALL_HERBIVORE_INTESTINE = ITEM.register(
             "small_herbivore_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.HERBIVOROUS_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -863,7 +862,7 @@ public class InitItem {
     // 食草动物瘤胃
     public static final Supplier<Item> HERBIVORE_RUMEN = ITEM.register(
             "herbivore_rumen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, -0.5));
                         modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -879,15 +878,13 @@ public class InitItem {
     // 苦力怕阑尾
     public static final Supplier<Item> CREEPER_APPENDIX = ITEM.register(
             "creeper_appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.EXPLOSIVE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .skill(context -> {
-                        if (context.entity() instanceof Player player) {
-                            OrganSkillUtil.explosion(player, context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
-                        }
+                        OrganSkillUtil.explosion(context.entity(), context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
                     })
                     .build()
     );
@@ -895,7 +892,7 @@ public class InitItem {
     // 苦力怕阑尾
     public static final Supplier<Item> CREEPER_LEAF = ITEM.register(
             "creeper_leaf",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.PHOTOSYNTHESIS, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -906,7 +903,7 @@ public class InitItem {
     // 腐烂心脏
     public static final Supplier<Item> ROTTEN_HEART = ITEM.register(
             "rotten_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -916,7 +913,7 @@ public class InitItem {
     // 腐烂肺脏
     public static final Supplier<Item> ROTTEN_LUNG = ITEM.register(
             "rotten_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -928,7 +925,7 @@ public class InitItem {
     // 腐烂脊柱
     public static final Supplier<Item> ROTTEN_SPINE = ITEM.register(
             "rotten_spine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -939,7 +936,7 @@ public class InitItem {
     // 腐烂胃
     public static final Supplier<Item> ROTTEN_STOMACH = ITEM.register(
             "rotten_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SCAVENGER_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -950,7 +947,7 @@ public class InitItem {
     // 腐烂肠子
     public static final Supplier<Item> ROTTEN_INTESTINE = ITEM.register(
             "rotten_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SCAVENGER_NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -961,7 +958,7 @@ public class InitItem {
     // 腐烂肾脏
     public static final Supplier<Item> ROTTEN_KIDNEY = ITEM.register(
             "rotten_kidney",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -971,7 +968,7 @@ public class InitItem {
     // 腐烂脾脏
     public static final Supplier<Item> ROTTEN_SPLEEN = ITEM.register(
             "rotten_spleen",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -981,7 +978,7 @@ public class InitItem {
     // 腐烂肝脏
     public static final Supplier<Item> ROTTEN_LIVER = ITEM.register(
             "rotten_liver",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -991,7 +988,7 @@ public class InitItem {
     // 腐烂阑尾
     public static final Supplier<Item> ROTTEN_APPENDIX = ITEM.register(
             "rotten_appendix",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -1001,7 +998,7 @@ public class InitItem {
     // 腐烂肋骨
     public static final Supplier<Item> ROTTEN_RIB = ITEM.register(
             "rotten_rib",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                     })
@@ -1011,7 +1008,7 @@ public class InitItem {
     // 腐烂肌肉
     public static final Supplier<Item> ROTTEN_MUSCLE = ITEM.register(
             "rotten_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -1019,10 +1016,45 @@ public class InitItem {
                     .build()
     );
 
+    // 凋零脊柱
+    public static final Supplier<Item> WITHERED_SPINE = ITEM.register(
+            "withered_spine",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.WITHERED, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 凋零肋骨
+    public static final Supplier<Item> WITHERED_RIB = ITEM.register(
+            "withered_rib",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.WITHERED, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 扭曲灵魂沙
+    public static final Supplier<Item> WRITHING_SOUL_SAND = ITEM.register(
+            "writhing_soul_sand",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.WITHERED, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
     // 傀儡核心
     public static final Supplier<Item> GOLEM_CORE = ITEM.register(
             "golem_core",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -1034,7 +1066,7 @@ public class InitItem {
     // 傀儡电缆
     public static final Supplier<Item> GOLEM_CABLE = ITEM.register(
             "golem_cable",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -1047,7 +1079,7 @@ public class InitItem {
     // 熔炉内核
     public static final Supplier<Item> INNER_FURNACE = ITEM.register(
             "inner_furnace",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -1064,7 +1096,7 @@ public class InitItem {
     // 活塞型肌肉
     public static final Supplier<Item> PISTON_MUSCLE = ITEM.register(
             "piston_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 2));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -1076,7 +1108,7 @@ public class InitItem {
     // 傀儡装甲板
     public static final Supplier<Item> GOLEM_ARMOR_PLATE = ITEM.register(
             "golem_armor_plate",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.IRON_REPAIR, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -1093,11 +1125,9 @@ public class InitItem {
     // 丝腺
     public static final Supplier<Item> SILK_GLAND = ITEM.register(
             "silk_gland",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .skill(context -> {
-                        if (context.entity() instanceof Player player) {
-                            OrganSkillUtil.silk(player);
-                        }
+                        OrganSkillUtil.silk(context.entity());
                     })
                     .build()
     );
@@ -1105,7 +1135,7 @@ public class InitItem {
     // 毒腺
     public static final Supplier<Item> VENOM_GLAND = ITEM.register(
             "venom_gland",
-            () -> OrganFactory.builder(
+            () -> OrganBuilder.builder(
                             new Item(
                                     new Item.Properties()
                                             .stacksTo(1)
@@ -1138,7 +1168,7 @@ public class InitItem {
     // 节肢生物心脏
     public static final Supplier<Item> ARTHROPOD_HEART = ITEM.register(
             "arthropod_heart",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -1149,7 +1179,7 @@ public class InitItem {
     // 节肢生物肠子
     public static final Supplier<Item> ARTHROPOD_INTESTINE = ITEM.register(
             "arthropod_intestine",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -1161,7 +1191,7 @@ public class InitItem {
     // 节肢生物肺脏
     public static final Supplier<Item> ARTHROPOD_LUNG = ITEM.register(
             "arthropod_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
@@ -1174,7 +1204,7 @@ public class InitItem {
     // 节肢生物肌肉
     public static final Supplier<Item> ARTHROPOD_MUSCLE = ITEM.register(
             "arthropod_muscle",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
@@ -1185,7 +1215,7 @@ public class InitItem {
     // 节肢生物胃
     public static final Supplier<Item> ARTHROPOD_STOMACH = ITEM.register(
             "arthropod_stomach",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -1197,7 +1227,7 @@ public class InitItem {
     // 节肢生物盲囊
     public static final Supplier<Item> ARTHROPOD_CAECUM = ITEM.register(
             "arthropod_caecum",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 0.5));
                         modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -1209,16 +1239,54 @@ public class InitItem {
     // 羊驼肺脏
     public static final Supplier<Item> LLAMA_LUNG = ITEM.register(
             "llama_lung",
-            () -> OrganFactory.builder()
+            () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
                     .skill(context -> {
-                        if (context.entity() instanceof Player player) {
-                            OrganSkillUtil.spit(player);
-                        }
+                        OrganSkillUtil.spit(context.entity());
+                    })
+                    .build()
+    );
+
+    // 烈焰核心
+    public static final Supplier<Item> BLAZE_CORE = ITEM.register(
+            "blaze_core",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 0.25));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 3));
+                    })
+                    .build()
+    );
+
+    // 烈焰外壳
+    public static final Supplier<Item> BLAZE_SHELL = ITEM.register(
+            "blaze_shell",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 3));
+                    })
+                    .build()
+    );
+
+    // 活性烈焰棒
+    public static final Supplier<Item> ACTIVE_BLAZE_ROD = ITEM.register(
+            "active_blaze_rod",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.VOMIT_FIREBALL, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 3));
+                    })
+                    .skill(context -> {
+                        context.data().addTask(new BlazeFireballTask(context.data()));
                     })
                     .build()
     );

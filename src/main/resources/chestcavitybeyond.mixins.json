@@ -3,6 +3,9 @@
   "package": "net.zhaiji.chestcavitybeyond.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BlazeMixin",
+    "BlazeMixin$BlazeAttackGoalMixin",
+    "CaveSpiderMixin",
     "CommonHooksMixin",
     "CreeperMixin",
     "CreeperMixin$SwellGoalMixin",
@@ -12,6 +15,7 @@
     "IronGolemMixin",
     "LivingBreatheEventMixin",
     "LivingEntityMixin",
+    "LlamaMixin",
     "MobEffectInstanceMixin",
     "PlayerMixin",
     "RandomSwimmingGoalMixin",
@@ -19,6 +23,7 @@
     "SnowballMixin",
     "WaterAllergyManager",
     "WaterAnimalMixin",
+    "WitherBossMixin",
     "WitherSkeletonMixin"
   ],
   "injectors": {
@@ -26,5 +31,8 @@
   },
   "overwrites": {
     "requireAnnotations": true
+  },
+  "mixinextras": {
+    "minVersion": "0.5.0"
   }
 }

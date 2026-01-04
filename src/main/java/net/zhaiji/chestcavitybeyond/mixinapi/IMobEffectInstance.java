@@ -8,6 +8,7 @@ public interface IMobEffectInstance {
 
     /**
      * 设置持续时间
+     *
      * @param duration 持续时间
      */
     void setDuration(int duration);

@@ -11,6 +11,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LlamaSpit;
+import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -59,11 +61,11 @@ public class OrganSkillUtil {
     /**
      * 让玩家沿着视线方向传送
      *
-     * @param player 玩家
+     * @param entity 实体
      * @param ender  末影属性值
      */
-    public static void teleport(Player player, double ender) {
-        TeleportUtil.teleport(player, ender);
+    public static void teleport(LivingEntity entity, double ender) {
+        TeleportUtil.teleport(entity, ender);
     }
 
     /**
@@ -103,9 +105,9 @@ public class OrganSkillUtil {
     /**
      * 自爆
      */
-    public static void explosion(Player player, double creepy) {
+    public static void explosion(LivingEntity entity, double creepy) {
         if (creepy <= 0) return;
-        player.level().explode(null, player.getX(), player.getY(), player.getZ(), (float) (3 * creepy), Level.ExplosionInteraction.NONE);
+        entity.level().explode(null, entity.getX(), entity.getY(), entity.getZ(), (float) (3 * creepy), Level.ExplosionInteraction.NONE);
     }
 
     /**
@@ -131,7 +133,7 @@ public class OrganSkillUtil {
             Level level = player.level();
             stack.consume(1, player);
             float pitch = 1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F;
-            level.playSound(null, player.getOnPos().above(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
+            level.playSound(null, player.blockPosition(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
         }
     }
 
@@ -184,7 +186,7 @@ public class OrganSkillUtil {
             stack = player.getItemInHand(hand);
         } while (isCrouching && stack.getBurnTime(null) > 0);
         if (isConsume) {
-            player.level().playSound(null, player.getOnPos().above(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
+            player.level().playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
             player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
         }
     }
@@ -192,43 +194,68 @@ public class OrganSkillUtil {
     /**
      * 吐丝
      */
-    public static void silk(Player player) {
-        boolean instabuild = player.getAbilities().instabuild;
-        if (player.getFoodData().getFoodLevel() <= 0 && !instabuild) return;
-        if (!instabuild) {
-            player.getFoodData().addExhaustion(4);
+    public static void silk(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            boolean instabuild = player.getAbilities().instabuild;
+            if (player.getFoodData().getFoodLevel() <= 0 && !instabuild) return;
+            if (!instabuild) {
+                player.getFoodData().addExhaustion(4);
+            }
         }
-        Level level = player.level();
+        Level level = entity.level();
         level.playSound(
                 null,
-                player.getOnPos().above(),
+                entity.blockPosition(),
                 SoundEvents.EGG_THROW,
                 SoundSource.PLAYERS,
                 0.5F,
                 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
-        ThrownCobweb thrownCobweb = new ThrownCobweb(player, level);
-        thrownCobweb.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1, 1);
+        ThrownCobweb thrownCobweb = new ThrownCobweb(entity, level);
+        thrownCobweb.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
         level.addFreshEntity(thrownCobweb);
     }
 
     /**
      * 吐口水
      */
-    public static void spit(Player player) {
-        Level level = player.level();
-        LlamaSpit llamaspit = new LlamaSpit(EntityType.LLAMA_SPIT, level);
-        llamaspit.setOwner(player);
-        llamaspit.setPos(player.getX(), player.getEyeY() - 0.5, player.getZ());
-        llamaspit.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1, 1);
+    public static void spit(LivingEntity entity) {
+        Level level = entity.level();
         level.playSound(
                 null,
-                player.getOnPos().above(),
+                entity.blockPosition(),
                 SoundEvents.LLAMA_SPIT,
-                player.getSoundSource(),
+                entity.getSoundSource(),
                 1.0F,
                 1.0F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F
         );
+        LlamaSpit llamaspit = new LlamaSpit(EntityType.LLAMA_SPIT, level);
+        llamaspit.setOwner(entity);
+        llamaspit.setPos(entity.getX(), entity.getEyeY() - 0.5, entity.getZ());
+        llamaspit.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
         level.addFreshEntity(llamaspit);
+    }
+
+    /**
+     * 发射凋零骷髅头
+     */
+    public static void witherSkull(LivingEntity entity) {
+        Level level = entity.level();
+        level.levelEvent(null, 1024, entity.blockPosition(), 0);
+        Vec3 lookAngle = entity.getLookAngle();
+        WitherSkull witherSkull = new WitherSkull(level, entity, lookAngle);
+        witherSkull.setPos(entity.getX() + lookAngle.x / 2, entity.getEyeY() - 0.5, entity.getZ() + lookAngle.z / 2);
+        level.addFreshEntity(witherSkull);
+    }
+
+    /**
+     * 发射小火球
+     */
+    public static void smallFireball(LivingEntity entity) {
+        Level level = entity.level();
+        level.levelEvent(null, 1018, entity.blockPosition(), 0);
+        SmallFireball smallfireball = new SmallFireball(level, entity, entity.getLookAngle().normalize());
+        smallfireball.setPos(entity.getX(), entity.getEyeY() - 0.2, entity.getZ());
+        level.addFreshEntity(smallfireball);
     }
 }

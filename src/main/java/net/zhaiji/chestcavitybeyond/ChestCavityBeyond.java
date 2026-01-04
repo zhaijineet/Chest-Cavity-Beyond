@@ -6,6 +6,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zhaiji.chestcavitybeyond.event.CommonEventManager;
+import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.register.*;
 
 @Mod(ChestCavityBeyond.MOD_ID)
@@ -22,6 +23,9 @@ public class ChestCavityBeyond {
         InitMenuType.MENU_TYPE.register(modEventBus);
         InitEffect.EFFECT.register(modEventBus);
         InitRecipe.RECIPE_SERIALIZERS.register(modEventBus);
+
+        // 自定注册
+        OrganManager.register();
 
         // 事件注册管理
         CommonEventManager.init(modEventBus, NeoForge.EVENT_BUS);

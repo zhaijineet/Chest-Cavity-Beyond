@@ -1,4 +1,5 @@
-// 1.21.1	2026-01-03T21:07:49.309805	Item Models: chestcavitybeyond
+// 1.21.1	2026-01-04T15:00:01.5788073	Item Models: chestcavitybeyond
+24958fd31beb57a2b7817edbbadb67097c619879 assets/chestcavitybeyond/models/item/active_blaze_rod.json
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
 00cca18ba2522d946fc1b3aae5088e80327ed5fd assets/chestcavitybeyond/models/item/animal_heart.json
 2774a5ea950050eb83c792d720e8a40243767dbb assets/chestcavitybeyond/models/item/animal_intestine.json
@@ -18,6 +19,8 @@ d3aaf0da98f8c4ad23acd43dcffbe47c1f7b5c55 assets/chestcavitybeyond/models/item/ar
 9e528755394e54ad390245c47d7e75964a74a4ba assets/chestcavitybeyond/models/item/arthropod_lung.json
 6b1e9dada46f0202d8976f178346b2b4ba8ad253 assets/chestcavitybeyond/models/item/arthropod_muscle.json
 54b8f93029f2048d16fa9e2b66633da5699af0ff assets/chestcavitybeyond/models/item/arthropod_stomach.json
+d5f3fe586ad5cc4fe1f35c8959f4f0da942ef7d2 assets/chestcavitybeyond/models/item/blaze_core.json
+e2b91054388f815be4781b70a19195463389adf6 assets/chestcavitybeyond/models/item/blaze_shell.json
 605e5541f45576b2d137efca3f5d791f168add5e assets/chestcavitybeyond/models/item/brute_muscle.json
 7dc3ffeba6c9b5a9df2e4309b662860b55e35378 assets/chestcavitybeyond/models/item/carnivore_intestine.json
 39603d00553bac554ae4092576330038bce3b815 assets/chestcavitybeyond/models/item/carnivore_stomach.json
@@ -103,3 +106,6 @@ c7860ceb28528450ec48190047ee4569357a9971 assets/chestcavitybeyond/models/item/sp
 9b88aaafb7ddf6f80fe64802292021c5e45bb22c assets/chestcavitybeyond/models/item/stomach.json
 56258d626c609762f8c0f8d6e738410ac655325f assets/chestcavitybeyond/models/item/swift_muscle.json
 c6d759d5c9afe051f6a5fdadd17413ee8a5e5403 assets/chestcavitybeyond/models/item/venom_gland.json
+5c9ec89807740c0e1e4271f9f658dcdb2f8b348d assets/chestcavitybeyond/models/item/withered_rib.json
+4c94cf96dc33c04f23e3604e78c25abb880d3f78 assets/chestcavitybeyond/models/item/withered_spine.json
+a5fa6b5dfae08eeb4f30fce8c5a4611617615074 assets/chestcavitybeyond/models/item/writhing_soul_sand.json
