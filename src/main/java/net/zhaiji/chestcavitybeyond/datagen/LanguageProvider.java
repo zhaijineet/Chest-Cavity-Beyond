@@ -23,8 +23,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     public void English() {
         add(InitCreativeModeTab.CHEST_CAVITY_BEYOND_TAB_TRANSLATABLE, "Chest Cavity Beyond");
 
+        add(KeyMappings.KEY_CATEGORY_TRANSLATABLE, "Chest Cavity");
         add(KeyMappings.OPEN_SKILL_GUI_TRANSLATABLE, "Open Skill Gui");
         add(KeyMappings.USE_ORGAN_SKILL_TRANSLATABLE, "Use Organ Skill");
+        for (int i = 0; i < 27; i++) {
+            add(KeyMappings.USE_ORGAN_SKILLS_TRANSLATABLE + i, "Organ Skill " + (i < 9 ? "0" + (i + 1) : (i + 1)));
+        }
 
         addItem(InitItem.CHEST_OPENER, "Chest Opener");
 
@@ -159,6 +163,20 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.SHULKER_SPLEEN, "Shlker Spleen");
 
+        addItem(InitItem.BREEZE_HEART, "Breeze Heart");
+        addItem(InitItem.ACTIVE_BREEZE_ROD, "Active Breeze Rod");
+
+        addItem(InitItem.DRAGON_HEART, "Dragon Heart");
+        addItem(InitItem.DRAGON_LUNG, "Dragon Lung");
+        addItem(InitItem.DRAGON_SPINE, "Dragon Spine");
+        addItem(InitItem.DRAGON_KIDNEY, "Dragon Kidney");
+        addItem(InitItem.DRAGON_SPLEEN, "Dragon Spleen");
+        addItem(InitItem.DRAGON_LIVER, "Dragon Liver");
+        addItem(InitItem.DRAGON_APPENDIX, "Dragon Appendix");
+        addItem(InitItem.DRAGON_RIB, "Dragon Rib");
+        addItem(InitItem.DRAGON_MUSCLE, "Dragon Muscle");
+        addItem(InitItem.MANA_REACTOR, "Mana Reactor");
+
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
         addAttribute(InitAttribute.DEFENSE, "Defense");
@@ -192,6 +210,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.WITHERED, "Withered");
         addAttribute(InitAttribute.VOMIT_FIREBALL, "Vomit Fireball");
         addAttribute(InitAttribute.GHASTLY, "Ghastly");
+        addAttribute(InitAttribute.CRYSTALLIZATION, "Crystallization");
 
         addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
@@ -201,8 +220,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     public void Chinese() {
         add(InitCreativeModeTab.CHEST_CAVITY_BEYOND_TAB_TRANSLATABLE, "胸腔");
 
+        add(KeyMappings.KEY_CATEGORY_TRANSLATABLE, "胸腔");
         add(KeyMappings.OPEN_SKILL_GUI_TRANSLATABLE, "打开技能界面");
         add(KeyMappings.USE_ORGAN_SKILL_TRANSLATABLE, "使用器官技能");
+        for (int i = 0; i < 27; i++) {
+            add(KeyMappings.USE_ORGAN_SKILLS_TRANSLATABLE + i, "器官技能" + (i < 9 ? "0" + (i + 1) : (i + 1)));
+        }
 
         addItem(InitItem.CHEST_OPENER, "开胸器");
 
@@ -334,7 +357,21 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.GHAST_STOMACH, "恶魂胃");
         addItem(InitItem.GAS_SAC, "气囊");
 
-            addItem(InitItem.SHULKER_SPLEEN, "潜影贝脾脏");
+        addItem(InitItem.SHULKER_SPLEEN, "潜影贝脾脏");
+
+        addItem(InitItem.BREEZE_HEART, "旋风核心");
+        addItem(InitItem.ACTIVE_BREEZE_ROD, "活性旋风棒");
+
+        addItem(InitItem.DRAGON_HEART, "龙之心脏");
+        addItem(InitItem.DRAGON_LUNG, "龙之肺脏");
+        addItem(InitItem.DRAGON_SPINE, "龙之脊柱");
+        addItem(InitItem.DRAGON_KIDNEY, "龙之肾脏");
+        addItem(InitItem.DRAGON_SPLEEN, "龙之脾脏");
+        addItem(InitItem.DRAGON_LIVER, "龙之肝脏");
+        addItem(InitItem.DRAGON_APPENDIX, "龙之阑尾");
+        addItem(InitItem.DRAGON_RIB, "龙之肋骨");
+        addItem(InitItem.DRAGON_MUSCLE, "龙之肌肉");
+        addItem(InitItem.MANA_REACTOR, "魔力反应装置");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
@@ -369,6 +406,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.WITHERED, "凋零化");
         addAttribute(InitAttribute.VOMIT_FIREBALL, "呕火");
         addAttribute(InitAttribute.GHASTLY, "可怖");
+        addAttribute(InitAttribute.CRYSTALLIZATION, "结晶化");
 
         addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 

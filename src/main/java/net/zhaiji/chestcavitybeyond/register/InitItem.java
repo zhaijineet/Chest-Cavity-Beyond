@@ -1347,4 +1347,139 @@ public class InitItem {
                     })
                     .build()
     );
+
+    // 旋风核心
+    public static final Supplier<Item> BREEZE_HEART = ITEM.register(
+            "breeze_heart",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
+                    })
+                    .skill(context -> {
+                        if (context.entity() instanceof Player player) {
+                            OrganSkillUtil.windCharge(player);
+                        }
+                    })
+                    .build()
+    );
+
+    // 活性旋风棒
+    public static final Supplier<Item> ACTIVE_BREEZE_ROD = ITEM.register(
+            "active_breeze_rod",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 0.5));
+                        modifiers.put(InitAttribute.LEAPING, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 龙之心脏
+    public static final Supplier<Item> DRAGON_HEART = ITEM.register(
+            "dragon_heart",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 龙之肺脏
+    public static final Supplier<Item> DRAGON_LUNG = ITEM.register(
+            "dragon_lung",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .skill(context -> {
+                        OrganSkillUtil.dragonFireball(context.entity());
+                    })
+                    .build()
+    );
+
+    // 龙之脊柱
+    public static final Supplier<Item> DRAGON_SPINE = ITEM.register(
+            "dragon_spine",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 龙之肾脏
+    public static final Supplier<Item> DRAGON_KIDNEY = ITEM.register(
+            "dragon_kidney",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 龙之脾脏
+    public static final Supplier<Item> DRAGON_SPLEEN = ITEM.register(
+            "dragon_spleen",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 龙之肝脏
+    public static final Supplier<Item> DRAGON_LIVER = ITEM.register(
+            "dragon_liver",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 龙之阑尾
+    public static final Supplier<Item> DRAGON_APPENDIX = ITEM.register(
+            "dragon_appendix",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 龙之肋骨
+    public static final Supplier<Item> DRAGON_RIB = ITEM.register(
+            "dragon_rib",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 龙之肌肉
+    public static final Supplier<Item> DRAGON_MUSCLE = ITEM.register(
+            "dragon_muscle",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 魔力反应装置
+    public static final Supplier<Item> MANA_REACTOR = ITEM.register(
+            "mana_reactor",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CRYSTALLIZATION, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
 }

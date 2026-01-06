@@ -37,6 +37,8 @@ public class ClientEventHandler {
      */
     public static void handlerRegisterKeyMappingsEvent(RegisterKeyMappingsEvent event) {
         event.register(KeyMappings.OPEN_SKILL_GUI);
+        event.register(KeyMappings.USE_ORGAN_SKILL);
+        KeyMappings.USE_SKILLS_MAPPINGS.forEach(event::register);
     }
 
     /**
@@ -103,6 +105,11 @@ public class ClientEventHandler {
         if (KeyMappings.USE_ORGAN_SKILL.isActiveAndMatches(key)) {
             if (OrganSkillScreen.selectedSlot != -1) {
                 PacketDistributor.sendToServer(new UseSkillPacket(OrganSkillScreen.selectedSlot));
+            }
+        }
+        for (int i = 0; i < KeyMappings.USE_SKILLS_MAPPINGS.size(); i++) {
+            if (KeyMappings.USE_SKILLS_MAPPINGS.get(i).isActiveAndMatches(key)) {
+                PacketDistributor.sendToServer(new UseSkillPacket(i));
             }
         }
     }

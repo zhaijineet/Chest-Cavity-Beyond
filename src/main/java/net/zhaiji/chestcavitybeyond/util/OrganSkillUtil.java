@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
+import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -313,5 +314,35 @@ public class OrganSkillUtil {
         if (hitResult instanceof EntityHitResult entityHitResult) {
             shulkerBullet(entity, entityHitResult.getEntity());
         }
+    }
+
+    /**
+     * 发射风弹
+     */
+    public static void windCharge(Player player) {
+        Level level = player.level();
+        level.playSound(
+                null,
+                player.blockPosition(),
+                SoundEvents.BREEZE_SHOOT,
+                player.getSoundSource(),
+                1.5F,
+                1.0F
+        );
+        WindCharge windcharge = new WindCharge(player, level, player.position().x(), player.getEyePosition().y(), player.position().z());
+        windcharge.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1.5F, 1);
+        level.addFreshEntity(windcharge);
+    }
+
+    /**
+     * 发射龙息弹
+     */
+    public static void dragonFireball(LivingEntity entity) {
+        Level level = entity.level();
+        level.levelEvent(null, 1017, entity.blockPosition(), 0);
+        DragonFireball dragonfireball = new DragonFireball(level, entity, entity.getLookAngle().normalize());
+        dragonfireball.setPos(entity.getX(), entity.getEyeY() - 0.6, entity.getZ());
+        dragonfireball.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
+        level.addFreshEntity(dragonfireball);
     }
 }

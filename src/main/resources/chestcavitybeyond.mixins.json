@@ -5,6 +5,7 @@
   "mixins": [
     "BlazeMixin",
     "BlazeMixin$BlazeAttackGoalMixin",
+    "BreezeShootMixin",
     "CaveSpiderMixin",
     "CommonHooksMixin",
     "CreeperMixin",
@@ -28,7 +29,8 @@
     "WaterAllergyManager",
     "WaterAnimalMixin",
     "WitherBossMixin",
-    "WitherSkeletonMixin"
+    "WitherSkeletonMixin",
+    "WitherSkullMixin"
   ],
   "injectors": {
     "defaultRequire": 1

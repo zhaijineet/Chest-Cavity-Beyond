@@ -25,6 +25,7 @@ public abstract class LargeFireballMixin extends Fireball {
     )
     public void chestCavityBeyond$onHit(Args args) {
         if (getOwner() instanceof Player) {
+            // 玩家造成的爆炸不会生成火焰和炸掉方块
             args.set(5, false);
             args.set(6, Level.ExplosionInteraction.NONE);
         }

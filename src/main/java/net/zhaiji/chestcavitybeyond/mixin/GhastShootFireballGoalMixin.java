@@ -17,6 +17,9 @@ public abstract class GhastShootFireballGoalMixin extends Goal {
     @Final
     private Ghast ghast;
 
+    /**
+     * 没有可怖属性不允许发射大火球
+     */
     @Inject(
             method = "tick",
             at = @At("HEAD"),

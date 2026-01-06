@@ -77,6 +77,8 @@ public class InitAttribute {
     public static final Holder<Attribute> VOMIT_FIREBALL = registerRangedAttribute("vomit_fireball");
     // 可怖
     public static final Holder<Attribute> GHASTLY = registerRangedAttribute("ghastly");
+    // 结晶化
+    public static final Holder<Attribute> CRYSTALLIZATION = registerRangedAttribute("crystallization");
 
     public static Holder<Attribute> registerRangedAttribute(String name) {
         return ATTRIBUTE.register(

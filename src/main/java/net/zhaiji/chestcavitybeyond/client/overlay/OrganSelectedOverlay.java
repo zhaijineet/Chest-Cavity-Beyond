@@ -27,6 +27,6 @@ public class OrganSelectedOverlay {
         int x = guiGraphics.guiWidth() / 2 + (isRightHand ? -120 : 98);
         int y = guiGraphics.guiHeight() - 22;
         guiGraphics.blit(ChestCavityBeyond.of("textures/gui/organ_selected.png"), x, y, 0, 0, 22, 22, 22, 22);
-        guiGraphics.renderItem(organ, x + 3, y + 2);
+        guiGraphics.renderItem(organ, x + 3, y + 3);
     }
 }
