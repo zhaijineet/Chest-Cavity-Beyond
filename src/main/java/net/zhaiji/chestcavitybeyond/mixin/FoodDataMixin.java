@@ -66,7 +66,8 @@ public abstract class FoodDataMixin implements IFoodData {
      */
     @Inject(
             method = "eat(Lnet/minecraft/world/food/FoodProperties;)V",
-            at = @At("HEAD")
+            at = @At("HEAD"),
+            cancellable = true
     )
     public void chestCavityBeyond$eat(FoodProperties foodProperties, CallbackInfo ci) {
         int foodLevel = foodProperties.nutrition();
@@ -115,12 +116,15 @@ public abstract class FoodDataMixin implements IFoodData {
                 }
             }
         }
-        digestionDiff = Math.max(0, digestionDiff);
-        nutritionDiff = Math.max(0, nutritionDiff);
         foodLevel = (int) (foodLevel * MathUtil.getDirectScale(digestionDiff));
+        // 正数时，应该小心增加，负数时，应该大胆减少
+        nutritionDiff = nutritionDiff > 0 ? nutritionDiff / 4 : nutritionDiff;
         saturation = (float) (saturation * MathUtil.getDirectScale(nutritionDiff) + saturationAdd);
+        foodLevel = Math.max(0, foodLevel);
+        saturation = Math.max(0, saturation);
         add(foodLevel, saturation);
         food = ItemStack.EMPTY;
+        ci.cancel();
     }
 
     /**

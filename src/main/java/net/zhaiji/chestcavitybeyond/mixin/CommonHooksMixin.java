@@ -28,16 +28,15 @@ public abstract class CommonHooksMixin {
     public static void onLivingBreathe(LivingEntity entity, int consumeAirAmount, int refillAirAmount) {
         boolean isAir = entity.getEyeInFluidType().isAir() || entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ())).is(Blocks.BUBBLE_COLUMN);
         ChestCavityData data = ChestCavityUtil.getData(entity);
-        boolean canBreathe = true;
-        if (data.isNeedBreath()) {
+        boolean canBreathe = !data.isNeedBreath();
+        if (!canBreathe) {
+            double consumer = consumeAirAmount;
+            double refill = 4;
             double currRecovery = data.getCurrentValue(InitAttribute.BREATH_RECOVERY);
             double currWaterBreath = data.getCurrentValue(InitAttribute.WATER_BREATH);
             boolean isInvulnerable = entity instanceof Player player && player.getAbilities().invulnerable;
-            double consumer = consumeAirAmount;
-            double refill = 4;
             // 检测呼吸功能
-            canBreathe =
-                    isInvulnerable
+            canBreathe =isInvulnerable
                             || (
                             data.getCurrentValue(InitAttribute.BREATH_CAPACITY) > 0
                                     && (

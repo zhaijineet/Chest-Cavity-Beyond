@@ -19,7 +19,7 @@ public class OrganSelectedOverlay {
      */
     public static void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui) return;
+        if (minecraft.options.hideGui || OrganSkillScreen.selectedSlot < 0) return;
         Player player = minecraft.player;
         ItemStack organ = ChestCavityUtil.getData(player).getOrgans().get(OrganSkillScreen.selectedSlot);
         if (!ChestCavityUtil.getOrganCap(organ).hasSkill()) return;

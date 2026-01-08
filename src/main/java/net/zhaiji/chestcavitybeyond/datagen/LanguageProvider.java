@@ -72,6 +72,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SMALL_GILLS, "Small Gills");
         addItem(InitItem.AQUATIC_MUSCLE, "Aquatic Muscle");
         addItem(InitItem.SMALL_AQUATIC_MUSCLE, "Small Aquatic Muscle");
+        addItem(InitItem.FISH_SPINE, "Fish Spine");
+        addItem(InitItem.SMALL_FISH_SPINE, "Small Fish Spine");
+        addItem(InitItem.FISH_BONE, "Fish Bone");
+        addItem(InitItem.SMALL_FISH_BONE, "Small Fish Bone");
+        addItem(InitItem.FISH_INTESTINE, "Fish Intestine");
+        addItem(InitItem.SMALL_FISH_INTESTINE, "Small Fish Intestine");
         addItem(InitItem.FISH_MUSCLE, "Fish Muscle");
         addItem(InitItem.SMALL_FISH_MUSCLE, "Small Fish Muscle");
 
@@ -106,6 +112,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.BRUTE_MUSCLE, "Brute Muscle");
         addItem(InitItem.SWIFT_MUSCLE, "Swift Muscle");
         addItem(InitItem.LEAPING_MUSCLE, "Leaping Muscle");
+        addItem(InitItem.SMALL_LEAPING_MUSCLE, "Small Leaping Muscle");
 
         addItem(InitItem.CARNIVORE_STOMACH, "Carnivore Stomach");
         addItem(InitItem.SMALL_CARNIVORE_STOMACH, "Small Carnivore Stomach");
@@ -176,6 +183,17 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.DRAGON_RIB, "Dragon Rib");
         addItem(InitItem.DRAGON_MUSCLE, "Dragon Muscle");
         addItem(InitItem.MANA_REACTOR, "Mana Reactor");
+
+        addItem(InitItem.SLIME_CORE, "Slime Core");
+        addItem(InitItem.SLIME_STOMACH, "Slime Stomach");
+        addItem(InitItem.MAGMA_CUBE_CORE, "Magma Cube Core");
+        addItem(InitItem.MAGMA_STOMACH, "Magma Stomach");
+
+        addItem(InitItem.SCULK_HEART, "Sculk Heart");
+        addItem(InitItem.SCULK_SPINE, "Sculk Spine");
+        addItem(InitItem.SCULK_RIB, "Sculk Rib");
+        addItem(InitItem.SCULK_MUSCLE, "Sculk Muscle");
+        addItem(InitItem.SCULK_CORE, "Sculk Core");
 
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
@@ -269,6 +287,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SMALL_GILLS, "小型鳃");
         addItem(InitItem.AQUATIC_MUSCLE, "水生生物肌肉");
         addItem(InitItem.SMALL_AQUATIC_MUSCLE, "小型水生生物肌肉");
+        addItem(InitItem.FISH_SPINE, "鱼类脊柱");
+        addItem(InitItem.SMALL_FISH_SPINE, "小型鱼类脊柱");
+        addItem(InitItem.FISH_BONE, "鱼骨");
+        addItem(InitItem.SMALL_FISH_BONE, "细小鱼骨");
+        addItem(InitItem.FISH_INTESTINE, "鱼肠");
+        addItem(InitItem.SMALL_FISH_INTESTINE, "小型鱼肠");
         addItem(InitItem.FISH_MUSCLE, "鱼类肌肉");
         addItem(InitItem.SMALL_FISH_MUSCLE, "小型鱼类肌肉");
         addItem(InitItem.SALTWATER_HEART, "盐水型心脏");
@@ -302,6 +326,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.BRUTE_MUSCLE, "力量型肌肉");
         addItem(InitItem.SWIFT_MUSCLE, "速度型肌肉");
         addItem(InitItem.LEAPING_MUSCLE, "弹跳型肌肉");
+        addItem(InitItem.SMALL_LEAPING_MUSCLE, "小型弹跳型肌肉");
 
         addItem(InitItem.CARNIVORE_STOMACH, "食肉动物胃");
         addItem(InitItem.SMALL_CARNIVORE_STOMACH, "小型食肉动物胃");
@@ -372,6 +397,17 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.DRAGON_RIB, "龙之肋骨");
         addItem(InitItem.DRAGON_MUSCLE, "龙之肌肉");
         addItem(InitItem.MANA_REACTOR, "魔力反应装置");
+
+        addItem(InitItem.SLIME_CORE, "史莱姆核心");
+        addItem(InitItem.SLIME_STOMACH, "粘液胃");
+        addItem(InitItem.MAGMA_CUBE_CORE, "岩浆怪核心");
+        addItem(InitItem.MAGMA_STOMACH, "熔岩胃");
+
+        addItem(InitItem.SCULK_HEART, "幽匿心脏");
+        addItem(InitItem.SCULK_SPINE, "幽匿脊柱");
+        addItem(InitItem.SCULK_RIB, "幽匿肋骨");
+        addItem(InitItem.SCULK_MUSCLE, "幽匿肌肉");
+        addItem(InitItem.SCULK_CORE, "幽匿核心");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");

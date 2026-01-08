@@ -224,8 +224,8 @@ public class ChestCavityData extends ItemStackHandler {
      * 如果健康小于等于0，就会持续受伤
      */
     private void applyHealth() {
-        double health = getCurrentValue(InitAttribute.HEALTH);
-        if (health <= 0) {
+        double health = getDifferenceValue(InitAttribute.HEALTH);
+        if (health < 0) {
             owner.hurt(DamageSourceManager.organLoss(owner.level()), 2);
         }
     }
@@ -312,6 +312,7 @@ public class ChestCavityData extends ItemStackHandler {
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compoundTag = super.serializeNBT(provider);
         compoundTag.putInt("selectedSlot", selectedSlot);
+        compoundTag.putBoolean("needBreath", needBreath);
         return compoundTag;
     }
 
@@ -319,5 +320,6 @@ public class ChestCavityData extends ItemStackHandler {
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
         selectedSlot = nbt.getInt("selectedSlot");
+        needBreath = nbt.getBoolean("needBreath");
     }
 }
