@@ -32,6 +32,7 @@ public class DataGenHandler {
         lookupProvider = datapackBuiltinEntriesProvider.getRegistryProvider();
         generator.addProvider(event.includeServer(), new DamageTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new RecipeProvider(packOutput, lookupProvider));
+        generator.addProvider(event.includeServer(), new ItemTagProvider(packOutput, lookupProvider, existingFileHelper));
 
         generator.addProvider(event.includeClient(), new ItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new LanguageProvider(packOutput, LanguageProvider.EN_US));

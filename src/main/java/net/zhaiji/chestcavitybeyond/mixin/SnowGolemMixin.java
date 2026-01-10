@@ -27,7 +27,7 @@ public abstract class SnowGolemMixin extends AbstractGolem {
             cancellable = true
     )
     public void chestCavityBeyond$performRangedAttack(LivingEntity target, float distanceFactor, CallbackInfo ci) {
-        if (!ChestCavityUtil.getData(this).hasOrgan(InitItem.SNOW_HEART.get())) {
+        if (!ChestCavityUtil.getData(this).hasOrgan(InitItem.SNOW_CORE.get())) {
             ci.cancel();
         }
     }

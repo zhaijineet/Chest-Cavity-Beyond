@@ -43,6 +43,33 @@ public class OrganSkillUtil {
             .build();
 
     /**
+     * 尝试为实体添加物品冷却
+     *
+     * @param entity   实体
+     * @param stack    冷却物品
+     * @param cooldown 冷却时间
+     */
+    public static void addCooldown(LivingEntity entity, ItemStack stack, int cooldown) {
+        if (entity instanceof Player player) {
+            player.getCooldowns().addCooldown(stack.getItem(), cooldown);
+        }
+    }
+
+    /**
+     * 检测实体的此物品是否正在冷却
+     *
+     * @param entity 实体
+     * @param stack  物品
+     * @return 是否在冷却
+     */
+    public static boolean hasCooldown(LivingEntity entity, ItemStack stack) {
+        if (entity instanceof Player player) {
+            return player.getCooldowns().isOnCooldown(stack.getItem());
+        }
+        return false;
+    }
+
+    /**
      * 将目标传送到周围随机位置
      * <p>
      * {@link EnderMan//#teleport}

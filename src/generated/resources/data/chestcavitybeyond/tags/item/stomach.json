@@ -1,0 +1,22 @@
+{
+  "values": [
+    "chestcavitybeyond:stomach",
+    "chestcavitybeyond:animal_stomach",
+    "chestcavitybeyond:small_animal_stomach",
+    "chestcavitybeyond:fireproof_stomach",
+    "chestcavitybeyond:ender_stomach",
+    "chestcavitybeyond:rotten_stomach",
+    "chestcavitybeyond:carnivore_stomach",
+    "chestcavitybeyond:small_carnivore_stomach",
+    "chestcavitybeyond:herbivore_rumen",
+    "chestcavitybeyond:herbivore_stomach",
+    "chestcavitybeyond:small_herbivore_stomach",
+    "chestcavitybeyond:ghast_stomach",
+    "chestcavitybeyond:slime_stomach",
+    "chestcavitybeyond:magma_stomach",
+    "chestcavitybeyond:arthropod_stomach",
+    "chestcavitybeyond:arthropod_caecum",
+    "chestcavitybeyond:mana_reactor",
+    "chestcavitybeyond:inner_furnace"
+  ]
+}

@@ -30,7 +30,7 @@ public abstract class BreezeShootMixin extends Behavior<Breeze> {
             cancellable = true
     )
     public void chestCavityBeyond$tick(ServerLevel level, Breeze owner, long gameTime, CallbackInfo ci) {
-        if (!ChestCavityUtil.getData(owner).hasOrgan(InitItem.BREEZE_HEART.get())) {
+        if (!ChestCavityUtil.getData(owner).hasOrgan(InitItem.BREEZE_CORE.get())) {
             ci.cancel();
         }
     }

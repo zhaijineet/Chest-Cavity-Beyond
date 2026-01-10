@@ -768,6 +768,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 8));
                     })
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 8 * 20);
                         OrganSkillUtil.teleport(context.entity(), context.data().getCurrentValue(InitAttribute.ENDER));
                     })
                     .build()
@@ -940,6 +942,8 @@ public class InitItem {
                     })
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
+                            if (OrganSkillUtil.hasCooldown(player, context.stack())) return;
+                            OrganSkillUtil.addCooldown(player, context.stack(), 2 * 20);
                             OrganSkillUtil.graze(player);
                         }
                     })
@@ -955,6 +959,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.EXPLOSIVE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 20 * 20);
                         OrganSkillUtil.explosion(context.entity(), context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
                     })
                     .build()
@@ -1158,6 +1164,8 @@ public class InitItem {
                     })
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
+                            if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                            OrganSkillUtil.addCooldown(player, context.stack(), 20);
                             OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
                         }
                     })
@@ -1187,6 +1195,8 @@ public class InitItem {
                     })
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
+                            if (OrganSkillUtil.hasCooldown(player, context.stack())) return;
+                            OrganSkillUtil.addCooldown(player, context.stack(), 20);
                             OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
                         }
                     })
@@ -1198,6 +1208,8 @@ public class InitItem {
             "silk_gland",
             () -> OrganBuilder.builder()
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 4 * 20);
                         OrganSkillUtil.silk(context.entity());
                     })
                     .build()
@@ -1229,6 +1241,8 @@ public class InitItem {
                         }
                     })
                     .attack((context, target, source, damageContainer) -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 4 * 20);
                         context.stack()
                                 .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
                                 .forEachEffect(target::addEffect);
@@ -1357,6 +1371,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 15 * 20);
                         OrganSkillUtil.smallFireball(
                                 context.data(),
                                 context.entity(),
@@ -1366,9 +1382,9 @@ public class InitItem {
                     .build()
     );
 
-    // 雪之心
-    public static final Supplier<Item> SNOW_HEART = ITEM.register(
-            "snow_heart",
+    // 雪之核心
+    public static final Supplier<Item> SNOW_CORE = ITEM.register(
+            "snow_core",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.25));
@@ -1390,6 +1406,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.GHASTLY, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 15 * 20);
                         OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY));
                     })
                     .build()
@@ -1415,20 +1433,24 @@ public class InitItem {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 5 * 20);
                         OrganSkillUtil.shulkerBullet(context.entity());
                     })
                     .build()
     );
 
     // 旋风核心
-    public static final Supplier<Item> BREEZE_HEART = ITEM.register(
-            "breeze_heart",
+    public static final Supplier<Item> BREEZE_CORE = ITEM.register(
+            "breeze_core",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
+                            if (OrganSkillUtil.hasCooldown(player, context.stack())) return;
+                            OrganSkillUtil.addCooldown(player, context.stack(), 8 * 20);
                             OrganSkillUtil.windCharge(player);
                         }
                     })
@@ -1466,6 +1488,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
                     })
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 60 * 20);
                         OrganSkillUtil.dragonFireball(context.entity());
                     })
                     .build()
@@ -1653,6 +1677,8 @@ public class InitItem {
             "sculk_core",
             () -> OrganBuilder.builder()
                     .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 60 * 20);
                         // TODO
                     })
                     .build()

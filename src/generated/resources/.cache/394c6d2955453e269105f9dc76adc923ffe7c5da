@@ -1,0 +1,14 @@
+// 1.21.1	2026-01-10T12:48:49.8958359	Tags for minecraft:item mod id chestcavitybeyond
+0fe001b93f08953d21b4d6f6486ba0712461bb0b data/chestcavitybeyond/tags/item/appendix.json
+a2eae83225458156c8e763c0ec976eea84908091 data/chestcavitybeyond/tags/item/heart.json
+70b06096c39c687d10d1b24868161d4b1ac8f04d data/chestcavitybeyond/tags/item/intestine.json
+d02733b6b096115a9ca055053e62e00dcb209ade data/chestcavitybeyond/tags/item/kidney.json
+21505b58dd3c5863664b8364e92945732a0b9ea1 data/chestcavitybeyond/tags/item/liver.json
+1a487815786ee3a6c31c4cba5af42163d3d167ca data/chestcavitybeyond/tags/item/lung.json
+35c24a78e729db7a459fd886ae7b944ebb203412 data/chestcavitybeyond/tags/item/muscle.json
+5b416564bcd106d6f2d1096bf047ff98d54b61a5 data/chestcavitybeyond/tags/item/organ.json
+bfb079a20cf2a234f605e107778397cfeade19de data/chestcavitybeyond/tags/item/rib.json
+a2b8b1e28ab5aa26364bbaf8620e76ad743a6ce3 data/chestcavitybeyond/tags/item/special_organ.json
+3f69c26c652669950c7ebe8e8af0b111c997c7ec data/chestcavitybeyond/tags/item/spine.json
+3e623d91e28ccb5623addee9ccee636f04b2e1de data/chestcavitybeyond/tags/item/spleen.json
+526b768aed9d765e7f2ec12de8b181c218524655 data/chestcavitybeyond/tags/item/stomach.json

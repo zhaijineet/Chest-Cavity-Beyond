@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "chestcavitybeyond:item/breeze_heart"
+    "layer0": "chestcavitybeyond:item/snow_core"
   }
 }

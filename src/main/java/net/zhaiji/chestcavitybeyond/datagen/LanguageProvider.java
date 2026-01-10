@@ -168,14 +168,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.BLAZE_SHELL, "Blaze Shell");
         addItem(InitItem.ACTIVE_BLAZE_ROD, "Active Blaze Rod");
 
-        addItem(InitItem.SNOW_HEART, "Snow Heart");
+        addItem(InitItem.SNOW_CORE, "Snow Core");
 
         addItem(InitItem.GHAST_STOMACH, "Ghast Stomach");
         addItem(InitItem.GAS_SAC, "Gas Sac");
 
         addItem(InitItem.SHULKER_SPLEEN, "Shlker Spleen");
 
-        addItem(InitItem.BREEZE_HEART, "Breeze Heart");
+        addItem(InitItem.BREEZE_CORE, "Breeze Core");
         addItem(InitItem.ACTIVE_BREEZE_ROD, "Active Breeze Rod");
 
         addItem(InitItem.DRAGON_HEART, "Dragon Heart");
@@ -392,14 +392,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.BLAZE_SHELL, "烈焰外壳");
         addItem(InitItem.ACTIVE_BLAZE_ROD, "活性烈焰棒");
 
-        addItem(InitItem.SNOW_HEART, "雪之心");
+        addItem(InitItem.SNOW_CORE, "雪之心");
 
         addItem(InitItem.GHAST_STOMACH, "恶魂胃");
         addItem(InitItem.GAS_SAC, "气囊");
 
         addItem(InitItem.SHULKER_SPLEEN, "潜影贝脾脏");
 
-        addItem(InitItem.BREEZE_HEART, "旋风核心");
+        addItem(InitItem.BREEZE_CORE, "旋风核心");
         addItem(InitItem.ACTIVE_BREEZE_ROD, "活性旋风棒");
 
         addItem(InitItem.DRAGON_HEART, "龙之心脏");

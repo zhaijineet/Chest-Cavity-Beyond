@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-08T22:22:43.1850423	Item Models: chestcavitybeyond
+// 1.21.1	2026-01-10T11:39:38.0618597	Item Models: chestcavitybeyond
 24958fd31beb57a2b7817edbbadb67097c619879 assets/chestcavitybeyond/models/item/active_blaze_rod.json
 a3a36204f995fe436e699c27a655639c158510b7 assets/chestcavitybeyond/models/item/active_breeze_rod.json
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
@@ -22,7 +22,7 @@ d3aaf0da98f8c4ad23acd43dcffbe47c1f7b5c55 assets/chestcavitybeyond/models/item/ar
 54b8f93029f2048d16fa9e2b66633da5699af0ff assets/chestcavitybeyond/models/item/arthropod_stomach.json
 d5f3fe586ad5cc4fe1f35c8959f4f0da942ef7d2 assets/chestcavitybeyond/models/item/blaze_core.json
 e2b91054388f815be4781b70a19195463389adf6 assets/chestcavitybeyond/models/item/blaze_shell.json
-8e5d0942f7c951cc59c5a9a3322028dd014c63b9 assets/chestcavitybeyond/models/item/breeze_heart.json
+08076f0a32117643a44c36f632099eab89002589 assets/chestcavitybeyond/models/item/breeze_core.json
 605e5541f45576b2d137efca3f5d791f168add5e assets/chestcavitybeyond/models/item/brute_muscle.json
 7dc3ffeba6c9b5a9df2e4309b662860b55e35378 assets/chestcavitybeyond/models/item/carnivore_intestine.json
 39603d00553bac554ae4092576330038bce3b815 assets/chestcavitybeyond/models/item/carnivore_stomach.json
@@ -132,7 +132,7 @@ eb38a7c5d74ff7373bcdae124f1b6b319737d861 assets/chestcavitybeyond/models/item/sm
 30bb034e3610aba5400ca325bfb2517404543979 assets/chestcavitybeyond/models/item/small_herbivore_intestine.json
 45dc3c848a8e9e4a43a0ec2e1cf41df70e3ce96e assets/chestcavitybeyond/models/item/small_herbivore_stomach.json
 047e4a35fd974f4b810b0034f0d641cbb32a5a32 assets/chestcavitybeyond/models/item/small_leaping_muscle.json
-717ee7927d2966ae60163dc51dd22b68994087e3 assets/chestcavitybeyond/models/item/snow_heart.json
+75605d2269713955ed01298490a252d10a6fe738 assets/chestcavitybeyond/models/item/snow_core.json
 c7860ceb28528450ec48190047ee4569357a9971 assets/chestcavitybeyond/models/item/spine.json
 3fe7beb6e6bba83cac483fa8c211b02be2922c08 assets/chestcavitybeyond/models/item/spleen.json
 9b88aaafb7ddf6f80fe64802292021c5e45bb22c assets/chestcavitybeyond/models/item/stomach.json
