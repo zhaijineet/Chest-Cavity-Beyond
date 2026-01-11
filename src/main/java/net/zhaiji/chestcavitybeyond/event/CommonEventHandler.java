@@ -117,8 +117,10 @@ public class CommonEventHandler {
         // 水生生物
         ChestCavityManager.registerEntity(EntityType.SQUID, ChestCavityManager.AQUATIC);
         ChestCavityManager.registerEntity(EntityType.GLOW_SQUID, ChestCavityManager.AQUATIC);
-        ChestCavityManager.registerEntity(EntityType.GUARDIAN, ChestCavityManager.AQUATIC);
-        ChestCavityManager.registerEntity(EntityType.ELDER_GUARDIAN, ChestCavityManager.AQUATIC);
+        // 守卫者
+        ChestCavityManager.registerEntity(EntityType.GUARDIAN, ChestCavityManager.GUARDIAN);
+        // 远古守卫者
+        ChestCavityManager.registerEntity(EntityType.ELDER_GUARDIAN, ChestCavityManager.ELDER_GUARDIAN);
         // 海豚
         ChestCavityManager.registerEntity(EntityType.DOLPHIN, ChestCavityManager.DOLPHIN);
         // 鱼类
@@ -381,7 +383,7 @@ public class CommonEventHandler {
      * @param event 实体tick之后事件
      */
     public static void handlerEntityTickEvent$Post(EntityTickEvent.Post event) {
-        if (event.getEntity() instanceof LivingEntity entity && !entity.level().isClientSide()) {
+        if (event.getEntity() instanceof LivingEntity entity) {
             ChestCavityUtil.getData(entity).tick();
         }
     }

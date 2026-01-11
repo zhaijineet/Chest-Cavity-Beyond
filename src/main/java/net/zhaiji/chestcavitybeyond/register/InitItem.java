@@ -20,7 +20,6 @@ import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -375,8 +374,8 @@ public class InitItem {
     );
 
     // 鳃
-    public static final Supplier<Item> GILLS = ITEM.register(
-            "gills",
+    public static final Supplier<Item> GILL = ITEM.register(
+            "gill",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 1));
@@ -387,8 +386,8 @@ public class InitItem {
     );
 
     // 小型鳃
-    public static final Supplier<Item> SMALL_GILLS = ITEM.register(
-            "small_gills",
+    public static final Supplier<Item> SMALL_GILL = ITEM.register(
+            "small_gill",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 0.5));
@@ -1492,7 +1491,7 @@ public class InitItem {
             "dragon_heart",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .build()
     );
@@ -1502,9 +1501,9 @@ public class InitItem {
             "dragon_lung",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 2));
-                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 2));
-                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .skill(context -> {
                         if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
@@ -1520,9 +1519,9 @@ public class InitItem {
             "dragon_spine",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 2));
-                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
-                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
                     })
                     .build()
     );
@@ -1532,7 +1531,7 @@ public class InitItem {
             "dragon_kidney",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .build()
     );
@@ -1542,7 +1541,7 @@ public class InitItem {
             "dragon_spleen",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .build()
     );
@@ -1552,7 +1551,7 @@ public class InitItem {
             "dragon_liver",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .build()
     );
@@ -1562,7 +1561,7 @@ public class InitItem {
             "dragon_appendix",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .build()
     );
@@ -1572,8 +1571,8 @@ public class InitItem {
             "dragon_rib",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 2));
-                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
                     })
                     .build()
     );
@@ -1583,8 +1582,8 @@ public class InitItem {
             "dragon_muscle",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 2));
-                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 3));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
                     .build()
     );
@@ -1666,7 +1665,7 @@ public class InitItem {
             "sculk_spine",
             () -> OrganBuilder.builder()
                     .modifier((id, modifiers) -> {
-                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 2));
                     })
                     .build()
     );
@@ -1696,12 +1695,218 @@ public class InitItem {
     public static final Supplier<Item> SCULK_CORE = ITEM.register(
             "sculk_core",
             () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 4));
+                        modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 4));
+                    })
                     .skill(context -> {
                         if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
                         OrganSkillUtil.addCooldown(context.entity(), context.stack(), 60 * 20);
-                        // TODO
+                        OrganSkillUtil.sonicBoom(context.entity());
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
+                    .build()
+    );
+
+    // 远古心脏
+    public static final Supplier<Item> ELDER_HEART = ITEM.register(
+            "elder_heart",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古肺脏
+    public static final Supplier<Item> ELDER_LUNG = ITEM.register(
+            "elder_lung",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.BREATH_RECOVERY, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古鳃
+    public static final Supplier<Item> ELDER_GILL = ITEM.register(
+            "elder_gill",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.WATER_BREATH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古阑尾
+    public static final Supplier<Item> ELDER_APPENDIX = ITEM.register(
+            "elder_appendix",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古肝脏
+    public static final Supplier<Item> ELDER_LIVER = ITEM.register(
+            "elder_liver",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DETOXIFICATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古脾脏
+    public static final Supplier<Item> ELDER_SPLEEN = ITEM.register(
+            "elder_spleen",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古肾脏
+    public static final Supplier<Item> ELDER_KIDNEY = ITEM.register(
+            "elder_kidney",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.FILTRATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古胃
+    public static final Supplier<Item> ELDER_STOMACH = ITEM.register(
+            "elder_stomach",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古肌肉
+    public static final Supplier<Item> ELDER_MUSCLE = ITEM.register(
+            "elder_muscle",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古鱼类肌肉
+    public static final Supplier<Item> ELDER_FISH_MUSCLE = ITEM.register(
+            "elder_fish_muscle",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.STRENGTH, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.SPEED, OrganAttributeUtil.createAddValueModifier(id, 1.25));
+                        modifiers.put(NeoForgeMod.SWIM_SPEED, OrganAttributeUtil.createMultipliedBaseModifier(id, 0.2));
+                    })
+                    .build()
+    );
+
+    // 远古脊柱
+    public static final Supplier<Item> ELDER_SPINE = ITEM.register(
+            "elder_spine",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 2));
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 远古肋骨
+    public static final Supplier<Item> ELDER_RIB = ITEM.register(
+            "elder_rib",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古鱼类脊柱
+    public static final Supplier<Item> ELDER_FISH_SPINE = ITEM.register(
+            "elder_fish_spine",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NERVES, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古鱼骨
+    public static final Supplier<Item> ELDER_FISH_BONE = ITEM.register(
+            "elder_fish_bone",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 1));
+                    })
+                    .build()
+    );
+
+    // 远古肠子
+    public static final Supplier<Item> ELDER_INTESTINE = ITEM.register(
+            "elder_intestine",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 远古鱼肠
+    public static final Supplier<Item> ELDER_FISH_INTESTINE = ITEM.register(
+            "elder_fish_intestine",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.NUTRITION, OrganAttributeUtil.createAddValueModifier(id, 2.5));
+                    })
+                    .build()
+    );
+
+    // 远古魔力反应装置
+    public static final Supplier<Item> ELDER_MANA_REACTOR = ITEM.register(
+            "elder_mana_reactor",
+            () -> OrganBuilder.builder()
+                    .modifier((id, modifiers) -> {
+                        modifiers.put(InitAttribute.CRYSTALLIZATION, OrganAttributeUtil.createAddValueModifier(id, 2));
+                    })
+                    .build()
+    );
+
+    // 守卫者之眼
+    public static final Supplier<Item> GUARDIAN_EYE = ITEM.register(
+            "guardian_eye",
+            () -> OrganBuilder.builder()
+                    .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 5 * 20);
+                        OrganSkillUtil.guardianLaser(context.entity(), false);
+                    })
+                    .build()
+    );
+
+    // 远古守卫者之眼
+    public static final Supplier<Item> ELDER_GUARDIAN_EYE = ITEM.register(
+            "elder_guardian_eye",
+            () -> OrganBuilder.builder()
+                    .skill(context -> {
+                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 8 * 20);
+                        OrganSkillUtil.guardianLaser(context.entity(), true);
+                    })
                     .build()
     );
 }

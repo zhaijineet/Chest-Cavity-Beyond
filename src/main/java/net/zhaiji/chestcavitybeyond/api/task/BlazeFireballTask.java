@@ -6,17 +6,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class BlazeFireballTask implements IChestCavityTask {
-    private final LivingEntity entity;
     private int cooldown;
     private int count;
 
-    public BlazeFireballTask(LivingEntity entity, int count) {
-        this.entity = entity;
+    public BlazeFireballTask(int count) {
         this.count = count;
     }
 
     @Override
-    public void tick() {
+    public void tick(LivingEntity entity) {
         if (cooldown <= 0) {
             Level level = entity.level();
             level.levelEvent(null, 1018, entity.blockPosition(), 0);
@@ -31,7 +29,7 @@ public class BlazeFireballTask implements IChestCavityTask {
     }
 
     @Override
-    public boolean canRemove() {
-        return count <= 0;
+    public boolean canRemove(LivingEntity entity) {
+        return count <= 0 || entity.isRemoved();
     }
 }

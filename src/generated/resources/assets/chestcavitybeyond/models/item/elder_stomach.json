@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "chestcavitybeyond:item/small_gills"
+    "layer0": "chestcavitybeyond:item/elder_stomach"
   }
 }

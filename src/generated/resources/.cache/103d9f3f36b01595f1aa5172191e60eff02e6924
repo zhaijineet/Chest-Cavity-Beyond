@@ -1,3 +1,7 @@
-// 1.21.1	2026-01-09T18:25:48.5801847	Registries
+// 1.21.1	2026-01-11T19:43:22.6079444	Registries
 27ea0a6d11a9de4e905c4c6ddc32792cf6355e0e data/chestcavitybeyond/damage_type/open_chest.json
 e7c7b2973253697c5fdaed51ad10119875b265f7 data/chestcavitybeyond/damage_type/organ_loss.json
+55cc6f356c40fcb0d22c3fac1c07c073d61a2d0e data/chestcavitybeyond/enchantment/advanced_surgery.json
+d5197d51cec7e851c1ba14e09e26c88a859a8374 data/chestcavitybeyond/enchantment/prudent_surgery.json
+88c7dd29d0811d2f5fcb0c5d9710687be91a07f1 data/chestcavitybeyond/enchantment/safe_surgery.json
+2d69d495aea681b89bbda41eac29afcdf6df8179 data/chestcavitybeyond/enchantment/teleoperation.json

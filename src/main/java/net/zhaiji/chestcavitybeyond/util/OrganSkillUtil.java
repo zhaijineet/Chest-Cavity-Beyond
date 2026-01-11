@@ -2,6 +2,8 @@ package net.zhaiji.chestcavitybeyond.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -23,15 +25,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.zhaiji.chestcavitybeyond.api.task.BlazeFireballTask;
+import net.zhaiji.chestcavitybeyond.api.task.GuardianLaserTask;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.entity.ThrownCobweb;
 import net.zhaiji.chestcavitybeyond.register.InitEffect;
+
+import java.util.List;
 
 public class OrganSkillUtil {
     /**
@@ -50,7 +52,7 @@ public class OrganSkillUtil {
      * @param cooldown 冷却时间
      */
     public static void addCooldown(LivingEntity entity, ItemStack stack, int cooldown) {
-        if (entity instanceof Player player) {
+        if (entity instanceof Player player && !player.isCreative()) {
             player.getCooldowns().addCooldown(stack.getItem(), cooldown);
         }
     }
@@ -63,7 +65,7 @@ public class OrganSkillUtil {
      * @return 是否在冷却
      */
     public static boolean hasCooldown(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player) {
+        if (entity instanceof Player player && !player.isCreative()) {
             return player.getCooldowns().isOnCooldown(stack.getItem());
         }
         return false;
@@ -283,7 +285,7 @@ public class OrganSkillUtil {
      * 发射小火球
      */
     public static void smallFireball(ChestCavityData data, LivingEntity entity, double vomitFireball) {
-        data.addTask(new BlazeFireballTask(entity, (int) vomitFireball));
+        data.addTask(new BlazeFireballTask((int) vomitFireball));
     }
 
     /**
@@ -371,5 +373,59 @@ public class OrganSkillUtil {
         dragonfireball.setPos(entity.getX(), entity.getEyeY() - 0.6, entity.getZ());
         dragonfireball.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
         level.addFreshEntity(dragonfireball);
+    }
+
+    /**
+     * 发射音爆
+     */
+    public static void sonicBoom(LivingEntity entity) {
+        Level level = entity.level();
+        Vec3 from = entity.getEyePosition();
+        Vec3 lookAngle = entity.getLookAngle().normalize();
+        // TODO 距离应该写入配置
+        Vec3 to = from.add(lookAngle.scale(7));
+        level.playSound(
+                null,
+                entity.blockPosition(),
+                SoundEvents.WARDEN_SONIC_BOOM,
+                entity.getSoundSource(),
+                3.0F,
+                1.0F
+        );
+        if (level instanceof ServerLevel serverLevel) {
+            for (int i = 1; i < 7; i++) {
+                Vec3 pos = from.add(lookAngle.scale(i));
+                serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x(), pos.y(), pos.z(), 1, 0.0, 0.0, 0.0, 0.0);
+            }
+        }
+        AABB searchBox = new AABB(from, to).inflate(1.0);
+        List<LivingEntity> targets = level.getEntitiesOfClass(
+                LivingEntity.class,
+                searchBox,
+                target -> {
+                    if (target == entity) return false;
+                    Vec3 targetPos = target.position().add(0, target.getBbHeight() / 2, 0);
+                    Vec3 direction = targetPos.subtract(from);
+                    double distance = direction.length();
+                    if (distance > 7) return false;
+                    Vec3 projected = from.add(lookAngle.scale(distance));
+                    return projected.distanceTo(targetPos) < 1.5;
+                }
+        );
+        for (LivingEntity target : targets) {
+            target.hurt(level.damageSources().sonicBoom(entity), 10);
+        }
+    }
+
+    /**
+     * 守卫者激光
+     */
+    public static void guardianLaser(LivingEntity entity,boolean elder) {
+        // TODO 距离写入配置
+        int distance = 16;
+        HitResult hitResult = ProjectileUtil.getHitResultOnViewVector(entity, checkEntity -> checkEntity != entity, distance);
+        if (hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
+            ChestCavityUtil.getData(entity).addTask(new GuardianLaserTask(target, elder));
+        }
     }
 }

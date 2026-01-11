@@ -202,20 +202,23 @@ public class ChestCavityData extends ItemStackHandler {
      * 器官tick
      */
     public void tick() {
-        applyHealth();
-        applyFiltration();
-        for (int i = 0; i < stacks.size(); i++) {
-            ItemStack stack = stacks.get(i);
-            ChestCavityUtil.organTick(this, owner, i, stack);
+        if (!owner.level().isClientSide()) {
+            applyHealth();
+            applyFiltration();
+            for (int i = 0; i < stacks.size(); i++) {
+                ItemStack stack = stacks.get(i);
+                ChestCavityUtil.organTick(this, owner, i, stack);
+            }
         }
+        // 客户端和服务端都要执行task
         Iterator<IChestCavityTask> iterator = tasks.iterator();
         while (iterator.hasNext()) {
             IChestCavityTask task = iterator.next();
-            if (task.canRemove()) {
-                task.onRemoved();
+            if (task.canRemove(owner)) {
+                task.onRemoved(owner);
                 iterator.remove();
             } else {
-                task.tick();
+                task.tick(owner);
             }
         }
     }
@@ -227,6 +230,16 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public void addTask(IChestCavityTask task) {
         tasks.add(task);
+        task.onAdded(owner);
+    }
+
+    /**
+     * 获取胸腔任务列表
+     *
+     * @return 胸腔任务列表
+     */
+    public List<IChestCavityTask> getTasks() {
+        return tasks;
     }
 
     /**

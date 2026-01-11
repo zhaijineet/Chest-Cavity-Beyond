@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.Input;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.*;
@@ -12,6 +13,8 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
+import net.zhaiji.chestcavitybeyond.api.client.task.IRenderTask;
+import net.zhaiji.chestcavitybeyond.api.task.IChestCavityTask;
 import net.zhaiji.chestcavitybeyond.builder.OrganBuilder;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
 import net.zhaiji.chestcavitybeyond.client.overlay.OrganSelectedOverlay;
@@ -53,6 +56,27 @@ public class ClientEventHandler {
      */
     public static void handlerRegisterGuiLayersEvent(RegisterGuiLayersEvent event) {
         event.registerBelow(VanillaGuiLayers.HOTBAR, OrganSelectedOverlay.ORGAN_SELECTED, OrganSelectedOverlay::render);
+    }
+
+    /**
+     * @param event 渲染Level阶段事件
+     */
+    public static void handlerRenderLevelStageEvent(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
+            Minecraft minecraft = Minecraft.getInstance();
+            Player player = minecraft.player;
+            MultiBufferSource multibuffersource = minecraft.renderBuffers().bufferSource();
+            for (IChestCavityTask task : ChestCavityUtil.getData(player).getTasks()) {
+                if (task instanceof IRenderTask rendererTask) {
+                    rendererTask.render(
+                            player,
+                            event.getPartialTick().getGameTimeDeltaPartialTick(minecraft.level.tickRateManager().isEntityFrozen(player)),
+                            event.getPoseStack(),
+                            multibuffersource
+                    );
+                }
+            }
+        }
     }
 
     /**

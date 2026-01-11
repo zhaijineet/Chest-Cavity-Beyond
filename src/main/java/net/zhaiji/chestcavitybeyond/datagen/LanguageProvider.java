@@ -7,6 +7,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
@@ -77,8 +78,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SMALL_ANIMAL_RIB, "Small Animal Rib");
         addItem(InitItem.SMALL_ANIMAL_MUSCLE, "Small Animal Muscle");
 
-        addItem(InitItem.GILLS, "Gills");
-        addItem(InitItem.SMALL_GILLS, "Small Gills");
+        addItem(InitItem.GILL, "Gill");
+        addItem(InitItem.SMALL_GILL, "Small Gill");
         addItem(InitItem.AQUATIC_MUSCLE, "Aquatic Muscle");
         addItem(InitItem.SMALL_AQUATIC_MUSCLE, "Small Aquatic Muscle");
         addItem(InitItem.FISH_SPINE, "Fish Spine");
@@ -204,6 +205,28 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SCULK_MUSCLE, "Sculk Muscle");
         addItem(InitItem.SCULK_CORE, "Sculk Core");
 
+        addItem(InitItem.ELDER_HEART, "Elder Heart");
+        addItem(InitItem.ELDER_GILL, "Elder Gills");
+        addItem(InitItem.ELDER_LUNG, "Elder Lung");
+        addItem(InitItem.ELDER_APPENDIX, "Elder Appendix");
+        addItem(InitItem.ELDER_LIVER, "Elder Liver");
+        addItem(InitItem.ELDER_SPLEEN, "Elder Spleen");
+        addItem(InitItem.ELDER_KIDNEY, "Elder Kidney");
+        addItem(InitItem.ELDER_STOMACH, "Elder Stomach");
+        addItem(InitItem.ELDER_FISH_MUSCLE, "Elder Fish Muscle");
+        addItem(InitItem.ELDER_MUSCLE, "Elder Muscle");
+        addItem(InitItem.ELDER_FISH_SPINE, "Elder Fish Spine");
+        addItem(InitItem.ELDER_FISH_BONE, "Elder Fish Bone");
+        addItem(InitItem.ELDER_SPINE, "Elder Spine");
+        addItem(InitItem.ELDER_RIB, "Elder Rib");
+        addItem(InitItem.ELDER_INTESTINE, "Elder Intestine");
+        addItem(InitItem.ELDER_FISH_INTESTINE, "Elder Fish Intestine");
+
+        addItem(InitItem.ELDER_MANA_REACTOR, "Elder Mana Reactor");
+
+        addItem(InitItem.GUARDIAN_EYE, "Guardian Eye");
+        addItem(InitItem.ELDER_GUARDIAN_EYE, "Elder Guardian Eye");
+
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
         addAttribute(InitAttribute.DEFENSE, "Defense");
@@ -264,6 +287,30 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addOrganSkill(InitItem.BREEZE_CORE, "Shoot wind charges");
         addOrganSkill(InitItem.DRAGON_LUNG, "Shoot dragon fireballs");
         addOrganSkill(InitItem.SCULK_CORE, "Sonic boom");
+
+        addEnchantment(
+                InitEnchantment.TELEOPERATION,
+                "Teleoperation",
+                "Each level increases reach distance by 1 block"
+        );
+        addEnchantment(
+                InitEnchantment.ADVANCED_SURGERY,
+                "Advanced Surgery",
+                "Each level increases minimum health threshold by 10%"
+        );
+        addEnchantment(
+                InitEnchantment.PRUDENT_SURGERY,
+                "Prudent Surgery",
+                "Each level reduces damage by 1 point"
+        );
+        addEnchantment(
+                InitEnchantment.SAFE_SURGERY,
+                "Safe Surgery",
+                "Level 1: Sneak allows self-opening; Level 2: Only other targets"
+        );
+
+        add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
+        add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "Target is too healthy");
 
         add(ItemTagManager.ORGANS, "Organs");
         add(ItemTagManager.HEART, "Hearts");
@@ -336,8 +383,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SMALL_ANIMAL_RIB, "小型动物肋骨");
         addItem(InitItem.SMALL_ANIMAL_MUSCLE, "小型动物肌肉");
 
-        addItem(InitItem.GILLS, "鳃");
-        addItem(InitItem.SMALL_GILLS, "小型鳃");
+        addItem(InitItem.GILL, "鳃");
+        addItem(InitItem.SMALL_GILL, "小型鳃");
         addItem(InitItem.AQUATIC_MUSCLE, "水生生物肌肉");
         addItem(InitItem.SMALL_AQUATIC_MUSCLE, "小型水生生物肌肉");
         addItem(InitItem.FISH_SPINE, "鱼类脊柱");
@@ -462,6 +509,28 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.SCULK_MUSCLE, "幽匿肌肉");
         addItem(InitItem.SCULK_CORE, "幽匿核心");
 
+        addItem(InitItem.ELDER_HEART, "远古心脏");
+        addItem(InitItem.ELDER_LUNG, "远古肺脏");
+        addItem(InitItem.ELDER_GILL, "远古鳃");
+        addItem(InitItem.ELDER_APPENDIX, "远古阑尾");
+        addItem(InitItem.ELDER_LIVER, "远古肝脏");
+        addItem(InitItem.ELDER_SPLEEN, "远古脾脏");
+        addItem(InitItem.ELDER_KIDNEY, "远古肾脏");
+        addItem(InitItem.ELDER_STOMACH, "远古胃");
+        addItem(InitItem.ELDER_MUSCLE, "远古肌肉");
+        addItem(InitItem.ELDER_FISH_MUSCLE, "远古鱼类肌肉");
+        addItem(InitItem.ELDER_SPINE, "远古脊柱");
+        addItem(InitItem.ELDER_RIB, "远古肋骨");
+        addItem(InitItem.ELDER_FISH_SPINE, "远古鱼类脊柱");
+        addItem(InitItem.ELDER_FISH_BONE, "远古鱼骨");
+        addItem(InitItem.ELDER_INTESTINE, "远古肠子");
+        addItem(InitItem.ELDER_FISH_INTESTINE, "远古鱼肠");
+
+        addItem(InitItem.ELDER_MANA_REACTOR, "远古魔力反应装置");
+
+        addItem(InitItem.GUARDIAN_EYE, "守卫者之眼");
+        addItem(InitItem.ELDER_GUARDIAN_EYE, "远古守卫者之眼");
+
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
         addAttribute(InitAttribute.DEFENSE, "防御");
@@ -539,6 +608,30 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ItemTagManager.BONE, "骨质器官");
         add(ItemTagManager.ROTTEN, "腐烂器官");
         add(ItemTagManager.IRON, "铁质器官");
+
+        addEnchantment(
+                InitEnchantment.TELEOPERATION,
+                "远程操作",
+                "每级可提升1格开胸器使用距离"
+        );
+        addEnchantment(
+                InitEnchantment.ADVANCED_SURGERY,
+                "先进手术",
+                "每级可提升10%的最低开胸生命值上限"
+        );
+        addEnchantment(
+                InitEnchantment.PRUDENT_SURGERY,
+                "谨慎手术",
+                "每级减少1点开胸造成的伤害"
+        );
+        addEnchantment(
+                InitEnchantment.SAFE_SURGERY,
+                "安全手术",
+                "1级时下蹲可对自己开胸，2级时只能对他人开胸"
+        );
+
+        add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");
+        add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "目标太过健康");
     }
 
     private void addAttribute(Holder<Attribute> attribute, String value) {
@@ -549,12 +642,17 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("death.attack." + damageType.location().getNamespace() + "." + damageType.location().getPath(), value);
     }
 
-    private void addDamageType(ResourceKey<DamageType> damageType, String value, int index) {
-        add("death.attack." + damageType.location().getNamespace() + "." + damageType.location().getPath() + "." + index, value);
+    private void addDamageType(ResourceKey<DamageType> resourceKey, String value, int index) {
+        add("death.attack." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath() + "." + index, value);
     }
 
     private void addOrganSkill(Supplier<Item> item, String value) {
         add("organ." + ChestCavityBeyond.MOD_ID + "." + item.get().getDescriptionId() + ".skill", value);
+    }
+
+    private void addEnchantment(ResourceKey<Enchantment> resourceKey, String value, String desc) {
+        add("enchantment." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath(), value);
+        add("enchantment." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath() + ".desc", desc);
     }
 
     @Override

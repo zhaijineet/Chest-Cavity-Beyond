@@ -1,17 +1,17 @@
-// 1.21.1	2026-01-10T16:43:08.2927455	Tags for minecraft:item mod id chestcavitybeyond
+// 1.21.1	2026-01-11T11:05:02.8244937	Tags for minecraft:item mod id chestcavitybeyond
 31a2ff3dac5d1b9ff9c9e5cada66c95e32c402dc data/chestcavitybeyond/tags/item/organs.json
-0fe001b93f08953d21b4d6f6486ba0712461bb0b data/chestcavitybeyond/tags/item/organs/appendix.json
-19085c87b94cd69ba21adc14a838487c1c0b7dea data/chestcavitybeyond/tags/item/organs/bone.json
-63d3e3e1e2a00f64941911ef734b473f5aba694d data/chestcavitybeyond/tags/item/organs/heart.json
-70b06096c39c687d10d1b24868161d4b1ac8f04d data/chestcavitybeyond/tags/item/organs/intestine.json
+abeed4869419f7e2ea44756bcb5241ab228e27c9 data/chestcavitybeyond/tags/item/organs/appendix.json
+60f67ebae84ca958b21cd37097f45ec5fe52644b data/chestcavitybeyond/tags/item/organs/bone.json
+d3bbd722014b3d975e708dcf6b5fe44cccb93938 data/chestcavitybeyond/tags/item/organs/heart.json
+3386d11bff95cd114b580537a119c18ee1c6fee4 data/chestcavitybeyond/tags/item/organs/intestine.json
 60d0d0232ecc8c917cbc8da7406a8505abec4bbb data/chestcavitybeyond/tags/item/organs/iron.json
-d02733b6b096115a9ca055053e62e00dcb209ade data/chestcavitybeyond/tags/item/organs/kidney.json
-21505b58dd3c5863664b8364e92945732a0b9ea1 data/chestcavitybeyond/tags/item/organs/liver.json
-1a487815786ee3a6c31c4cba5af42163d3d167ca data/chestcavitybeyond/tags/item/organs/lung.json
-35c24a78e729db7a459fd886ae7b944ebb203412 data/chestcavitybeyond/tags/item/organs/muscle.json
-bfb079a20cf2a234f605e107778397cfeade19de data/chestcavitybeyond/tags/item/organs/rib.json
+66e1ce4b2bf27d86b8f0964e99ca2e5c26101b80 data/chestcavitybeyond/tags/item/organs/kidney.json
+2bfb13a5c8c65598fccd6f08cb6ed7aeaf5d081c data/chestcavitybeyond/tags/item/organs/liver.json
+ebc7a88e8e355168c5dba8fd86639a69bcdbe199 data/chestcavitybeyond/tags/item/organs/lung.json
+f28624aa9976fdbc430b455f9f0a2d10ff6165bd data/chestcavitybeyond/tags/item/organs/muscle.json
+b4a750be0e6328bb6b4c67a8abce32c7f933d2c3 data/chestcavitybeyond/tags/item/organs/rib.json
 c75a1cbc768334f8873128a730d52f4a6470e57d data/chestcavitybeyond/tags/item/organs/rotten.json
-a2b8b1e28ab5aa26364bbaf8620e76ad743a6ce3 data/chestcavitybeyond/tags/item/organs/special.json
-3f69c26c652669950c7ebe8e8af0b111c997c7ec data/chestcavitybeyond/tags/item/organs/spine.json
-3e623d91e28ccb5623addee9ccee636f04b2e1de data/chestcavitybeyond/tags/item/organs/spleen.json
-526b768aed9d765e7f2ec12de8b181c218524655 data/chestcavitybeyond/tags/item/organs/stomach.json
+c3397e193572f6ce0bb84e6c030c6a6932dfd338 data/chestcavitybeyond/tags/item/organs/special.json
+62a36d7fbbf9928034862e70e3c5a084506933b9 data/chestcavitybeyond/tags/item/organs/spine.json
+e7b3ef65f6df0ec247967e39e4e6fe9167d987bf data/chestcavitybeyond/tags/item/organs/spleen.json
+3ca85934471f110599ea1705b3a7f2884f467511 data/chestcavitybeyond/tags/item/organs/stomach.json

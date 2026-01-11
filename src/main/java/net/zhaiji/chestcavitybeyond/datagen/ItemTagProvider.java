@@ -41,6 +41,7 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.GOLEM_CORE.get(),
                         InitItem.SNOW_CORE.get(),
                         InitItem.SCULK_CORE.get(),
+                        InitItem.ELDER_HEART.get(),
                         Items.NETHER_STAR
                 );
 
@@ -56,8 +57,10 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.ROTTEN_LUNG.get(),
                         InitItem.ARTHROPOD_LUNG.get(),
                         InitItem.DRAGON_LUNG.get(),
-                        InitItem.GILLS.get(),
-                        InitItem.SMALL_GILLS.get(),
+                        InitItem.GILL.get(),
+                        InitItem.SMALL_GILL.get(),
+                        InitItem.ELDER_GILL.get(),
+                        InitItem.ELDER_LUNG.get(),
                         InitItem.GAS_SAC.get()
                 );
 
@@ -83,6 +86,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.SALTWATER_MUSCLE.get(),
                         InitItem.PISTON_MUSCLE.get(),
                         InitItem.SCULK_MUSCLE.get(),
+                        InitItem.ELDER_FISH_MUSCLE.get(),
+                        InitItem.ELDER_MUSCLE.get(),
                         InitItem.WRITHING_SOUL_SAND.get(),
                         InitItem.CREEPER_LEAF.get()
                 );
@@ -101,6 +106,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.SCULK_RIB.get(),
                         InitItem.FISH_BONE.get(),
                         InitItem.SMALL_FISH_BONE.get(),
+                        InitItem.ELDER_FISH_BONE.get(),
+                        InitItem.ELDER_RIB.get(),
                         InitItem.GOLEM_ARMOR_PLATE.get(),
                         InitItem.BLAZE_SHELL.get()
                 );
@@ -115,7 +122,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.ENDER_APPENDIX.get(),
                         InitItem.ROTTEN_APPENDIX.get(),
                         InitItem.DRAGON_APPENDIX.get(),
-                        InitItem.CREEPER_APPENDIX.get()
+                        InitItem.CREEPER_APPENDIX.get(),
+                        InitItem.ELDER_APPENDIX.get()
                 );
 
         // 脾脏
@@ -128,7 +136,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.ENDER_SPLEEN.get(),
                         InitItem.ROTTEN_SPLEEN.get(),
                         InitItem.DRAGON_SPLEEN.get(),
-                        InitItem.SHULKER_SPLEEN.get()
+                        InitItem.SHULKER_SPLEEN.get(),
+                        InitItem.ELDER_SPLEEN.get()
                 );
 
         // 肾脏
@@ -140,7 +149,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.FIREPROOF_KIDNEY.get(),
                         InitItem.ENDER_KIDNEY.get(),
                         InitItem.ROTTEN_KIDNEY.get(),
-                        InitItem.DRAGON_KIDNEY.get()
+                        InitItem.DRAGON_KIDNEY.get(),
+                        InitItem.ELDER_KIDNEY.get()
                 );
 
         // 脊柱
@@ -157,6 +167,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.SCULK_SPINE.get(),
                         InitItem.FISH_SPINE.get(),
                         InitItem.SMALL_FISH_SPINE.get(),
+                        InitItem.ELDER_FISH_SPINE.get(),
+                        InitItem.ELDER_SPINE.get(),
                         InitItem.GOLEM_CABLE.get()
                 );
 
@@ -169,7 +181,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.FIREPROOF_LIVER.get(),
                         InitItem.ENDER_LIVER.get(),
                         InitItem.ROTTEN_LIVER.get(),
-                        InitItem.DRAGON_LIVER.get()
+                        InitItem.DRAGON_LIVER.get(),
+                        InitItem.ELDER_LIVER.get()
                 );
 
         // 肠子
@@ -187,7 +200,9 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.SMALL_CARNIVORE_INTESTINE.get(),
                         InitItem.HERBIVORE_INTESTINE.get(),
                         InitItem.SMALL_HERBIVORE_INTESTINE.get(),
-                        InitItem.ARTHROPOD_INTESTINE.get()
+                        InitItem.ARTHROPOD_INTESTINE.get(),
+                        InitItem.ELDER_INTESTINE.get(),
+                        InitItem.ELDER_FISH_INTESTINE.get()
                 );
 
         // 胃
@@ -209,8 +224,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.MAGMA_STOMACH.get(),
                         InitItem.ARTHROPOD_STOMACH.get(),
                         InitItem.ARTHROPOD_CAECUM.get(),
-                        InitItem.MANA_REACTOR.get(),
-                        InitItem.INNER_FURNACE.get()
+                        InitItem.INNER_FURNACE.get(),
+                        InitItem.ELDER_STOMACH.get()
                 );
 
         // 特殊器官
@@ -219,10 +234,14 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.SILK_GLAND.get(),
                         InitItem.VENOM_GLAND.get(),
                         InitItem.ACTIVE_BLAZE_ROD.get(),
-                        InitItem.ACTIVE_BREEZE_ROD.get()
+                        InitItem.ACTIVE_BREEZE_ROD.get(),
+                        InitItem.MANA_REACTOR.get(),
+                        InitItem.ELDER_MANA_REACTOR.get(),
+                        InitItem.GUARDIAN_EYE.get(),
+                        InitItem.ELDER_GUARDIAN_EYE.get()
                 );
 
-        // 骨头类器官
+        // 骨质器官
         tag(ItemTagManager.BONE)
                 .add(
                         InitItem.RIB.get(),
@@ -246,7 +265,11 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.DRAGON_SPINE.get(),
                         InitItem.SCULK_SPINE.get(),
                         InitItem.FISH_SPINE.get(),
-                        InitItem.SMALL_FISH_SPINE.get()
+                        InitItem.SMALL_FISH_SPINE.get(),
+                        InitItem.ELDER_FISH_SPINE.get(),
+                        InitItem.ELDER_FISH_BONE.get(),
+                        InitItem.ELDER_RIB.get(),
+                        InitItem.ELDER_SPINE.get()
                 );
 
         // 腐烂器官

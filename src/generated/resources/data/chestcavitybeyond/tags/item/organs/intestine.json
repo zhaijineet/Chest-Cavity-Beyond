@@ -12,6 +12,8 @@
     "chestcavitybeyond:small_carnivore_intestine",
     "chestcavitybeyond:herbivore_intestine",
     "chestcavitybeyond:small_herbivore_intestine",
-    "chestcavitybeyond:arthropod_intestine"
+    "chestcavitybeyond:arthropod_intestine",
+    "chestcavitybeyond:elder_intestine",
+    "chestcavitybeyond:elder_fish_intestine"
   ]
 }

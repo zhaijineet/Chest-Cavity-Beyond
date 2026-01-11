@@ -3,6 +3,8 @@ package net.zhaiji.chestcavitybeyond.network;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.zhaiji.chestcavitybeyond.network.client.ClientPacketHandler;
+import net.zhaiji.chestcavitybeyond.network.client.packet.AddGuardianLaserRenderTaskPacket;
+import net.zhaiji.chestcavitybeyond.network.client.packet.ChestOpenerMessagePacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
 import net.zhaiji.chestcavitybeyond.network.server.ServerPacketHandler;
 import net.zhaiji.chestcavitybeyond.network.server.packet.SyncSelectedSlotPacket;
@@ -32,6 +34,18 @@ public class PacketManager {
                 SyncChestCavityDataPacket.TYPE,
                 SyncChestCavityDataPacket.STREAM_CODEC,
                 ClientPacketHandler::handlerSyncChestCavityDataPacket
+        );
+
+        registrar.playToClient(
+                AddGuardianLaserRenderTaskPacket.TYPE,
+                AddGuardianLaserRenderTaskPacket.STREAM_CODEC,
+                ClientPacketHandler::handlerAddGuardianLaserRenderTaskPacket
+        );
+
+        registrar.playToClient(
+                ChestOpenerMessagePacket.TYPE,
+                ChestOpenerMessagePacket.STREAM_CODEC,
+                ClientPacketHandler::handlerChestOpenerMessagePacket
         );
     }
 }

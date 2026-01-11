@@ -21,6 +21,10 @@
     "chestcavitybeyond:dragon_spine",
     "chestcavitybeyond:sculk_spine",
     "chestcavitybeyond:fish_spine",
-    "chestcavitybeyond:small_fish_spine"
+    "chestcavitybeyond:small_fish_spine",
+    "chestcavitybeyond:elder_fish_spine",
+    "chestcavitybeyond:elder_fish_bone",
+    "chestcavitybeyond:elder_rib",
+    "chestcavitybeyond:elder_spine"
   ]
 }

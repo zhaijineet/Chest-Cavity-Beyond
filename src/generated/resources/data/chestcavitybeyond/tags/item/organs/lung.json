@@ -9,8 +9,10 @@
     "chestcavitybeyond:rotten_lung",
     "chestcavitybeyond:arthropod_lung",
     "chestcavitybeyond:dragon_lung",
-    "chestcavitybeyond:gills",
-    "chestcavitybeyond:small_gills",
+    "chestcavitybeyond:gill",
+    "chestcavitybeyond:small_gill",
+    "chestcavitybeyond:elder_gill",
+    "chestcavitybeyond:elder_lung",
     "chestcavitybeyond:gas_sac"
   ]
 }

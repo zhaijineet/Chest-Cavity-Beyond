@@ -16,6 +16,7 @@ public class ClientEventManager {
     }
 
     public static void gameBusListener(IEventBus gameBus) {
+        gameBus.addListener(ClientEventHandler::handlerRenderLevelStageEvent);
         gameBus.addListener(ClientEventHandler::handlerItemTooltipEvent);
         gameBus.addListener(ClientEventHandler::handlerInputEvent$MouseButton$Pre);
         gameBus.addListener(ClientEventHandler::handlerInputEvent$Key);

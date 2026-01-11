@@ -436,9 +436,9 @@ public class ChestCavityManager {
     public static final ChestCavityType AQUATIC = register("aquatic")
             .setFirstRow(0, InitItem.AQUATIC_MUSCLE.get())
             .setFirstRow(1, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(3, InitItem.GILLS.get())
+            .setFirstRow(3, InitItem.GILL.get())
             .setFirstRow(4, InitItem.ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.GILLS.get())
+            .setFirstRow(5, InitItem.GILL.get())
             .setFirstRow(7, InitItem.ANIMAL_RIB.get())
             .setFirstRow(8, InitItem.AQUATIC_MUSCLE.get())
 
@@ -482,15 +482,19 @@ public class ChestCavityManager {
 
             .setThirdRow(0, InitItem.FISH_MUSCLE.get())
             .setThirdRow(1, InitItem.FISH_MUSCLE.get())
+            .setThirdRow(2, InitItem.FISH_INTESTINE.get())
+            .setThirdRow(3, InitItem.FISH_INTESTINE.get())
+            .setThirdRow(5, InitItem.FISH_INTESTINE.get())
+            .setThirdRow(6, InitItem.FISH_INTESTINE.get())
             .setThirdRow(7, InitItem.FISH_MUSCLE.get())
             .setThirdRow(8, InitItem.FISH_MUSCLE.get());
 
     public static final ChestCavityType SMALL_AQUATIC = register("small_aquatic")
             .setFirstRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
             .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(3, InitItem.SMALL_GILLS.get())
+            .setFirstRow(3, InitItem.SMALL_GILL.get())
             .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.SMALL_GILLS.get())
+            .setFirstRow(5, InitItem.SMALL_GILL.get())
             .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
             .setFirstRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get())
 
@@ -529,6 +533,10 @@ public class ChestCavityManager {
 
             .setThirdRow(0, InitItem.SMALL_FISH_MUSCLE.get())
             .setThirdRow(1, InitItem.SMALL_FISH_MUSCLE.get())
+            .setThirdRow(2, InitItem.SMALL_FISH_INTESTINE.get())
+            .setThirdRow(3, InitItem.SMALL_FISH_INTESTINE.get())
+            .setThirdRow(5, InitItem.SMALL_FISH_INTESTINE.get())
+            .setThirdRow(6, InitItem.SMALL_FISH_INTESTINE.get())
             .setThirdRow(7, InitItem.SMALL_FISH_MUSCLE.get())
             .setThirdRow(8, InitItem.SMALL_FISH_MUSCLE.get());
 
@@ -704,10 +712,75 @@ public class ChestCavityManager {
             .setThirdRow(7, InitItem.SCULK_MUSCLE.get())
             .setThirdRow(8, InitItem.SCULK_MUSCLE.get())
 
-            .addValueBonuses(InitItem.SCULK_HEART.get(), Map.of(
+            .addValueBonuses(InitItem.SCULK_CORE.get(), Map.of(
                     InitAttribute.BREATH_CAPACITY, 1.0,
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
+
+    public static final ChestCavityType ELDER = register("elder")
+            .setFirstRow(0, InitItem.ELDER_MUSCLE.get())
+            .setFirstRow(1, InitItem.ELDER_RIB.get())
+            .setFirstRow(2, InitItem.ELDER_APPENDIX.get())
+            .setFirstRow(3, InitItem.ELDER_GILL.get())
+            .setFirstRow(4, InitItem.ELDER_HEART.get())
+            .setFirstRow(5, InitItem.ELDER_GILL.get())
+            .setFirstRow(7, InitItem.ELDER_RIB.get())
+            .setFirstRow(8, InitItem.ELDER_MUSCLE.get())
+
+            .setSecondRow(0, InitItem.ELDER_MUSCLE.get())
+            .setSecondRow(1, InitItem.ELDER_RIB.get())
+            .setSecondRow(2, InitItem.ELDER_SPLEEN.get())
+            .setSecondRow(3, InitItem.ELDER_KIDNEY.get())
+            .setSecondRow(4, InitItem.ELDER_SPINE.get())
+            .setSecondRow(5, InitItem.ELDER_KIDNEY.get())
+            .setSecondRow(6, InitItem.ELDER_LIVER.get())
+            .setSecondRow(7, InitItem.ELDER_RIB.get())
+            .setSecondRow(8, InitItem.ELDER_MUSCLE.get())
+
+            .setThirdRow(0, InitItem.ELDER_MUSCLE.get())
+            .setThirdRow(1, InitItem.ELDER_MUSCLE.get())
+            .setThirdRow(2, InitItem.ELDER_INTESTINE.get())
+            .setThirdRow(3, InitItem.ELDER_INTESTINE.get())
+            .setThirdRow(4, InitItem.ELDER_STOMACH.get())
+            .setThirdRow(5, InitItem.ELDER_INTESTINE.get())
+            .setThirdRow(6, InitItem.ELDER_INTESTINE.get())
+            .setThirdRow(7, InitItem.ELDER_MUSCLE.get())
+            .setThirdRow(8, InitItem.ELDER_MUSCLE.get());
+
+    public static final ChestCavityType ELDER_FISH = register("elder_fish")
+            .copyWith(ELDER)
+            .setFirstRow(0, InitItem.ELDER_FISH_MUSCLE.get())
+            .setFirstRow(1, InitItem.ELDER_FISH_BONE.get())
+            .setFirstRow(3, InitItem.ELDER_GILL.get())
+            .setFirstRow(4, InitItem.ELDER_HEART.get())
+            .setFirstRow(5, InitItem.ELDER_GILL.get())
+            .setFirstRow(7, InitItem.ELDER_FISH_BONE.get())
+            .setFirstRow(8, InitItem.ELDER_FISH_MUSCLE.get())
+
+            .setSecondRow(0, InitItem.ELDER_FISH_MUSCLE.get())
+            .setSecondRow(1, InitItem.ELDER_FISH_BONE.get())
+            .setSecondRow(4, InitItem.ELDER_FISH_SPINE.get())
+            .setSecondRow(7, InitItem.ELDER_FISH_BONE.get())
+            .setSecondRow(8, InitItem.ELDER_FISH_MUSCLE.get())
+
+            .setThirdRow(0, InitItem.ELDER_FISH_MUSCLE.get())
+            .setThirdRow(1, InitItem.ELDER_FISH_MUSCLE.get())
+            .setThirdRow(2, InitItem.ELDER_FISH_INTESTINE.get())
+            .setThirdRow(3, InitItem.ELDER_FISH_INTESTINE.get())
+            .setThirdRow(5, InitItem.ELDER_FISH_INTESTINE.get())
+            .setThirdRow(6, InitItem.ELDER_FISH_INTESTINE.get())
+            .setThirdRow(7, InitItem.ELDER_FISH_MUSCLE.get())
+            .setThirdRow(8, InitItem.ELDER_FISH_MUSCLE.get());
+
+    public static final ChestCavityType GUARDIAN = register("guardian")
+            .copyWith(FISH)
+            .setFirstRow(2, InitItem.ANIMAL_HEART.get())
+            .setFirstRow(4, InitItem.GUARDIAN_EYE.get());
+
+    public static final ChestCavityType ELDER_GUARDIAN = register("elder_guardian")
+            .copyWith(ELDER_FISH)
+            .setFirstRow(2, InitItem.ELDER_HEART.get())
+            .setFirstRow(4, InitItem.ELDER_GUARDIAN_EYE.get());
 
     /**
      * 获取实体的胸腔类型

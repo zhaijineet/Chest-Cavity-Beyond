@@ -3,6 +3,10 @@
     "chestcavitybeyond:silk_gland",
     "chestcavitybeyond:venom_gland",
     "chestcavitybeyond:active_blaze_rod",
-    "chestcavitybeyond:active_breeze_rod"
+    "chestcavitybeyond:active_breeze_rod",
+    "chestcavitybeyond:mana_reactor",
+    "chestcavitybeyond:elder_mana_reactor",
+    "chestcavitybeyond:guardian_eye",
+    "chestcavitybeyond:elder_guardian_eye"
   ]
 }
