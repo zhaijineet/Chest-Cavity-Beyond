@@ -28,7 +28,7 @@ public class EnchantmentUtil {
      */
     public static boolean canOpenChestCavity(Level level, ItemStack stack, float maxHealth, float health) {
         int enchantmentLevel = getEnchantmentLevel(level, stack, InitEnchantment.ADVANCED_SURGERY);
-        return maxHealth <= ChestCavityBeyondConfig.minChestOpenMaxHealth || maxHealth * (0.2 + enchantmentLevel * 0.1) >= health;
+        return maxHealth <= ChestCavityBeyondConfig.minChestOpenMaxHealth || maxHealth * (0.3 + enchantmentLevel * 0.1) >= health;
     }
 
     /**

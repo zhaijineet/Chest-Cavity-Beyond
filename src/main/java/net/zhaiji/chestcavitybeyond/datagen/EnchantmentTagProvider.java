@@ -25,12 +25,12 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
                         InitEnchantment.SAFE_SURGERY,
                         InitEnchantment.PRUDENT_SURGERY
                 );
-        tag(EnchantmentTags.TRADEABLE)
-                .add(
-                        InitEnchantment.TELEOPERATION,
-                        InitEnchantment.ADVANCED_SURGERY,
-                        InitEnchantment.SAFE_SURGERY,
-                        InitEnchantment.PRUDENT_SURGERY
-                );
+//        tag(EnchantmentTags.TRADEABLE)
+//                .add(
+//                        InitEnchantment.TELEOPERATION,
+//                        InitEnchantment.ADVANCED_SURGERY,
+//                        InitEnchantment.SAFE_SURGERY,
+//                        InitEnchantment.PRUDENT_SURGERY
+//                );
     }
 }
