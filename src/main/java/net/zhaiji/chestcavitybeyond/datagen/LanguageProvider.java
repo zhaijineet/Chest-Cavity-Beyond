@@ -37,9 +37,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             add(KeyMappings.USE_ORGAN_SKILLS_TRANSLATABLE + i, "Organ Skill " + (i < 9 ? "0" + (i + 1) : (i + 1)));
         }
 
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_VALUE.ordinal(), "Provides %1$s points of %2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(), "Provides %1$s%% %2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(), "Provides %1$s%% final %2$s");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_VALUE.ordinal(), "%1$s %2$s");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(), "%1$s%% %2$s");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(), "%1$s%% Final %2$s");
 
         addItem(InitItem.CHEST_OPENER, "Chest Opener");
 
@@ -345,9 +345,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             add(KeyMappings.USE_ORGAN_SKILLS_TRANSLATABLE + i, "器官技能" + (i < 9 ? "0" + (i + 1) : (i + 1)));
         }
 
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_VALUE.ordinal(), "提供%1$s点%2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(), "提供%1$s%%%2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(), "提供%1$s%%最终%2$s");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_VALUE.ordinal(), "%1$s %2$s");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(), "%1$s%% %2$s");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(), "%1$s%% 最终%2$s");
 
         addItem(InitItem.CHEST_OPENER, "开胸器");
 
@@ -481,7 +481,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.BLAZE_SHELL, "烈焰外壳");
         addItem(InitItem.ACTIVE_BLAZE_ROD, "活性烈焰棒");
 
-        addItem(InitItem.SNOW_CORE, "雪之心");
+        addItem(InitItem.SNOW_CORE, "雪之核心");
 
         addItem(InitItem.GHAST_STOMACH, "恶魂胃");
         addItem(InitItem.GAS_SAC, "气囊");

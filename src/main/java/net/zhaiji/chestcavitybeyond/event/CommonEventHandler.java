@@ -70,8 +70,6 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.VINDICATOR, ChestCavityTypeManager.HUMAN);
         ChestCavityTypeManager.registerEntity(EntityType.PILLAGER, ChestCavityTypeManager.HUMAN);
         ChestCavityTypeManager.registerEntity(EntityType.WITCH, ChestCavityTypeManager.HUMAN);
-        // 动物
-        ChestCavityTypeManager.registerEntity(EntityType.PIG, ChestCavityTypeManager.ANIMAL);
         // 食草生物1型
         ChestCavityTypeManager.registerEntity(EntityType.HORSE, ChestCavityTypeManager.HERBIVORE1);
         ChestCavityTypeManager.registerEntity(EntityType.DONKEY, ChestCavityTypeManager.HERBIVORE1);
@@ -87,6 +85,7 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.WOLF, ChestCavityTypeManager.CARNIVORE);
         ChestCavityTypeManager.registerEntity(EntityType.RAVAGER, ChestCavityTypeManager.CARNIVORE);
         // 动物
+        ChestCavityTypeManager.registerEntity(EntityType.PIG, ChestCavityTypeManager.ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.CAMEL, ChestCavityTypeManager.ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.PANDA, ChestCavityTypeManager.ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.POLAR_BEAR, ChestCavityTypeManager.ANIMAL);

@@ -22,6 +22,6 @@ public class InitEntityType {
     );
 
     public static <T extends Entity> Supplier<EntityType<T>> register(String name, EntityType.Builder<T> builder) {
-        return ENTITY_TYPE.register(name, () -> builder.build(name));
+        return ENTITY_TYPE.register(name, () -> builder.build(ChestCavityBeyond.of(name).toString()));
     }
 }

@@ -36,7 +36,7 @@ public class TooltipUtil {
                 tooltips.add(
                         Component.translatable(
                                 "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + modifier.operation().ordinal(),
-                                i,
+                                i > 0 ? "+" + i : i,
                                 Component.translatable(attribute.value().getDescriptionId())
                         )
                 );
@@ -44,7 +44,7 @@ public class TooltipUtil {
                 tooltips.add(
                         Component.translatable(
                                 "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + modifier.operation().ordinal(),
-                                value,
+                                value > 0 ? "+" + value : value,
                                 Component.translatable(attribute.value().getDescriptionId())
                         )
                 );

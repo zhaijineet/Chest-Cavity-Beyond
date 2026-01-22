@@ -1,7 +1,14 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.Items;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
@@ -836,9 +843,33 @@ public class ChestCavityTypeManager {
         ChestCavityType type = ENTITY_CHEST_CAVITY_TYPE_MAP.get(entity.getType());
         if (type == null) {
             EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
-            // 找不到实体类型所属的胸腔类型，就注册一套新的人类器官给它
-            registerEntity(entityType, HUMAN);
-            return HUMAN;
+            // 骷髅
+            if (entity instanceof AbstractSkeleton) {
+                return registerEntity(entityType, SKELETON);
+            }
+            // 亡灵
+            if (entity instanceof Zombie || entityType.is(EntityTypeTags.UNDEAD)) {
+                return registerEntity(entityType, SKELETON);
+            }
+            // 鱼类
+            if (entity instanceof AbstractFish) {
+                return registerEntity(entityType, FISH);
+            }
+            // 不是鱼，但能在水下呼吸，注册水生生物器官
+            // 但如果陆地和水下都能呼吸，这个检测就不管用了
+            // 只能手动注册了
+            if (entityType.is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
+                    || entity instanceof WaterAnimal
+                    || entityType.getCategory() == MobCategory.WATER_CREATURE
+                    || entityType.getCategory() == MobCategory.WATER_AMBIENT) {
+                return registerEntity(entityType, AQUATIC);
+            }
+            // 动物
+            if (entity instanceof Animal || entityType.getCategory() == MobCategory.CREATURE) {
+                return registerEntity(entityType, ANIMAL);
+            }
+            // 以上检测全未通过，就注册一套新的人类器官给它
+            return registerEntity(entityType, HUMAN);
         }
         return type;
     }
@@ -859,9 +890,11 @@ public class ChestCavityTypeManager {
      *
      * @param entityType      实体类型
      * @param chestCavityType 胸腔类型
+     * @return 胸腔类型
      */
-    public static void registerEntity(EntityType<? extends LivingEntity> entityType, ChestCavityType chestCavityType) {
+    public static ChestCavityType registerEntity(EntityType<? extends LivingEntity> entityType, ChestCavityType chestCavityType) {
         ENTITY_CHEST_CAVITY_TYPE_MAP.put(entityType, chestCavityType.builder(entityType));
+        return chestCavityType;
     }
 
     /**
