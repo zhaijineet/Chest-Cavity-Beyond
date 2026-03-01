@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -60,12 +61,14 @@ public class ChestOpenerItem extends Item {
             ChestCavityType cavityType = ChestCavityTypeManager.getType(target);
             if (cavityType.isUnopenable()) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    PacketDistributor.sendToPlayer(serverPlayer,
-                        new UnopenableChestCavityMessagePacket(target.getId()));
+                    PacketDistributor.sendToPlayer(serverPlayer, new UnopenableChestCavityMessagePacket(target.getId()));
                 }
                 return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
             }
-            boolean canOpenCavity = player.isCreative() || EnchantmentUtil.canOpenChestCavity(level, stack, target.getMaxHealth(), target.getHealth());
+            boolean isOwner = target instanceof OwnableEntity ownable && ownable.getOwner() == player;
+            int safeSurgeryLevel = EnchantmentUtil.getEnchantmentLevel(level, stack, InitEnchantment.SAFE_SURGERY);
+            boolean canOpenOwnable = isOwner && (safeSurgeryLevel == 0 || (safeSurgeryLevel == 1 && player.isShiftKeyDown()));
+            boolean canOpenCavity = player.isCreative() || canOpenOwnable || EnchantmentUtil.canOpenChestCavity(level, stack, target.getMaxHealth(), target.getHealth());
             hasDoor = ChestCavityUtil.getData(target).hasOrgan(ItemTags.DOORS);
             boolean hasChestPlate = !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
             if (!canOpenCavity && !hasDoor || hasChestPlate) {
@@ -85,8 +88,8 @@ public class ChestOpenerItem extends Item {
                 }
             }
         } else {
-            int enchantmentLevel = EnchantmentUtil.getEnchantmentLevel(level, stack, InitEnchantment.SAFE_SURGERY);
-            if (enchantmentLevel == 0 || enchantmentLevel == 1 && player.isShiftKeyDown()) {
+            int safeSurgeryLevel = EnchantmentUtil.getEnchantmentLevel(level, stack, InitEnchantment.SAFE_SURGERY);
+            if (safeSurgeryLevel == 0 || safeSurgeryLevel == 1 && player.isShiftKeyDown()) {
                 ChestCavityUtil.openChestCavity(player);
                 hasDoor = ChestCavityUtil.getData(player).hasOrgan(ItemTags.DOORS);
                 if (!hasDoor) {

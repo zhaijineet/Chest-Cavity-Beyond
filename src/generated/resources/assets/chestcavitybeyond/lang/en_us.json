@@ -46,7 +46,7 @@
   "enchantment.chestcavitybeyond.prudent_surgery": "Prudent Surgery",
   "enchantment.chestcavitybeyond.prudent_surgery.desc": "Each level reduces damage by 1 point",
   "enchantment.chestcavitybeyond.safe_surgery": "Safe Surgery",
-  "enchantment.chestcavitybeyond.safe_surgery.desc": "Level 1: Sneak allows self-opening; Level 2: Only other targets",
+  "enchantment.chestcavitybeyond.safe_surgery.desc": "Level 1: Sneak to open self and pets; Level 2: Only other entities",
   "enchantment.chestcavitybeyond.teleoperation": "Teleoperation",
   "enchantment.chestcavitybeyond.teleoperation.desc": "Each level increases reach distance by 1 block",
   "item.chestcavitybeyond.active_blaze_rod": "Active Blaze Rod",

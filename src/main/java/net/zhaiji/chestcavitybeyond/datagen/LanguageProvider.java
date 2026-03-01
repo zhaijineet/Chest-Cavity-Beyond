@@ -309,7 +309,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addEnchantment(
                 InitEnchantment.SAFE_SURGERY,
                 "Safe Surgery",
-                "Level 1: Sneak allows self-opening; Level 2: Only other targets"
+                "Level 1: Sneak to open self and pets; Level 2: Only other entities"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
@@ -634,7 +634,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addEnchantment(
                 InitEnchantment.SAFE_SURGERY,
                 "安全手术",
-                "1级时下蹲可对自己开胸，2级时只能对他人开胸"
+                "1级时下蹲可对自己和宠物开胸，2级时只能对其他生物开胸"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");

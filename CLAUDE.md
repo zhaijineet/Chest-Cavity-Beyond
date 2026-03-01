@@ -84,6 +84,7 @@ net.zhaiji.chestcavitybeyond
 ├── manager/                      # 核心管理器
 ├── menu/                         # GUI 菜单
 ├── mixin/                        # Mixin 注入
+├── mixinapi/                     # Mixin 接口注入 API
 ├── network/                      # 网络包
 ├── recipe/                       # 自定义配方
 ├── register/                     # 注册类

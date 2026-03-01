@@ -46,7 +46,7 @@
   "enchantment.chestcavitybeyond.prudent_surgery": "谨慎手术",
   "enchantment.chestcavitybeyond.prudent_surgery.desc": "每级减少1点开胸造成的伤害",
   "enchantment.chestcavitybeyond.safe_surgery": "安全手术",
-  "enchantment.chestcavitybeyond.safe_surgery.desc": "1级时下蹲可对自己开胸，2级时只能对他人开胸",
+  "enchantment.chestcavitybeyond.safe_surgery.desc": "1级时下蹲可对自己和宠物开胸，2级时只能对其他生物开胸",
   "enchantment.chestcavitybeyond.teleoperation": "远程操作",
   "enchantment.chestcavitybeyond.teleoperation.desc": "每级可提升1格开胸器使用距离",
   "item.chestcavitybeyond.active_blaze_rod": "活性烈焰棒",
