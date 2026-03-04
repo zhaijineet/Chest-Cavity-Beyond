@@ -704,7 +704,7 @@ public class ChestCavityTypeManager {
             .setSecondRow(8, InitItem.GOLEM_ARMOR_PLATE.get())
 
             .setThirdRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setSecondRow(1, InitItem.PISTON_MUSCLE.get())
+            .setThirdRow(1, InitItem.PISTON_MUSCLE.get())
             .setThirdRow(2, InitItem.INNER_FURNACE.get())
             .setThirdRow(3, InitItem.INNER_FURNACE.get())
             .setThirdRow(4, InitItem.INNER_FURNACE.get())

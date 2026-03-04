@@ -13,7 +13,7 @@ public class RegisterChestCavityEvent extends Event {
     /**
      * 注册胸腔类型
      */
-    public ChestCavityType register(String name) {
+    public ChestCavityType registerType(String name) {
         return ChestCavityTypeManager.register(name);
     }
 

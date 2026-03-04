@@ -2,6 +2,11 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.0.7
+
+- 新增了 `incomingDamage` 器官方法，在 `LivingIncomingDamageEvent` 事件中触发
+- 优化了器官技能冷却系统，通过 `cooldown()` 方法统一设置冷却时间
+
 ## 1.0.6
 
 - 新增了 OwnableEntity 所有者开胸功能，玩家可以直接打开自己驯服的实体的胸腔（如狼、猫等）

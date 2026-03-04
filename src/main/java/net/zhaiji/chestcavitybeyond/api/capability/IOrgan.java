@@ -113,6 +113,16 @@ public interface IOrgan {
     }
 
     /**
+     * 器官拥有者受到伤害前
+     *
+     * @param context         胸腔槽位上下文
+     * @param source          伤害源
+     * @param damageContainer 伤害容器
+     */
+    default void incomingDamage(ChestCavitySlotContext context, DamageSource source, DamageContainer damageContainer) {
+    }
+
+    /**
      * 器官拥有者攻击
      *
      * @param context         胸腔槽位上下文
@@ -131,5 +141,14 @@ public interface IOrgan {
      * @param damageContainer 伤害容器
      */
     default void hurt(ChestCavitySlotContext context, DamageSource source, DamageContainer damageContainer) {
+    }
+
+    /**
+     * 获取器官技能冷却时间（tick）
+     *
+     * @return 冷却时间（tick），0 表示无冷却
+     */
+    default int getCooldownTicks() {
+        return 0;
     }
 }

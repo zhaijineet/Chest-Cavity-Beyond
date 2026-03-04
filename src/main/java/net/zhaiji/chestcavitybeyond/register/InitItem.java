@@ -770,9 +770,8 @@ public class InitItem {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 1.25));
                         modifiers.put(InitAttribute.ENDER, OrganAttributeUtil.createAddValueModifier(id, 8));
                     })
+                    .cooldown(8 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 8 * 20);
                         OrganSkillUtil.teleport(context.entity(), context.data().getCurrentValue(InitAttribute.ENDER));
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -944,10 +943,9 @@ public class InitItem {
                         modifiers.put(InitAttribute.CARNIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, -0.5));
                         modifiers.put(InitAttribute.HERBIVOROUS_DIGESTION, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
+                    .cooldown(2 * 20)
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
-                            if (OrganSkillUtil.hasCooldown(player, context.stack())) return;
-                            OrganSkillUtil.addCooldown(player, context.stack(), 2 * 20);
                             OrganSkillUtil.graze(player);
                         }
                     })
@@ -963,9 +961,8 @@ public class InitItem {
                         modifiers.put(Attributes.LUCK, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                         modifiers.put(InitAttribute.EXPLOSIVE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
+                    .cooldown(20 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 20 * 20);
                         OrganSkillUtil.explosion(context.entity(), context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1168,10 +1165,9 @@ public class InitItem {
                         modifiers.put(InitAttribute.DEFENSE, OrganAttributeUtil.createAddValueModifier(id, 0.25));
                         modifiers.put(InitAttribute.FURNACE_POWER, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
+                    .cooldown(20)
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
-                            if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                            OrganSkillUtil.addCooldown(player, context.stack(), 20);
                             OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
                         }
                     })
@@ -1200,10 +1196,9 @@ public class InitItem {
                         modifiers.put(InitAttribute.IRON_REPAIR, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, -0.5));
                     })
+                    .cooldown(20)
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
-                            if (OrganSkillUtil.hasCooldown(player, context.stack())) return;
-                            OrganSkillUtil.addCooldown(player, context.stack(), 20);
                             OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
                         }
                     })
@@ -1215,9 +1210,8 @@ public class InitItem {
     public static final Supplier<Item> SILK_GLAND = ITEM.register(
             "silk_gland",
             () -> OrganBuilder.builder()
+                    .cooldown(4 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 4 * 20);
                         OrganSkillUtil.silk(context.entity());
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1383,9 +1377,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 3));
                         modifiers.put(InitAttribute.WATER_ALLERGY, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
+                    .cooldown(15 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 15 * 20);
                         OrganSkillUtil.smallFireball(
                                 context.data(),
                                 context.entity(),
@@ -1420,9 +1413,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.FIRE_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 1));
                         modifiers.put(InitAttribute.GHASTLY, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
+                    .cooldown(15 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 15 * 20);
                         OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY));
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1448,9 +1440,8 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.METABOLISM, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
+                    .cooldown(5 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 5 * 20);
                         OrganSkillUtil.shulkerBullet(context.entity());
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1464,10 +1455,9 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 0.75));
                     })
+                    .cooldown(8 * 20)
                     .skill(context -> {
                         if (context.entity() instanceof Player player) {
-                            if (OrganSkillUtil.hasCooldown(player, context.stack())) return;
-                            OrganSkillUtil.addCooldown(player, context.stack(), 8 * 20);
                             OrganSkillUtil.windCharge(player);
                         }
                     })
@@ -1505,9 +1495,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.BREATH_CAPACITY, OrganAttributeUtil.createAddValueModifier(id, 3));
                         modifiers.put(InitAttribute.ENDURANCE, OrganAttributeUtil.createAddValueModifier(id, 3));
                     })
+                    .cooldown(60 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 60 * 20);
                         OrganSkillUtil.dragonFireball(context.entity());
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1699,9 +1688,8 @@ public class InitItem {
                         modifiers.put(InitAttribute.HEALTH, OrganAttributeUtil.createAddValueModifier(id, 4));
                         modifiers.put(Attributes.KNOCKBACK_RESISTANCE, OrganAttributeUtil.createAddValueModifier(id, 4));
                     })
+                    .cooldown(60 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 60 * 20);
                         OrganSkillUtil.sonicBoom(context.entity());
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1893,11 +1881,8 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.ENTITY_INTERACTION_RANGE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
+                    .cooldown(5 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) {
-                            return;
-                        }
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 5 * 20);
                         OrganSkillUtil.guardianLaser(context.entity(), false);
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)
@@ -1911,9 +1896,8 @@ public class InitItem {
                     .modifier((id, modifiers) -> {
                         modifiers.put(Attributes.ENTITY_INTERACTION_RANGE, OrganAttributeUtil.createAddValueModifier(id, 1));
                     })
+                    .cooldown(8 * 20)
                     .skill(context -> {
-                        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
-                        OrganSkillUtil.addCooldown(context.entity(), context.stack(), 8 * 20);
                         OrganSkillUtil.guardianLaser(context.entity(), true);
                     })
                     .skillTooltip(TooltipUtil::simpleSkillTooltip)

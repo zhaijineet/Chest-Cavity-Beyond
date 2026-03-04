@@ -11,6 +11,7 @@ import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HurtConsumer;
+import net.zhaiji.chestcavitybeyond.api.function.IncomingDamageConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
@@ -36,6 +37,8 @@ public class OrganBuilder {
     private static final AttackConsumer EMPTY_ATTACK = (context, target, source, damageContainer) -> {
     };
     private static final HurtConsumer EMPTY_HURT = (context, source, damageContainer) -> {
+    };
+    private static final IncomingDamageConsumer EMPTY_INCOMING_DAMAGE = (context, source, damageContainer) -> {
     };
 
     /**
@@ -63,8 +66,10 @@ public class OrganBuilder {
         private Consumer<ChestCavitySlotContext> organRemovedConsumer = EMPTY_CONSUMER;
         private boolean hasSkill = false;
         private Consumer<ChestCavitySlotContext> organSkillConsumer = EMPTY_CONSUMER;
+        private int cooldownTicks = 0;
         private AttackConsumer attackConsumer = EMPTY_ATTACK;
         private HurtConsumer hurtConsumer = EMPTY_HURT;
+        private IncomingDamageConsumer incomingDamageConsumer = EMPTY_INCOMING_DAMAGE;
 
         private Builder() {
         }
@@ -147,6 +152,14 @@ public class OrganBuilder {
         }
 
         /**
+         * 设置器官技能冷却时间（tick）
+         */
+        public Builder cooldown(int cooldownTicks) {
+            this.cooldownTicks = cooldownTicks;
+            return this;
+        }
+
+        /**
          * 设置器官拥有者攻击触发器
          */
         public Builder attack(AttackConsumer attackConsumer) {
@@ -159,6 +172,14 @@ public class OrganBuilder {
          */
         public Builder hurt(HurtConsumer hurtConsumer) {
             this.hurtConsumer = hurtConsumer;
+            return this;
+        }
+
+        /**
+         * 设置器官拥有者受到伤害前触发器
+         */
+        public Builder incomingDamage(IncomingDamageConsumer incomingDamageConsumer) {
+            this.incomingDamageConsumer = incomingDamageConsumer;
             return this;
         }
 
@@ -181,8 +202,10 @@ public class OrganBuilder {
                             organRemovedConsumer,
                             hasSkill,
                             organSkillConsumer,
+                            cooldownTicks,
                             attackConsumer,
-                            hurtConsumer
+                            hurtConsumer,
+                            incomingDamageConsumer
                     )
             );
             return item;
