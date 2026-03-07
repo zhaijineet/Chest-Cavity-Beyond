@@ -3,6 +3,7 @@ package net.zhaiji.chestcavitybeyond.api.function;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.zhaiji.chestcavitybeyond.api.task.ISerializableTask;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
 /**
  * Task反序列化器函数式接口
@@ -12,9 +13,11 @@ import net.zhaiji.chestcavitybeyond.api.task.ISerializableTask;
 public interface TaskDeserializer {
     /**
      * 从NBT反序列化task
+     *
+     * @param data     胸腔数据
      * @param provider HolderLookup.Provider
-     * @param nbt NBT数据
+     * @param nbt      NBT数据
      * @return 反序列化的task实例
      */
-    ISerializableTask deserialize(HolderLookup.Provider provider, CompoundTag nbt);
+    ISerializableTask deserialize(ChestCavityData data, HolderLookup.Provider provider, CompoundTag nbt);
 }

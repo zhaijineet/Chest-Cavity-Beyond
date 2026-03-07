@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.zhaiji.chestcavitybeyond.api.function.TaskDeserializer;
 import net.zhaiji.chestcavitybeyond.api.task.ISerializableTask;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +34,8 @@ public class TaskManager {
      * @param nbt      NBT数据
      * @return 反序列化的task实例，如果类型未注册则返回null
      */
-    public static ISerializableTask deserializeTask(ResourceLocation type, HolderLookup.Provider provider, CompoundTag nbt) {
+    public static ISerializableTask deserializeTask(ChestCavityData data,ResourceLocation type, HolderLookup.Provider provider, CompoundTag nbt) {
         TaskDeserializer deserializer = TASK_REGISTRY.get(type);
-        return deserializer != null ? deserializer.deserialize(provider, nbt) : null;
+        return deserializer != null ? deserializer.deserialize(data, provider, nbt) : null;
     }
 }

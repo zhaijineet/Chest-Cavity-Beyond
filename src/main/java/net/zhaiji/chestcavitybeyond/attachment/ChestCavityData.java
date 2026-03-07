@@ -372,7 +372,7 @@ public class ChestCavityData extends ItemStackHandler {
             CompoundTag taskTag = tasksList.getCompound(i);
             ResourceLocation type = ResourceLocation.parse(taskTag.getString("type"));
             CompoundTag data = taskTag.getCompound("data");
-            IChestCavityTask task = TaskManager.deserializeTask(type, provider, data);
+            IChestCavityTask task = TaskManager.deserializeTask(this, type, provider, data);
             if (task != null) {
                 tasks.add(task);
             }
