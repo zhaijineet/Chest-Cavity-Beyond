@@ -90,7 +90,7 @@ public class Organ implements IOrgan {
             AttributeModifier modifier = OrganAttributeUtil.createModifier(context.id(), entry.value(), entry.operation());
             modifiers.put(entry.attribute(), modifier);
         }
-        if (context.data() == null || context.entity() == null) {
+        if (context.data() != null && context.entity() != null) {
             organModifierConsumer.accept(context, modifiers);
         }
 //        // 防止在 ChestCavityType.builder() 构建时因 context.data() 为 null 而抛出异常
