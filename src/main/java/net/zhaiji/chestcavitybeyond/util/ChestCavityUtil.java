@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
@@ -241,6 +242,18 @@ public class ChestCavityUtil {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 getOrganCap(stack).hurt(createContext(data, entity, i, stack), source, damageContainer);
+            }
+        }
+    }
+
+    /**
+     * 遍历所有器官触发被治疗回调
+     */
+    public static void heal(ChestCavityData data, LivingEntity entity, LivingHealEvent event) {
+        for (int i = 0; i < data.getSlots(); i++) {
+            ItemStack stack = data.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                getOrganCap(stack).heal(createContext(data, entity, i, stack), event);
             }
         }
     }

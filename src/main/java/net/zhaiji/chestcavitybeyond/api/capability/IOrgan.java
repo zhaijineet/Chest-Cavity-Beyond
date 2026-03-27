@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
@@ -181,6 +182,15 @@ public interface IOrgan {
      * @param damageContainer 伤害容器
      */
     default void hurt(ChestCavitySlotContext context, DamageSource source, DamageContainer damageContainer) {
+    }
+
+    /**
+     * 器官拥有者被治疗
+     *
+     * @param context 胸腔槽位上下文
+     * @param event   治疗事件
+     */
+    default void heal(ChestCavitySlotContext context, LivingHealEvent event) {
     }
 
     /**

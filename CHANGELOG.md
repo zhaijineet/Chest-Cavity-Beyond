@@ -2,6 +2,10 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.1.6
+
+- 新增 `heal` 器官回调：在 `LivingHealEvent` 中触发
+
 ## 1.1.5
 
 - 重构 Mixin 业务逻辑，将逻辑从 Mixin 类中提取到独立工具类：新增 `MixinUtil`和 `MixinClientUtil`

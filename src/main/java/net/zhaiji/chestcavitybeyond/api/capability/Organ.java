@@ -12,11 +12,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.zhaiji.chestcavitybeyond.api.AttributeEntry;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
+import net.zhaiji.chestcavitybeyond.api.function.HealConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HurtConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.IncomingDamageConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganModifierConsumer;
@@ -49,6 +51,7 @@ public class Organ implements IOrgan {
     private final Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer;
     private final AttackConsumer attackConsumer;
     private final HurtConsumer hurtConsumer;
+    private final HealConsumer healConsumer;
     private final IncomingDamageConsumer incomingDamageConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityOpenConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityCloseConsumer;
@@ -69,6 +72,7 @@ public class Organ implements IOrgan {
         this.organSkillOnCooldownConsumer = builder.organSkillOnCooldownConsumer;
         this.attackConsumer = builder.attackConsumer;
         this.hurtConsumer = builder.hurtConsumer;
+        this.healConsumer = builder.healConsumer;
         this.incomingDamageConsumer = builder.incomingDamageConsumer;
         this.chestCavityOpenConsumer = builder.chestCavityOpenConsumer;
         this.chestCavityCloseConsumer = builder.chestCavityCloseConsumer;
@@ -204,6 +208,11 @@ public class Organ implements IOrgan {
     }
 
     @Override
+    public void heal(ChestCavitySlotContext context, LivingHealEvent event) {
+        healConsumer.accept(context, event);
+    }
+
+    @Override
     public int getCooldownTicks() {
         return cooldownTicks;
     }
@@ -228,6 +237,8 @@ public class Organ implements IOrgan {
         private static final AttackConsumer EMPTY_ATTACK = (context, target, source, damageContainer) -> {
         };
         private static final HurtConsumer EMPTY_HURT = (context, source, damageContainer) -> {
+        };
+        private static final HealConsumer EMPTY_HEAL = (context, event) -> {
         };
         private static final IncomingDamageConsumer EMPTY_INCOMING_DAMAGE = (context, event) -> {
         };
@@ -254,6 +265,7 @@ public class Organ implements IOrgan {
         private Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer = EMPTY_CONSUMER;
         private AttackConsumer attackConsumer = EMPTY_ATTACK;
         private HurtConsumer hurtConsumer = EMPTY_HURT;
+        private HealConsumer healConsumer = EMPTY_HEAL;
         private IncomingDamageConsumer incomingDamageConsumer = EMPTY_INCOMING_DAMAGE;
         private Consumer<ChestCavitySlotContext> chestCavityOpenConsumer = EMPTY_CHEST_CAVITY_OPEN;
         private Consumer<ChestCavitySlotContext> chestCavityCloseConsumer = EMPTY_CHEST_CAVITY_CLOSE;
@@ -425,6 +437,14 @@ public class Organ implements IOrgan {
          */
         public Builder hurt(HurtConsumer hurtConsumer) {
             this.hurtConsumer = hurtConsumer;
+            return this;
+        }
+
+        /**
+         * 设置器官拥有者被治疗触发器
+         */
+        public Builder heal(HealConsumer healConsumer) {
+            this.healConsumer = healConsumer;
             return this;
         }
 

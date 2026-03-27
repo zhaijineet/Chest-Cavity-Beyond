@@ -23,6 +23,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -301,6 +302,17 @@ public class CommonEventHandler {
         if (source.is(DamageTypeTags.IS_FALL) && entity.getAttribute(Attributes.GRAVITY).getValue() <= 0) {
             event.setCanceled(true);
         }
+    }
+
+    /**
+     * 触发所有器官的被治疗回调
+     *
+     * @param event 实体治疗事件
+     */
+    public static void handlerLivingHealEvent(LivingHealEvent event) {
+        LivingEntity entity = event.getEntity();
+        ChestCavityData data = ChestCavityUtil.getData(entity);
+        ChestCavityUtil.heal(data, entity, event);
     }
 
     /**
