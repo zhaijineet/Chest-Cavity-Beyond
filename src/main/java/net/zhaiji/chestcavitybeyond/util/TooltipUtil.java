@@ -31,8 +31,8 @@ public class TooltipUtil {
      */
     public static void addOrganAttributeTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
@@ -83,8 +83,8 @@ public class TooltipUtil {
      */
     public static void simpleSkillTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,

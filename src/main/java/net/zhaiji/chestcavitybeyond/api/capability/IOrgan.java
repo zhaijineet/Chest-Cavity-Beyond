@@ -38,8 +38,8 @@ public interface IOrgan {
      * 器官描述提示
      *
      * @param data              胸腔数据
-     * @param stack             器官物品
      * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
+     * @param stack             器官物品
      * @param keyContext        工具提示按键上下文
      * @param context           工具提示上下文
      * @param tooltipComponents 工具提示组件列表
@@ -47,8 +47,8 @@ public interface IOrgan {
      */
     default void descriptionTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
@@ -60,8 +60,8 @@ public interface IOrgan {
      * 器官物品提示
      *
      * @param data              胸腔数据
-     * @param stack             器官物品
      * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
+     * @param stack             器官物品
      * @param keyContext        工具提示按键上下文
      * @param context           工具提示上下文
      * @param tooltipComponents 工具提示组件列表
@@ -69,8 +69,8 @@ public interface IOrgan {
      */
     default void attributeTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
@@ -82,8 +82,8 @@ public interface IOrgan {
      * 技能描述提示
      *
      * @param data              胸腔数据
-     * @param stack             器官物品
      * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
+     * @param stack             器官物品
      * @param keyContext        工具提示按键上下文
      * @param context           工具提示上下文
      * @param tooltipComponents 工具提示组件列表
@@ -91,8 +91,8 @@ public interface IOrgan {
      */
     default void skillTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,

@@ -130,8 +130,8 @@ public class ClientEventHandler {
         // 由于需要更改添加顺序的缘故，此处按倒序执行
         organ.skillTooltip(
             data,
-            event.getItemStack(),
             index,
+            event.getItemStack(),
             keyContext,
             event.getContext(),
             event.getToolTip(),
@@ -139,8 +139,8 @@ public class ClientEventHandler {
         );
         organ.attributeTooltip(
             data,
-            event.getItemStack(),
             index,
+            event.getItemStack(),
             keyContext,
             event.getContext(),
             event.getToolTip(),
@@ -148,8 +148,8 @@ public class ClientEventHandler {
         );
         organ.descriptionTooltip(
             data,
-            event.getItemStack(),
             index,
+            event.getItemStack(),
             keyContext,
             event.getContext(),
             event.getToolTip(),

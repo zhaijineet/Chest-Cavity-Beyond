@@ -92,6 +92,10 @@ public class Organ implements IOrgan {
         return new Builder(item);
     }
 
+    public static Builder builder(Function<Item.Properties,Item> itemFunction) {
+        return new Builder(itemFunction);
+    }
+
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ChestCavitySlotContext context) {
         Multimap<Holder<Attribute>, AttributeModifier> modifiers = LinkedHashMultimap.create();
@@ -114,21 +118,21 @@ public class Organ implements IOrgan {
     @Override
     public void descriptionTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
         TooltipFlag tooltipFlag
     ) {
-        descriptionTooltipConsumer.accept(data, stack, index, keyContext, context, tooltipComponents, tooltipFlag);
+        descriptionTooltipConsumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
     }
 
     @Override
     public void attributeTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
@@ -138,20 +142,20 @@ public class Organ implements IOrgan {
         if (consumer == null) {
             consumer = TooltipUtil.DEFAULT_ATTRIBUTE_TOOLTIP;
         }
-        consumer.accept(data, stack, index, keyContext, context, tooltipComponents, tooltipFlag);
+        consumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
     }
 
     @Override
     public void skillTooltip(
         ChestCavityData data,
-        ItemStack stack,
         int index,
+        ItemStack stack,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
         TooltipFlag tooltipFlag
     ) {
-        skillTooltipConsumer.accept(data, stack, index, keyContext, context, tooltipComponents, tooltipFlag);
+        skillTooltipConsumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
     }
 
     @Override
@@ -235,7 +239,7 @@ public class Organ implements IOrgan {
     public static class Builder {
         private static final OrganModifierConsumer EMPTY_MODIFIER = (context, modifiers) -> {
         };
-        private static final OrganTooltipConsumer EMPTY_TOOLTIP = (data, stack, index, keyContext, context, tooltipComponents, tooltipFlag) -> {
+        private static final OrganTooltipConsumer EMPTY_TOOLTIP = (data, index, stack, keyContext, context, tooltipComponents, tooltipFlag) -> {
         };
         private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
         };
