@@ -44,8 +44,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         }
 
         add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_VALUE.ordinal(), "%1$s %2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(), "%1$s%% %2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(), "%1$s%% Final %2$s");
+        add(
+            "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(),
+            "%1$s%% %2$s"
+        );
+        add(
+            "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(),
+            "%1$s%% Final %2$s"
+        );
 
         addItem(InitItem.CHEST_OPENER, "Chest Opener");
 
@@ -272,7 +278,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
         addDamageType(InitDamageType.ORGAN_LOSS, "%1$s died from organ loss");
+        addDamageTypeWithPlayer(InitDamageType.ORGAN_LOSS, "%1$s died from organ loss");
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s died from a medical accident");
+        addDamageTypeWithPlayer(InitDamageType.OPEN_CHEST, "%1$s died from a medical accident");
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s died from %2$s's malpractice", 0);
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s died tragically during chest surgery", 1);
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s bled out during surgery", 2);
@@ -298,24 +306,24 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addOrganSkill(InitItem.ELDER_GUARDIAN_EYE, "Shoot charged laser");
 
         addEnchantment(
-                InitEnchantment.TELEOPERATION,
-                "Teleoperation",
-                "Each level increases reach distance by 1 block"
+            InitEnchantment.TELEOPERATION,
+            "Teleoperation",
+            "Each level increases reach distance by 1 block"
         );
         addEnchantment(
-                InitEnchantment.ADVANCED_SURGERY,
-                "Advanced Surgery",
-                "Each level increases minimum health threshold by 10%"
+            InitEnchantment.ADVANCED_SURGERY,
+            "Advanced Surgery",
+            "Each level increases minimum health threshold by 10%"
         );
         addEnchantment(
-                InitEnchantment.PRUDENT_SURGERY,
-                "Prudent Surgery",
-                "Each level reduces damage by 1 point"
+            InitEnchantment.PRUDENT_SURGERY,
+            "Prudent Surgery",
+            "Each level reduces damage by 1 point"
         );
         addEnchantment(
-                InitEnchantment.SAFE_SURGERY,
-                "Safe Surgery",
-                "Level 1: Sneak to open self and pets; Level 2: Only other entities"
+            InitEnchantment.SAFE_SURGERY,
+            "Safe Surgery",
+            "Level 1: Sneak to open self and pets; Level 2: Only other entities"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
@@ -353,8 +361,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         }
 
         add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_VALUE.ordinal(), "%1$s %2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(), "%1$s%% %2$s");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(), "%1$s%% 最终%2$s");
+        add(
+            "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_BASE.ordinal(),
+            "%1$s%% %2$s"
+        );
+        add(
+            "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(),
+            "%1$s%% 最终%2$s"
+        );
 
         addItem(InitItem.CHEST_OPENER, "开胸器");
 
@@ -580,7 +594,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 
         addDamageType(InitDamageType.ORGAN_LOSS, "%1$s死于器官缺失");
+        addDamageTypeWithPlayer(InitDamageType.ORGAN_LOSS, "%1$s死于器官缺失");
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s死于医疗事故");
+        addDamageTypeWithPlayer(InitDamageType.OPEN_CHEST, "%1$s死于医疗事故");
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s死于庸医%2$s", 0);
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s在胸腔手术中不幸去世", 1);
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s在手术中失血过多而亡", 2);
@@ -623,24 +639,24 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ItemTagManager.IRON, "铁质器官");
 
         addEnchantment(
-                InitEnchantment.TELEOPERATION,
-                "远程操作",
-                "每级可提升1格开胸器使用距离"
+            InitEnchantment.TELEOPERATION,
+            "远程操作",
+            "每级可提升1格开胸器使用距离"
         );
         addEnchantment(
-                InitEnchantment.ADVANCED_SURGERY,
-                "先进手术",
-                "每级可提升10%的最低开胸生命值上限"
+            InitEnchantment.ADVANCED_SURGERY,
+            "先进手术",
+            "每级可提升10%的最低开胸生命值上限"
         );
         addEnchantment(
-                InitEnchantment.PRUDENT_SURGERY,
-                "谨慎手术",
-                "每级减少1点开胸造成的伤害"
+            InitEnchantment.PRUDENT_SURGERY,
+            "谨慎手术",
+            "每级减少1点开胸造成的伤害"
         );
         addEnchantment(
-                InitEnchantment.SAFE_SURGERY,
-                "安全手术",
-                "1级时下蹲可对自己和宠物开胸，2级时只能对其他生物开胸"
+            InitEnchantment.SAFE_SURGERY,
+            "安全手术",
+            "1级时下蹲可对自己和宠物开胸，2级时只能对其他生物开胸"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");
@@ -654,6 +670,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
     private void addDamageType(ResourceKey<DamageType> damageType, String value) {
         add("death.attack." + damageType.location().getNamespace() + "." + damageType.location().getPath(), value);
+    }
+
+    private void addDamageTypeWithPlayer(ResourceKey<DamageType> resourceKey, String value) {
+        add("death.attack." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath() + ".player", value);
     }
 
     private void addDamageType(ResourceKey<DamageType> resourceKey, String value, int index) {

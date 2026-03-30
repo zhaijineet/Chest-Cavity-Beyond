@@ -936,9 +936,9 @@ public class InitItem {
     public static final Supplier<Item> GOLEM_CORE = ITEM.register(
         "golem_core",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 0.75)
+            .addValueAttribute(InitAttribute.HEALTH, 3)
             .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
-            .addValueAttribute(InitAttribute.NERVES, 0.25)
+            .addValueAttribute(InitAttribute.SPEED, -2)
             .build()
     );
 
@@ -946,10 +946,9 @@ public class InitItem {
     public static final Supplier<Item> GOLEM_CABLE = ITEM.register(
         "golem_cable",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 0.25)
+            .addValueAttribute(InitAttribute.NERVES, 0.5)
             .addValueAttribute(InitAttribute.DEFENSE, 1)
             .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
-            .addValueAttribute(InitAttribute.SPEED, -0.5)
             .build()
     );
 

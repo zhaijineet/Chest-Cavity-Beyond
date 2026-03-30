@@ -2,6 +2,12 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.1.8
+
+- `ChestCavityData` Task API 重命名：`hasTask` → `hasTaskIf`、`getFirstTask` → `getFirstTaskIf`、`removeTask(Predicate)` → `removeTaskIf`，消除与 `removeTask(IChestCavityTask)` 的 lambda 歧义
+- `organ_loss` 和 `open_chest` 伤害类型新增玩家击杀消息
+- 调整 `golem_core` 和 `golem_cable` 器官属性数值
+
 ## 1.1.7
 
 - `cooldown` 支持动态冷却，可根据上下文动态决定冷却时间

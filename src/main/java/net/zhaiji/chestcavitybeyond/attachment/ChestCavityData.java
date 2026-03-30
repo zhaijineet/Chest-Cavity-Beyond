@@ -23,7 +23,6 @@ import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.api.task.IChestCavityTask;
 import net.zhaiji.chestcavitybeyond.api.task.ISerializableTask;
-import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.manager.TaskManager;
@@ -46,7 +45,7 @@ public class ChestCavityData extends ItemStackHandler {
     /**
      * 选择使用技能的槽位索引
      * <p>
-     * 此项仅用于序列化存储，具体使用请看{@link OrganSkillScreen}
+     * 此项仅用于序列化存储，具体使用请看{@code OrganSkillScreen}
      * </p>
      */
     public int selectedSlot = -1;
@@ -341,7 +340,7 @@ public class ChestCavityData extends ItemStackHandler {
      * @param predicate 匹配条件
      * @return 是否存在符合条件的任务
      */
-    public boolean hasTask(Predicate<IChestCavityTask> predicate) {
+    public boolean hasTaskIf(Predicate<IChestCavityTask> predicate) {
         for (IChestCavityTask task : tasks) {
             if (predicate.test(task)) {
                 return true;
@@ -356,7 +355,7 @@ public class ChestCavityData extends ItemStackHandler {
      * @param predicate 匹配条件
      * @return 第一个符合条件的任务
      */
-    public Optional<IChestCavityTask> getFirstTask(Predicate<IChestCavityTask> predicate) {
+    public Optional<IChestCavityTask> getFirstTaskIf(Predicate<IChestCavityTask> predicate) {
         for (IChestCavityTask task : tasks) {
             if (predicate.test(task)) {
                 return Optional.of(task);
@@ -371,7 +370,7 @@ public class ChestCavityData extends ItemStackHandler {
      * @param predicate 匹配条件
      * @return 是否成功删除
      */
-    public boolean removeTask(Predicate<IChestCavityTask> predicate) {
+    public boolean removeTaskIf(Predicate<IChestCavityTask> predicate) {
         Iterator<IChestCavityTask> iterator = tasks.iterator();
         while (iterator.hasNext()) {
             IChestCavityTask task = iterator.next();
