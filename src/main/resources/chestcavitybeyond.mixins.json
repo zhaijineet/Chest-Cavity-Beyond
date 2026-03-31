@@ -51,6 +51,8 @@
   },
   "client": [
     "EndCrystalRendererMixin",
-    "LocalPlayerMixin"
+    "GuiMixin",
+    "LocalPlayerMixin",
+    "PlayerTabOverlayMixin"
   ]
 }
