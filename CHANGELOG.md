@@ -2,6 +2,10 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.1.9
+
+- 彩蛋更新
+
 ## 1.1.8
 
 - `ChestCavityData` Task API 重命名：`hasTask` → `hasTaskIf`、`getFirstTask` → `getFirstTaskIf`、`removeTask(Predicate)` → `removeTaskIf`，消除与 `removeTask(IChestCavityTask)` 的 lambda 歧义
