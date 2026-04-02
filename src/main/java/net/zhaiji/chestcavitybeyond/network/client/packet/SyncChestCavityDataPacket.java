@@ -6,7 +6,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
+import net.zhaiji.chestcavitybeyond.network.client.ClientPacketHandler;
 
 /**
  * 同步胸腔数据
@@ -36,5 +38,9 @@ public record SyncChestCavityDataPacket(NonNullList<ItemStack> organs, int slot)
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
+    }
+
+    public static void handler(SyncChestCavityDataPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> ClientPacketHandler.handlerSyncChestCavityDataPacket(context.player(), packet));
     }
 }

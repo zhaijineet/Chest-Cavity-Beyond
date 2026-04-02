@@ -2,12 +2,10 @@ package net.zhaiji.chestcavitybeyond.network;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import net.zhaiji.chestcavitybeyond.network.client.ClientPacketHandler;
 import net.zhaiji.chestcavitybeyond.network.client.packet.AddGuardianLaserRenderTaskPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.ChestOpenerMessagePacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.UnopenableChestCavityMessagePacket;
-import net.zhaiji.chestcavitybeyond.network.server.ServerPacketHandler;
 import net.zhaiji.chestcavitybeyond.network.server.packet.SyncSelectedSlotPacket;
 import net.zhaiji.chestcavitybeyond.network.server.packet.UseSkillPacket;
 
@@ -22,37 +20,37 @@ public class PacketManager {
         registrar.playToServer(
                 UseSkillPacket.TYPE,
                 UseSkillPacket.STREAM_CODEC,
-                ServerPacketHandler::handleUseSkillPacket
+                UseSkillPacket::handler
         );
 
         registrar.playToServer(
                 SyncSelectedSlotPacket.TYPE,
                 SyncSelectedSlotPacket.STREAM_CODEC,
-                ServerPacketHandler::handlerSyncSelectedSlotPacket
+                SyncSelectedSlotPacket::handler
         );
 
         registrar.playToClient(
                 SyncChestCavityDataPacket.TYPE,
                 SyncChestCavityDataPacket.STREAM_CODEC,
-                ClientPacketHandler::handlerSyncChestCavityDataPacket
+                SyncChestCavityDataPacket::handler
         );
 
         registrar.playToClient(
                 AddGuardianLaserRenderTaskPacket.TYPE,
                 AddGuardianLaserRenderTaskPacket.STREAM_CODEC,
-                ClientPacketHandler::handlerAddGuardianLaserRenderTaskPacket
+                AddGuardianLaserRenderTaskPacket::handler
         );
 
         registrar.playToClient(
                 ChestOpenerMessagePacket.TYPE,
                 ChestOpenerMessagePacket.STREAM_CODEC,
-                ClientPacketHandler::handlerChestOpenerMessagePacket
+                ChestOpenerMessagePacket::handler
         );
 
         registrar.playToClient(
                 UnopenableChestCavityMessagePacket.TYPE,
                 UnopenableChestCavityMessagePacket.STREAM_CODEC,
-                ClientPacketHandler::handlerUnopenableCavityMessagePacket
+                UnopenableChestCavityMessagePacket::handler
         );
     }
 }

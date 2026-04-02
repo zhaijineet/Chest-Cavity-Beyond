@@ -1243,7 +1243,7 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_HEART = ITEM.register(
         "dragon_heart",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 3)
+            .addValueAttribute(InitAttribute.HEALTH, 5)
             .build()
     );
 
@@ -1251,9 +1251,9 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_LUNG = ITEM.register(
         "dragon_lung",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 3)
-            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 3)
-            .addValueAttribute(InitAttribute.ENDURANCE, 3)
+            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 5)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 5)
+            .addValueAttribute(InitAttribute.ENDURANCE, 5)
             .cooldown(60 * 20)
             .skill(context -> {
                 OrganSkillUtil.dragonFireball(context.entity());
@@ -1266,9 +1266,9 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_SPINE = ITEM.register(
         "dragon_spine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 3)
-            .addValueAttribute(InitAttribute.DEFENSE, 2)
-            .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 2)
+            .addValueAttribute(InitAttribute.NERVES, 5)
+            .addValueAttribute(InitAttribute.DEFENSE, 5)
+            .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
             .build()
     );
 
@@ -1276,7 +1276,7 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_KIDNEY = ITEM.register(
         "dragon_kidney",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.FILTRATION, 3)
+            .addValueAttribute(InitAttribute.FILTRATION, 5)
             .build()
     );
 
@@ -1284,7 +1284,7 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_SPLEEN = ITEM.register(
         "dragon_spleen",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.METABOLISM, 3)
+            .addValueAttribute(InitAttribute.METABOLISM, 5)
             .build()
     );
 
@@ -1292,7 +1292,7 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_LIVER = ITEM.register(
         "dragon_liver",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DETOXIFICATION, 3)
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 5)
             .build()
     );
 
@@ -1300,7 +1300,7 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_APPENDIX = ITEM.register(
         "dragon_appendix",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.LUCK, 3)
+            .addValueAttribute(Attributes.LUCK, 5)
             .build()
     );
 
@@ -1308,8 +1308,8 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_RIB = ITEM.register(
         "dragon_rib",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 3)
-            .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 2)
+            .addValueAttribute(InitAttribute.DEFENSE, 5)
+            .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
             .build()
     );
 
@@ -1317,8 +1317,8 @@ public class InitItem {
     public static final Supplier<Item> DRAGON_MUSCLE = ITEM.register(
         "dragon_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 3)
-            .addValueAttribute(InitAttribute.SPEED, 3)
+            .addValueAttribute(InitAttribute.STRENGTH, 5)
+            .addValueAttribute(InitAttribute.SPEED, 5)
             .build()
     );
 
@@ -1378,7 +1378,7 @@ public class InitItem {
     public static final Supplier<Item> SCULK_HEART = ITEM.register(
         "sculk_heart",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 2)
+            .addValueAttribute(InitAttribute.HEALTH, 3)
             .build()
     );
 
@@ -1411,8 +1411,8 @@ public class InitItem {
     public static final Supplier<Item> SCULK_CORE = ITEM.register(
         "sculk_core",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 4)
-            .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 4)
+            .addValueAttribute(InitAttribute.HEALTH, 5)
+            .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
             .cooldown(60 * 20)
             .skill(context -> {
                 OrganSkillUtil.sonicBoom(context.entity());
