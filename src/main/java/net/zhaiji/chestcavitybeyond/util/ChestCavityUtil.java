@@ -63,7 +63,7 @@ public class ChestCavityUtil {
      * @return 器官capability
      */
     public static IOrgan getOrganCap(ItemStack stack) {
-        return Objects.requireNonNullElse(stack.getCapability(CapabilityManager.ORGAN), net.zhaiji.chestcavitybeyond.manager.OrganManager.EMPTY_ORGAN);
+        return Objects.requireNonNullElse(stack.getCapability(CapabilityManager.ORGAN), OrganManager.EMPTY_ORGAN);
     }
 
     /**

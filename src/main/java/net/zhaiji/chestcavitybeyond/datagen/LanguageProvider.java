@@ -255,6 +255,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.STRENGTH, "Strength");
         addAttribute(InitAttribute.SPEED, "Speed");
         addAttribute(InitAttribute.FIRE_RESISTANCE, "Fire Resistance");
+        addAttribute(InitAttribute.FROST_RESISTANCE, "Frost Resistance");
         addAttribute(InitAttribute.WATER_ALLERGY, "Water Allergy");
         addAttribute(InitAttribute.ENDER, "Ender");
         addAttribute(InitAttribute.PROJECTILE_DODGE, "Projectile Dodge");
@@ -571,6 +572,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.STRENGTH, "力量");
         addAttribute(InitAttribute.SPEED, "速度");
         addAttribute(InitAttribute.FIRE_RESISTANCE, "火焰抗性");
+        addAttribute(InitAttribute.FROST_RESISTANCE, "冰霜抗性");
         addAttribute(InitAttribute.WATER_ALLERGY, "水过敏");
         addAttribute(InitAttribute.ENDER, "末影");
         addAttribute(InitAttribute.PROJECTILE_DODGE, "弹射物闪避");

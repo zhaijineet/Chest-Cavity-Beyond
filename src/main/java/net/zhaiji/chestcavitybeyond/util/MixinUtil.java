@@ -8,6 +8,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.player.Player;
@@ -258,15 +259,15 @@ public class MixinUtil {
                         double d2 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
                         double d3 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
                         double d4 = entity.getRandom().nextDouble() - entity.getRandom().nextDouble();
-                        entity.level()
-                            .addParticle(ParticleTypes.BUBBLE,
-                                entity.getX() + d2,
-                                entity.getY() + d3,
-                                entity.getZ() + d4,
-                                vec3.x,
-                                vec3.y,
-                                vec3.z
-                            );
+                        entity.level().addParticle(
+                            ParticleTypes.BUBBLE,
+                            entity.getX() + d2,
+                            entity.getY() + d3,
+                            entity.getZ() + d4,
+                            vec3.x,
+                            vec3.y,
+                            vec3.z
+                        );
                     }
                 }
                 if (drownEvent.getDamageAmount() > 0) {
@@ -320,8 +321,7 @@ public class MixinUtil {
         if (source.getDirectEntity() instanceof LivingEntity attacker) {
             double launch = ChestCavityUtil.getData(attacker).getCurrentValue(InitAttribute.LAUNCH);
             if (launch > 0) {
-                double knockbackResistance = ChestCavityUtil.getData(target)
-                                                 .getCurrentValue(net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE) / 8;
+                double knockbackResistance = ChestCavityUtil.getData(target).getCurrentValue(Attributes.KNOCKBACK_RESISTANCE) / 8;
                 double yAdd = Math.max(0.0, 1 - knockbackResistance);
                 target.setDeltaMovement(target.getDeltaMovement().add(0.0, 0.4 * yAdd, 0.0));
             }

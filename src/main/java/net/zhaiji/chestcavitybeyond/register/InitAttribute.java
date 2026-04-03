@@ -39,6 +39,8 @@ public class InitAttribute {
     public static final Holder<Attribute> SPEED = registerRangedAttribute("speed");
     // 火焰抗性
     public static final Holder<Attribute> FIRE_RESISTANCE = registerRangedAttribute("fire_resistance");
+    // 冰霜抗性
+    public static final Holder<Attribute> FROST_RESISTANCE = registerRangedAttribute("frost_resistance");
     // 水过敏
     // TODO 水过敏伤害没有应用函数计算进行增减，后续考虑进行计算
     public static final Holder<Attribute> WATER_ALLERGY = registerRangedAttribute("water_allergy");

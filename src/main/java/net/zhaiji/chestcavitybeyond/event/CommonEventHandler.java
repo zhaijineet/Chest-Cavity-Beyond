@@ -333,6 +333,13 @@ public class CommonEventHandler {
             flag = true;
         }
 
+        // 应用冰霜伤害修改
+        if (source.is(DamageTypeTags.IS_FREEZING)) {
+            double frostResistance = data.getDifferenceValue(InitAttribute.FROST_RESISTANCE);
+            damage *= MathUtil.getAttenuationScale(damage, frostResistance);
+            flag = true;
+        }
+
         // 应用溺水伤害修改
         if (source.is(DamageTypeTags.IS_DROWNING)) {
             double ender = data.getCurrentValue(InitAttribute.ENDER);
