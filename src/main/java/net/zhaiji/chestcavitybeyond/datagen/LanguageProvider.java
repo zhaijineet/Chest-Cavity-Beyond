@@ -336,6 +336,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("commands.chestcavitybeyond.resize.success.single", "Resized %s's chest cavity to %s(%s slots)");
         add("commands.chestcavitybeyond.resize.success.multiple", "Resized chest cavity of %s entities to %s(%s slots)");
 
+        add("commands.chestcavitybeyond.resetorgans.failed", "No valid targets found");
+        add("commands.chestcavitybeyond.resetorgans.success.single", "Reset %s's chest cavity organs to defaults");
+        add("commands.chestcavitybeyond.resetorgans.success.multiple", "Reset chest cavity organs of %s entities to defaults");
+
         add(ItemTagManager.ORGANS, "Organs");
         add(ItemTagManager.HEART, "Hearts");
         add(ItemTagManager.LUNG, "Lungs");
@@ -673,6 +677,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("commands.chestcavitybeyond.resize.failed", "没有找到有效目标");
         add("commands.chestcavitybeyond.resize.success.single", "已将%s的胸腔容量调整为%s（%s个槽位）");
         add("commands.chestcavitybeyond.resize.success.multiple", "已将%s个实体的胸腔容量调整为%s（%s个槽位）");
+
+        add("commands.chestcavitybeyond.resetorgans.failed", "没有找到有效目标");
+        add("commands.chestcavitybeyond.resetorgans.success.single", "已将%s的胸腔器官重置为默认");
+        add("commands.chestcavitybeyond.resetorgans.success.multiple", "已将%s个实体的胸腔器官重置为默认");
     }
 
     private void addAttribute(Holder<Attribute> attribute, String value) {

@@ -113,6 +113,17 @@ public class ChestCavityData extends ItemStackHandler {
     }
 
     /**
+     * 重置器官
+     */
+    public void reset() {
+        NonNullList<Item> organs = type.getOrgans();
+        for (int i = 0; i < getSlots(); i++) {
+            setStackInSlot(i, organs.get(i).getDefaultInstance());
+        }
+        initAttributeModifier();
+    }
+
+    /**
      * 获取胸腔类型
      *
      * @return 胸腔类型

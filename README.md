@@ -6,7 +6,7 @@
 
 - **Minecraft 版本**: 1.21.1
 - **NeoForge 版本**: 21.1.216
-- **模组版本**: 1.0.0
+- **模组版本**: 1.3.2
 - **作者**: zhaiji
 - **代码许可证**: MIT
 - **美术资源许可证**: Apache License 2.0（来自 [Chest Cavity](https://github.com/Tigereye504/chestcavity)）

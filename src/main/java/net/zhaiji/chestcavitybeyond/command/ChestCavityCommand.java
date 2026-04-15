@@ -20,6 +20,9 @@ public class ChestCavityCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(
         Component.translatable("commands.chestcavitybeyond.resize.failed")
     );
+    private static final SimpleCommandExceptionType ERROR_RESET_ORGANS_FAILED = new SimpleCommandExceptionType(
+        Component.translatable("commands.chestcavitybeyond.resetorgans.failed")
+    );
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
@@ -34,6 +37,9 @@ public class ChestCavityCommand {
                             return builder.buildFuture();
                         })
                         .executes(ChestCavityCommand::execute)
+                    )
+                    .then(Commands.literal("resetorgans")
+                        .executes(ChestCavityCommand::executeResetOrgans)
                     )
                 )
         );
@@ -73,6 +79,39 @@ public class ChestCavityCommand {
                     newSize.getSerializedName(),
                     newSize.getSlots()
                 ), true
+            );
+        }
+
+        return successCount;
+    }
+
+    private static int executeResetOrgans(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        Collection<? extends Entity> targets = EntityArgument.getEntities(context, "targets");
+
+        int successCount = 0;
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity livingEntity) {
+                // 重置为默认器官
+                ChestCavityUtil.getData(livingEntity).reset();
+                successCount++;
+            }
+        }
+
+        if (successCount == 0) {
+            throw ERROR_RESET_ORGANS_FAILED.create();
+        }
+
+        if (targets.size() == 1) {
+            Entity target = targets.iterator().next();
+            context.getSource().sendSuccess(
+                () -> Component.translatable("commands.chestcavitybeyond.resetorgans.success.single", target.getDisplayName()),
+                true
+            );
+        } else {
+            int count = successCount;
+            context.getSource().sendSuccess(
+                () -> Component.translatable("commands.chestcavitybeyond.resetorgans.success.multiple", count),
+                true
             );
         }
 

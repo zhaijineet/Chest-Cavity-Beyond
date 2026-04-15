@@ -328,7 +328,7 @@ public class OrganAttributeUtil {
      */
     public static void updateScale(ChestCavityData data, LivingEntity entity) {
         double bonus = 0;
-        if (!ChestCavityBeyondConfig.enableChestCavityScaleSideEffect) {
+        if (ChestCavityBeyondConfig.enableChestCavityScaleSideEffect) {
             bonus = 0.25 * switch (data.getSize()) {
                 case ROW_3 -> 0;    // 3排 = 0
                 case ROW_4 -> 1;    // 4排 = 1
