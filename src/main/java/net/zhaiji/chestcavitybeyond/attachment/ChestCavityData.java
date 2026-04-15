@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -181,16 +182,32 @@ public class ChestCavityData extends ItemStackHandler {
         return compoundTag;
     }
 
+    /**
+     * 此处进行了重构，需要增加向后兼容
+     * <p>
+     * 下一个1.4.0版本再改回来
+     * </p>
+     */
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        // 先读取胸腔容量
-        size = ChestCavitySize.byId(nbt.getInt("chestCavitySize"));
+        stacks.clear();
 
-        // 读取物品
-        ListTag tagList = nbt.getList("items", 10);
+        // 读取胸腔容量：优先读新字段 chestCavitySize，兜底读旧字段 Size
+        if (nbt.contains("chestCavitySize", Tag.TAG_INT)) {
+            size = ChestCavitySize.byId(nbt.getInt("chestCavitySize"));
+        } else if (nbt.contains("Size", Tag.TAG_INT)) {
+            size = ChestCavitySize.bySlots(nbt.getInt("Size"));
+        } else {
+            size = type != null ? type.getSize() : ChestCavitySize.DEFAULT_SIZE;
+        }
+
+        // 读取物品：同时兼容旧格式大写 "Items" 和新格式小写 "items"
+        String itemsKey = nbt.contains("items", Tag.TAG_LIST) ? "items" : "Items";
+        ListTag tagList = nbt.getList(itemsKey, Tag.TAG_COMPOUND);
         for (int i = 0; i < tagList.size(); i++) {
             CompoundTag itemTags = tagList.getCompound(i);
-            int slot = itemTags.getInt("slot");
+            // 同时兼容旧格式大写 "Slot" 和新格式小写 "slot"
+            int slot = itemTags.contains("slot", Tag.TAG_INT) ? itemTags.getInt("slot") : itemTags.getInt("Slot");
             if (slot >= 0 && slot < getSlots()) {
                 ItemStack.parse(provider, itemTags).ifPresent(stack -> stacks.set(slot, stack));
             }
@@ -201,7 +218,7 @@ public class ChestCavityData extends ItemStackHandler {
 
         // 反序列化tasks
         tasks.clear();
-        ListTag tasksList = nbt.getList("tasks", 10);
+        ListTag tasksList = nbt.getList("tasks", Tag.TAG_COMPOUND);
         for (int i = 0; i < tasksList.size(); i++) {
             CompoundTag taskTag = tasksList.getCompound(i);
             ResourceLocation type = ResourceLocation.parse(taskTag.getString("type"));

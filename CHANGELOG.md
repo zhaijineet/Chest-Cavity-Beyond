@@ -2,6 +2,10 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.3.1
+
+- 修复 `ChestCavityData` 反序列化的向后兼容性：同时兼容旧版 NBT 键名（`Size`、`Items`、`Slot`）和新版键名（`chestCavitySize`、`items`、`slot`），避免旧存档升级后胸腔数据丢失
+
 ## 1.3.0
 
 - 新增胸腔容量系统，支持 4 种大小（3~6 行，27~54 槽位），胸腔界面根据容量自动调整布局和背景纹理
