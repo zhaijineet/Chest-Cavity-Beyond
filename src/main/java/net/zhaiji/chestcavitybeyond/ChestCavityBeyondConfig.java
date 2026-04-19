@@ -71,7 +71,7 @@ public class ChestCavityBeyondConfig {
 
     private static final ModConfigSpec.IntValue FURNACE_POWER_MAX_DURATION = BUILDER
             .comment(
-                    "熔炉力量效果的最大持续时间（tick）",
+                    "熔炉之力效果的最大持续时间（tick）",
                     "Maximum duration of furnace power effect (ticks)"
             )
             .defineInRange(

@@ -13,6 +13,7 @@ public class CommonEventManager {
     public static void modBusListener(IEventBus modBus) {
         modBus.addListener(ChestCavityBeyondConfig::handlerModConfigEvent);
         modBus.addListener(CommonEventHandler::handlerRegisterCapabilitiesEvent);
+        modBus.addListener(CommonEventHandler::handlerFMLCommonSetupEvent);
         modBus.addListener(CommonEventHandler::handlerFMLLoadCompleteEvent);
         modBus.addListener(CommonEventHandler::handlerEntityAttributeModificationEvent);
         modBus.addListener(PacketManager::handlerRegisterPayloadHandlersEvent);

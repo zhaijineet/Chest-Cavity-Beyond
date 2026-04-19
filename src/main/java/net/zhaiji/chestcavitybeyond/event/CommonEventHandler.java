@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.fml.ModLoader;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -32,7 +33,10 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
-import net.zhaiji.chestcavitybeyond.api.event.RegisterChestCavityEvent;
+import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterEvent;
+import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterCompletedEvent;
+import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterCompletedEvent;
+import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.command.ChestCavityCommand;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
@@ -58,6 +62,30 @@ public class CommonEventHandler {
         OrganManager.getRegistry().forEach((item, organ) -> {
             event.registerItem(CapabilityManager.ORGAN, (itemStack, context) -> organ, item);
         });
+    }
+
+    /**
+     * 注册器官
+     * <p>
+     * 在此阶段注册为已有物品添加器官能力，并触发器官注册事件供外部模组使用。
+     *
+     * @param event FMLCommonSetupEvent
+     */
+    public static void handlerFMLCommonSetupEvent(FMLCommonSetupEvent event) {
+        // 下界之星器官注册
+        Organ.builder(Items.NETHER_STAR)
+            .addValueAttribute(InitAttribute.HEALTH, 2.5)
+            .skill(context -> {
+                if (context.entity() instanceof Player player) {
+                    OrganSkillUtil.witherSkull(player);
+                }
+                return true;
+            })
+            .cooldown(20 * 3)
+            .build();
+
+        ModLoader.postEvent(new OrganRegisterEvent());
+        ModLoader.postEvent(new OrganRegisterCompletedEvent());
     }
 
     /**
@@ -190,17 +218,8 @@ public class CommonEventHandler {
         // 盔甲架
         ChestCavityTypeManager.registerEntity(EntityType.ARMOR_STAND, ChestCavityTypeManager.ARMOR_STAND);
 
-        // 下界之星器官注册
-        Organ.builder(Items.NETHER_STAR)
-            .addValueAttribute(InitAttribute.HEALTH, 2.5)
-            .skill(context -> {
-                if (context.entity() instanceof Player player) {
-                    OrganSkillUtil.witherSkull(player);
-                }
-            })
-            .build();
-
-        ModLoader.postEvent(new RegisterChestCavityEvent());
+        ModLoader.postEvent(new ChestCavityRegisterEvent());
+        ModLoader.postEvent(new ChestCavityRegisterCompletedEvent());
     }
 
     /**

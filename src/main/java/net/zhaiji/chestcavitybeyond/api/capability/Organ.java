@@ -22,6 +22,7 @@ import net.zhaiji.chestcavitybeyond.api.function.HealConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HurtConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.IncomingDamageConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganModifierConsumer;
+import net.zhaiji.chestcavitybeyond.api.function.OrganSkillConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OtherOrganChangeConsumer;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -47,7 +48,7 @@ public class Organ implements IOrgan {
     private final Consumer<ChestCavitySlotContext> organRemovedConsumer;
     private final OtherOrganChangeConsumer otherOrganChangeConsumer;
     private final boolean hasSkill;
-    private final Consumer<ChestCavitySlotContext> organSkillConsumer;
+    private final OrganSkillConsumer organSkillConsumer;
     private final ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction;
     private final Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer;
     private final AttackConsumer attackConsumer;
@@ -92,7 +93,7 @@ public class Organ implements IOrgan {
         return new Builder(item);
     }
 
-    public static Builder builder(Function<Item.Properties,Item> itemFunction) {
+    public static Builder builder(Function<Item.Properties, Item> itemFunction) {
         return new Builder(itemFunction);
     }
 
@@ -189,11 +190,12 @@ public class Organ implements IOrgan {
             organSkillOnCooldownConsumer.accept(context);
             return;
         }
-        int cooldown = cooldownTicksFunction.applyAsInt(context);
-        if (cooldown > 0) {
-            OrganSkillUtil.addCooldown(context.entity(), context.stack(), cooldown);
+        if (organSkillConsumer.apply(context)) {
+            int cooldown = cooldownTicksFunction.applyAsInt(context);
+            if (cooldown > 0) {
+                OrganSkillUtil.addCooldown(context.entity(), context.stack(), cooldown);
+            }
         }
-        organSkillConsumer.accept(context);
     }
 
     @Override
@@ -258,6 +260,7 @@ public class Organ implements IOrgan {
         };
         private static final OtherOrganChangeConsumer EMPTY_OTHER_ORGAN_CHANGE = (context, changedIndex, oldStack, newStack) -> {
         };
+        private static final OrganSkillConsumer EMPTY_Skill = context -> false;
         private final Item.Properties properties = new Item.Properties().stacksTo(1);
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
         private Function<Item.Properties, Item> itemFunction = null;
@@ -270,7 +273,7 @@ public class Organ implements IOrgan {
         private Consumer<ChestCavitySlotContext> organRemovedConsumer = EMPTY_CONSUMER;
         private OtherOrganChangeConsumer otherOrganChangeConsumer = EMPTY_OTHER_ORGAN_CHANGE;
         private boolean hasSkill = false;
-        private Consumer<ChestCavitySlotContext> organSkillConsumer = EMPTY_CONSUMER;
+        private OrganSkillConsumer organSkillConsumer = EMPTY_Skill;
         private ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction = EMPTY_COOLDOWN;
         private Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer = EMPTY_CONSUMER;
         private AttackConsumer attackConsumer = EMPTY_ATTACK;
@@ -410,9 +413,9 @@ public class Organ implements IOrgan {
         }
 
         /**
-         * 设置器官技能
+         * 设置器官技能，返回值为true表示技能成功执行需要添加冷却，false表示技能未执行不添加冷却
          */
-        public Builder skill(Consumer<ChestCavitySlotContext> organSkillConsumer) {
+        public Builder skill(OrganSkillConsumer organSkillConsumer) {
             hasSkill = true;
             this.organSkillConsumer = organSkillConsumer;
             return this;

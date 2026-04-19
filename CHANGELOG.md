@@ -2,6 +2,13 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.3.3
+
+- 新增 `OrganSkillConsumer` 函数式接口作为器官技能回调，返回值控制是否添加冷却：`true` 表示技能成功执行并添加冷却，`false` 表示技能未执行不添加冷却
+- 新增 `ChestCavityRegisterCompletedEvent` ，在所有胸腔类型注册完成后触发，支持第三方模组替换或移除已注册的胸腔类型映射
+- 新增 `OrganRegisterEvent` 和 `OrganRegisterCompletedEvent`，供外部模组添加、替换或移除器官能力
+- 重命名 `RegisterChestCavityEvent` → `ChestCavityRegisterEvent`，命名风格统一
+
 ## 1.3.2
 
 - 新增 `/chestcavity <targets> resetorgans` 命令，可将目标实体的胸腔器官重置为默认

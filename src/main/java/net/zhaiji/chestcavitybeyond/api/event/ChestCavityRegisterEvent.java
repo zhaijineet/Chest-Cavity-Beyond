@@ -13,7 +13,7 @@ import net.zhaiji.chestcavitybeyond.manager.TaskManager;
 /**
  * 注册胸腔事件
  */
-public class RegisterChestCavityEvent extends Event implements IModBusEvent {
+public class ChestCavityRegisterEvent extends Event implements IModBusEvent {
     /**
      * 注册胸腔类型
      */

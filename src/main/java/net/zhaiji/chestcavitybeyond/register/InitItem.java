@@ -636,6 +636,7 @@ public class InitItem {
             .cooldown(8 * 20)
             .skill(context -> {
                 OrganSkillUtil.teleport(context.entity(), context.data().getCurrentValue(InitAttribute.ENDER));
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -781,6 +782,7 @@ public class InitItem {
                 if (context.entity() instanceof Player player) {
                     OrganSkillUtil.graze(player);
                 }
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -795,6 +797,7 @@ public class InitItem {
             .cooldown(20 * 20)
             .skill(context -> {
                 OrganSkillUtil.explosion(context.entity(), context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -964,6 +967,7 @@ public class InitItem {
                 if (context.entity() instanceof Player player) {
                     OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
                 }
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -991,6 +995,7 @@ public class InitItem {
                 if (context.entity() instanceof Player player) {
                     OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
                 }
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1003,6 +1008,7 @@ public class InitItem {
             .cooldown(4 * 20)
             .skill(context -> {
                 OrganSkillUtil.silk(context.entity());
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1119,6 +1125,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.ENDURANCE, 0.75)
             .skill(context -> {
                 OrganSkillUtil.spit(context.entity());
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1159,6 +1166,7 @@ public class InitItem {
                     context.entity(),
                     context.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL)
                 );
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1172,6 +1180,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .skill(context -> {
                 OrganSkillUtil.snowball(context.entity());
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1187,6 +1196,7 @@ public class InitItem {
             .cooldown(15 * 20)
             .skill(context -> {
                 OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY));
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1211,6 +1221,7 @@ public class InitItem {
             .cooldown(5 * 20)
             .skill(context -> {
                 OrganSkillUtil.shulkerBullet(context.entity());
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1226,6 +1237,7 @@ public class InitItem {
                 if (context.entity() instanceof Player player) {
                     OrganSkillUtil.windCharge(player);
                 }
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1258,6 +1270,7 @@ public class InitItem {
             .cooldown(60 * 20)
             .skill(context -> {
                 OrganSkillUtil.dragonFireball(context.entity());
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1417,6 +1430,7 @@ public class InitItem {
             .cooldown(60 * 20)
             .skill(context -> {
                 OrganSkillUtil.sonicBoom(context.entity());
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1574,6 +1588,7 @@ public class InitItem {
             .cooldown(5 * 20)
             .skill(context -> {
                 OrganSkillUtil.guardianLaser(context.entity(), false);
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
@@ -1587,6 +1602,7 @@ public class InitItem {
             .cooldown(8 * 20)
             .skill(context -> {
                 OrganSkillUtil.guardianLaser(context.entity(), true);
+                return true;
             })
             .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
