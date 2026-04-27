@@ -1,4 +1,4 @@
-// 1.21.1	2026-01-11T11:05:02.8257525	Item Models: chestcavitybeyond
+// 1.21.1	2026-04-28T07:45:47.6915039	Item Models: chestcavitybeyond
 24958fd31beb57a2b7817edbbadb67097c619879 assets/chestcavitybeyond/models/item/active_blaze_rod.json
 a3a36204f995fe436e699c27a655639c158510b7 assets/chestcavitybeyond/models/item/active_breeze_rod.json
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
@@ -124,7 +124,6 @@ cff62d1bcadcc4f0691a8497736ee937c3e3a93c assets/chestcavitybeyond/models/item/sa
 96dd7f13591b2aee0e3ef2aa5e2563506bf40522 assets/chestcavitybeyond/models/item/sculk_heart.json
 d3a1064cbfba70f80b4e05e0d19baec866dbc902 assets/chestcavitybeyond/models/item/sculk_muscle.json
 8af7d7cca9b167ba2266d894ae616f3c341f7414 assets/chestcavitybeyond/models/item/sculk_rib.json
-b3639506406bb8ec44d915d0d0a441adb5aa4967 assets/chestcavitybeyond/models/item/sculk_spine.json
 0a0084bc3df254257cc3a39cd19d8c832a98cbf8 assets/chestcavitybeyond/models/item/shulker_spleen.json
 54384047b342ce9527494146641f42d9286a2710 assets/chestcavitybeyond/models/item/silk_gland.json
 ac53764ae04532d265ebd16768a0eb6a2b366e14 assets/chestcavitybeyond/models/item/slime_core.json

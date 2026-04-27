@@ -93,6 +93,7 @@ public class ChestCavityData extends ItemStackHandler {
             owner = entity;
             type = ChestCavityTypeManager.getType(entity);
             size = type.getSize();
+            needBreath = type.getNeedBreath();
             filtrationPeriod = ChestCavityBeyondConfig.filtrationPeriod;
             filtrationTickOffset = entity.level().getRandom().nextInt(filtrationPeriod);
         }
@@ -103,11 +104,12 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public void init() {
         if (init) return;
+        stacks.clear();
         NonNullList<Item> organs = type.getOrgans();
         for (int i = 0; i < getSlots(); i++) {
             stacks.set(i, organs.get(i).getDefaultInstance());
+            ChestCavityUtil.organAdded(this, owner, i, stacks.get(i));
         }
-        needBreath = type.getNeedBreath();
         initAttributeModifier();
         init = true;
     }
@@ -726,5 +728,56 @@ public class ChestCavityData extends ItemStackHandler {
             return instance.getValue();
         }
         return 0;
+    }
+
+    /**
+     * 实体转换时调用，根据源类型的转换映射将器官转为目标类型对应的器官
+     * <p>
+     * 例如村民（HUMAN）→ 僵尸村民（UNDEAD）时，MUSCLE 会变为 ROTTEN_MUSCLE。
+     * 无映射的器官保持原样。
+     * </p>
+     *
+     * @param sourceType 源胸腔类型，用于查找转换映射
+     */
+    public void convertOrgans(ChestCavityType sourceType) {
+        // 检测当前器官是否为源类型原始默认器官（未被修改过）
+        NonNullList<Item> sourceDefaults = sourceType.getOrgans();
+        boolean unchanged = true;
+        for (int i = 0; i < stacks.size(); i++) {
+            if (stacks.get(i).getItem() != sourceDefaults.get(i)) {
+                unchanged = false;
+                break;
+            }
+        }
+
+        if (unchanged) {
+            // 未被修改过：直接初始化
+            init = false;
+            init();
+        } else {
+            // 已被修改过：逐个按源类型的映射表转换
+            for (int i = 0; i < getSlots(); i++) {
+                ItemStack current = stacks.get(i);
+                if (current.isEmpty()) continue;
+
+                ItemStack converted = sourceType.getConversionResult(
+                    ChestCavityUtil.createContext(this, owner, i, current)
+                );
+                if (converted != current || !ItemStack.isSameItemSameComponents(converted, current)) {
+                    stacks.set(i, converted);
+                }
+            }
+
+            // 属性修饰符：新实体上没有旧修饰符（NeoForge 不拷贝 AttributeModifier），直接全量应用
+            initAttributeModifier();
+
+            // 触发 organAdded：确保 add 专有效果在新实体上正确初始化
+            for (int i = 0; i < getSlots(); i++) {
+                ItemStack stack = stacks.get(i);
+                if (!stack.isEmpty()) {
+                    ChestCavityUtil.organAdded(this, owner, i, stack);
+                }
+            }
+        }
     }
 }

@@ -20,9 +20,11 @@ import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingConversionEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
@@ -33,8 +35,9 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
-import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterEvent;
 import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterCompletedEvent;
+import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterEvent;
+import net.zhaiji.chestcavitybeyond.api.event.OrganConversionEvent;
 import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterCompletedEvent;
 import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -307,9 +310,19 @@ public class CommonEventHandler {
         ChestCavityData data = ChestCavityUtil.getData(entity);
         // 触发所有器官的incomingDamage效果
         ChestCavityUtil.incomingDamage(data, entity, event);
+        // 触发攻击者的attack回调（即使事件被取消，攻击行为已发生）
+        DamageSource source = event.getSource();
+        LivingEntity attacker = source.getEntity() instanceof LivingEntity attackerEntity
+                                ? attackerEntity
+                                : source.getDirectEntity() instanceof LivingEntity directEntity
+                                  ? directEntity
+                                  : null;
+        if (attacker != null) {
+            ChestCavityData attackerData = ChestCavityUtil.getData(attacker);
+            ChestCavityUtil.attack(attackerData, attacker, entity, source, event.getContainer());
+        }
         // 检查事件是否已被取消
         if (event.isCanceled()) return;
-        DamageSource source = event.getSource();
         boolean isProjectile = source.is(DamageTypeTags.IS_PROJECTILE);
         boolean isWaterPotion = source.getDirectEntity() instanceof ThrownPotion potion
                                 && potion.getItem().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER);
@@ -398,11 +411,6 @@ public class CommonEventHandler {
 
         event.setNewDamage((float) damage);
 
-        // 触发所有器官的attack效果
-        if (attacker != null) {
-            ChestCavityData attackerData = ChestCavityUtil.getData(attacker);
-            ChestCavityUtil.attack(attackerData, attacker, entity, source, event.getContainer());
-        }
         // 触发所有器官的hurt效果
         ChestCavityUtil.hurt(data, entity, source, event.getContainer());
     }
@@ -419,6 +427,52 @@ public class CommonEventHandler {
         if (source.getDirectEntity() instanceof ServerPlayer player && !(entity instanceof TamableAnimal tamable && tamable.getOwner() != null)) {
             player.sendSystemMessage(source.getLocalizedDeathMessage(entity));
         }
+    }
+
+    /**
+     * 实体转换时，在 attachment 拷贝前清理旧实体上所有器官的 remove 回调
+     * <p>
+     * 高优先级执行，确保在 NeoForge 拷贝 attachment 之前先清除 organAdded 产生的副作用。
+     * </p>
+     *
+     * @param event 实体转换后事件
+     */
+    public static void handlerLivingConversionEvent$Post$Clean(LivingConversionEvent.Post event) {
+        LivingEntity original = event.getEntity();
+        ChestCavityData data = ChestCavityUtil.getData(original);
+        for (int i = 0; i < data.getSlots(); i++) {
+            ItemStack stack = data.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                ChestCavityUtil.organRemoved(data, original, i, stack);
+            }
+        }
+    }
+
+    /**
+     * 处理实体转换时的器官转换
+     * <p>
+     * 先发布 {@link OrganConversionEvent.Pre}（可取消），若未取消则执行默认转换，
+     * 再发布 {@link OrganConversionEvent.Post}。
+     * </p>
+     *
+     * @param event 实体转换后事件
+     */
+    public static void handlerLivingConversionEvent$Post(LivingConversionEvent.Post event) {
+        LivingEntity original = event.getEntity();
+        LivingEntity outcome = event.getOutcome();
+        ChestCavityData oldData = ChestCavityUtil.getData(original);
+        ChestCavityData newData = ChestCavityUtil.getData(outcome);
+
+        // Pre 事件（可取消）
+        OrganConversionEvent.Pre preEvent = new OrganConversionEvent.Pre(original, outcome, oldData, newData);
+        NeoForge.EVENT_BUS.post(preEvent);
+        if (preEvent.isCanceled()) return;
+
+        // 执行默认转换，以旧实体类型为转换源
+        newData.convertOrgans(oldData.getType());
+
+        // Post 事件
+        NeoForge.EVENT_BUS.post(new OrganConversionEvent.Post(original, outcome, oldData, newData));
     }
 
     /**

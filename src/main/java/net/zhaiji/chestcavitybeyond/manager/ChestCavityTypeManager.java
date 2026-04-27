@@ -50,7 +50,19 @@ public class ChestCavityTypeManager {
             .setThirdRow(5, InitItem.INTESTINE.get())
             .setThirdRow(6, InitItem.INTESTINE.get())
             .setThirdRow(7, InitItem.MUSCLE.get())
-            .setThirdRow(8, InitItem.MUSCLE.get());
+            .setThirdRow(8, InitItem.MUSCLE.get())
+            // HUMAN → UNDEAD 器官转换映射
+            .addConversion(InitItem.MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
+            .addConversion(InitItem.RIB.get(), InitItem.ROTTEN_RIB.get())
+            .addConversion(InitItem.APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
+            .addConversion(InitItem.HEART.get(), InitItem.ROTTEN_HEART.get())
+            .addConversion(InitItem.LUNG.get(), InitItem.ROTTEN_LUNG.get())
+            .addConversion(InitItem.SPINE.get(), InitItem.ROTTEN_SPINE.get())
+            .addConversion(InitItem.STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
+            .addConversion(InitItem.INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
+            .addConversion(InitItem.KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
+            .addConversion(InitItem.SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
+            .addConversion(InitItem.LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
     public static final ChestCavityType ANIMAL = register("animal")
             .setFirstRow(0, InitItem.ANIMAL_MUSCLE.get())
@@ -80,7 +92,19 @@ public class ChestCavityTypeManager {
             .setThirdRow(5, InitItem.ANIMAL_INTESTINE.get())
             .setThirdRow(6, InitItem.ANIMAL_INTESTINE.get())
             .setThirdRow(7, InitItem.ANIMAL_MUSCLE.get())
-            .setThirdRow(8, InitItem.ANIMAL_MUSCLE.get());
+            .setThirdRow(8, InitItem.ANIMAL_MUSCLE.get())
+            // ANIMAL → UNDEAD 器官转换映射（用于Hoglin→Zoglin）
+            .addConversion(InitItem.ANIMAL_MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
+            .addConversion(InitItem.ANIMAL_RIB.get(), InitItem.ROTTEN_RIB.get())
+            .addConversion(InitItem.ANIMAL_APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
+            .addConversion(InitItem.ANIMAL_HEART.get(), InitItem.ROTTEN_HEART.get())
+            .addConversion(InitItem.ANIMAL_LUNG.get(), InitItem.ROTTEN_LUNG.get())
+            .addConversion(InitItem.ANIMAL_SPINE.get(), InitItem.ROTTEN_SPINE.get())
+            .addConversion(InitItem.ANIMAL_STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
+            .addConversion(InitItem.ANIMAL_INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
+            .addConversion(InitItem.ANIMAL_KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
+            .addConversion(InitItem.ANIMAL_SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
+            .addConversion(InitItem.ANIMAL_LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
     public static final ChestCavityType HERBIVORE1 = register("herbivore1")
             .copyWith(ANIMAL)
@@ -366,7 +390,19 @@ public class ChestCavityTypeManager {
 
             .addValueBonuses(InitItem.ROTTEN_LUNG.get(), Map.of(
                     InitAttribute.WATER_BREATH, 0.5
-            ));
+            ))
+            // UNDEAD → HUMAN 器官转换映射（用于僵尸村民治愈）
+            .addConversion(InitItem.ROTTEN_MUSCLE.get(), InitItem.MUSCLE.get())
+            .addConversion(InitItem.ROTTEN_RIB.get(), InitItem.RIB.get())
+            .addConversion(InitItem.ROTTEN_APPENDIX.get(), InitItem.APPENDIX.get())
+            .addConversion(InitItem.ROTTEN_HEART.get(), InitItem.HEART.get())
+            .addConversion(InitItem.ROTTEN_LUNG.get(), InitItem.LUNG.get())
+            .addConversion(InitItem.ROTTEN_SPINE.get(), InitItem.SPINE.get())
+            .addConversion(InitItem.ROTTEN_STOMACH.get(), InitItem.STOMACH.get())
+            .addConversion(InitItem.ROTTEN_INTESTINE.get(), InitItem.INTESTINE.get())
+            .addConversion(InitItem.ROTTEN_KIDNEY.get(), InitItem.KIDNEY.get())
+            .addConversion(InitItem.ROTTEN_SPLEEN.get(), InitItem.SPLEEN.get())
+            .addConversion(InitItem.ROTTEN_LIVER.get(), InitItem.LIVER.get());
 
     public static final ChestCavityType SKELETON = register("skeleton")
             .setFirstRow(1, InitItem.ROTTEN_RIB.get())
@@ -746,13 +782,12 @@ public class ChestCavityTypeManager {
 
             .setSecondRow(0, InitItem.SCULK_MUSCLE.get())
             .setSecondRow(1, InitItem.SCULK_RIB.get())
-            .setSecondRow(4, InitItem.SCULK_SPINE.get())
+            .setSecondRow(4, InitItem.SCULK_CORE.get())
             .setSecondRow(7, InitItem.SCULK_RIB.get())
             .setSecondRow(8, InitItem.SCULK_MUSCLE.get())
 
             .setThirdRow(0, InitItem.SCULK_MUSCLE.get())
             .setThirdRow(1, InitItem.SCULK_MUSCLE.get())
-            .setThirdRow(4, InitItem.SCULK_CORE.get())
             .setThirdRow(7, InitItem.SCULK_MUSCLE.get())
             .setThirdRow(8, InitItem.SCULK_MUSCLE.get())
 

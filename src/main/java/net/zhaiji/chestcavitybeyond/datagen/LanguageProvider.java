@@ -214,7 +214,6 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.MAGMA_STOMACH, "Magma Stomach");
 
         addItem(InitItem.SCULK_HEART, "Sculk Heart");
-        addItem(InitItem.SCULK_SPINE, "Sculk Spine");
         addItem(InitItem.SCULK_RIB, "Sculk Rib");
         addItem(InitItem.SCULK_MUSCLE, "Sculk Muscle");
         addItem(InitItem.SCULK_CORE, "Sculk Core");
@@ -539,7 +538,6 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.MAGMA_STOMACH, "熔岩胃");
 
         addItem(InitItem.SCULK_HEART, "幽匿心脏");
-        addItem(InitItem.SCULK_SPINE, "幽匿脊柱");
         addItem(InitItem.SCULK_RIB, "幽匿肋骨");
         addItem(InitItem.SCULK_MUSCLE, "幽匿肌肉");
         addItem(InitItem.SCULK_CORE, "幽匿核心");

@@ -329,12 +329,10 @@ public class OrganAttributeUtil {
     public static void updateScale(ChestCavityData data, LivingEntity entity) {
         double bonus = 0;
         if (ChestCavityBeyondConfig.enableChestCavityScaleSideEffect) {
-            bonus = 0.25 * switch (data.getSize()) {
-                case ROW_3 -> 0;    // 3排 = 0
-                case ROW_4 -> 1;    // 4排 = 1
-                case ROW_5 -> 2;    // 5排 = 2
-                case ROW_6 -> 3;    // 6排 = 3
-            };
+            int currentRows = data.getSize().getRows();
+            int defaultRows = data.getType().getSize().getRows();
+            int extraRows = currentRows - defaultRows;
+            bonus = 0.25 * extraRows;
         }
         updateAttributeModifier(entity, Attributes.SCALE, createMultipliedBaseModifier("chest_cavity_scale", bonus));
     }

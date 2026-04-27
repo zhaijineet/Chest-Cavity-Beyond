@@ -28,8 +28,16 @@ import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.EnchantmentUtil;
 
 public class ChestOpenerItem extends Item {
-    public ChestOpenerItem() {
-        super(new Properties().stacksTo(1));
+    private final float baseDamage;
+
+    public ChestOpenerItem(Item.Properties properties) {
+        super(properties);
+        baseDamage = 4;
+    }
+
+    public ChestOpenerItem(Item.Properties properties, float baseDamage) {
+        super(properties);
+        this.baseDamage = baseDamage;
     }
 
     @Override
@@ -49,7 +57,7 @@ public class ChestOpenerItem extends Item {
             EnchantmentUtil.calculateOpenDistance(level, stack, player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).getValue())
         );
         DamageSource source = DamageSourceManager.openChest(level, player);
-        float damage = EnchantmentUtil.calculateOpenDamage(level, stack, 4);
+        float damage = EnchantmentUtil.calculateOpenDamage(level, stack, baseDamage);
         boolean hasDoor;
         if (hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
             // 检查胸腔类型是否可开胸

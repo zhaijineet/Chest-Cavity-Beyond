@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.event;
 
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.network.PacketManager;
@@ -28,6 +29,8 @@ public class CommonEventManager {
         gameBus.addListener(CommonEventHandler::handlerLivingHealEvent);
         gameBus.addListener(CommonEventHandler::handlerLivingDamageEvent$Pre);
         gameBus.addListener(CommonEventHandler::handlerLivingDeathEvent);
+        gameBus.addListener(EventPriority.HIGH, CommonEventHandler::handlerLivingConversionEvent$Post$Clean);
+        gameBus.addListener(EventPriority.LOW, CommonEventHandler::handlerLivingConversionEvent$Post);
         gameBus.addListener(CommonEventHandler::handlerPlayerEvent$BreakSpeed);
         gameBus.addListener(CommonEventHandler::handlerEntityTickEvent$Post);
         gameBus.addListener(CommonEventHandler::handlerRegisterCommandsEvent);

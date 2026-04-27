@@ -2,6 +2,13 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.3.4
+
+- 新增实体转换时的器官自动转换系统：村民→僵尸村民时器官自动变为腐化版（MUSCLE→ROTTEN_MUSCLE 等），僵尸村民治愈同理；支持 HUMAN↔UNDEAD、ANIMAL→UNDEAD 三组完整映射
+- 新增 `OrganConversionEvent.Pre` / `Post` 事件，允许外部模组干预或接管器官转换逻辑（Pre 可取消默认转换）
+- 新增 `ChestCavityType#addConversion` 系列 API（4 个重载），支持简单物品映射、条件匹配、完整回调等多种转换注册方式
+- 调整 `attack` 回调时机：从 cancel 检查后移至检查前，确保攻击行为（无论是否被取消）必定触发攻击者器官的 attack 效果
+
 ## 1.3.3
 
 - 新增 `OrganSkillConsumer` 函数式接口作为器官技能回调，返回值控制是否添加冷却：`true` 表示技能成功执行并添加冷却，`false` 表示技能未执行不添加冷却

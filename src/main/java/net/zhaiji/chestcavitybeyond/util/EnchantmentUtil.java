@@ -36,7 +36,7 @@ public class EnchantmentUtil {
      */
     public static float calculateOpenDamage(Level level, ItemStack stack, float damage) {
         int enchantmentLevel = getEnchantmentLevel(level, stack, InitEnchantment.PRUDENT_SURGERY);
-        return damage - enchantmentLevel;
+        return Math.max(0, damage - enchantmentLevel);
     }
 
     public static int getEnchantmentLevel(Level level, ItemStack stack, ResourceKey<Enchantment> resourceKey) {

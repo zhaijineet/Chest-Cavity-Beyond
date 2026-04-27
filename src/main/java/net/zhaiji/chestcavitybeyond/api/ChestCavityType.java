@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class ChestCavityType {
     private final NonNullList<Item> organs = NonNullList.withSize(54, Items.AIR);
@@ -37,6 +39,8 @@ public class ChestCavityType {
     private final Map<Item, List<AttributeBonus>> attributeBonuses = new HashMap<>();
 
     private final List<AttributeBonus> typeDefaultBonuses = new ArrayList<>();
+
+    private final Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> conversionMap = new HashMap<>();
 
     private ChestCavitySize size = ChestCavitySize.ROW_3;
 
@@ -146,6 +150,7 @@ public class ChestCavityType {
         canOpen = copyTarget.canOpen;
         unopenableMessage = copyTarget.unopenableMessage;
         size = copyTarget.size;
+        conversionMap.putAll(copyTarget.conversionMap);
         return this;
     }
 
@@ -241,6 +246,16 @@ public class ChestCavityType {
     ) {
         attributeBonuses.computeIfAbsent(organ, item -> new ArrayList<>())
             .add(new AttributeBonus(attribute, bonusValue, operation));
+        return this;
+    }
+
+    /**
+     * 清空所有器官添加的额外属性加成
+     *
+     * @return 胸腔类型
+     */
+    public ChestCavityType clearAttributeBonuses() {
+        attributeBonuses.clear();
         return this;
     }
 
@@ -395,6 +410,100 @@ public class ChestCavityType {
      */
     public ChestCavityType setUnopenableMessage(String messageKey) {
         this.unopenableMessage = messageKey;
+        return this;
+    }
+
+    /**
+     * 注册器官转换映射（简单映射，精确物品匹配）
+     *
+     * @param from 原始器官
+     * @param to   转换后的器官
+     * @return 胸腔类型
+     */
+    public ChestCavityType addConversion(Item from, Item to) {
+        conversionMap.put(ctx -> ctx.stack().is(from), ctx -> to.getDefaultInstance());
+        return this;
+    }
+
+    /**
+     * 注册器官转换映射（携带 NBT/组件的 ItemStack，精确物品匹配）
+     *
+     * @param from 原始器官
+     * @param to   转换后的器官物品栈（保留 NBT/组件）
+     * @return 胸腔类型
+     */
+    public ChestCavityType addConversion(Item from, ItemStack to) {
+        conversionMap.put(ctx -> ctx.stack().is(from), ctx -> to.copy());
+        return this;
+    }
+
+    /**
+     * 注册器官转换映射（条件匹配 + 简单目标）
+     *
+     * @param condition 匹配条件（首个命中即用）
+     * @param to        转换后的器官
+     * @return 胸腔类型
+     */
+    public ChestCavityType addConversion(Predicate<ChestCavitySlotContext> condition, Item to) {
+        conversionMap.put(condition, ctx -> to.getDefaultInstance());
+        return this;
+    }
+
+    /**
+     * 注册器官转换映射（条件匹配 + 指定 ItemStack）
+     *
+     * @param condition 匹配条件（首个命中即用）
+     * @param to        转换后的器官物品栈（保留 NBT/组件）
+     * @return 胸腔类型
+     */
+    public ChestCavityType addConversion(Predicate<ChestCavitySlotContext> condition, ItemStack to) {
+        conversionMap.put(condition, ctx -> to.copy());
+        return this;
+    }
+
+    /**
+     * 注册器官转换映射（条件匹配 + 完整回调）
+     * <p>
+     * 回调接收 {@link ChestCavitySlotContext}，返回要放入槽位的新 ItemStack：
+     * - 返回 {@code context.stack()} → 保持原器官不变
+     * - 返回其他 ItemStack → 替换
+     * - 返回 {@link ItemStack#EMPTY} → 清除槽位
+     * </p>
+     *
+     * @param condition 匹配条件（首个命中即用）
+     * @param converter 转换函数
+     * @return 胸腔类型
+     */
+    public ChestCavityType addConversion(
+        Predicate<ChestCavitySlotContext> condition,
+        Function<ChestCavitySlotContext, ItemStack> converter
+    ) {
+        conversionMap.put(condition, converter);
+        return this;
+    }
+
+    /**
+     * 获取器官转换结果（按注册顺序匹配，首个命中即用）
+     *
+     * @param context 当前槽位的上下文
+     * @return 转换后的 ItemStack，无匹配则返回 {@code context.stack()}（保持不变）
+     */
+    public ItemStack getConversionResult(ChestCavitySlotContext context) {
+        for (Map.Entry<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> entry : conversionMap.entrySet()) {
+            if (entry.getKey().test(context)) {
+                return entry.getValue().apply(context);
+            }
+        }
+        return context.stack();
+    }
+
+    /**
+     * 清空所有器官转换规则
+     *
+     * @return 胸腔类型
+     */
+    public ChestCavityType clearConversions() {
+        conversionMap.clear();
         return this;
     }
 }

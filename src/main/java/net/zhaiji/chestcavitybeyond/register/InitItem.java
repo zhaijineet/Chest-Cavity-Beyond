@@ -27,7 +27,7 @@ public class InitItem {
     // 开胸器
     public static final Supplier<Item> CHEST_OPENER = ITEM.register(
         "chest_opener",
-        ChestOpenerItem::new
+        () -> new ChestOpenerItem(new Item.Properties().stacksTo(1))
     );
 
     // 心脏
@@ -1396,14 +1396,6 @@ public class InitItem {
             .build()
     );
 
-    // 幽匿脊柱
-    public static final Supplier<Item> SCULK_SPINE = ITEM.register(
-        "sculk_spine",
-        () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 2)
-            .build()
-    );
-
     // 幽匿肋骨
     public static final Supplier<Item> SCULK_RIB = ITEM.register(
         "sculk_rib",
@@ -1426,6 +1418,7 @@ public class InitItem {
         "sculk_core",
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 5)
+            .addValueAttribute(InitAttribute.NERVES, 2)
             .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
             .cooldown(60 * 20)
             .skill(context -> {
