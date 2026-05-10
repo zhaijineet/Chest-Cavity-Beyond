@@ -67,6 +67,11 @@ public class ChestCavityData extends ItemStackHandler {
      */
     private boolean needBreath;
 
+    /**
+     * 是否需要健康
+     */
+    private boolean needHealth;
+
     private ChestCavityType type;
 
     private ChestCavitySize size;
@@ -94,6 +99,7 @@ public class ChestCavityData extends ItemStackHandler {
             type = ChestCavityTypeManager.getType(entity);
             size = type.getSize();
             needBreath = type.getNeedBreath();
+            needHealth = type.getNeedHealth();
             filtrationPeriod = ChestCavityBeyondConfig.filtrationPeriod;
             filtrationTickOffset = entity.level().getRandom().nextInt(filtrationPeriod);
         }
@@ -180,6 +186,7 @@ public class ChestCavityData extends ItemStackHandler {
 
         compoundTag.putInt("selectedSlot", selectedSlot);
         compoundTag.putBoolean("needBreath", needBreath);
+        compoundTag.putBoolean("needHealth", needHealth);
         compoundTag.putInt("chestCavitySize", size.getId());
         // 序列化可序列化的tasks
         ListTag tasksList = new ListTag();
@@ -228,17 +235,21 @@ public class ChestCavityData extends ItemStackHandler {
 
         selectedSlot = nbt.getInt("selectedSlot");
         needBreath = nbt.getBoolean("needBreath");
+        needHealth = nbt.getBoolean("needHealth");
 
-        // 反序列化tasks
-        tasks.clear();
-        ListTag tasksList = nbt.getList("tasks", Tag.TAG_COMPOUND);
-        for (int i = 0; i < tasksList.size(); i++) {
-            CompoundTag taskTag = tasksList.getCompound(i);
-            ResourceLocation type = ResourceLocation.parse(taskTag.getString("type"));
-            CompoundTag data = taskTag.getCompound("data");
-            IChestCavityTask task = TaskManager.deserializeTask(this, type, provider, data);
-            if (task != null) {
-                tasks.add(task);
+        // 由于客户端本身设计有专有task，排除客户端的task反序列化，避免同步数据时清楚客户端task
+        if (!owner.level().isClientSide()) {
+            // 反序列化tasks
+            tasks.clear();
+            ListTag tasksList = nbt.getList("tasks", Tag.TAG_COMPOUND);
+            for (int i = 0; i < tasksList.size(); i++) {
+                CompoundTag taskTag = tasksList.getCompound(i);
+                ResourceLocation type = ResourceLocation.parse(taskTag.getString("type"));
+                CompoundTag data = taskTag.getCompound("data");
+                IChestCavityTask task = TaskManager.deserializeTask(this, type, provider, data);
+                if (task != null) {
+                    tasks.add(task);
+                }
             }
         }
 
@@ -343,6 +354,13 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public boolean isNeedBreath() {
         return needBreath;
+    }
+
+    /**
+     * @return 是否需要健康
+     */
+    public boolean isNeedHealth() {
+        return needHealth;
     }
 
     /**
@@ -665,6 +683,7 @@ public class ChestCavityData extends ItemStackHandler {
      * 如果健康小于等于0，就会持续受伤
      */
     private void applyHealth() {
+        if (!needHealth) return;
         double health = getCurrentValue(InitAttribute.HEALTH);
         if (health <= 0) {
             owner.hurt(DamageSourceManager.organLoss(owner.level()), 2);

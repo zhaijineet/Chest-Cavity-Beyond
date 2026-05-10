@@ -296,7 +296,7 @@ public class CommonEventHandler {
             double finalScale = scale;
             // int duration = instance.mapDuration(oldDuration -> (int) (oldDuration * finalScale));
             // if (duration <= 20) event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
-            mobEffectInstance.setDuration(oldDuration -> (int) (oldDuration * finalScale));
+            mobEffectInstance.setDuration(oldDuration -> (int) (oldDuration * finalScale), event.getEntity());
         }
     }
 
@@ -308,9 +308,7 @@ public class CommonEventHandler {
     public static void handlerLivingIncomingDamageEvent(LivingIncomingDamageEvent event) {
         LivingEntity entity = event.getEntity();
         ChestCavityData data = ChestCavityUtil.getData(entity);
-        // 触发所有器官的incomingDamage效果
-        ChestCavityUtil.incomingDamage(data, entity, event);
-        // 触发攻击者的attack回调（即使事件被取消，攻击行为已发生）
+        // 触发攻击者的attack回调
         DamageSource source = event.getSource();
         LivingEntity attacker = source.getEntity() instanceof LivingEntity attackerEntity
                                 ? attackerEntity
@@ -321,6 +319,8 @@ public class CommonEventHandler {
             ChestCavityData attackerData = ChestCavityUtil.getData(attacker);
             ChestCavityUtil.attack(attackerData, attacker, entity, source, event.getContainer());
         }
+        // 触发所有器官的incomingDamage效果
+        ChestCavityUtil.incomingDamage(data, entity, event);
         // 检查事件是否已被取消
         if (event.isCanceled()) return;
         boolean isProjectile = source.is(DamageTypeTags.IS_PROJECTILE);
@@ -331,6 +331,7 @@ public class CommonEventHandler {
             if (data.getCurrentValue(InitAttribute.PROJECTILE_DODGE) > 0 && ender > 0) {
                 OrganSkillUtil.randomTeleport(entity, ender);
                 event.setCanceled(true);
+                return;
             }
         }
         if (source.is(DamageTypeTags.IS_FALL) && entity.getAttribute(Attributes.GRAVITY).getValue() <= 0) {

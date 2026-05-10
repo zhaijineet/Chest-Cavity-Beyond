@@ -46,6 +46,8 @@ public class ChestCavityType {
 
     private boolean needBreath = true;
 
+    private boolean needHealth = true;
+
     private BiFunction<Player, LivingEntity, Boolean> canOpen = (player, entity) -> true;
 
     private String unopenableMessage;
@@ -147,6 +149,7 @@ public class ChestCavityType {
         attributeBonuses.putAll(copyTarget.attributeBonuses);
         typeDefaultBonuses.addAll(copyTarget.typeDefaultBonuses);
         needBreath = copyTarget.needBreath;
+        needHealth = copyTarget.needHealth;
         canOpen = copyTarget.canOpen;
         unopenableMessage = copyTarget.unopenableMessage;
         size = copyTarget.size;
@@ -216,6 +219,26 @@ public class ChestCavityType {
      */
     public ChestCavityType setNeedBreath(boolean needBreath) {
         this.needBreath = needBreath;
+        return this;
+    }
+
+    /**
+     * 获取是否需要健康
+     *
+     * @return 是否需要健康
+     */
+    public boolean getNeedHealth() {
+        return needHealth;
+    }
+
+    /**
+     * 设置是否需要健康
+     *
+     * @param needHealth 是否需要健康
+     * @return 胸腔类型
+     */
+    public ChestCavityType setNeedHealth(boolean needHealth) {
+        this.needHealth = needHealth;
         return this;
     }
 

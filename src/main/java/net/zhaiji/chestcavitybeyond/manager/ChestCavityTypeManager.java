@@ -366,6 +366,8 @@ public class ChestCavityTypeManager {
             .setThirdRow(8, InitItem.DRAGON_MUSCLE.get());
 
     public static final ChestCavityType UNDEAD = register("undead")
+            .setNeedHealth(false)
+
             .setFirstRow(0, InitItem.ROTTEN_MUSCLE.get())
             .setFirstRow(1, InitItem.ROTTEN_RIB.get())
             .setFirstRow(2, InitItem.ROTTEN_APPENDIX.get())
@@ -405,6 +407,8 @@ public class ChestCavityTypeManager {
             .addConversion(InitItem.ROTTEN_LIVER.get(), InitItem.LIVER.get());
 
     public static final ChestCavityType SKELETON = register("skeleton")
+            .setNeedHealth(false)
+
             .setFirstRow(1, InitItem.ROTTEN_RIB.get())
             .setFirstRow(7, InitItem.ROTTEN_RIB.get())
             .setSecondRow(1, InitItem.ROTTEN_RIB.get())
@@ -419,6 +423,8 @@ public class ChestCavityTypeManager {
             ));
 
     public static final ChestCavityType WITHER_SKELETON = register("wither_skeleton")
+            .setNeedHealth(false)
+
             .setFirstRow(1, InitItem.WITHERED_RIB.get())
             .setFirstRow(7, InitItem.WITHERED_RIB.get())
 
@@ -434,6 +440,8 @@ public class ChestCavityTypeManager {
             ));
 
     public static final ChestCavityType WITHER = register("wither")
+            .setNeedHealth(false)
+
             .setFirstRow(0, InitItem.WRITHING_SOUL_SAND.get())
             .setFirstRow(1, InitItem.WITHERED_RIB.get())
             .setFirstRow(2, InitItem.WRITHING_SOUL_SAND.get())

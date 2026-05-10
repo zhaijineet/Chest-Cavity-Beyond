@@ -305,7 +305,7 @@ public class ChestCavityUtil {
         for (MobEffectInstance effect : effects) {
             MobEffectInstance temp = new MobEffectInstance(effect);
             if (!effect.getEffect().value().isInstantenous()) {
-                ((IMobEffectInstance) temp).setDuration(duration -> duration / 10);
+                ((IMobEffectInstance) temp).setDuration(duration -> duration / 10, null);
             }
             instances.add(temp);
         }

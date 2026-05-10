@@ -2,6 +2,10 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.3.5
+
+- 新增「是否需要健康」系统：`ChestCavityType` 新增 `needHealth` 属性，设为 `false` 的实体不会因健康值 ≤ 0 而持续受伤；亡灵、骷髅、凋灵骷髅、凋灵默认不需要健康
+
 ## 1.3.4
 
 - 新增实体转换时的器官自动转换系统：村民→僵尸村民时器官自动变为腐化版（MUSCLE→ROTTEN_MUSCLE 等），僵尸村民治愈同理；支持 HUMAN↔UNDEAD、ANIMAL→UNDEAD 三组完整映射
