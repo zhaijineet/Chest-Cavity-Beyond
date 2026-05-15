@@ -22,7 +22,7 @@ import net.zhaiji.chestcavitybeyond.api.function.HealConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HurtConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.IncomingDamageConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganModifierConsumer;
-import net.zhaiji.chestcavitybeyond.api.function.OrganSkillConsumer;
+import net.zhaiji.chestcavitybeyond.api.function.OrganSkillFunction;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OtherOrganChangeConsumer;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -40,15 +40,13 @@ import java.util.function.ToIntFunction;
 public class Organ implements IOrgan {
     private final List<AttributeEntry> attributeEntries;
     private final OrganModifierConsumer organModifierConsumer;
-    private final OrganTooltipConsumer descriptionTooltipConsumer;
-    private final OrganTooltipConsumer attributeTooltipConsumer;
-    private final OrganTooltipConsumer skillTooltipConsumer;
+    private final OrganTooltipConsumer tooltipConsumer;
     private final Consumer<ChestCavitySlotContext> organTickConsumer;
     private final Consumer<ChestCavitySlotContext> organAddedConsumer;
     private final Consumer<ChestCavitySlotContext> organRemovedConsumer;
     private final OtherOrganChangeConsumer otherOrganChangeConsumer;
     private final boolean hasSkill;
-    private final OrganSkillConsumer organSkillConsumer;
+    private final OrganSkillFunction organSkillFunction;
     private final ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction;
     private final Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer;
     private final AttackConsumer attackConsumer;
@@ -61,15 +59,13 @@ public class Organ implements IOrgan {
     private Organ(Builder builder) {
         this.attributeEntries = builder.attributeEntries;
         this.organModifierConsumer = builder.organModifierConsumer;
-        this.descriptionTooltipConsumer = builder.descriptionTooltipConsumer;
-        this.attributeTooltipConsumer = builder.attributeTooltipConsumer;
-        this.skillTooltipConsumer = builder.skillTooltipConsumer;
+        this.tooltipConsumer = builder.tooltipConsumer;
         this.organTickConsumer = builder.organTickConsumer;
         this.organAddedConsumer = builder.organAddedConsumer;
         this.organRemovedConsumer = builder.organRemovedConsumer;
         this.otherOrganChangeConsumer = builder.otherOrganChangeConsumer;
         this.hasSkill = builder.hasSkill;
-        this.organSkillConsumer = builder.organSkillConsumer;
+        this.organSkillFunction = builder.organSkillFunction;
         this.cooldownTicksFunction = builder.cooldownTicksFunction;
         this.organSkillOnCooldownConsumer = builder.organSkillOnCooldownConsumer;
         this.attackConsumer = builder.attackConsumer;
@@ -107,17 +103,11 @@ public class Organ implements IOrgan {
         if (context.data() != null && context.entity() != null) {
             organModifierConsumer.accept(context, modifiers);
         }
-//        // 防止在 ChestCavityType.builder() 构建时因 context.data() 为 null 而抛出异常
-//        try {
-//            organModifierConsumer.accept(context, modifiers);
-//        } catch (NullPointerException e) {
-//            // 静默忽略，因为构建时可能没有实体数据
-//        }
         return modifiers;
     }
 
     @Override
-    public void descriptionTooltip(
+    public void organTooltip(
         ChestCavityData data,
         int index,
         ItemStack stack,
@@ -126,37 +116,11 @@ public class Organ implements IOrgan {
         List<Component> tooltipComponents,
         TooltipFlag tooltipFlag
     ) {
-        descriptionTooltipConsumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
-    }
-
-    @Override
-    public void attributeTooltip(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
-        TooltipsKeyContext keyContext,
-        Item.TooltipContext context,
-        List<Component> tooltipComponents,
-        TooltipFlag tooltipFlag
-    ) {
-        OrganTooltipConsumer consumer = attributeTooltipConsumer;
+        OrganTooltipConsumer consumer = tooltipConsumer;
         if (consumer == null) {
-            consumer = TooltipUtil.DEFAULT_ATTRIBUTE_TOOLTIP;
+            consumer = TooltipUtil.DEFAULT_TOOLTIP;
         }
         consumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
-    }
-
-    @Override
-    public void skillTooltip(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
-        TooltipsKeyContext keyContext,
-        Item.TooltipContext context,
-        List<Component> tooltipComponents,
-        TooltipFlag tooltipFlag
-    ) {
-        skillTooltipConsumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
     }
 
     @Override
@@ -190,7 +154,7 @@ public class Organ implements IOrgan {
             organSkillOnCooldownConsumer.accept(context);
             return;
         }
-        if (organSkillConsumer.apply(context)) {
+        if (organSkillFunction.apply(context)) {
             int cooldown = cooldownTicksFunction.applyAsInt(context);
             if (cooldown > 0) {
                 OrganSkillUtil.addCooldown(context.entity(), context.stack(), cooldown);
@@ -241,8 +205,6 @@ public class Organ implements IOrgan {
     public static class Builder {
         private static final OrganModifierConsumer EMPTY_MODIFIER = (context, modifiers) -> {
         };
-        private static final OrganTooltipConsumer EMPTY_TOOLTIP = (data, index, stack, keyContext, context, tooltipComponents, tooltipFlag) -> {
-        };
         private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
         };
         private static final ToIntFunction<ChestCavitySlotContext> EMPTY_COOLDOWN = context -> 0;
@@ -260,20 +222,18 @@ public class Organ implements IOrgan {
         };
         private static final OtherOrganChangeConsumer EMPTY_OTHER_ORGAN_CHANGE = (context, changedIndex, oldStack, newStack) -> {
         };
-        private static final OrganSkillConsumer EMPTY_Skill = context -> false;
+        private static final OrganSkillFunction EMPTY_SKILL = context -> false;
         private final Item.Properties properties = new Item.Properties().stacksTo(1);
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
         private Function<Item.Properties, Item> itemFunction = null;
         private OrganModifierConsumer organModifierConsumer = EMPTY_MODIFIER;
-        private OrganTooltipConsumer descriptionTooltipConsumer = EMPTY_TOOLTIP;
-        private OrganTooltipConsumer attributeTooltipConsumer = null;
-        private OrganTooltipConsumer skillTooltipConsumer = EMPTY_TOOLTIP;
+        private OrganTooltipConsumer tooltipConsumer = null;
         private Consumer<ChestCavitySlotContext> organTickConsumer = EMPTY_CONSUMER;
         private Consumer<ChestCavitySlotContext> organAddedConsumer = EMPTY_CONSUMER;
         private Consumer<ChestCavitySlotContext> organRemovedConsumer = EMPTY_CONSUMER;
         private OtherOrganChangeConsumer otherOrganChangeConsumer = EMPTY_OTHER_ORGAN_CHANGE;
         private boolean hasSkill = false;
-        private OrganSkillConsumer organSkillConsumer = EMPTY_Skill;
+        private OrganSkillFunction organSkillFunction = EMPTY_SKILL;
         private ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction = EMPTY_COOLDOWN;
         private Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer = EMPTY_CONSUMER;
         private AttackConsumer attackConsumer = EMPTY_ATTACK;
@@ -303,26 +263,10 @@ public class Organ implements IOrgan {
         }
 
         /**
-         * 设置器官描述工具提示
-         */
-        public Builder descriptionTooltip(OrganTooltipConsumer descriptionTooltipConsumer) {
-            this.descriptionTooltipConsumer = descriptionTooltipConsumer;
-            return this;
-        }
-
-        /**
          * 设置器官工具提示
          */
-        public Builder attributeTooltip(OrganTooltipConsumer attributeTooltipConsumer) {
-            this.attributeTooltipConsumer = attributeTooltipConsumer;
-            return this;
-        }
-
-        /**
-         * 设置技能描述工具提示
-         */
-        public Builder skillTooltip(OrganTooltipConsumer skillTooltipConsumer) {
-            this.skillTooltipConsumer = skillTooltipConsumer;
+        public Builder tooltip(OrganTooltipConsumer tooltipConsumer) {
+            this.tooltipConsumer = tooltipConsumer;
             return this;
         }
 
@@ -415,9 +359,9 @@ public class Organ implements IOrgan {
         /**
          * 设置器官技能，返回值为true表示技能成功执行需要添加冷却，false表示技能未执行不添加冷却
          */
-        public Builder skill(OrganSkillConsumer organSkillConsumer) {
+        public Builder skill(OrganSkillFunction organSkillFunction) {
             hasSkill = true;
-            this.organSkillConsumer = organSkillConsumer;
+            this.organSkillFunction = organSkillFunction;
             return this;
         }
 

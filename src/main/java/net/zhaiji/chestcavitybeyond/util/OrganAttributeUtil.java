@@ -143,7 +143,6 @@ public class OrganAttributeUtil {
         Multimap<Holder<Attribute>, AttributeModifier> removeModifiers = ChestCavityUtil.getAttributeModifiers(
             ChestCavityUtil.createContext(
                 data,
-                entity,
                 index,
                 oldStack
             )
@@ -151,7 +150,6 @@ public class OrganAttributeUtil {
         Multimap<Holder<Attribute>, AttributeModifier> addModifiers = ChestCavityUtil.getAttributeModifiers(
             ChestCavityUtil.createContext(
                 data,
-                entity,
                 index,
                 newStack
             )

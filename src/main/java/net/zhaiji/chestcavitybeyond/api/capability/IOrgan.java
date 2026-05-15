@@ -1,6 +1,6 @@
 package net.zhaiji.chestcavitybeyond.api.capability;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -31,11 +31,14 @@ public interface IOrgan {
      * @return 器官提供的属性
      */
     default Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ChestCavitySlotContext context) {
-        return HashMultimap.create();
+        return ImmutableMultimap.of();
     }
 
     /**
-     * 器官描述提示
+     * 器官工具提示
+     * <p>
+     * 默认使用 OrganTooltip 管线渲染。
+     * </p>
      *
      * @param data              胸腔数据
      * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
@@ -45,51 +48,7 @@ public interface IOrgan {
      * @param tooltipComponents 工具提示组件列表
      * @param tooltipFlag       工具提示标识符
      */
-    default void descriptionTooltip(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
-        TooltipsKeyContext keyContext,
-        Item.TooltipContext context,
-        List<Component> tooltipComponents,
-        TooltipFlag tooltipFlag
-    ) {
-    }
-
-    /**
-     * 器官物品提示
-     *
-     * @param data              胸腔数据
-     * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
-     * @param stack             器官物品
-     * @param keyContext        工具提示按键上下文
-     * @param context           工具提示上下文
-     * @param tooltipComponents 工具提示组件列表
-     * @param tooltipFlag       工具提示标识符
-     */
-    default void attributeTooltip(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
-        TooltipsKeyContext keyContext,
-        Item.TooltipContext context,
-        List<Component> tooltipComponents,
-        TooltipFlag tooltipFlag
-    ) {
-    }
-
-    /**
-     * 技能描述提示
-     *
-     * @param data              胸腔数据
-     * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
-     * @param stack             器官物品
-     * @param keyContext        工具提示按键上下文
-     * @param context           工具提示上下文
-     * @param tooltipComponents 工具提示组件列表
-     * @param tooltipFlag       工具提示标识符
-     */
-    default void skillTooltip(
+    default void organTooltip(
         ChestCavityData data,
         int index,
         ItemStack stack,

@@ -3,7 +3,7 @@ package net.zhaiji.chestcavitybeyond.api.function;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 
 @FunctionalInterface
-public interface OrganSkillConsumer {
+public interface OrganSkillFunction {
     /**
      * 器官技能回调
      *

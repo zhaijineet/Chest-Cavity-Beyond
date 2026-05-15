@@ -40,6 +40,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(KeyMappings.OPEN_SKILL_GUI_TRANSLATABLE, "Open Skill Gui");
         add(KeyMappings.USE_ORGAN_SKILL_TRANSLATABLE, "Use Organ Skill");
         add(KeyMappings.DESCEND_VEHICLE_TRANSLATABLE, "Descend Vehicle");
+        add(KeyMappings.SKILL_PREV_TRANSLATABLE, "Previous Skill");
+        add(KeyMappings.SKILL_NEXT_TRANSLATABLE, "Next Skill");
+        add(KeyMappings.SKILL_CONFIRM_TRANSLATABLE, "Confirm Skill");
         for (int i = 0; i < ChestCavitySize.ROW_6.getSlots(); i++) {
             add(KeyMappings.USE_ORGAN_SKILLS_TRANSLATABLE + i, "Organ Skill " + (i < 9 ? "0" + (i + 1) : (i + 1)));
         }
@@ -53,6 +56,13 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(),
             "%1$s%% Final %2$s"
         );
+
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.passive_effect", "【Passive Effect】");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.active_skill", "【Active Skill】");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.0", "Hold [");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.1", "Shift");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.2", "] for details");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.cooldown", "Cooldown: %ss");
 
         addItem(InitItem.CHEST_OPENER, "Chest Opener");
 
@@ -288,23 +298,113 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s became a medical experiment of %2$s", 3);
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s perished due to %2$s's medical error", 4);
 
-        addOrganSkill(InitItem.ENDER_APPENDIX, "Teleport in viewing direction");
-        addOrganSkill(InitItem.HERBIVORE_RUMEN, "Eat grass");
-        addOrganSkill(InitItem.CREEPER_APPENDIX, "Explode");
-        addOrganSkill(InitItem.INNER_FURNACE, "Burn fuel for power");
-        addOrganSkill(InitItem.GOLEM_ARMOR_PLATE, "Repair itself using iron ingots");
-        addOrganSkill(InitItem.SILK_GLAND, "Shoot cobwebs");
-        addOrganSkill(InitItem.VENOM_GLAND, "Apply poison on hit");
-        addOrganSkill(InitItem.LLAMA_LUNG, "Spit");
-        addOrganSkill(InitItem.ACTIVE_BLAZE_ROD, "Shoot continuous fireballs");
-        addOrganSkill(InitItem.SNOW_CORE, "Throw snowballs");
-        addOrganSkill(InitItem.GHAST_STOMACH, "Shoot large fireballs");
-        addOrganSkill(InitItem.SHULKER_SPLEEN, "Shoot shulker bullets");
-        addOrganSkill(InitItem.BREEZE_CORE, "Shoot wind charges");
-        addOrganSkill(InitItem.DRAGON_LUNG, "Shoot dragon fireballs");
-        addOrganSkill(InitItem.SCULK_CORE, "Sonic boom");
-        addOrganSkill(InitItem.GUARDIAN_EYE, "Shoot charged laser");
-        addOrganSkill(InitItem.ELDER_GUARDIAN_EYE, "Shoot charged laser");
+        // ===== Active Skills (simple + detailed) =====
+        addOrganSimpleActiveSkill(InitItem.ENDER_APPENDIX, "Teleport in viewing direction");
+        addOrganActiveSkill(InitItem.ENDER_APPENDIX,
+            "Teleport along the line of sight",
+            "Teleport distance depends on Ender attribute value",
+            "Can pass through thin walls when close"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "Eat grass");
+        addOrganActiveSkill(InitItem.HERBIVORE_RUMEN,
+            "Consume grass, short grass, or tall grass for food",
+            "Grass blocks turn into dirt",
+            "Tall grass restores more hunger than short grass"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "Explode");
+        addOrganActiveSkill(InitItem.CREEPER_APPENDIX,
+            "Create an explosion centered on self",
+            "Power equals 3 times Explosive attribute value",
+            "Does not destroy blocks"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "Burn fuel for power");
+        addOrganActiveSkill(InitItem.INNER_FURNACE,
+            "Consume burnable items in hand to gain Furnace Power",
+            "Sneak to consume multiple items at once",
+            "Effect level equals Furnace Power attribute minus 1",
+            "Duration accumulates from consumed fuel burn time"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.GOLEM_ARMOR_PLATE, "Repair itself using iron ingots");
+        addOrganActiveSkill(InitItem.GOLEM_ARMOR_PLATE,
+            "Consume an iron ingot from inventory to heal",
+            "Healing equals 2.5 times Iron Repair attribute"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.SILK_GLAND, "Shoot cobwebs");
+        addOrganActiveSkill(InitItem.SILK_GLAND,
+            "Throw a cobweb that can trap entities",
+            "Costs hunger to use"
+        );
+
+        // venom_gland: passive effect (triggered on attack, not an active skill)
+        addOrganSimplePassiveEffect(InitItem.VENOM_GLAND, "Apply potion effects on attack");
+        addOrganPassiveEffect(InitItem.VENOM_GLAND,
+            "Apply stored potion effects to target on attack",
+            "Effect duration is reduced to 1/10 of original",
+            "4 seconds cooldown"
+        );
+
+        addOrganActiveSkill(InitItem.LLAMA_LUNG,
+            "Shoot a llama spit projectile"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.ACTIVE_BLAZE_ROD, "Shoot continuous fireballs");
+        addOrganActiveSkill(InitItem.ACTIVE_BLAZE_ROD,
+            "Launch a barrage of small fireballs",
+            "Number of fireballs equals Vomit Fireball attribute",
+            "Fires one fireball every 6 ticks"
+        );
+
+        addOrganActiveSkill(InitItem.SNOW_CORE,
+            "Throw a snowball projectile"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.GHAST_STOMACH, "Shoot large fireballs");
+        addOrganActiveSkill(InitItem.GHAST_STOMACH,
+            "Launch a ghast-style large fireball",
+            "Explosion power equals Ghastly attribute value"
+        );
+
+        addOrganActiveSkill(InitItem.SHULKER_SPLEEN,
+            "Fire a homing shulker bullet at target in sight"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.BREEZE_CORE, "Shoot wind charges");
+        addOrganActiveSkill(InitItem.BREEZE_CORE,
+            "Launch a wind charge projectile",
+            "Creates wind burst on impact"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.DRAGON_LUNG, "Shoot dragon fireballs");
+        addOrganActiveSkill(InitItem.DRAGON_LUNG,
+            "Launch a dragon fireball",
+            "Creates area-of-effect dragon breath on impact"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.SCULK_CORE, "Sonic boom");
+        addOrganActiveSkill(InitItem.SCULK_CORE,
+            "Emit a sonic boom in the looking direction",
+            "Deals 10 damage to all targets in the path",
+            "Passes through entities"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.GUARDIAN_EYE, "Shoot charged laser");
+        addOrganActiveSkill(InitItem.GUARDIAN_EYE,
+            "Charge and fire a laser beam at target in sight",
+            "Deals 2 magic damage plus 3 attack damage",
+            "Target must remain in range during charging"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.ELDER_GUARDIAN_EYE, "Shoot charged laser");
+        addOrganActiveSkill(InitItem.ELDER_GUARDIAN_EYE,
+            "Charge and fire a laser beam at target in sight",
+            "Deals 4 magic damage plus 6 attack damage",
+            "Target must remain in range during charging"
+        );
 
         addEnchantment(
             InitEnchantment.TELEOPERATION,
@@ -351,10 +451,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ItemTagManager.LIVER, "Livers");
         add(ItemTagManager.INTESTINE, "Intestines");
         add(ItemTagManager.STOMACH, "Stomachs");
-        add(ItemTagManager.SPECIAL, "Special Organs");
-        add(ItemTagManager.BONE, "Bone Organs");
-        add(ItemTagManager.ROTTEN, "Rotten Organs");
-        add(ItemTagManager.IRON, "Iron Organs");
+        add(ItemTagManager.SPECIAL, "Special");
+        add(ItemTagManager.BONE, "Bone");
+        add(ItemTagManager.ROTTEN, "Rotten");
+        add(ItemTagManager.IRON, "Iron");
 
     }
 
@@ -365,6 +465,9 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(KeyMappings.OPEN_SKILL_GUI_TRANSLATABLE, "打开技能界面");
         add(KeyMappings.USE_ORGAN_SKILL_TRANSLATABLE, "使用器官技能");
         add(KeyMappings.DESCEND_VEHICLE_TRANSLATABLE, "乘坐实体下降");
+        add(KeyMappings.SKILL_PREV_TRANSLATABLE, "上一个技能");
+        add(KeyMappings.SKILL_NEXT_TRANSLATABLE, "下一个技能");
+        add(KeyMappings.SKILL_CONFIRM_TRANSLATABLE, "确认技能");
         for (int i = 0; i < ChestCavitySize.ROW_6.getSlots(); i++) {
             add(KeyMappings.USE_ORGAN_SKILLS_TRANSLATABLE + i, "器官技能" + (i < 9 ? "0" + (i + 1) : (i + 1)));
         }
@@ -378,6 +481,13 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "organ." + ChestCavityBeyond.MOD_ID + ".attribute.tooltips_" + AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL.ordinal(),
             "%1$s%% 最终%2$s"
         );
+
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.passive_effect", "【被动效果】");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.active_skill", "【主动技能】");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.0", "按住[");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.1", "Shift");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.2", "]查看详细说明");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.cooldown", "冷却时间：%s秒");
 
         addItem(InitItem.CHEST_OPENER, "开胸器");
 
@@ -612,23 +722,113 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s成了%2$s的医疗试验品", 3);
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s因%2$s的医疗失误而丧命", 4);
 
-        addOrganSkill(InitItem.ENDER_APPENDIX, "向视线方向传送");
-        addOrganSkill(InitItem.HERBIVORE_RUMEN, "吃草");
-        addOrganSkill(InitItem.CREEPER_APPENDIX, "自爆");
-        addOrganSkill(InitItem.INNER_FURNACE, "燃烧燃料获得动力");
-        addOrganSkill(InitItem.GOLEM_ARMOR_PLATE, "使用铁锭修补自身");
-        addOrganSkill(InitItem.SILK_GLAND, "发射蛛网");
-        addOrganSkill(InitItem.VENOM_GLAND, "攻击时施加中毒效果");
-        addOrganSkill(InitItem.LLAMA_LUNG, "吐口水");
-        addOrganSkill(InitItem.ACTIVE_BLAZE_ROD, "发射连续的火球");
-        addOrganSkill(InitItem.SNOW_CORE, "发射雪球");
-        addOrganSkill(InitItem.GHAST_STOMACH, "发射大型火球");
-        addOrganSkill(InitItem.SHULKER_SPLEEN, "发射潜影子弹");
-        addOrganSkill(InitItem.BREEZE_CORE, "发射风弹");
-        addOrganSkill(InitItem.DRAGON_LUNG, "发射龙息弹");
-        addOrganSkill(InitItem.SCULK_CORE, "发射音爆");
-        addOrganSkill(InitItem.GUARDIAN_EYE, "发射充能光线");
-        addOrganSkill(InitItem.ELDER_GUARDIAN_EYE, "发射充能光线");
+        // ===== 主动技能 (simple + 详细描述) =====
+        addOrganSimpleActiveSkill(InitItem.ENDER_APPENDIX, "向视线方向传送");
+        addOrganActiveSkill(InitItem.ENDER_APPENDIX,
+            "沿视线方向进行传送",
+            "传送距离取决于末影属性值",
+            "近距离时可穿墙传送"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "吃草");
+        addOrganActiveSkill(InitItem.HERBIVORE_RUMEN,
+            "食用草方块、矮草丛或高草丛",
+            "草方块会变成泥土",
+            "高草丛比矮草丛恢复更多饱食度"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "自爆");
+        addOrganActiveSkill(InitItem.CREEPER_APPENDIX,
+            "以自身为中心制造爆炸",
+            "威力等于3倍爆炸属性值",
+            "不会破坏方块"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "燃烧燃料获得动力");
+        addOrganActiveSkill(InitItem.INNER_FURNACE,
+            "消耗手持可燃物品获得熔炉之力效果",
+            "潜行时一次性消耗多个物品",
+            "效果等级等于熔炉之力属性值减1",
+            "持续时间从消耗的燃料燃烧时间累计"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.GOLEM_ARMOR_PLATE, "使用铁锭修补自身");
+        addOrganActiveSkill(InitItem.GOLEM_ARMOR_PLATE,
+            "消耗背包中的铁锭来治疗自身",
+            "治疗量等于2.5倍铁修复属性值"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.SILK_GLAND, "发射蛛网");
+        addOrganActiveSkill(InitItem.SILK_GLAND,
+            "投掷蛛网困住实体",
+            "使用消耗饱食度"
+        );
+
+        // 毒腺：被动效果（攻击时触发，非主动技能）
+        addOrganSimplePassiveEffect(InitItem.VENOM_GLAND, "攻击时施加药水效果");
+        addOrganPassiveEffect(InitItem.VENOM_GLAND,
+            "攻击时对目标施加存储的药水效果",
+            "药水效果持续时间缩短为原来的1/10",
+            "冷却时间：4秒"
+        );
+
+        addOrganActiveSkill(InitItem.LLAMA_LUNG,
+            "发射羊驼口水弹"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.ACTIVE_BLAZE_ROD, "发射连续的火球");
+        addOrganActiveSkill(InitItem.ACTIVE_BLAZE_ROD,
+            "连续发射小型火球",
+            "火球数量等于呕火属性值",
+            "每6tick发射一颗火球"
+        );
+
+        addOrganActiveSkill(InitItem.SNOW_CORE,
+            "投掷雪球"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.GHAST_STOMACH, "发射大型火球");
+        addOrganActiveSkill(InitItem.GHAST_STOMACH,
+            "发射恶魂式大型火球",
+            "爆炸威力等于可怖属性值"
+        );
+
+        addOrganActiveSkill(InitItem.SHULKER_SPLEEN,
+            "向视线中的目标发射追踪潜影子弹"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.BREEZE_CORE, "发射风弹");
+        addOrganActiveSkill(InitItem.BREEZE_CORE,
+            "发射风弹",
+            "击中后产生风爆效果"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.DRAGON_LUNG, "发射龙息弹");
+        addOrganActiveSkill(InitItem.DRAGON_LUNG,
+            "发射龙息弹",
+            "击中后产生范围龙息效果"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.SCULK_CORE, "发射音爆");
+        addOrganActiveSkill(InitItem.SCULK_CORE,
+            "向视线方向发射音爆",
+            "对路径上所有目标造成10点伤害",
+            "穿透实体"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.GUARDIAN_EYE, "发射充能光线");
+        addOrganActiveSkill(InitItem.GUARDIAN_EYE,
+            "对视线中的目标充能并发射光线",
+            "造成2点魔法伤害加3点攻击伤害",
+            "充能期间目标需保持在范围内"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.ELDER_GUARDIAN_EYE, "发射充能光线");
+        addOrganActiveSkill(InitItem.ELDER_GUARDIAN_EYE,
+            "对视线中的目标充能并发射光线",
+            "造成4点魔法伤害加6点攻击伤害",
+            "充能期间目标需保持在范围内"
+        );
 
         add(ItemTagManager.ORGANS, "器官");
         add(ItemTagManager.HEART, "心脏");
@@ -642,10 +842,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ItemTagManager.LIVER, "肝脏");
         add(ItemTagManager.INTESTINE, "肠子");
         add(ItemTagManager.STOMACH, "胃");
-        add(ItemTagManager.SPECIAL, "特殊器官");
-        add(ItemTagManager.BONE, "骨质器官");
-        add(ItemTagManager.ROTTEN, "腐烂器官");
-        add(ItemTagManager.IRON, "铁质器官");
+        add(ItemTagManager.SPECIAL, "特殊");
+        add(ItemTagManager.BONE, "骨质");
+        add(ItemTagManager.ROTTEN, "腐烂");
+        add(ItemTagManager.IRON, "铁质");
 
         addEnchantment(
             InitEnchantment.TELEOPERATION,
@@ -697,8 +897,32 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("death.attack." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath() + "." + index, value);
     }
 
-    private void addOrganSkill(Supplier<Item> item, String value) {
-        add("organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".skill", value);
+    private void addOrganSimpleActiveSkill(Supplier<Item> item, String... lines) {
+        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".active_skill.simple.";
+        for (int i = 0; i < lines.length; i++) {
+            add(base + i, lines[i]);
+        }
+    }
+
+    private void addOrganActiveSkill(Supplier<Item> item, String... lines) {
+        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".active_skill.";
+        for (int i = 0; i < lines.length; i++) {
+            add(base + i, lines[i]);
+        }
+    }
+
+    private void addOrganSimplePassiveEffect(Supplier<Item> item, String... lines) {
+        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".passive_effect.simple.";
+        for (int i = 0; i < lines.length; i++) {
+            add(base + i, lines[i]);
+        }
+    }
+
+    private void addOrganPassiveEffect(Supplier<Item> item, String... lines) {
+        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".passive_effect.";
+        for (int i = 0; i < lines.length; i++) {
+            add(base + i, lines[i]);
+        }
     }
 
     private void addEnchantment(ResourceKey<Enchantment> resourceKey, String value, String desc) {

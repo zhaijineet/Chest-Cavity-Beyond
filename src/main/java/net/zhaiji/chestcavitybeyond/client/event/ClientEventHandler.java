@@ -53,6 +53,9 @@ public class ClientEventHandler {
         event.register(KeyMappings.OPEN_SKILL_GUI);
         event.register(KeyMappings.USE_ORGAN_SKILL);
         event.register(KeyMappings.DESCEND_VEHICLE);
+        event.register(KeyMappings.SKILL_PREV);
+        event.register(KeyMappings.SKILL_NEXT);
+        event.register(KeyMappings.SKILL_CONFIRM);
         KeyMappings.USE_SKILLS_MAPPINGS.forEach(event::register);
     }
 
@@ -127,26 +130,7 @@ public class ClientEventHandler {
             }
         }
 
-        // 由于需要更改添加顺序的缘故，此处按倒序执行
-        organ.skillTooltip(
-            data,
-            index,
-            event.getItemStack(),
-            keyContext,
-            event.getContext(),
-            event.getToolTip(),
-            event.getFlags()
-        );
-        organ.attributeTooltip(
-            data,
-            index,
-            event.getItemStack(),
-            keyContext,
-            event.getContext(),
-            event.getToolTip(),
-            event.getFlags()
-        );
-        organ.descriptionTooltip(
+        organ.organTooltip(
             data,
             index,
             event.getItemStack(),
@@ -158,19 +142,12 @@ public class ClientEventHandler {
     }
 
     /**
-     * 设置技能界面鼠标按键的功能
+     * 鼠标按键输入事件
      *
      * @param event 鼠标按键输入事件
      */
     public static void handlerInputEvent$MouseButton$Pre(InputEvent.MouseButton.Pre event) {
         if (event.getAction() != InputConstants.PRESS) return;
-        if (Minecraft.getInstance().screen instanceof OrganSkillScreen screen) {
-            if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-                screen.changeSelectedSlot();
-            }
-            screen.onClose();
-            event.setCanceled(true);
-        }
         customKeyTrigger(InputConstants.Type.MOUSE.getOrCreate(event.getButton()));
     }
 

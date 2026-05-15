@@ -2,6 +2,23 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.0
+
+> ⚠️ 此版本改动较大，部分 API 不向后兼容，请备份存档后更新。
+
+- 新增器官工具提示管线系统（`OrganTooltip`）：将原本分散的 `descriptionTooltip`、`attributeTooltip`、`skillTooltip` 三个回调统一合并为 `organTooltip` 单一回调，通过 Builder 配置 Tags → Attributes → Description → ShiftHint → PassiveEffect → ActiveSkill 六段渲染管线，每段均提供 afterXxx 注入点
+- 新增客户端配置 `detailedTooltips`：控制器官 tooltip 默认显示模式（详细/简略），可通过配置文件或按住 Shift 切换
+- 新增被动效果/主动技能分层显示：器官 tooltip 中的技能描述区分为「被动效果」和「主动技能」两段，各自支持简略（`.simple.0~N`）和详细（`.0~N`）双语系索引格式
+- 新增标签显示注册系统：`ItemTagManager` 新增 `TagDisplay` 注册/查询引擎，支持颜色、优先级自定义，附属模组可通过 `register` 系列方法注册自定义标签显示
+- 新增 `TooltipSectionFunction` 函数式接口，作为工具提示段落渲染标准接口
+- 简化 `ChestCavityUtil.createContext`：移除冗余的 `entity` 参数，改为从 `data` 中自动获取
+- 修复 `ChestCavityMenu` 关闭音效仅在客户端播放的问题：改为通过 `level.playSound` 双端同步
+- 修复铁傀儡修复技能（`OrganSkillUtil`）搜索铁锭时未在首次匹配后 break 的问题
+- 修复 `ChestCavityTypeManager` 亡灵类型推断错误：Zombie 实体被错误注册为 `SKELETON` 类型，改为 `UNDEAD`
+- `ChestCavityData` 新增 `setNeedBreath`、`setNeedHealth` setter 方法
+- 尝试兼容 Controllable 手柄模组：虚拟光标点击、右摇杆滚轮、按键映射均可操作环形菜单，但不保证完全兼容
+- 环形菜单（OrganSkillScreen）新增键盘/手柄导航：注册 `SKILL_PREV`（上一个技能）、`SKILL_NEXT`（下一个技能）、`SKILL_CONFIRM`（确认选择）三个按键绑定，支持方向键切换、滚轮切换、空格确认，鼠标左键/确认键均可确认选择
+
 ## 1.3.5
 
 - 新增「是否需要健康」系统：`ChestCavityType` 新增 `needHealth` 属性，设为 `false` 的实体不会因健康值 ≤ 0 而持续受伤；亡灵、骷髅、凋灵骷髅、凋灵默认不需要健康

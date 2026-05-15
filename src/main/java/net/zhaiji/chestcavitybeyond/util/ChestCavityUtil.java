@@ -82,18 +82,16 @@ public class ChestCavityUtil {
      * 创建胸腔槽位上下文
      *
      * @param data   胸腔数据 (可能为null)
-     * @param entity 胸腔主人 (可能为null)
      * @param index  位置索引
      * @param stack  对应物品
      * @return 胸腔槽位上下文
      */
     public static ChestCavitySlotContext createContext(
         @Nullable ChestCavityData data,
-        @Nullable LivingEntity entity,
         int index,
         ItemStack stack
     ) {
-        return new ChestCavitySlotContext(data, entity, getSlotId(index), index, stack);
+        return new ChestCavitySlotContext(data, data != null ? data.getOwner() : null, getSlotId(index), index, stack);
     }
 
     /**
@@ -126,7 +124,7 @@ public class ChestCavityUtil {
      */
     public static void organTick(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        getOrganCap(stack).tick(createContext(data, entity, index, stack));
+        getOrganCap(stack).tick(createContext(data, index, stack));
     }
 
     /**
@@ -134,7 +132,7 @@ public class ChestCavityUtil {
      */
     public static void organAdded(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        ChestCavitySlotContext changedContext = createContext(data, entity, index, stack);
+        ChestCavitySlotContext changedContext = createContext(data, index, stack);
         getOrganCap(stack).organAdded(changedContext);
     }
 
@@ -143,7 +141,7 @@ public class ChestCavityUtil {
      */
     public static void organRemoved(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        ChestCavitySlotContext changedContext = createContext(data, entity, index, stack);
+        ChestCavitySlotContext changedContext = createContext(data, index, stack);
         getOrganCap(stack).organRemoved(changedContext);
     }
 
@@ -168,7 +166,7 @@ public class ChestCavityUtil {
             if (i == changedIndex) continue;
             ItemStack otherStack = data.getStackInSlot(i);
             if (otherStack.isEmpty()) continue;
-            ChestCavitySlotContext otherContext = createContext(data, entity, i, otherStack);
+            ChestCavitySlotContext otherContext = createContext(data, i, otherStack);
             getOrganCap(otherStack).otherOrganChange(otherContext, changedIndex, oldStack, newStack);
         }
     }
@@ -178,7 +176,7 @@ public class ChestCavityUtil {
      */
     public static void organSkill(ChestCavityData data, LivingEntity entity, int index, ItemStack stack) {
         if (stack.isEmpty()) return;
-        getOrganCap(stack).organSkill(createContext(data, entity, index, stack));
+        getOrganCap(stack).organSkill(createContext(data, index, stack));
     }
 
     /**
@@ -188,7 +186,7 @@ public class ChestCavityUtil {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                getOrganCap(stack).chestCavityOpen(createContext(data, entity, i, stack));
+                getOrganCap(stack).chestCavityOpen(createContext(data, i, stack));
             }
         }
     }
@@ -200,7 +198,7 @@ public class ChestCavityUtil {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                getOrganCap(stack).chestCavityClose(createContext(data, entity, i, stack));
+                getOrganCap(stack).chestCavityClose(createContext(data, i, stack));
             }
         }
     }
@@ -212,7 +210,7 @@ public class ChestCavityUtil {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                getOrganCap(stack).incomingDamage(createContext(data, entity, i, stack), event);
+                getOrganCap(stack).incomingDamage(createContext(data, i, stack), event);
             }
         }
     }
@@ -230,7 +228,7 @@ public class ChestCavityUtil {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                getOrganCap(stack).attack(createContext(data, entity, i, stack), target, source, damageContainer);
+                getOrganCap(stack).attack(createContext(data, i, stack), target, source, damageContainer);
             }
         }
     }
@@ -242,7 +240,7 @@ public class ChestCavityUtil {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                getOrganCap(stack).hurt(createContext(data, entity, i, stack), source, damageContainer);
+                getOrganCap(stack).hurt(createContext(data, i, stack), source, damageContainer);
             }
         }
     }
@@ -254,7 +252,7 @@ public class ChestCavityUtil {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                getOrganCap(stack).heal(createContext(data, entity, i, stack), event);
+                getOrganCap(stack).heal(createContext(data, i, stack), event);
             }
         }
     }

@@ -27,6 +27,6 @@ public record UseSkillPacket(int slot) implements CustomPacketPayload {
     }
 
     public static void handler(UseSkillPacket packet, IPayloadContext context) {
-        context.enqueueWork(() -> ServerPacketHandler.handleUseSkillPacket(context.player(), packet));
+        context.enqueueWork(() -> ServerPacketHandler.handlerUseSkillPacket(context.player(), packet));
     }
 }

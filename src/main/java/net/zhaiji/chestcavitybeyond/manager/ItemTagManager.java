@@ -1,10 +1,28 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.Tags;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
+import net.zhaiji.chestcavitybeyond.api.TagDisplay;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+/**
+ * Tag 注册中心 + 查询引擎
+ * <p>
+ * 包含预定义的器官类型 TagKey 常量和 TagDisplay 显示系统。
+ * 附属 mod 可通过 {@link #register(String, int, int)} 或 {@link #register(TagKey, int, int)} 注册自定义 TagDisplay。
+ * </p>
+ */
 public class ItemTagManager {
     // 器官
     public static final TagKey<Item> ORGANS = create("organs");
@@ -38,8 +56,116 @@ public class ItemTagManager {
     public static final TagKey<Item> ROTTEN = create("organs/rotten");
     // 铁质器官
     public static final TagKey<Item> IRON = create("organs/iron");
+    private static final List<TagDisplay> TAG_DISPLAYS = new ArrayList<>();
 
+    /**
+     * 创建 TagKey
+     */
     public static TagKey<Item> create(String name) {
         return ItemTags.create(ChestCavityBeyond.of(name));
     }
+
+    /**
+     * 注册一个 Tag 显示信息
+     */
+    public static void register(TagDisplay display) {
+        TAG_DISPLAYS.add(display);
+    }
+
+    public static TagKey<Item> register(String name, int color, int priority) {
+        TagKey<Item> tagKey = ItemTags.create(ChestCavityBeyond.of(name));
+        TagDisplay.builder(tagKey).color(color).priority(priority).build();
+        return tagKey;
+    }
+
+    public static void register(TagKey<Item> tag, int color, int priority) {
+        TagDisplay.builder(tag).color(color).priority(priority).build();
+    }
+
+    public static TagKey<Item> register(String name, int color) {
+        TagKey<Item> tagKey = ItemTags.create(ChestCavityBeyond.of(name));
+        TagDisplay.builder(tagKey).color(color).build();
+        return tagKey;
+    }
+
+    public static void register(TagKey<Item> tag, int color) {
+        register(tag, color, 0);
+    }
+
+    public static TagKey<Item> register(String name) {
+        TagKey<Item> tagKey = ItemTags.create(ChestCavityBeyond.of(name));
+        TagDisplay.builder(tagKey).build();
+        return tagKey;
+    }
+
+    public static void register(TagKey<Item> tag) {
+        TagDisplay.builder(tag).build();
+    }
+
+    /**
+     * 获取物品的 Tags 行
+     *
+     * @return 包含所有匹配 tag 的 Component，如 "魔法 机械"
+     */
+    public static Component getTagsLine(ItemStack stack) {
+        List<TagDisplay> matched = TAG_DISPLAYS.stream()
+            .filter(display -> stack.is(display.tag()))
+            .sorted(
+                Comparator.comparingInt(TagDisplay::priority)
+                    .reversed()
+                    .thenComparing(display -> display.tag().location())
+            )
+            .toList();
+
+        MutableComponent line = Component.empty();
+
+        if (matched.isEmpty()) return line;
+
+        for (int i = 0; i < matched.size(); i++) {
+            if (i > 0) line = line.append(" ");
+            TagDisplay tagDisplay = matched.get(i);
+            line = line.append(getTagDisplayName(tagDisplay.tag()).withColor(tagDisplay.color()));
+        }
+        return line;
+    }
+
+    /**
+     * 从语言键获取 Tag 显示名
+     */
+    private static MutableComponent getTagDisplayName(TagKey<Item> tag) {
+        String translationKey = Tags.getTagTranslationKey(tag);
+        if (Language.getInstance().has(translationKey)) {
+            return Component.translatable(translationKey);
+        }
+        // 翻译不存在时，取 path 最后一段，首字母大写作为显示名
+        String path = tag.location().getPath();
+        int lastSlash = path.lastIndexOf('/');
+        if (lastSlash >= 0) {
+            path = path.substring(lastSlash + 1);
+        }
+        path = Character.toUpperCase(path.charAt(0)) + path.substring(1);
+        return Component.literal(path);
+    }
+
+    // ==================== 测试用 TagDisplay 注册（集中管理，方便删改） ====================
+//    static {
+//        // 器官类型 — 位置标签（高优先级）
+//        register(HEART,     0xFFFF5555, 100);  // 红色
+//        register(LUNG,      0xFF55FFFF, 100);  // 青色
+//        register(MUSCLE,    0xFFFFAA00, 100);  // 橙色
+//        register(RIB,       0xFFAAAAAA, 100);  // 灰色
+//        register(APPENDIX,  0xFF55FF55, 100);  // 绿色
+//        register(SPLEEN,    0xFFAA00AA, 100);  // 紫色
+//        register(KIDNEY,    0xFF55AA55, 100);  // 深绿
+//        register(SPINE,     0xFFAAAAAA, 100);  // 灰色
+//        register(LIVER,     0xFFAA3333, 100);  // 深红
+//        register(INTESTINE, 0xFFAA7744, 100);  // 棕色
+//        register(STOMACH,   0xFFAAFF55, 100);  // 黄绿
+//        register(SPECIAL,   0xFF5555FF, 100);  // 蓝色
+//
+//        // 材质标签（低优先级）
+//        register(BONE,   0xFFDDDDDD, 50);  // 浅灰
+//        register(ROTTEN, 0xFF55AA55,  50);  // 暗绿
+//        register(IRON,   0xFFDDDDDD, 50);  // 银白
+//    }
 }

@@ -894,7 +894,7 @@ public class ChestCavityTypeManager {
             }
             // 亡灵
             if (entity instanceof Zombie || entityType.is(EntityTypeTags.UNDEAD)) {
-                return registerEntity(entityType, SKELETON);
+                return registerEntity(entityType, UNDEAD);
             }
             // 鱼类
             if (entity instanceof AbstractFish) {

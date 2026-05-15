@@ -1,6 +1,7 @@
 package net.zhaiji.chestcavitybeyond.client.event;
 
 import net.neoforged.bus.api.IEventBus;
+import net.zhaiji.chestcavitybeyond.ChestCavityBeyondClientConfig;
 
 public class ClientEventManager {
     public static void init(IEventBus modBus, IEventBus gameBus) {
@@ -13,6 +14,7 @@ public class ClientEventManager {
         modBus.addListener(ClientEventHandler::handlerRegisterKeyMappingsEvent);
         modBus.addListener(ClientEventHandler::handlerEntityRenderersEvent$RegisterRenderers);
         modBus.addListener(ClientEventHandler::handlerRegisterGuiLayersEvent);
+        modBus.addListener(ChestCavityBeyondClientConfig::handlerModConfigEvent);
     }
 
     public static void gameBusListener(IEventBus gameBus) {

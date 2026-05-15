@@ -506,7 +506,7 @@ public class ChestCavityType {
     }
 
     /**
-     * 获取器官转换结果（按注册顺序匹配，首个命中即用）
+     * 获取器官转换结果（匹配顺序不保证，首个命中即用）
      *
      * @param context 当前槽位的上下文
      * @return 转换后的 ItemStack，无匹配则返回 {@code context.stack()}（保持不变）

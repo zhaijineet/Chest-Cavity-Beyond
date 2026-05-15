@@ -15,6 +15,9 @@ public class KeyMappings {
     public static final String USE_ORGAN_SKILL_TRANSLATABLE = "key.chestcavitybeyond.use_organ_skill";
     public static final String DESCEND_VEHICLE_TRANSLATABLE = "key.chestcavitybeyond.vehicle_down";
     public static final String USE_ORGAN_SKILLS_TRANSLATABLE = "key.chestcavitybeyond.use_organ_skill_";
+    public static final String SKILL_PREV_TRANSLATABLE = "key.chestcavitybeyond.skill_prev";
+    public static final String SKILL_NEXT_TRANSLATABLE = "key.chestcavitybeyond.skill_next";
+    public static final String SKILL_CONFIRM_TRANSLATABLE = "key.chestcavitybeyond.skill_confirm";
 
     public static final List<KeyMapping> USE_SKILLS_MAPPINGS = new ArrayList<>();
 
@@ -42,6 +45,33 @@ public class KeyMappings {
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
             InputConstants.KEY_LCONTROL,
+            KEY_CATEGORY_TRANSLATABLE
+    );
+
+    // 环形菜单切换上一个技能
+    public static final KeyMapping SKILL_PREV = new KeyMapping(
+            SKILL_PREV_TRANSLATABLE,
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            InputConstants.KEY_LEFT,
+            KEY_CATEGORY_TRANSLATABLE
+    );
+
+    // 环形菜单切换下一个技能
+    public static final KeyMapping SKILL_NEXT = new KeyMapping(
+            SKILL_NEXT_TRANSLATABLE,
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            InputConstants.KEY_RIGHT,
+            KEY_CATEGORY_TRANSLATABLE
+    );
+
+    // 环形菜单确认选择
+    public static final KeyMapping SKILL_CONFIRM = new KeyMapping(
+            SKILL_CONFIRM_TRANSLATABLE,
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            InputConstants.KEY_SPACE,
             KEY_CATEGORY_TRANSLATABLE
     );
 

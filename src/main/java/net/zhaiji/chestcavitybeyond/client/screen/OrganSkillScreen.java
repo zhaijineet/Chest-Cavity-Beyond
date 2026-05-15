@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
 import net.zhaiji.chestcavitybeyond.network.server.packet.SyncSelectedSlotPacket;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
@@ -54,6 +55,7 @@ public class OrganSkillScreen extends Screen {
     public static int selected = -1;
     private final List<Integer> indices = new ArrayList<>();
     private final List<ItemStack> organs = new ArrayList<>();
+    private int focusedIndex = -1;
     private int centerX;
     private int centerY;
     private double dvdX = 0;
@@ -111,6 +113,14 @@ public class OrganSkillScreen extends Screen {
                 selected = i;
                 break;
             }
+        }
+        // 鼠标悬停在扇形上时，切回鼠标模式
+        if (selected != -1) {
+            focusedIndex = -1;
+        }
+        // 键盘/滚轮焦点优先
+        if (focusedIndex != -1) {
+            selected = focusedIndex;
         }
         PoseStack poseStack = guiGraphics.pose();
         poseStack.pushPose();
@@ -203,9 +213,52 @@ public class OrganSkillScreen extends Screen {
     }
 
     @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
+            changeSelectedSlot();
+            onClose();
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        int count = organs.size();
+        if (count == 0) return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        if (verticalAmount > 0) {
+            focusedIndex = focusedIndex <= 0 ? count - 1 : focusedIndex - 1;
+        } else if (verticalAmount < 0) {
+            focusedIndex = focusedIndex >= count - 1 ? 0 : focusedIndex + 1;
+        }
+        return true;
+    }
+
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        InputConstants.Key key = InputConstants.getKey(keyCode, scanCode);
+        int count = organs.size();
         // 个人习惯，按e键也会关闭此界面
-        if (minecraft.options.keyInventory.isActiveAndMatches(InputConstants.getKey(keyCode, scanCode))) {
+        if (minecraft.options.keyInventory.isActiveAndMatches(key)) {
+            onClose();
+            return true;
+        }
+        // 切换上一个技能
+        if (KeyMappings.SKILL_PREV.isActiveAndMatches(key)) {
+            if (count > 0) focusedIndex = focusedIndex <= 0 ? count - 1 : focusedIndex - 1;
+            return true;
+        }
+        // 切换下一个技能
+        if (KeyMappings.SKILL_NEXT.isActiveAndMatches(key)) {
+            if (count > 0) focusedIndex = focusedIndex >= count - 1 ? 0 : focusedIndex + 1;
+            return true;
+        }
+        // 确认选择
+        if (KeyMappings.SKILL_CONFIRM.isActiveAndMatches(key)) {
+            if (focusedIndex != -1) {
+                selected = focusedIndex;
+            }
+            changeSelectedSlot();
             onClose();
             return true;
         }

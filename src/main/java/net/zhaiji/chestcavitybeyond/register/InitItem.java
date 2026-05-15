@@ -17,7 +17,7 @@ import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.item.ChestOpenerItem;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
-import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
+
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -638,7 +638,6 @@ public class InitItem {
                 OrganSkillUtil.teleport(context.entity(), context.data().getCurrentValue(InitAttribute.ENDER));
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -784,7 +783,6 @@ public class InitItem {
                 }
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -799,7 +797,6 @@ public class InitItem {
                 OrganSkillUtil.explosion(context.entity(), context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -969,7 +966,6 @@ public class InitItem {
                 }
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -997,7 +993,6 @@ public class InitItem {
                 }
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1010,7 +1005,6 @@ public class InitItem {
                 OrganSkillUtil.silk(context.entity());
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1046,7 +1040,6 @@ public class InitItem {
                     }
                 }
             )
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .attack((context, target, source, damageContainer) -> {
                 if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
                 OrganSkillUtil.addCooldown(context.entity(), context.stack(), 4 * 20);
@@ -1127,7 +1120,6 @@ public class InitItem {
                 OrganSkillUtil.spit(context.entity());
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1168,7 +1160,6 @@ public class InitItem {
                 );
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1182,7 +1173,6 @@ public class InitItem {
                 OrganSkillUtil.snowball(context.entity());
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1198,7 +1188,6 @@ public class InitItem {
                 OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY));
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1219,11 +1208,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.METABOLISM, 0.75)
             .cooldown(5 * 20)
-            .skill(context -> {
-                OrganSkillUtil.shulkerBullet(context.entity());
-                return true;
-            })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
+            .skill(context -> OrganSkillUtil.shulkerBullet(context.entity()))
             .build()
     );
 
@@ -1239,7 +1224,6 @@ public class InitItem {
                 }
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1272,7 +1256,6 @@ public class InitItem {
                 OrganSkillUtil.dragonFireball(context.entity());
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1425,7 +1408,6 @@ public class InitItem {
                 OrganSkillUtil.sonicBoom(context.entity());
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1583,7 +1565,6 @@ public class InitItem {
                 OrganSkillUtil.guardianLaser(context.entity(), false);
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 
@@ -1597,7 +1578,6 @@ public class InitItem {
                 OrganSkillUtil.guardianLaser(context.entity(), true);
                 return true;
             })
-            .skillTooltip(TooltipUtil::simpleSkillTooltip)
             .build()
     );
 }

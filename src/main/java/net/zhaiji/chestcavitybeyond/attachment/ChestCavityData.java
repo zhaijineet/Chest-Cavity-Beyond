@@ -357,10 +357,24 @@ public class ChestCavityData extends ItemStackHandler {
     }
 
     /**
+     * 设置是否需要呼吸
+     */
+    public void setNeedBreath(boolean needBreath) {
+        this.needBreath = needBreath;
+    }
+
+    /**
      * @return 是否需要健康
      */
     public boolean isNeedHealth() {
         return needHealth;
+    }
+
+    /**
+     * 设置是否需要健康
+     */
+    public void setNeedHealth(boolean needHealth) {
+        this.needHealth = needHealth;
     }
 
     /**
@@ -504,7 +518,7 @@ public class ChestCavityData extends ItemStackHandler {
      * 客户端同步用
      */
     public void sync(SyncChestCavityDataPacket packet) {
-        this.size = packet.size();
+        size = packet.size();
         NonNullList<ItemStack> organs = packet.organs();
         stacks.clear();
         for (int i = 0; i < organs.size(); i++) {
@@ -780,7 +794,7 @@ public class ChestCavityData extends ItemStackHandler {
                 if (current.isEmpty()) continue;
 
                 ItemStack converted = sourceType.getConversionResult(
-                    ChestCavityUtil.createContext(this, owner, i, current)
+                    ChestCavityUtil.createContext(this, i, current)
                 );
                 if (converted != current || !ItemStack.isSameItemSameComponents(converted, current)) {
                     stacks.set(i, converted);

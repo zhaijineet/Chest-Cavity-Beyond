@@ -21,8 +21,9 @@ public class DamageTypeBuilder {
         return new DamageTypeBuilder(resourceKey);
     }
 
-    public void setMsgId(String msgId) {
+    public DamageTypeBuilder setMsgId(String msgId) {
         this.msgId = msgId;
+        return this;
     }
 
     public DamageTypeBuilder setScaling(DamageScaling scaling) {

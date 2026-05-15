@@ -162,11 +162,15 @@ public class OrganSkillUtil {
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.is(Items.IRON_INGOT)) {
                 stack = itemStack;
+                break;
             }
         }
-        for (ItemStack itemStack : player.getInventory().offhand) {
-            if (itemStack.is(Items.IRON_INGOT)) {
-                stack = itemStack;
+        if (stack == null) {
+            for (ItemStack itemStack : player.getInventory().offhand) {
+                if (itemStack.is(Items.IRON_INGOT)) {
+                    stack = itemStack;
+                    break;
+                }
             }
         }
         if (stack == null) return;
@@ -346,12 +350,14 @@ public class OrganSkillUtil {
         level.addFreshEntity(new ShulkerBullet(level, entity, target, Direction.UP.getAxis()));
     }
 
-    public static void shulkerBullet(LivingEntity entity) {
+    public static boolean shulkerBullet(LivingEntity entity) {
         int distance = ChestCavityBeyondConfig.shulkerBulletDistance;
         HitResult hitResult = ProjectileUtil.getHitResultOnViewVector(entity, checkEntity -> checkEntity != entity, distance);
         if (hitResult instanceof EntityHitResult entityHitResult) {
             shulkerBullet(entity, entityHitResult.getEntity());
+            return true;
         }
+        return false;
     }
 
     /**

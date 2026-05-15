@@ -101,10 +101,15 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         super.removed(player);
         Level level = player.level();
         LivingEntity entity = data.getOwner();
-        if (level.isClientSide()) {
-            if (ChestCavityUtil.getData(entity).hasOrgan(ItemTags.DOORS)) {
-                player.playNotifySound(SoundEvents.CHEST_CLOSE, player.getSoundSource(), 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
-            }
+        if (ChestCavityUtil.getData(entity).hasOrgan(ItemTags.DOORS)) {
+            level.playSound(
+                player,
+                player.getOnPos(),
+                SoundEvents.CHEST_CLOSE,
+                player.getSoundSource(),
+                0.5F,
+                level.random.nextFloat() * 0.1F + 0.9F
+            );
         }
         // 触发胸腔关闭回调
         ChestCavityUtil.chestCavityClose(data, entity);
