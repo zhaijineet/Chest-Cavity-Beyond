@@ -19,6 +19,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
+import net.zhaiji.chestcavitybeyond.compat.CompatManager;
+import net.zhaiji.chestcavitybeyond.compat.SableCompat;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -135,6 +137,10 @@ public class TeleportUtil {
                 }
             }
         }
+        // 若命中 sable 结构（坐标远超视线距离 → clip 返回了 plot 空间坐标），委托 SableCompat 处理
+        if (CompatManager.SABLE_LOADED && targetPos != null && from.distanceToSqr(targetPos.getCenter()) > ender * ender * 4) {
+            return SableCompat.teleportSable(level, from, targetPos, blockHitResult, lookAngle, ender);
+        }
         // 如果目标距离很近，尝试穿墙传送
         if (from.distanceToSqr(blockHitResult.getLocation()) < 9) {
             // 添加少量偏移，确保不会从原位置开始检测
@@ -181,7 +187,7 @@ public class TeleportUtil {
      * 是否可以传送
      */
     @Nullable
-    private static BlockPos traversalCheck(Level level, BlockPos traversePos) {
+    public static BlockPos traversalCheck(Level level, BlockPos traversePos) {
         BlockState blockState = level.getBlockState(traversePos);
         var collision = blockState.getCollisionShape(level, traversePos);
         if (collision.isEmpty() && isTeleportPositionClear(level, traversePos.below()).isPresent()) {
@@ -196,7 +202,7 @@ public class TeleportUtil {
      * 此方法可以将玩家从方块中推上去
      * </P>
      */
-    private static Optional<Double> isTeleportPositionClear(Level level, BlockPos target) {
+    public static Optional<Double> isTeleportPositionClear(Level level, BlockPos target) {
         if (level.isOutsideBuildHeight(target)) {
             return Optional.empty();
         }

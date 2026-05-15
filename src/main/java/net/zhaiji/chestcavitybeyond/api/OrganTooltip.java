@@ -64,7 +64,7 @@ public class OrganTooltip {
 
     public static class Builder {
         private TooltipSectionFunction tagsSection = TooltipUtil::tagsSection;
-        private TooltipSectionFunction attributesSection = TooltipUtil::addOrganAttributeTooltip;
+        private TooltipSectionFunction attributesSection = TooltipUtil::organAttributeTooltip;
         private TooltipSectionFunction descriptionSection = TooltipUtil::descriptionSection;
         private TooltipSectionFunction shiftHintSection = TooltipUtil::shiftHintSection;
         private TooltipSectionFunction passiveEffectSection = TooltipUtil::passiveEffectSection;

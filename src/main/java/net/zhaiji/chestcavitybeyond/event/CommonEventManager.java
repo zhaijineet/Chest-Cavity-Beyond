@@ -3,6 +3,7 @@ package net.zhaiji.chestcavitybeyond.event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
+import net.zhaiji.chestcavitybeyond.datagen.DataGenHandler;
 import net.zhaiji.chestcavitybeyond.network.PacketManager;
 
 public class CommonEventManager {
@@ -12,6 +13,7 @@ public class CommonEventManager {
     }
 
     public static void modBusListener(IEventBus modBus) {
+        modBus.addListener(DataGenHandler::handlerGatherDataEvent);
         modBus.addListener(ChestCavityBeyondConfig::handlerModConfigEvent);
         modBus.addListener(CommonEventHandler::handlerRegisterCapabilitiesEvent);
         modBus.addListener(CommonEventHandler::handlerFMLCommonSetupEvent);

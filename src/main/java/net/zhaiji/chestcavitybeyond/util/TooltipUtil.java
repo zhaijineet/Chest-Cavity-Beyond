@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
@@ -28,11 +29,19 @@ import java.util.function.BiConsumer;
 
 public class TooltipUtil {
     public static final String PREFIX = "organ." + ChestCavityBeyond.MOD_ID + ".";
-
+    public static String DEFAULT_PREFIX = " • ";
     /**
      * 默认的器官工具提示回调
      */
     public static OrganTooltipConsumer DEFAULT_TOOLTIP = OrganTooltip.builder().build();
+
+    /**
+     * 获取动态前缀 + path 的组合，方便直接拼接 type
+     */
+    public static String getBaseKey(ItemStack stack) {
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return "organ." + key.getNamespace() + "." + key.getPath();
+    }
 
     /**
      * 判断翻译键是否存在
@@ -43,35 +52,37 @@ public class TooltipUtil {
 
     /**
      * 添加详细文本行（.0~.N 索引格式）
+     *
+     * @param lines  行列表
+     * @param stack  物品栈
+     * @param type   段落类型（如 "description"、"passive_effect"）
+     * @param prefix 行首前缀（如 " • "）
      */
-    public static void addDetailedLines(List<Component> lines, ItemStack stack, String type) {
-        String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+    public static void addDetailedLines(List<Component> lines, ItemStack stack, String type, String prefix) {
         int i = 0;
         String key;
-        String baseKey = PREFIX + path + "." + type + ".";
+        String baseKey = getBaseKey(stack) + "." + type + ".";
         while (hasTranslation(key = baseKey + i)) {
-            lines.add(Component.literal(" • ").append(Component.translatable(key)));
+            lines.add(Component.literal(prefix).append(Component.translatable(key)));
             i++;
         }
     }
 
     /**
      * 简略模式优先使用 .simple.0~.N 索引键，不存在则回退到详细文本
+     *
+     * @param stack    物品栈
+     * @param type     段落类型（如 "passive_effect"、"active_skill"）
+     * @param detailed 是否为详细模式
+     * @param prefix   行首前缀（如 " • "）
      */
-    public static List<Component> addSimpleOrDetailedLines(ItemStack stack, String type, boolean detailed) {
+    public static List<Component> addSimpleOrDetailedLines(ItemStack stack, String type, boolean detailed, String prefix) {
         List<Component> result = new ArrayList<>();
         if (!detailed) {
-            String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-            String baseKey = PREFIX + path + "." + type + ".simple.";
-            int i = 0;
-            String key;
-            while (hasTranslation(key = baseKey + i)) {
-                result.add(Component.literal(" • ").append(Component.translatable(key)));
-                i++;
-            }
+            addDetailedLines(result, stack, type + ".simple", prefix);
             if (!result.isEmpty()) return result;
         }
-        addDetailedLines(result, stack, type);
+        addDetailedLines(result, stack, type, prefix);
         return result;
     }
 
@@ -83,27 +94,11 @@ public class TooltipUtil {
     }
 
     /**
-     * 创建段落执行函数，捕获 7 个渲染参数。
-     * 返回的函数只需传入段落和行列表即可将段落输出追加到行列表。
-     */
-    public static BiConsumer<TooltipSectionFunction, List<Component>> sectionApply(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
-        TooltipsKeyContext keyContext,
-        Item.TooltipContext context,
-        List<Component> tooltipComponents,
-        TooltipFlag tooltipFlag
-    ) {
-        return (section, lines) -> lines.addAll(section.apply(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag));
-    }
-
-    /**
      * 将 OrganTooltip 管线构建为 OrganTooltipConsumer
      */
     public static OrganTooltipConsumer buildConsumer(OrganTooltip organTooltip) {
         return (data, index, stack, keyContext, context, tooltipComponents, tooltipFlag) -> {
-            BiConsumer<TooltipSectionFunction, List<Component>> apply = sectionApply(
+            BiConsumer<TooltipSectionFunction, List<Component>> apply = (section, lines) -> lines.addAll(section.apply(
                 data,
                 index,
                 stack,
@@ -111,7 +106,7 @@ public class TooltipUtil {
                 context,
                 tooltipComponents,
                 tooltipFlag
-            );
+            ));
             List<Component> lines = new ArrayList<>();
 
             // 1. Tags
@@ -122,7 +117,7 @@ public class TooltipUtil {
             apply.accept(organTooltip.attributesSection, lines);
             apply.accept(organTooltip.afterAttributes, lines);
 
-            // 3. Description（无标题，纯文字）
+            // 3. Description
             apply.accept(organTooltip.descriptionSection, lines);
             apply.accept(organTooltip.afterDescription, lines);
 
@@ -130,17 +125,17 @@ public class TooltipUtil {
             apply.accept(organTooltip.shiftHintSection, lines);
             apply.accept(organTooltip.afterShiftHint, lines);
 
-            String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+            String base = getBaseKey(stack);
 
             // 5. PassiveEffect
-            if (hasTranslation(PREFIX + path + ".passive_effect.0")) {
+            if (hasTranslation(base + ".passive_effect.0")) {
                 lines.add(Component.translatable(PREFIX + "tooltip.header.passive_effect").withStyle(ChatFormatting.GRAY));
                 apply.accept(organTooltip.passiveEffectSection, lines);
             }
             apply.accept(organTooltip.afterPassiveEffect, lines);
 
             // 6. ActiveSkill
-            if (hasTranslation(PREFIX + path + ".active_skill.0")) {
+            if (hasTranslation(base + ".active_skill.0")) {
                 lines.add(Component.translatable(PREFIX + "tooltip.header.active_skill").withStyle(ChatFormatting.YELLOW));
                 apply.accept(organTooltip.activeSkillSection, lines);
             }
@@ -156,7 +151,7 @@ public class TooltipUtil {
     /**
      * 为器官属性工具提示
      */
-    public static List<Component> addOrganAttributeTooltip(
+    public static List<Component> organAttributeTooltip(
         ChestCavityData data,
         int index,
         ItemStack stack,
@@ -171,50 +166,35 @@ public class TooltipUtil {
         );
         if (attributeModifiers.isEmpty()) return result;
         attributeModifiers.forEach((attribute, modifier) -> {
+            boolean isPercentage = attribute.value() instanceof PercentageAttribute;
+            boolean isAddValue = modifier.operation() == AttributeModifier.Operation.ADD_VALUE;
             double value = modifier.amount();
-            if (modifier.operation() != AttributeModifier.Operation.ADD_VALUE || attribute.value() instanceof PercentageAttribute) {
+            if (!isAddValue || isPercentage) {
                 value *= 100;
             }
-            if (value == (int) value) {
-                int i = (int) value;
-                String string = i > 0 ? "+" + i : String.valueOf(i);
-                if (modifier.operation() == AttributeModifier.Operation.ADD_VALUE && attribute.value() instanceof PercentageAttribute) {
-                    string += "%";
-                }
-                result.add(
-                    Component.translatable(
-                        PREFIX + "attribute.tooltips_" + modifier.operation().ordinal(),
-                        string,
-                        Component.translatable(attribute.value().getDescriptionId())
-                    )
-                );
-            } else {
-                String string = value > 0 ? "+" + formatAttributeValue(value) : formatAttributeValue(value);
-                if (modifier.operation() == AttributeModifier.Operation.ADD_VALUE && attribute.value() instanceof PercentageAttribute) {
-                    string += "%";
-                }
-                result.add(
-                    Component.translatable(
-                        PREFIX + "attribute.tooltips_" + modifier.operation().ordinal(),
-                        string,
-                        Component.translatable(attribute.value().getDescriptionId())
-                    )
-                );
+            String string = (value > 0 ? "+" : "") + formatAttributeValue(value);
+            if (isAddValue && isPercentage) {
+                string += "%";
             }
+            result.add(
+                Component.translatable(
+                    PREFIX + "attribute.tooltips_" + modifier.operation().ordinal(),
+                    string,
+                    Component.translatable(attribute.value().getDescriptionId())
+                )
+            );
         });
         return result;
     }
 
     /**
-     * 简单工具提示添加
+     * 简单工具提示添加（从索引1开始插入）
      *
      * @param total 总工具提示
      * @param add   需要添加的工具提示
      */
     public static void simpleTooltipAdd(List<Component> total, List<Component> add) {
-        for (int i = 0; i < add.size(); i++) {
-            total.add(i + 1, add.get(i));
-        }
+        total.addAll(1, add);
     }
 
     /**
@@ -261,7 +241,9 @@ public class TooltipUtil {
         List<Component> tooltipComponents,
         TooltipFlag tooltipFlag
     ) {
-        return addSimpleOrDetailedLines(stack, "description", isDetailedMode(keyContext));
+        List<Component> result = new ArrayList<>();
+        addDetailedLines(result, stack, "description", "");
+        return result;
     }
 
     /**
@@ -277,8 +259,7 @@ public class TooltipUtil {
         TooltipFlag tooltipFlag
     ) {
         if (ChestCavityBeyondClientConfig.detailedTooltips) return List.of();
-        String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        String base = PREFIX + path;
+        String base = getBaseKey(stack);
         // 条件1：必须有被动效果或主动技能
         boolean hasPassiveOrSkill = hasTranslation(base + ".passive_effect.0") || hasTranslation(base + ".active_skill.0");
         if (!hasPassiveOrSkill) return List.of();
@@ -306,7 +287,7 @@ public class TooltipUtil {
         List<Component> tooltipComponents,
         TooltipFlag tooltipFlag
     ) {
-        return addSimpleOrDetailedLines(stack, "passive_effect", isDetailedMode(keyContext));
+        return addSimpleOrDetailedLines(stack, "passive_effect", isDetailedMode(keyContext), DEFAULT_PREFIX);
     }
 
     /**
@@ -322,9 +303,9 @@ public class TooltipUtil {
         TooltipFlag tooltipFlag
     ) {
         boolean detailed = isDetailedMode(keyContext);
-        List<Component> lines = new ArrayList<>(addSimpleOrDetailedLines(stack, "active_skill", detailed));
+        List<Component> lines = addSimpleOrDetailedLines(stack, "active_skill", detailed, DEFAULT_PREFIX);
         if (detailed) {
-            lines.addAll(addCooldownLine(data, index, stack));
+            lines.addAll(cooldownLine(data, index, stack));
         }
         return lines;
     }
@@ -332,13 +313,12 @@ public class TooltipUtil {
     /**
      * 根据器官的冷却生成冷却时间提示行
      */
-    public static List<Component> addCooldownLine(ChestCavityData data, int index, ItemStack stack) {
+    public static List<Component> cooldownLine(ChestCavityData data, int index, ItemStack stack) {
         int cooldownTicks = ChestCavityUtil.getOrganCap(stack)
             .getCooldownTicks(ChestCavityUtil.createContext(data, index, stack));
         if (cooldownTicks > 0) {
-            double seconds = Math.round(cooldownTicks / 20.0 * 10.0) / 10.0;
-            String formatted = seconds == (int) seconds ? String.valueOf((int) seconds) : String.valueOf(seconds);
-            return List.of(Component.literal(" • ").append(Component.translatable(PREFIX + "tooltip.cooldown", formatted)));
+            String formatted = formatAttributeValue(cooldownTicks / 20.0);
+            return List.of(Component.literal(DEFAULT_PREFIX).append(Component.translatable(PREFIX + "tooltip.cooldown", formatted)));
         }
         return List.of();
     }

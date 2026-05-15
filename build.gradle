@@ -35,6 +35,28 @@ repositories {
     maven {
         url = "https://api.modrinth.com/maven"
     }
+    maven {
+        name = "Curse Maven"
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    exclusiveContent { // Sable
+        forRepository {
+            maven {
+                url = "https://maven.ryanhcode.dev/releases"
+                name = "RyanHCode Maven"
+            }
+        }
+        filter {
+            includeGroup("dev.ryanhcode.sable")
+            includeGroup("dev.ryanhcode.sable-companion")
+        }
+    }
 }
 
 base {
@@ -164,6 +186,8 @@ dependencies {
     localRuntime "mezz.jei:jei-1.21.1-neoforge:19.27.0.340"
     // Jade
     localRuntime "maven.modrinth:jade:15.10.4+neoforge"
+    // Sable
+    api("dev.ryanhcode.sable:sable-common-1.21.1:1.2.2")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
