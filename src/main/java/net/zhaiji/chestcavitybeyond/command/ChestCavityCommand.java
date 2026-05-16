@@ -9,10 +9,12 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
+import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.Collection;
 
@@ -22,6 +24,9 @@ public class ChestCavityCommand {
     );
     private static final SimpleCommandExceptionType ERROR_RESET_ORGANS_FAILED = new SimpleCommandExceptionType(
         Component.translatable("commands.chestcavitybeyond.resetorgans.failed")
+    );
+    private static final SimpleCommandExceptionType ERROR_ATTRIBUTES_NOT_PLAYER = new SimpleCommandExceptionType(
+        Component.translatable("commands.chestcavitybeyond.attributes.failed.not_player")
     );
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -40,6 +45,9 @@ public class ChestCavityCommand {
                     )
                     .then(Commands.literal("resetorgans")
                         .executes(ChestCavityCommand::executeResetOrgans)
+                    )
+                    .then(Commands.literal("attributes")
+                        .executes(ChestCavityCommand::executeAttributes)
                     )
                 )
         );
@@ -116,5 +124,21 @@ public class ChestCavityCommand {
         }
 
         return successCount;
+    }
+
+    private static int executeAttributes(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayer();
+        if (player == null) {
+            throw ERROR_ATTRIBUTES_NOT_PLAYER.create();
+        }
+        Collection<? extends Entity> targets = EntityArgument.getEntities(context, "targets");
+
+        int count = 0;
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity livingEntity) {
+                count += TooltipUtil.sendAttributeDisplay(player, livingEntity);
+            }
+        }
+        return count;
     }
 }

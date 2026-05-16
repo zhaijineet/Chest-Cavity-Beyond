@@ -6,8 +6,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -15,21 +20,28 @@ import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondClientConfig;
+import net.zhaiji.chestcavitybeyond.api.AttributeDisplay;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.OrganTooltip;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.TooltipSectionFunction;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 
 public class TooltipUtil {
     public static final String PREFIX = "organ." + ChestCavityBeyond.MOD_ID + ".";
-    public static String DEFAULT_PREFIX = " • ";
+    // 普通空格会导致自动换行时，此前缀被错误的分割为独自占据一行，改为使用\u00A0不换行空格
+    public static String DEFAULT_PREFIX = "\u00A0•\u00A0";
     /**
      * 默认的器官工具提示回调
      */
@@ -113,13 +125,13 @@ public class TooltipUtil {
             apply.accept(organTooltip.tagsSection, lines);
             apply.accept(organTooltip.afterTags, lines);
 
-            // 2. Attributes
-            apply.accept(organTooltip.attributesSection, lines);
-            apply.accept(organTooltip.afterAttributes, lines);
-
-            // 3. Description
+            // 2. Description
             apply.accept(organTooltip.descriptionSection, lines);
             apply.accept(organTooltip.afterDescription, lines);
+
+            // 3. Attributes
+            apply.accept(organTooltip.attributesSection, lines);
+            apply.accept(organTooltip.afterAttributes, lines);
 
             // 4. ShiftHint
             apply.accept(organTooltip.shiftHintSection, lines);
@@ -172,7 +184,7 @@ public class TooltipUtil {
             if (!isAddValue || isPercentage) {
                 value *= 100;
             }
-            String string = (value > 0 ? "+" : "") + formatAttributeValue(value);
+            String string = (value > 0 ? " +" : " ") + formatAttributeValue(value);
             if (isAddValue && isPercentage) {
                 string += "%";
             }
@@ -204,13 +216,87 @@ public class TooltipUtil {
      * 浮点数：保留最多3位小数，去除末尾多余的0（如 "0.5", "1.25", "1.5" 而非 "1.500"）
      * </p>
      */
-    private static String formatAttributeValue(double value) {
-        // 四舍五入到3位小数，消除浮点精度偏差
-        double rounded = Math.round(value * 1000.0) / 1000.0;
-        if (rounded == (int) rounded) {
-            return String.valueOf((int) rounded);
+    public static String formatAttributeValue(double value) {
+        DecimalFormat df = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.US));
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df.format(value);
+    }
+
+    /**
+     * 构建属性描述的悬停文本（多行）
+     * <p>
+     * 使用索引翻译键模式 {@code <descriptionKey>.0} ~ {@code <descriptionKey>.N}，
+     * 行间以换行分隔。
+     * 无描述行时显示"暂无详细描述"。
+     * </p>
+     *
+     * @param attributeDisplay 属性显示信息
+     * @return 悬停文本组件
+     */
+    public static Component buildAttributeDescription(AttributeDisplay attributeDisplay) {
+        MutableComponent hover = Component.empty();
+        int i = 0;
+        String lineKey;
+        while (hasTranslation(lineKey = attributeDisplay.getDescriptionKey(i))) {
+            if (i > 0) hover.append(Component.literal("\n"));
+            hover.append(Component.translatable(lineKey));
+            i++;
         }
-        return String.valueOf(rounded);
+        if (i == 0) {
+            hover.append(Component.translatable("commands.chestcavitybeyond.attributes.no_description"));
+        }
+        return hover;
+    }
+
+    /**
+     * 向指定玩家发送目标实体的胸腔属性信息
+     *
+     * @param viewer 查看属性的玩家
+     * @param target 被查看属性的目标实体
+     * @return 显示的属性数量
+     */
+    public static int sendAttributeDisplay(ServerPlayer viewer, LivingEntity target) {
+        // 标题行（含目标名称）
+        viewer.sendSystemMessage(
+            Component.translatable("commands.chestcavitybeyond.attributes.header", target.getDisplayName()).withStyle(ChatFormatting.YELLOW)
+        );
+
+        List<AttributeDisplay> displays = AttributeDisplayManager.getDisplays();
+        int count = 0;
+
+        for (AttributeDisplay display : displays) {
+            AttributeInstance instance = target.getAttribute(display.attribute());
+            if (instance == null) continue;
+            double value = instance.getValue();
+
+            // 不显示值为0的属性（当 showWhenZero 为 false 时）
+            if (!display.showWhenZero() && value == 0) continue;
+
+            // 属性名（高亮 + 悬停）
+            Component nameComp =
+                Component.translatable(display.attribute().value().getDescriptionId())
+                    .withStyle(style -> style
+                        .withColor(ChatFormatting.AQUA)
+                        .withHoverEvent(new HoverEvent(
+                            HoverEvent.Action.SHOW_TEXT,
+                            TooltipUtil.buildAttributeDescription(display)
+                        ))
+                    );
+
+            // 属性值
+            String valueStr = (value > 0 ? "+" : "") + TooltipUtil.formatAttributeValue(value);
+            Component valueComp = Component.literal(valueStr);
+
+            viewer.sendSystemMessage(
+                Component.literal(" ")
+                    .append(nameComp)
+                    .append(Component.literal(": "))
+                    .append(valueComp)
+            );
+            count++;
+        }
+
+        return count;
     }
 
     /**

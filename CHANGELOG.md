@@ -2,6 +2,15 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.2
+
+- 新增物品**生物分析仪**（Biological Analyzer）：可以右键查看自身/目标的胸腔属性，也可通过 `/chestcavity <targets> attributes` 命令查看，属性名可悬停查看详细描述
+- 新增 `AttributeDisplay` 属性显示信息类：通过 Builder 模式构造，支持 `showWhenZero`（值为0时是否显示）、`priority`（显示优先级）字段
+- 新增 `AttributeDisplayManager` 属性显示管理器：33 个属性按功能分组分配优先级（生存核心 40 → 体能基础 30 → 代谢系统 20 → 专食消化 10 → 特殊能力 0）
+- 调整器官 Tooltip 渲染管线顺序为 Tags → Description → Attributes → ShiftHint，Description 现在显示在 Attributes 之前
+- 修正熔炉内核技能描述：「效果等级等于熔炉之力属性值减1」→「效果等级等于熔炉之力属性值」
+- 补充毒腺被动效果描述：新增「可与任意药水合成以更换存储的药水效果」说明
+
 ## 1.4.1
 
 - 修复末影器官的传送技能与航空学（Create: Aeronautics）结构的交互。

@@ -263,15 +263,14 @@ public class CommonEventHandler {
     }
 
     /**
-     * 开胸器打开生物胸腔
+     * 开胸器打开生物胸腔 / 生物分析仪查看属性
      *
      * @param event 玩家交互实体事件
      */
     public static void handlerPlayerInteractEvent$EntityInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getEntity().getItemInHand(event.getHand());
-        // 当玩家手持开胸器时，可能更希望打开胸腔
-        if (stack.is(InitItem.CHEST_OPENER.get()) && event.getTarget() instanceof LivingEntity) {
-            // 取消实体交互，使开胸器能够正常使用
+        // 当玩家手持开胸器或生物分析仪时，可能更希望使用物品的效果
+        if ((stack.is(InitItem.CHEST_OPENER.get()) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get())) && event.getTarget() instanceof LivingEntity) {
             event.setCanceled(true);
         }
     }

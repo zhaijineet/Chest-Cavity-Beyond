@@ -15,6 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.item.ChestOpenerItem;
+import net.zhaiji.chestcavitybeyond.item.BiologicalAnalyzerItem;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
 
@@ -28,6 +29,12 @@ public class InitItem {
     public static final Supplier<Item> CHEST_OPENER = ITEM.register(
         "chest_opener",
         () -> new ChestOpenerItem(new Item.Properties().stacksTo(1))
+    );
+
+    // 生物分析仪
+    public static final Supplier<Item> BIOLOGICAL_ANALYZER = ITEM.register(
+        "biological_analyzer",
+        () -> new BiologicalAnalyzerItem(new Item.Properties().stacksTo(1))
     );
 
     // 心脏
@@ -1042,6 +1049,7 @@ public class InitItem {
             )
             .attack((context, target, source, damageContainer) -> {
                 if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
+                if (context.entity() == target) return;
                 OrganSkillUtil.addCooldown(context.entity(), context.stack(), 4 * 20);
                 context.stack()
                     .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)

@@ -1,4 +1,4 @@
-// 1.21.1	2026-04-28T07:45:47.6915039	Item Models: chestcavitybeyond
+// 1.21.1	2026-05-16T22:00:58.0338505	Item Models: chestcavitybeyond
 24958fd31beb57a2b7817edbbadb67097c619879 assets/chestcavitybeyond/models/item/active_blaze_rod.json
 a3a36204f995fe436e699c27a655639c158510b7 assets/chestcavitybeyond/models/item/active_breeze_rod.json
 1179a0b4daef7f6507c16b9ccb1651c79aa079b4 assets/chestcavitybeyond/models/item/animal_appendix.json
@@ -20,6 +20,7 @@ d3aaf0da98f8c4ad23acd43dcffbe47c1f7b5c55 assets/chestcavitybeyond/models/item/ar
 9e528755394e54ad390245c47d7e75964a74a4ba assets/chestcavitybeyond/models/item/arthropod_lung.json
 6b1e9dada46f0202d8976f178346b2b4ba8ad253 assets/chestcavitybeyond/models/item/arthropod_muscle.json
 54b8f93029f2048d16fa9e2b66633da5699af0ff assets/chestcavitybeyond/models/item/arthropod_stomach.json
+05c3558097fae4aafcdd4dffcd59b47410059cb7 assets/chestcavitybeyond/models/item/biological_analyzer.json
 d5f3fe586ad5cc4fe1f35c8959f4f0da942ef7d2 assets/chestcavitybeyond/models/item/blaze_core.json
 e2b91054388f815be4781b70a19195463389adf6 assets/chestcavitybeyond/models/item/blaze_shell.json
 08076f0a32117643a44c36f632099eab89002589 assets/chestcavitybeyond/models/item/breeze_core.json

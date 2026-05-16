@@ -38,6 +38,18 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
                 .save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, InitItem.BIOLOGICAL_ANALYZER.get())
+                .pattern("AG ")
+                .pattern("IIR")
+                .pattern(" S ")
+                .define('A', Items.GLASS)
+                .define('G', Items.EMERALD)
+                .define('I', Items.IRON_INGOT)
+                .define('R', Items.REDSTONE)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+                .save(recipeOutput);
+
         SpecialRecipeBuilder.special(VenomGlandRecipe::new).save(recipeOutput, ChestCavityBeyond.of("venom_gland_recipe"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.BLAZE_ROD)

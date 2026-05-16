@@ -1,4 +1,5 @@
-// 1.21.1	2026-01-25T01:16:17.567604	Recipes
+// 1.21.1	2026-05-16T22:25:45.0431332	Recipes
+1a51ed845147f103e19adf2b729821a1cfe4a83f data/chestcavitybeyond/advancement/recipes/misc/biological_analyzer.json
 c837a424d5a66d65d0ee162e4ecdba83a3f1f2ae data/chestcavitybeyond/advancement/recipes/misc/blaze_rod.json
 22fd5bd094718e7e8b5a0e1d061efb7d8c89a721 data/chestcavitybeyond/advancement/recipes/misc/bone_meal_rib.json
 729a21d9f6f4ca42b6d371fffb4141395f3c7df9 data/chestcavitybeyond/advancement/recipes/misc/bone_meal_spine.json
@@ -10,6 +11,7 @@ fcfa8f013d6553b13b47a4038cf0ff08ae444d3e data/chestcavitybeyond/advancement/reci
 2315836bfb250b4c4a9bf6cc5c8161bd9849de90 data/chestcavitybeyond/advancement/recipes/misc/rotten.json
 b6ff643b701cfb9d3736105bfa550c55593dd848 data/chestcavitybeyond/advancement/recipes/misc/slime_ball.json
 86775c03b04798d638eb4b10493bfc36b2d995b5 data/chestcavitybeyond/advancement/recipes/misc/slime_stomach.json
+0a3e94f22262570f2c81776a61f4d62854149c65 data/chestcavitybeyond/recipe/biological_analyzer.json
 0777a9d049d58377bc013ebc510befbf291362a3 data/chestcavitybeyond/recipe/blaze_rod.json
 78bc88e07f136a8bdd9750a26c42b16582b62d80 data/chestcavitybeyond/recipe/bone_meal_rib.json
 bc9b45c10441031269536753747647ce2c867e86 data/chestcavitybeyond/recipe/bone_meal_spine.json
