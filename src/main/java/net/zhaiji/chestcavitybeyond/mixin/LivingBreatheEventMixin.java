@@ -17,31 +17,17 @@ public class LivingBreatheEventMixin {
     private int refillAirAmount;
 
     @Inject(
-            method = "<init>",
-            at = @At("RETURN")
+        method = "<init>",
+        at = @At("RETURN")
     )
-    public void chestCavityBeyond$init(LivingEntity entity, boolean canBreathe, int consumeAirAmount, int refillAirAmount, CallbackInfo ci) {
+    public void chestCavityBeyond$init(
+        LivingEntity entity,
+        boolean canBreathe,
+        int consumeAirAmount,
+        int refillAirAmount,
+        CallbackInfo ci
+    ) {
         this.consumeAirAmount = consumeAirAmount;
         this.refillAirAmount = refillAirAmount;
-    }
-
-    @Inject(
-            method = "setConsumeAirAmount",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    public void chestCavityBeyond$setConsumeAirAmount(int consumeAirAmount, CallbackInfo ci) {
-        this.consumeAirAmount = consumeAirAmount;
-        ci.cancel();
-    }
-
-    @Inject(
-            method = "setRefillAirAmount",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    public void chestCavityBeyond$setRefillAirAmount(int refillAirAmount, CallbackInfo ci) {
-        this.refillAirAmount = refillAirAmount;
-        ci.cancel();
     }
 }

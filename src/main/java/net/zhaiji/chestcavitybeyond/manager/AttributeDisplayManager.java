@@ -5,8 +5,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.zhaiji.chestcavitybeyond.api.AttributeDisplay;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,7 +18,14 @@ import java.util.List;
  * </p>
  */
 public class AttributeDisplayManager {
-    private static final HashMap<Holder<Attribute>, AttributeDisplay> DISPLAYS = new HashMap<>();
+    private static final List<AttributeDisplay> DISPLAYS = new ArrayList<>();
+
+    /**
+     * 排序比较器：priority 降序 → attribute descriptionId 字典序
+     */
+    private static final Comparator<AttributeDisplay> DISPLAY_COMPARATOR = Comparator.comparingInt(AttributeDisplay::priority)
+        .reversed()
+        .thenComparing(display -> display.attribute().value().getDescriptionId());
 
     static {
         // 生存核心 (40)
@@ -104,11 +111,10 @@ public class AttributeDisplayManager {
      * @return 已注册的属性显示信息
      */
     public static AttributeDisplay register(Holder<Attribute> attribute, int priority, boolean showWhenZero) {
-        AttributeDisplay display = AttributeDisplay.builder(attribute)
+        return AttributeDisplay.builder(attribute)
             .priority(priority)
             .showWhenZero(showWhenZero)
             .build();
-        return display;
     }
 
     /**
@@ -120,18 +126,17 @@ public class AttributeDisplayManager {
      * @param display 属性显示信息
      */
     public static void register(AttributeDisplay display) {
-        DISPLAYS.put(display.attribute(), display);
+        DISPLAYS.removeIf(d -> d.attribute().equals(display.attribute()));
+        DISPLAYS.add(display);
+        DISPLAYS.sort(DISPLAY_COMPARATOR);
     }
 
     /**
-     * 获取所有已注册的属性显示信息（按 priority 降序排列）
+     * 获取所有已注册的属性显示信息（已按 priority 降序排列）
      *
      * @return 按 priority 排序的属性显示信息列表
      */
     public static List<AttributeDisplay> getDisplays() {
-        return DISPLAYS.values().stream()
-            .sorted(Comparator.comparingInt(AttributeDisplay::priority).reversed()
-                .thenComparing(display -> display.attribute().value().getDescriptionId()))
-            .toList();
+        return DISPLAYS;
     }
 }

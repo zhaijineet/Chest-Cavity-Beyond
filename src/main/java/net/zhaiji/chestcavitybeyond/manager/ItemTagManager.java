@@ -1,6 +1,5 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -24,6 +23,13 @@ import java.util.List;
  * </p>
  */
 public class ItemTagManager {
+    private static final List<TagDisplay> DISPLAYS = new ArrayList<>();
+
+    /** 排序比较器：priority 降序 → tag location 字典序 */
+    private static final Comparator<TagDisplay> TAG_COMPARATOR = Comparator.comparingInt(TagDisplay::priority)
+        .reversed()
+        .thenComparing(display -> display.tag().location());
+
     // 器官
     public static final TagKey<Item> ORGANS = create("organs");
     // 心脏
@@ -56,7 +62,6 @@ public class ItemTagManager {
     public static final TagKey<Item> ROTTEN = create("organs/rotten");
     // 铁质器官
     public static final TagKey<Item> IRON = create("organs/iron");
-    private static final List<TagDisplay> TAG_DISPLAYS = new ArrayList<>();
 
     /**
      * 创建 TagKey
@@ -69,7 +74,8 @@ public class ItemTagManager {
      * 注册一个 Tag 显示信息
      */
     public static void register(TagDisplay display) {
-        TAG_DISPLAYS.add(display);
+        DISPLAYS.add(display);
+        DISPLAYS.sort(TAG_COMPARATOR);
     }
 
     public static TagKey<Item> register(String name, int color, int priority) {
@@ -108,13 +114,8 @@ public class ItemTagManager {
      * @return 包含所有匹配 tag 的 Component，如 "魔法 机械"
      */
     public static Component getTagsLine(ItemStack stack) {
-        List<TagDisplay> matched = TAG_DISPLAYS.stream()
+        List<TagDisplay> matched = DISPLAYS.stream()
             .filter(display -> stack.is(display.tag()))
-            .sorted(
-                Comparator.comparingInt(TagDisplay::priority)
-                    .reversed()
-                    .thenComparing(display -> display.tag().location())
-            )
             .toList();
 
         MutableComponent line = Component.empty();

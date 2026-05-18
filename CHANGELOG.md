@@ -2,6 +2,10 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.3
+
+- 修复了 DragonSurvival（龙之生存）兼容性，⚠️ **海洋龙/洞穴龙仍需要装备鳃（水下呼吸属性 `WATER_BREATH`）才能在水中/熔岩中呼吸**
+
 ## 1.4.2
 
 - 新增物品**生物分析仪**（Biological Analyzer）：可以右键查看自身/目标的胸腔属性，也可通过 `/chestcavity <targets> attributes` 命令查看，属性名可悬停查看详细描述
