@@ -51,8 +51,8 @@ public class OrganSkillUtil {
      * 食草的基本食物属性
      */
     private static final FoodProperties GRASS_FOOD = new FoodProperties.Builder()
-            .nutrition(1)
-            .saturationModifier(0.2F)
+            .nutrition(2)
+            .saturationModifier(1)
             .build();
 
     /**
@@ -107,14 +107,14 @@ public class OrganSkillUtil {
      * @param entity 实体
      * @param ender  末影属性值
      */
-    public static void teleport(LivingEntity entity, double ender) {
-        TeleportUtil.teleport(entity, ender);
+    public static boolean teleport(LivingEntity entity, double ender) {
+        return TeleportUtil.teleport(entity, ender);
     }
 
     /**
      * 吃草
      */
-    public static void graze(Player player) {
+    public static boolean graze(Player player) {
         Vec3 from = player.getEyePosition();
         Vec3 to = from.add(player.getLookAngle().normalize().scale(player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE).getValue()));
         ClipContext clipContext = new ClipContext(
@@ -132,32 +132,37 @@ public class OrganSkillUtil {
             if (state.is(Blocks.SHORT_GRASS)) {
                 player.getFoodData().eat(GRASS_FOOD);
                 level.destroyBlock(pos, false);
+                return true;
             } else if (state.is(Blocks.TALL_GRASS)) {
                 player.getFoodData().eat(GRASS_FOOD);
                 player.getFoodData().eat(GRASS_FOOD);
                 level.destroyBlock(pos, false);
+                return true;
             } else if (state.is(Blocks.GRASS_BLOCK)) {
                 player.getFoodData().eat(GRASS_FOOD);
                 player.gameEvent(GameEvent.EAT);
                 level.levelEvent(2001, pos, Block.getId(state));
                 level.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2);
+                return true;
             }
         }
+        return false;
     }
 
     /**
      * 自爆
      */
-    public static void explosion(LivingEntity entity, double creepy) {
-        if (creepy <= 0) return;
+    public static boolean explosion(LivingEntity entity, double creepy) {
+        if (creepy <= 0) return false;
         entity.level().explode(null, entity.getX(), entity.getY(), entity.getZ(), (float) (3 * creepy), Level.ExplosionInteraction.NONE);
+        return true;
     }
 
     /**
      * 用铁锭修复自身
      */
-    public static void ironRepair(Player player, double ironRepair) {
-        if (ironRepair <= 0) return;
+    public static boolean ironRepair(Player player, double ironRepair) {
+        if (ironRepair <= 0) return false;
         ItemStack stack = null;
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.is(Items.IRON_INGOT)) {
@@ -173,7 +178,7 @@ public class OrganSkillUtil {
                 }
             }
         }
-        if (stack == null) return;
+        if (stack == null) return false;
         float oldHealth = player.getHealth();
         player.heal((float) (2.5 * ironRepair));
         if (player.getHealth() > oldHealth) {
@@ -181,21 +186,23 @@ public class OrganSkillUtil {
             stack.consume(1, player);
             float pitch = 1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F;
             level.playSound(null, player.blockPosition(), SoundEvents.IRON_GOLEM_REPAIR, player.getSoundSource(), 1.0F, pitch);
+            return true;
         }
+        return false;
     }
 
     /**
      * 让玩家可以吃燃料回复饱食度饱和度
      */
-    public static void furnacePower(Player player, double furnacePower) {
-        if (furnacePower <= 0) return;
+    public static boolean furnacePower(Player player, double furnacePower) {
+        if (furnacePower <= 0) return false;
         InteractionHand hand = InteractionHand.MAIN_HAND;
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getBurnTime(null) <= 0) {
             hand = InteractionHand.OFF_HAND;
             stack = player.getItemInHand(hand);
         }
-        if (stack.getBurnTime(null) <= 0) return;
+        if (stack.getBurnTime(null) <= 0) return false;
         boolean isCrouching = player.isCrouching();
         int totalDuration = 0;
         int amplifier = Math.max(0, (int) (furnacePower - 1));
@@ -235,16 +242,18 @@ public class OrganSkillUtil {
             player.level().playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
             player.removeEffect(InitEffect.FURNACE_POWER);
             player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
+            return true;
         }
+        return false;
     }
 
     /**
      * 吐丝
      */
-    public static void silk(LivingEntity entity) {
+    public static boolean silk(LivingEntity entity) {
         if (entity instanceof Player player) {
             boolean instabuild = player.getAbilities().instabuild;
-            if (player.getFoodData().getFoodLevel() <= 0 && !instabuild) return;
+            if (player.getFoodData().getFoodLevel() <= 0 && !instabuild) return false;
             if (!instabuild) {
                 player.getFoodData().addExhaustion(4);
             }
@@ -261,12 +270,13 @@ public class OrganSkillUtil {
         ThrownCobweb thrownCobweb = new ThrownCobweb(entity, level);
         thrownCobweb.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
         level.addFreshEntity(thrownCobweb);
+        return true;
     }
 
     /**
      * 吐口水
      */
-    public static void spit(LivingEntity entity) {
+    public static boolean spit(LivingEntity entity) {
         Level level = entity.level();
         level.playSound(
                 null,
@@ -281,31 +291,35 @@ public class OrganSkillUtil {
         llamaspit.setPos(entity.getX(), entity.getEyeY() - 0.5, entity.getZ());
         llamaspit.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
         level.addFreshEntity(llamaspit);
+        return true;
     }
 
     /**
      * 发射凋零骷髅头
      */
-    public static void witherSkull(LivingEntity entity) {
+    public static boolean witherSkull(LivingEntity entity) {
         Level level = entity.level();
         level.levelEvent(null, 1024, entity.blockPosition(), 0);
         Vec3 lookAngle = entity.getLookAngle();
         WitherSkull witherSkull = new WitherSkull(level, entity, lookAngle.normalize());
         witherSkull.setPos(entity.getX() + lookAngle.x, entity.getEyeY() - 0.5, entity.getZ() + lookAngle.z);
         level.addFreshEntity(witherSkull);
+        return true;
     }
 
     /**
      * 发射小火球
      */
-    public static void smallFireball(ChestCavityData data, LivingEntity entity, double vomitFireball) {
-        data.addTask(new BlazeFireballTask((int) vomitFireball));
+    public static boolean smallFireball(ChestCavityData data, LivingEntity entity, int vomitFireball) {
+        if (vomitFireball <= 0) return false;
+        data.addTask(new BlazeFireballTask(vomitFireball));
+        return true;
     }
 
     /**
      * 发射雪球
      */
-    public static void snowball(LivingEntity entity) {
+    public static boolean snowball(LivingEntity entity) {
         Level level = entity.level();
         level.playSound(
                 null,
@@ -320,18 +334,20 @@ public class OrganSkillUtil {
         snowball.setPos(entity.getX() + lookAngle.x / 2, entity.getEyeY() - 0.2, entity.getZ() + lookAngle.z / 2);
         snowball.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1.6F, 12);
         level.addFreshEntity(snowball);
+        return true;
     }
 
     /**
      * 发射大火球
      */
-    public static void largeFireball(LivingEntity entity, double ghastly) {
+    public static boolean largeFireball(LivingEntity entity, double ghastly) {
         Level level = entity.level();
         level.levelEvent(null, 1016, entity.blockPosition(), 0);
         Vec3 lookAngle = entity.getLookAngle();
         LargeFireball largefireball = new LargeFireball(level, entity, lookAngle.normalize(), (int) ghastly);
         largefireball.setPos(entity.getX(), entity.getEyeY() - 0.9, entity.getZ());
         level.addFreshEntity(largefireball);
+        return true;
     }
 
     /**
@@ -363,7 +379,7 @@ public class OrganSkillUtil {
     /**
      * 发射风弹
      */
-    public static void windCharge(Player player) {
+    public static boolean windCharge(Player player) {
         Level level = player.level();
         level.playSound(
                 null,
@@ -376,43 +392,31 @@ public class OrganSkillUtil {
         WindCharge windcharge = new WindCharge(player, level, player.position().x(), player.getEyePosition().y(), player.position().z());
         windcharge.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1.5F, 1);
         level.addFreshEntity(windcharge);
+        return true;
     }
 
     /**
      * 发射龙息弹
      */
-    public static void dragonFireball(LivingEntity entity) {
+    public static boolean dragonFireball(LivingEntity entity) {
         Level level = entity.level();
         level.levelEvent(null, 1017, entity.blockPosition(), 0);
         DragonFireball dragonfireball = new DragonFireball(level, entity, entity.getLookAngle().normalize());
         dragonfireball.setPos(entity.getX(), entity.getEyeY() - 0.6, entity.getZ());
         dragonfireball.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 1, 1);
         level.addFreshEntity(dragonfireball);
+        return true;
     }
 
     /**
      * 发射音爆
      */
-    public static void sonicBoom(LivingEntity entity) {
+    public static boolean sonicBoom(LivingEntity entity) {
         Level level = entity.level();
         Vec3 from = entity.getEyePosition();
         Vec3 lookAngle = entity.getLookAngle().normalize();
         int sonicBoomDist = ChestCavityBeyondConfig.sonicBoomDistance;
         Vec3 to = from.add(lookAngle.scale(sonicBoomDist));
-        level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.WARDEN_SONIC_BOOM,
-                entity.getSoundSource(),
-                3.0F,
-                1.0F
-        );
-        if (level instanceof ServerLevel serverLevel) {
-            for (int i = 1; i < sonicBoomDist; i++) {
-                Vec3 pos = from.add(lookAngle.scale(i));
-                serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x(), pos.y(), pos.z(), 1, 0.0, 0.0, 0.0, 0.0);
-            }
-        }
         AABB searchBox = new AABB(from, to).inflate(1.0);
         List<LivingEntity> targets = level.getEntitiesOfClass(
                 LivingEntity.class,
@@ -427,19 +431,36 @@ public class OrganSkillUtil {
                     return projected.distanceTo(targetPos) < 1.5;
                 }
         );
+        level.playSound(
+                null,
+                entity.blockPosition(),
+                SoundEvents.WARDEN_SONIC_BOOM,
+                entity.getSoundSource(),
+                3.0F,
+                1.0F
+        );
+        if (level instanceof ServerLevel serverLevel) {
+            for (int i = 1; i < sonicBoomDist; i++) {
+                Vec3 pos = from.add(lookAngle.scale(i));
+                serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, pos.x(), pos.y(), pos.z(), 1, 0.0, 0.0, 0.0, 0.0);
+            }
+        }
         for (LivingEntity target : targets) {
             target.hurt(level.damageSources().sonicBoom(entity), 10);
         }
+        return true;
     }
 
     /**
      * 守卫者激光
      */
-    public static void guardianLaser(LivingEntity entity, boolean elder) {
+    public static boolean guardianLaser(LivingEntity entity, boolean elder) {
         int distance = ChestCavityBeyondConfig.guardianLaserDistance;
         HitResult hitResult = ProjectileUtil.getHitResultOnViewVector(entity, checkEntity -> checkEntity != entity, distance);
         if (hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
             ChestCavityUtil.getData(entity).addTask(new GuardianLaserTask(target, elder));
+            return true;
         }
+        return false;
     }
 }

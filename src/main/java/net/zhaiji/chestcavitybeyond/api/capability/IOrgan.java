@@ -112,14 +112,6 @@ public interface IOrgan {
     }
 
     /**
-     * 器官技能冷却中时调用
-     *
-     * @param context 胸腔槽位上下文
-     */
-    default void organSkillOnCooldown(ChestCavitySlotContext context) {
-    }
-
-    /**
      * 器官拥有者受到伤害前
      *
      * @param context 胸腔槽位上下文

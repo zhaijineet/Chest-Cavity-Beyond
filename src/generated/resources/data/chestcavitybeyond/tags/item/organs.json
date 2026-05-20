@@ -14,7 +14,6 @@
     "#chestcavitybeyond:organs/special",
     "#chestcavitybeyond:organs/iron",
     "#chestcavitybeyond:organs/bone",
-    "#chestcavitybeyond:organs/rotten",
-    "minecraft:nether_star"
+    "#chestcavitybeyond:organs/rotten"
   ]
 }

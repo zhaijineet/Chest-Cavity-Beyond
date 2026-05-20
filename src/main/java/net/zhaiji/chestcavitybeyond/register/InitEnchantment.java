@@ -5,12 +5,11 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.Block;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.builder.EnchantmentDefinitionBuilder;
+import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 
 public class InitEnchantment {
     public static final ResourceKey<Enchantment> TELEOPERATION = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("teleoperation"));
@@ -22,17 +21,17 @@ public class InitEnchantment {
     public static final ResourceKey<Enchantment> PRUDENT_SURGERY = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("prudent_surgery"));
 
     public static void bootstrap(BootstrapContext<Enchantment> context) {
-        HolderGetter<DamageType> damageTypeLookup = context.lookup(Registries.DAMAGE_TYPE);
-        HolderGetter<Enchantment> enchantmentLookup = context.lookup(Registries.ENCHANTMENT);
         HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
-        HolderGetter<Block> blockLookup = context.lookup(Registries.BLOCK);
+
+        HolderSet<Item> chestOpeners = itemLookup.getOrThrow(ItemTagManager.CHEST_OPENERS);
 
         register(
                 context,
                 TELEOPERATION,
                 Enchantment.enchantment(
                         EnchantmentDefinitionBuilder.builder()
-                                .setSupportedItems(getItem(itemLookup, InitItem.CHEST_OPENER.get()))
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
                                 .setMinCost(1, 11)
                                 .setMaxCost(12, 11)
                                 .setMaxLevel(4)
@@ -45,7 +44,8 @@ public class InitEnchantment {
                 ADVANCED_SURGERY,
                 Enchantment.enchantment(
                         EnchantmentDefinitionBuilder.builder()
-                                .setSupportedItems(getItem(itemLookup, InitItem.CHEST_OPENER.get()))
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
                                 .setMinCost(1, 11)
                                 .setMaxCost(12, 11)
                                 .setMaxLevel(3)
@@ -58,7 +58,8 @@ public class InitEnchantment {
                 SAFE_SURGERY,
                 Enchantment.enchantment(
                         EnchantmentDefinitionBuilder.builder()
-                                .setSupportedItems(getItem(itemLookup, InitItem.CHEST_OPENER.get()))
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
                                 .setMinCost(1, 11)
                                 .setMaxCost(12, 11)
                                 .setMaxLevel(2)
@@ -71,17 +72,14 @@ public class InitEnchantment {
                 PRUDENT_SURGERY,
                 Enchantment.enchantment(
                         EnchantmentDefinitionBuilder.builder()
-                                .setSupportedItems(getItem(itemLookup, InitItem.CHEST_OPENER.get()))
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
                                 .setMinCost(1, 11)
                                 .setMaxCost(12, 11)
                                 .setMaxLevel(3)
                                 .build()
                 )
         );
-    }
-
-    private static HolderSet<Item> getItem(HolderGetter<Item> itemLookup, Item item) {
-        return HolderSet.direct(itemLookup.get(item.builtInRegistryHolder().key()).get());
     }
 
     private static void register(BootstrapContext<Enchantment> context, ResourceKey<Enchantment> key, Enchantment.Builder builder) {

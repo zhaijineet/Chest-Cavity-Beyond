@@ -30,6 +30,8 @@ public class ItemTagManager {
         .reversed()
         .thenComparing(display -> display.tag().location());
 
+    // 开胸器
+    public static final TagKey<Item> CHEST_OPENERS = create("chest_openers");
     // 器官
     public static final TagKey<Item> ORGANS = create("organs");
     // 心脏
@@ -71,10 +73,20 @@ public class ItemTagManager {
     }
 
     /**
-     * 注册一个 Tag 显示信息
+     * 注册一个 Tag 显示信息。
+     * <p>
+     * 如果同一 {@link TagKey} 已存在注册，则替换为最新的 {@link TagDisplay}。
+     * </p>
      */
     public static void register(TagDisplay display) {
+        DISPLAYS.removeIf(d -> d.tag().equals(display.tag()));
         DISPLAYS.add(display);
+    }
+
+    /**
+     * 对已注册的所有 TagDisplay 执行排序。
+     */
+    public static void sort() {
         DISPLAYS.sort(TAG_COMPARATOR);
     }
 
@@ -138,14 +150,24 @@ public class ItemTagManager {
         if (Language.getInstance().has(translationKey)) {
             return Component.translatable(translationKey);
         }
-        // 翻译不存在时，取 path 最后一段，首字母大写作为显示名
+        // 翻译不存在时，取 path 最后一段，将下划线替换为空格，每个单词首字母大写作为显示名
         String path = tag.location().getPath();
         int lastSlash = path.lastIndexOf('/');
         if (lastSlash >= 0) {
             path = path.substring(lastSlash + 1);
         }
-        path = Character.toUpperCase(path.charAt(0)) + path.substring(1);
-        return Component.literal(path);
+        String[] parts = path.split("_");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0) stringBuilder.append(' ');
+            if (!parts[i].isEmpty()) {
+                stringBuilder.append(Character.toUpperCase(parts[i].charAt(0)));
+                if (parts[i].length() > 1) {
+                    stringBuilder.append(parts[i].substring(1));
+                }
+            }
+        }
+        return Component.literal(stringBuilder.toString());
     }
 
     // ==================== 测试用 TagDisplay 注册（集中管理，方便删改） ====================

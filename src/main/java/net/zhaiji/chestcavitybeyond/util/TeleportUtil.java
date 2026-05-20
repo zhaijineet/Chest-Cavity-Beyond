@@ -72,27 +72,27 @@ public class TeleportUtil {
     /**
      * 主动传送
      */
-    public static void teleport(LivingEntity entity, double ender) {
+    public static boolean teleport(LivingEntity entity, double ender) {
         Level level = entity.level();
         Optional<Vec3> pos = teleportPosition(level, entity, ender);
-        if (pos.isPresent()) {
-            if (entity instanceof ServerPlayer serverPlayer) {
-                Optional<Vec3> eventPos = teleportEvent(entity, pos.get());
-                if (eventPos.isPresent()) {
-                    Vec3 targetPos = eventPos.get();
-                    entity.teleportTo(targetPos.x(), targetPos.y(), targetPos.z());
-                    onTeleportComplete(entity, level, targetPos);
-                    serverPlayer.connection.resetPosition();
-                    entity.resetFallDistance();
-                    if (entity.isInWall()) {
-                        // 当玩家卡进墙里的时候，改变成游泳动作，预防受伤
-                        entity.setPose(Pose.SWIMMING);
-                    }
-                } else {
-                    level.playSound(null, entity.blockPosition(), SoundEvents.DISPENSER_FAIL, entity.getSoundSource());
+        if (pos.isPresent() && entity instanceof ServerPlayer serverPlayer) {
+            Optional<Vec3> eventPos = teleportEvent(entity, pos.get());
+            if (eventPos.isPresent()) {
+                Vec3 targetPos = eventPos.get();
+                entity.teleportTo(targetPos.x(), targetPos.y(), targetPos.z());
+                onTeleportComplete(entity, level, targetPos);
+                serverPlayer.connection.resetPosition();
+                entity.resetFallDistance();
+                if (entity.isInWall()) {
+                    // 当玩家卡进墙里的时候，改变成游泳动作，预防受伤
+                    entity.setPose(Pose.SWIMMING);
                 }
+                return true;
+            } else {
+                level.playSound(null, entity.blockPosition(), SoundEvents.DISPENSER_FAIL, entity.getSoundSource());
             }
         }
+        return false;
     }
 
     /**
@@ -224,7 +224,7 @@ public class TeleportUtil {
      */
     private static Optional<Vec3> teleportEvent(LivingEntity entity, Vec3 target) {
         EntityTeleportEvent.EnderEntity event = EventHooks.onEnderTeleport(entity, target.x(), target.y(), target.z());
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        if (event.isCanceled()) {
             return Optional.empty();
         }
         return Optional.of(new Vec3(event.getTargetX(), event.getTargetY(), event.getTargetZ()));

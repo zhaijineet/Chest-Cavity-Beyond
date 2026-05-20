@@ -126,8 +126,14 @@ public class AttributeDisplayManager {
      * @param display 属性显示信息
      */
     public static void register(AttributeDisplay display) {
-        DISPLAYS.removeIf(d -> d.attribute().equals(display.attribute()));
+        DISPLAYS.removeIf(attributeDisplay -> attributeDisplay.attribute().equals(display.attribute()));
         DISPLAYS.add(display);
+    }
+
+    /**
+     * 对已注册的所有 AttributeDisplay 执行排序。
+     */
+    public static void sort() {
         DISPLAYS.sort(DISPLAY_COMPARATOR);
     }
 

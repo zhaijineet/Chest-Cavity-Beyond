@@ -42,8 +42,10 @@ import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterCompletedEvent;
 import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.command.ChestCavityCommand;
+import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
+import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
 import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
@@ -78,12 +80,7 @@ public class CommonEventHandler {
         // 下界之星器官注册
         Organ.builder(Items.NETHER_STAR)
             .addValueAttribute(InitAttribute.HEALTH, 2.5)
-            .skill(context -> {
-                if (context.entity() instanceof Player player) {
-                    OrganSkillUtil.witherSkull(player);
-                }
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.witherSkull(context.entity()))
             .cooldown(20 * 3)
             .build();
 
@@ -222,6 +219,10 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.ARMOR_STAND, ChestCavityTypeManager.ARMOR_STAND);
 
         ModLoader.postEvent(new ChestCavityRegisterEvent());
+
+        ItemTagManager.sort();
+        AttributeDisplayManager.sort();
+
         ModLoader.postEvent(new ChestCavityRegisterCompletedEvent());
     }
 

@@ -12,9 +12,10 @@
     "base": 1,
     "per_level_above_first": 11
   },
+  "primary_items": "#chestcavitybeyond:chest_openers",
   "slots": [
     "any"
   ],
-  "supported_items": "chestcavitybeyond:chest_opener",
+  "supported_items": "#chestcavitybeyond:chest_openers",
   "weight": 10
 }

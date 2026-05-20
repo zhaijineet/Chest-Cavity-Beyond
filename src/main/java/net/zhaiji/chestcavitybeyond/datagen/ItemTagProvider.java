@@ -21,6 +21,10 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        // 开胸器
+        tag(ItemTagManager.CHEST_OPENERS)
+                .add(InitItem.CHEST_OPENER.get());
+
         // 心脏
         tag(ItemTagManager.HEART)
                 .add(
@@ -313,7 +317,6 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         ItemTagManager.IRON,
                         ItemTagManager.BONE,
                         ItemTagManager.ROTTEN
-                )
-                .add(Items.NETHER_STAR);
+                );
     }
 }

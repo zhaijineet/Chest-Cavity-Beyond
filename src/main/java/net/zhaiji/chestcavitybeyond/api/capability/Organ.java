@@ -33,6 +33,7 @@ import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -56,8 +57,8 @@ public class Organ implements IOrgan {
     private final Consumer<ChestCavitySlotContext> chestCavityOpenConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityCloseConsumer;
 
-    private Organ(Builder builder) {
-        this.attributeEntries = builder.attributeEntries;
+    private Organ(AbstractBuilder<?> builder) {
+        this.attributeEntries = List.copyOf(builder.attributeEntries);
         this.organModifierConsumer = builder.organModifierConsumer;
         this.tooltipConsumer = builder.tooltipConsumer;
         this.organTickConsumer = builder.organTickConsumer;
@@ -77,7 +78,7 @@ public class Organ implements IOrgan {
     }
 
     /**
-     * 新建构建器
+     * 新建构建器。
      *
      * @return 构建器
      */
@@ -85,12 +86,46 @@ public class Organ implements IOrgan {
         return new Builder();
     }
 
+    /**
+     * 使用已有物品构造构建器。
+     *
+     * @param item 禁止注册时使用的物品实例
+     * @return 构建器
+     */
     public static Builder builder(Item item) {
         return new Builder(item);
     }
 
+    /**
+     * 使用物品工厂构造构建器。
+     *
+     * @param itemFunction 物品工厂
+     * @return 构建器
+     */
     public static Builder builder(Function<Item.Properties, Item> itemFunction) {
         return new Builder(itemFunction);
+    }
+
+    /**
+     * 包装指定物品当前注册的器官。
+     * <p>
+     * 从 {@link OrganManager#getRegistry()} 中读取 {@code item} 对应的原始 {@link Organ}，
+     * 并创建一个只包含器官行为覆盖项的构建器。未被覆盖的属性和回调都会继承原器官；
+     * 调用 {@link AbstractBuilder#build()} 会把新 {@link Organ} 自动写回同一个物品的注册表项，
+     * 只替换 Organ，不创建或替换 Item。
+     * </p>
+     *
+     * @param item 已注册器官能力的物品
+     * @return 包装器官构建器
+     * @throws IllegalArgumentException 当指定物品没有注册 {@link Organ} 时抛出
+     */
+    public static WrapperBuilder wrap(Item item) {
+        Objects.requireNonNull(item, "item");
+        Organ organ = OrganManager.getRegistry().get(item);
+        if (organ == null) {
+            throw new IllegalArgumentException("Cannot wrap unregistered organ item: " + item);
+        }
+        return new WrapperBuilder(item, organ);
     }
 
     @Override
@@ -163,11 +198,6 @@ public class Organ implements IOrgan {
     }
 
     @Override
-    public void organSkillOnCooldown(ChestCavitySlotContext context) {
-        organSkillOnCooldownConsumer.accept(context);
-    }
-
-    @Override
     public void incomingDamage(ChestCavitySlotContext context, LivingIncomingDamageEvent event) {
         incomingDamageConsumer.accept(context, event);
     }
@@ -202,7 +232,14 @@ public class Organ implements IOrgan {
         chestCavityCloseConsumer.accept(context);
     }
 
-    public static class Builder {
+    /**
+     * 器官行为构建基类。
+     * <p>
+     * 包含所有器官行为字段和配置方法（setter 返回 {@link AbstractBuilder}），
+     * 以及统一的 {@link #build()} 入口。
+     * </p>
+     */
+    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
         private static final OrganModifierConsumer EMPTY_MODIFIER = (context, modifiers) -> {
         };
         private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
@@ -223,9 +260,8 @@ public class Organ implements IOrgan {
         private static final OtherOrganChangeConsumer EMPTY_OTHER_ORGAN_CHANGE = (context, changedIndex, oldStack, newStack) -> {
         };
         private static final OrganSkillFunction EMPTY_SKILL = context -> false;
-        private final Item.Properties properties = new Item.Properties().stacksTo(1);
+
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
-        private Function<Item.Properties, Item> itemFunction = null;
         private OrganModifierConsumer organModifierConsumer = EMPTY_MODIFIER;
         private OrganTooltipConsumer tooltipConsumer = null;
         private Consumer<ChestCavitySlotContext> organTickConsumer = EMPTY_CONSUMER;
@@ -243,6 +279,185 @@ public class Organ implements IOrgan {
         private Consumer<ChestCavitySlotContext> chestCavityOpenConsumer = EMPTY_CHEST_CAVITY_OPEN;
         private Consumer<ChestCavitySlotContext> chestCavityCloseConsumer = EMPTY_CHEST_CAVITY_CLOSE;
 
+        protected AbstractBuilder() {
+        }
+
+        /**
+         * 将给定 Organ 的全部配置复制到此构建器中。
+         */
+        protected void copyFrom(Organ organ) {
+            attributeEntries.clear();
+            attributeEntries.addAll(organ.attributeEntries);
+            organModifierConsumer = organ.organModifierConsumer;
+            tooltipConsumer = organ.tooltipConsumer;
+            organTickConsumer = organ.organTickConsumer;
+            organAddedConsumer = organ.organAddedConsumer;
+            organRemovedConsumer = organ.organRemovedConsumer;
+            otherOrganChangeConsumer = organ.otherOrganChangeConsumer;
+            hasSkill = organ.hasSkill;
+            organSkillFunction = organ.organSkillFunction;
+            cooldownTicksFunction = organ.cooldownTicksFunction;
+            organSkillOnCooldownConsumer = organ.organSkillOnCooldownConsumer;
+            attackConsumer = organ.attackConsumer;
+            hurtConsumer = organ.hurtConsumer;
+            healConsumer = organ.healConsumer;
+            incomingDamageConsumer = organ.incomingDamageConsumer;
+            chestCavityOpenConsumer = organ.chestCavityOpenConsumer;
+            chestCavityCloseConsumer = organ.chestCavityCloseConsumer;
+        }
+
+        /**
+         * 子类返回自身，用于泛型自引用链式调用。
+         */
+        protected abstract T self();
+
+        /**
+         * 子类必须提供要注册到的物品实例。
+         * <p>
+         * Builder 返回新创建的 Item，WrapperBuilder 返回已存在的 Item。
+         * </p>
+         */
+        protected abstract Item resolveItem();
+
+        public T tooltip(OrganTooltipConsumer tooltipConsumer) {
+            this.tooltipConsumer = Objects.requireNonNull(tooltipConsumer, "tooltipConsumer");
+            return self();
+        }
+
+        public T modifier(OrganModifierConsumer organModifierConsumer) {
+            this.organModifierConsumer = Objects.requireNonNull(organModifierConsumer, "organModifierConsumer");
+            return self();
+        }
+
+        public T removeAttribute(Holder<Attribute> attribute) {
+            attributeEntries.removeIf(entry -> Objects.equals(entry.attribute(), attribute));
+            return self();
+        }
+
+        public T clearAttributes() {
+            attributeEntries.clear();
+            return self();
+        }
+
+        public T addAttribute(Holder<Attribute> attribute, double value, AttributeModifier.Operation operation) {
+            Objects.requireNonNull(attribute, "attribute");
+            Objects.requireNonNull(operation, "operation");
+            attributeEntries.add(new AttributeEntry(attribute, value, operation));
+            return self();
+        }
+
+        public T addValueAttribute(Holder<Attribute> attribute, double value) {
+            return addAttribute(attribute, value, AttributeModifier.Operation.ADD_VALUE);
+        }
+
+        public T baseMultipliedAttribute(Holder<Attribute> attribute, double value) {
+            return addAttribute(attribute, value, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        }
+
+        public T totalMultipliedAttribute(Holder<Attribute> attribute, double value) {
+            return addAttribute(attribute, value, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        }
+
+        public T tick(Consumer<ChestCavitySlotContext> organTickConsumer) {
+            this.organTickConsumer = Objects.requireNonNull(organTickConsumer, "organTickConsumer");
+            return self();
+        }
+
+        public T added(Consumer<ChestCavitySlotContext> organAddedConsumer) {
+            this.organAddedConsumer = Objects.requireNonNull(organAddedConsumer, "organAddedConsumer");
+            return self();
+        }
+
+        public T removed(Consumer<ChestCavitySlotContext> organRemovedConsumer) {
+            this.organRemovedConsumer = Objects.requireNonNull(organRemovedConsumer, "organRemovedConsumer");
+            return self();
+        }
+
+        public T otherChange(OtherOrganChangeConsumer otherOrganChangeConsumer) {
+            this.otherOrganChangeConsumer = Objects.requireNonNull(otherOrganChangeConsumer, "otherOrganChangeConsumer");
+            return self();
+        }
+
+        public T skill(OrganSkillFunction organSkillFunction) {
+            hasSkill = true;
+            this.organSkillFunction = Objects.requireNonNull(organSkillFunction, "organSkillFunction");
+            return self();
+        }
+
+        public T clearSkill() {
+            hasSkill = false;
+            organSkillFunction = EMPTY_SKILL;
+            cooldownTicksFunction = EMPTY_COOLDOWN;
+            organSkillOnCooldownConsumer = EMPTY_CONSUMER;
+            return self();
+        }
+
+        public T cooldown(int cooldownTicks) {
+            this.cooldownTicksFunction = context -> cooldownTicks;
+            return self();
+        }
+
+        public T cooldown(ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction) {
+            this.cooldownTicksFunction = Objects.requireNonNull(cooldownTicksFunction, "cooldownTicksFunction");
+            return self();
+        }
+
+        public T skillOnCooldown(Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer) {
+            this.organSkillOnCooldownConsumer = Objects.requireNonNull(organSkillOnCooldownConsumer, "organSkillOnCooldownConsumer");
+            return self();
+        }
+
+        public T attack(AttackConsumer attackConsumer) {
+            this.attackConsumer = Objects.requireNonNull(attackConsumer, "attackConsumer");
+            return self();
+        }
+
+        public T hurt(HurtConsumer hurtConsumer) {
+            this.hurtConsumer = Objects.requireNonNull(hurtConsumer, "hurtConsumer");
+            return self();
+        }
+
+        public T heal(HealConsumer healConsumer) {
+            this.healConsumer = Objects.requireNonNull(healConsumer, "healConsumer");
+            return self();
+        }
+
+        public T incomingDamage(IncomingDamageConsumer incomingDamageConsumer) {
+            this.incomingDamageConsumer = Objects.requireNonNull(incomingDamageConsumer, "incomingDamageConsumer");
+            return self();
+        }
+
+        public T chestCavityOpen(Consumer<ChestCavitySlotContext> chestCavityOpenConsumer) {
+            this.chestCavityOpenConsumer = Objects.requireNonNull(chestCavityOpenConsumer, "chestCavityOpenConsumer");
+            return self();
+        }
+
+        public T chestCavityClose(Consumer<ChestCavitySlotContext> chestCavityCloseConsumer) {
+            this.chestCavityCloseConsumer = Objects.requireNonNull(chestCavityCloseConsumer, "chestCavityCloseConsumer");
+            return self();
+        }
+
+        /**
+         * 构建并注册 Organ，返回对应的 Item。
+         * <p>
+         * Builder：创建新 Item → 注册 Organ → 返回新 Item。
+         * </p>
+         * <p>
+         * WrapperBuilder：使用已有 Item → 替换 Organ → 返回该 Item。
+         * </p>
+         */
+        public Item build() {
+            Item item = resolveItem();
+            OrganManager.getRegistry().put(item, new Organ(this));
+            return item;
+        }
+    }
+
+    // 物品级构建器：创建新 Item + 注册 Organ
+    public static class Builder extends AbstractBuilder<Builder> {
+        private final Item.Properties properties = new Item.Properties().stacksTo(1);
+        private Function<Item.Properties, Item> itemFunction = null;
+
         public Builder() {
         }
 
@@ -254,202 +469,52 @@ public class Organ implements IOrgan {
             this.itemFunction = itemFunction;
         }
 
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        protected Item resolveItem() {
+            if (itemFunction == null) {
+                return new Item(properties);
+            }
+            return itemFunction.apply(properties);
+        }
+
         /**
-         * 设置器官物品属性
+         * 设置器官物品属性。
          */
         public Builder properties(Consumer<Item.Properties> itemPropertiesConsumer) {
+            Objects.requireNonNull(itemPropertiesConsumer, "itemPropertiesConsumer");
             itemPropertiesConsumer.accept(properties);
             return this;
         }
+    }
 
-        /**
-         * 设置器官工具提示
-         */
-        public Builder tooltip(OrganTooltipConsumer tooltipConsumer) {
-            this.tooltipConsumer = tooltipConsumer;
+    /**
+     * 基于已有器官创建局部覆盖版本的构建器。
+     * <pre>
+     * 该构建器只处理 Organ 侧行为：属性、tooltip、回调、技能和冷却等。
+     * 它不会创建、替换或修改 Item。
+     * 调用 {@link #build()} 时会创建新 {@link Organ} 并写回 {@link OrganManager} 中当前 item 对应的注册表项。
+     * </pre>
+     */
+    public static class WrapperBuilder extends AbstractBuilder<WrapperBuilder> {
+        private final Item item;
+
+        private WrapperBuilder(Item item, Organ source) {
+            this.item = item;
+            copyFrom(source);
+        }
+
+        @Override
+        protected WrapperBuilder self() {
             return this;
         }
 
-        /**
-         * 设置器官提供的属性修饰符
-         */
-        public Builder modifier(OrganModifierConsumer organModifierConsumer) {
-            this.organModifierConsumer = organModifierConsumer;
-            return this;
-        }
-
-        /**
-         * 添加属性修饰符
-         *
-         * @param attribute 属性
-         * @param value     值
-         * @param operation 操作类型
-         * @return 构建器
-         */
-        public Builder addAttribute(Holder<Attribute> attribute, double value, AttributeModifier.Operation operation) {
-            attributeEntries.add(new AttributeEntry(attribute, value, operation));
-            return this;
-        }
-
-        /**
-         * 添加基础值加算属性修饰符
-         *
-         * @param attribute 属性
-         * @param value     值
-         * @return 构建器
-         */
-        public Builder addValueAttribute(Holder<Attribute> attribute, double value) {
-            return addAttribute(attribute, value, AttributeModifier.Operation.ADD_VALUE);
-        }
-
-        /**
-         * 添加基础值乘算属性修饰符
-         *
-         * @param attribute 属性
-         * @param value     值
-         * @return 构建器
-         */
-        public Builder baseMultipliedAttribute(Holder<Attribute> attribute, double value) {
-            return addAttribute(attribute, value, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-        }
-
-        /**
-         * 添加最终乘算属性修饰符
-         *
-         * @param attribute 属性
-         * @param value     值
-         * @return 构建器
-         */
-        public Builder totalMultipliedAttribute(Holder<Attribute> attribute, double value) {
-            return addAttribute(attribute, value, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
-        }
-
-        /**
-         * 设置器官tick触发器
-         */
-        public Builder tick(Consumer<ChestCavitySlotContext> organTickConsumer) {
-            this.organTickConsumer = organTickConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官移植触发器
-         */
-        public Builder added(Consumer<ChestCavitySlotContext> organAddedConsumer) {
-            this.organAddedConsumer = organAddedConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官摘除触发器
-         */
-        public Builder removed(Consumer<ChestCavitySlotContext> organRemovedConsumer) {
-            this.organRemovedConsumer = organRemovedConsumer;
-            return this;
-        }
-
-        /**
-         * 设置其他器官变化时的回调
-         */
-        public Builder otherChange(OtherOrganChangeConsumer otherOrganChangeConsumer) {
-            this.otherOrganChangeConsumer = otherOrganChangeConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官技能，返回值为true表示技能成功执行需要添加冷却，false表示技能未执行不添加冷却
-         */
-        public Builder skill(OrganSkillFunction organSkillFunction) {
-            hasSkill = true;
-            this.organSkillFunction = organSkillFunction;
-            return this;
-        }
-
-        /**
-         * 设置器官技能冷却时间（tick）
-         */
-        public Builder cooldown(int cooldownTicks) {
-            this.cooldownTicksFunction = ctx -> cooldownTicks;
-            return this;
-        }
-
-        /**
-         * 设置器官技能动态冷却时间（tick）
-         *
-         * @param cooldownTicksFunction 根据上下文返回冷却时间的函数，返回 0 表示不冷却
-         */
-        public Builder cooldown(ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction) {
-            this.cooldownTicksFunction = cooldownTicksFunction;
-            return this;
-        }
-
-        /**
-         * 设置器官技能冷却时的回调
-         */
-        public Builder skillOnCooldown(Consumer<ChestCavitySlotContext> organSkillOnCooldownConsumer) {
-            this.organSkillOnCooldownConsumer = organSkillOnCooldownConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官拥有者攻击触发器
-         */
-        public Builder attack(AttackConsumer attackConsumer) {
-            this.attackConsumer = attackConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官拥有者受伤触发器
-         */
-        public Builder hurt(HurtConsumer hurtConsumer) {
-            this.hurtConsumer = hurtConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官拥有者被治疗触发器
-         */
-        public Builder heal(HealConsumer healConsumer) {
-            this.healConsumer = healConsumer;
-            return this;
-        }
-
-        /**
-         * 设置器官拥有者受到伤害前触发器
-         */
-        public Builder incomingDamage(IncomingDamageConsumer incomingDamageConsumer) {
-            this.incomingDamageConsumer = incomingDamageConsumer;
-            return this;
-        }
-
-        /**
-         * 设置胸腔打开触发器
-         */
-        public Builder chestCavityOpen(Consumer<ChestCavitySlotContext> chestCavityOpenConsumer) {
-            this.chestCavityOpenConsumer = chestCavityOpenConsumer;
-            return this;
-        }
-
-        /**
-         * 设置胸腔关闭触发器
-         */
-        public Builder chestCavityClose(Consumer<ChestCavitySlotContext> chestCavityCloseConsumer) {
-            this.chestCavityCloseConsumer = chestCavityCloseConsumer;
-            return this;
-        }
-
-        /**
-         * 构建
-         */
-        public Item build() {
-            Item item;
-            if (itemFunction == null) {
-                item = new Item(properties);
-            } else {
-                item = itemFunction.apply(properties);
-            }
-            OrganManager.getRegistry().put(item, new Organ(this));
+        @Override
+        protected Item resolveItem() {
             return item;
         }
     }

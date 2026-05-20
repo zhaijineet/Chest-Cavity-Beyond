@@ -40,8 +40,22 @@ import java.util.function.BiConsumer;
 
 public class TooltipUtil {
     public static final String PREFIX = "organ." + ChestCavityBeyond.MOD_ID + ".";
+    /**
+     * 格式化属性修饰符的数值显示
+     * <p>
+     * 整数：直接显示（如 "2", "+3"）
+     * 浮点数：保留最多3位小数，去除末尾多余的0（如 "0.5", "1.25", "1.5" 而非 "1.500"）
+     * </p>
+     */
+    private static final ThreadLocal<DecimalFormat> DECIMAL_FORMAT = ThreadLocal.withInitial(() -> {
+        DecimalFormat df = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.US));
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df;
+    });
+
     // 普通空格会导致自动换行时，此前缀被错误的分割为独自占据一行，改为使用\u00A0不换行空格
     public static String DEFAULT_PREFIX = "\u00A0•\u00A0";
+
     /**
      * 默认的器官工具提示回调
      */
@@ -206,20 +220,16 @@ public class TooltipUtil {
      * @param add   需要添加的工具提示
      */
     public static void simpleTooltipAdd(List<Component> total, List<Component> add) {
-        total.addAll(1, add);
+        // 一般来说不会传入空列表，但万一呢？
+        if (total.isEmpty()) {
+            total.addAll(add);
+        } else {
+            total.addAll(1, add);
+        }
     }
 
-    /**
-     * 格式化属性修饰符的数值显示
-     * <p>
-     * 整数：直接显示（如 "2", "+3"）
-     * 浮点数：保留最多3位小数，去除末尾多余的0（如 "0.5", "1.25", "1.5" 而非 "1.500"）
-     * </p>
-     */
     public static String formatAttributeValue(double value) {
-        DecimalFormat df = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.US));
-        df.setRoundingMode(RoundingMode.HALF_UP);
-        return df.format(value);
+        return DECIMAL_FORMAT.get().format(value);
     }
 
     /**
@@ -390,7 +400,8 @@ public class TooltipUtil {
     ) {
         boolean detailed = isDetailedMode(keyContext);
         List<Component> lines = addSimpleOrDetailedLines(stack, "active_skill", detailed, DEFAULT_PREFIX);
-        if (detailed) {
+        // 详细模式 或 非详细模式下没有简略行（回退到了详细描述行）时，显示冷却时间
+        if (detailed || !hasTranslation(getBaseKey(stack) + ".active_skill.simple.0")) {
             lines.addAll(cooldownLine(data, index, stack));
         }
         return lines;
@@ -400,8 +411,7 @@ public class TooltipUtil {
      * 根据器官的冷却生成冷却时间提示行
      */
     public static List<Component> cooldownLine(ChestCavityData data, int index, ItemStack stack) {
-        int cooldownTicks = ChestCavityUtil.getOrganCap(stack)
-            .getCooldownTicks(ChestCavityUtil.createContext(data, index, stack));
+        int cooldownTicks = ChestCavityUtil.getOrganCap(stack).getCooldownTicks(ChestCavityUtil.createContext(data, index, stack));
         if (cooldownTicks > 0) {
             String formatted = formatAttributeValue(cooldownTicks / 20.0);
             return List.of(Component.literal(DEFAULT_PREFIX).append(Component.translatable(PREFIX + "tooltip.cooldown", formatted)));

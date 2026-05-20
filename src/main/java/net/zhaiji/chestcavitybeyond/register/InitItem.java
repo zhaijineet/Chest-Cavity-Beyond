@@ -393,7 +393,7 @@ public class InitItem {
             .build()
     );
 
-    // 小型鱼骨
+    // 小型鱼肠
     public static final Supplier<Item> SMALL_FISH_INTESTINE = ITEM.register(
         "small_fish_intestine",
         () -> Organ.builder()
@@ -641,10 +641,10 @@ public class InitItem {
             .addValueAttribute(Attributes.LUCK, 1.25)
             .addValueAttribute(InitAttribute.ENDER, 8)
             .cooldown(8 * 20)
-            .skill(context -> {
-                OrganSkillUtil.teleport(context.entity(), context.data().getCurrentValue(InitAttribute.ENDER));
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.teleport(
+                context.entity(),
+                context.data().getCurrentValue(InitAttribute.ENDER)
+            ))
             .build()
     );
 
@@ -683,7 +683,6 @@ public class InitItem {
             .addValueAttribute(InitAttribute.SPEED, 1.25)
             .build()
     );
-
 
     // 弹跳型肌肉
     public static final Supplier<Item> LEAPING_MUSCLE = ITEM.register(
@@ -786,9 +785,9 @@ public class InitItem {
             .cooldown(2 * 20)
             .skill(context -> {
                 if (context.entity() instanceof Player player) {
-                    OrganSkillUtil.graze(player);
+                    return OrganSkillUtil.graze(player);
                 }
-                return true;
+                return false;
             })
             .build()
     );
@@ -800,10 +799,10 @@ public class InitItem {
             .addValueAttribute(Attributes.LUCK, 0.75)
             .addValueAttribute(InitAttribute.EXPLOSIVE, 1)
             .cooldown(20 * 20)
-            .skill(context -> {
-                OrganSkillUtil.explosion(context.entity(), context.data().getCurrentValue(InitAttribute.EXPLOSIVE));
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.explosion(
+                context.entity(),
+                context.data().getCurrentValue(InitAttribute.EXPLOSIVE)
+            ))
             .build()
     );
 
@@ -969,9 +968,9 @@ public class InitItem {
             .cooldown(20)
             .skill(context -> {
                 if (context.entity() instanceof Player player) {
-                    OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
+                    return OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
                 }
-                return true;
+                return false;
             })
             .build()
     );
@@ -996,9 +995,9 @@ public class InitItem {
             .cooldown(20)
             .skill(context -> {
                 if (context.entity() instanceof Player player) {
-                    OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
+                    return OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
                 }
-                return true;
+                return false;
             })
             .build()
     );
@@ -1008,10 +1007,7 @@ public class InitItem {
         "silk_gland",
         () -> Organ.builder()
             .cooldown(4 * 20)
-            .skill(context -> {
-                OrganSkillUtil.silk(context.entity());
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.silk(context.entity()))
             .build()
     );
 
@@ -1124,10 +1120,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.BREATH_RECOVERY, 0.75)
             .addValueAttribute(InitAttribute.BREATH_CAPACITY, 0.75)
             .addValueAttribute(InitAttribute.ENDURANCE, 0.75)
-            .skill(context -> {
-                OrganSkillUtil.spit(context.entity());
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.spit(context.entity()))
             .build()
     );
 
@@ -1160,14 +1153,11 @@ public class InitItem {
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 3)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 3)
             .cooldown(15 * 20)
-            .skill(context -> {
-                OrganSkillUtil.smallFireball(
-                    context.data(),
-                    context.entity(),
-                    context.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL)
-                );
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.smallFireball(
+                context.data(),
+                context.entity(),
+                (int) context.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL)
+            ))
             .build()
     );
 
@@ -1177,10 +1167,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 0.25)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
-            .skill(context -> {
-                OrganSkillUtil.snowball(context.entity());
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.snowball(context.entity()))
             .build()
     );
 
@@ -1192,10 +1179,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .addValueAttribute(InitAttribute.GHASTLY, 1)
             .cooldown(15 * 20)
-            .skill(context -> {
-                OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY));
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY)))
             .build()
     );
 
@@ -1228,9 +1212,9 @@ public class InitItem {
             .cooldown(8 * 20)
             .skill(context -> {
                 if (context.entity() instanceof Player player) {
-                    OrganSkillUtil.windCharge(player);
+                    return OrganSkillUtil.windCharge(player);
                 }
-                return true;
+                return false;
             })
             .build()
     );
@@ -1260,10 +1244,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.BREATH_CAPACITY, 5)
             .addValueAttribute(InitAttribute.ENDURANCE, 5)
             .cooldown(60 * 20)
-            .skill(context -> {
-                OrganSkillUtil.dragonFireball(context.entity());
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.dragonFireball(context.entity()))
             .build()
     );
 
@@ -1412,10 +1393,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.NERVES, 2)
             .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
             .cooldown(60 * 20)
-            .skill(context -> {
-                OrganSkillUtil.sonicBoom(context.entity());
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.sonicBoom(context.entity()))
             .build()
     );
 
@@ -1569,10 +1547,10 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
             .cooldown(5 * 20)
-            .skill(context -> {
-                OrganSkillUtil.guardianLaser(context.entity(), false);
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.guardianLaser(
+                context.entity(),
+                false
+            ))
             .build()
     );
 
@@ -1582,10 +1560,10 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
             .cooldown(8 * 20)
-            .skill(context -> {
-                OrganSkillUtil.guardianLaser(context.entity(), true);
-                return true;
-            })
+            .skill(context -> OrganSkillUtil.guardianLaser(
+                context.entity(),
+                true
+            ))
             .build()
     );
 }
