@@ -82,6 +82,19 @@ public class OrganSkillScreen extends Screen {
                 organs.add(stack);
             }
         }
+
+        // 默认选中当前已选的技能
+        if (selectedSlot >= 0 && selectedSlot < data.getSlots()) {
+            ItemStack currentStack = data.getStackInSlot(selectedSlot);
+            if (!currentStack.isEmpty() && ChestCavityUtil.getOrganCap(currentStack).hasSkill()) {
+                for (int i = 0; i < indices.size(); i++) {
+                    if (indices.get(i) == selectedSlot) {
+                        focusedIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.Items;
+import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
@@ -18,11 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChestCavityTypeManager {
-    public static final Map<String, ChestCavityType> CHEST_CAVITY_TYPE_REGISTRY = new HashMap<>();
+    public static final Map<ResourceLocation, ChestCavityType> CHEST_CAVITY_TYPE_REGISTRY = new HashMap<>();
 
     public static final Map<EntityType<? extends LivingEntity>, ChestCavityType> ENTITY_CHEST_CAVITY_TYPE_MAP = new HashMap<>();
 
-    public static final ChestCavityType HUMAN = register("human")
+    public static final ChestCavityType HUMAN = register(ChestCavityBeyond.of("human"))
             .setFirstRow(0, InitItem.MUSCLE.get())
             .setFirstRow(1, InitItem.RIB.get())
             .setFirstRow(2, InitItem.APPENDIX.get())
@@ -64,7 +66,7 @@ public class ChestCavityTypeManager {
             .addConversion(InitItem.SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
             .addConversion(InitItem.LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
-    public static final ChestCavityType ANIMAL = register("animal")
+    public static final ChestCavityType ANIMAL = register(ChestCavityBeyond.of("animal"))
             .setFirstRow(0, InitItem.ANIMAL_MUSCLE.get())
             .setFirstRow(1, InitItem.ANIMAL_RIB.get())
             .setFirstRow(2, InitItem.ANIMAL_APPENDIX.get())
@@ -106,7 +108,7 @@ public class ChestCavityTypeManager {
             .addConversion(InitItem.ANIMAL_SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
             .addConversion(InitItem.ANIMAL_LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
-    public static final ChestCavityType HERBIVORE1 = register("herbivore1")
+    public static final ChestCavityType HERBIVORE1 = register(ChestCavityBeyond.of("herbivore1"))
             .copyWith(ANIMAL)
             .setThirdRow(2, InitItem.HERBIVORE_INTESTINE.get())
             .setThirdRow(3, InitItem.HERBIVORE_INTESTINE.get())
@@ -114,20 +116,20 @@ public class ChestCavityTypeManager {
             .setThirdRow(5, InitItem.HERBIVORE_INTESTINE.get())
             .setThirdRow(6, InitItem.HERBIVORE_INTESTINE.get());
 
-    public static final ChestCavityType HERBIVORE2 = register("herbivore2")
+    public static final ChestCavityType HERBIVORE2 = register(ChestCavityBeyond.of("herbivore2"))
             .copyWith(HERBIVORE1)
             .setThirdRow(5, InitItem.HERBIVORE_RUMEN.get());
 
-    public static final ChestCavityType HERBIVORE3 = register("herbivore3")
+    public static final ChestCavityType HERBIVORE3 = register(ChestCavityBeyond.of("herbivore3"))
             .copyWith(HERBIVORE2)
             .setThirdRow(3, InitItem.HERBIVORE_RUMEN.get());
 
-    public static final ChestCavityType LLAMA = register("llama")
+    public static final ChestCavityType LLAMA = register(ChestCavityBeyond.of("llama"))
             .copyWith(HERBIVORE1)
             .setFirstRow(3, InitItem.LLAMA_LUNG.get())
             .setFirstRow(5, InitItem.LLAMA_LUNG.get());
 
-    public static final ChestCavityType CARNIVORE = register("carnivore")
+    public static final ChestCavityType CARNIVORE = register(ChestCavityBeyond.of("carnivore"))
             .copyWith(ANIMAL)
             .setThirdRow(2, InitItem.CARNIVORE_INTESTINE.get())
             .setThirdRow(3, InitItem.CARNIVORE_INTESTINE.get())
@@ -135,13 +137,13 @@ public class ChestCavityTypeManager {
             .setThirdRow(5, InitItem.CARNIVORE_INTESTINE.get())
             .setThirdRow(6, InitItem.CARNIVORE_INTESTINE.get());
 
-    public static final ChestCavityType SHULKER = register("shulker")
+    public static final ChestCavityType SHULKER = register(ChestCavityBeyond.of("shulker"))
             .copyWith(ANIMAL)
             .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
             .setSecondRow(2, InitItem.SHULKER_SPLEEN.get())
             .setSecondRow(6, InitItem.SHULKER_SPLEEN.get());
 
-    public static final ChestCavityType SMALL_ANIMAL = register("small_animal")
+    public static final ChestCavityType SMALL_ANIMAL = register(ChestCavityBeyond.of("small_animal"))
             .setFirstRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
             .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
             .setFirstRow(2, InitItem.SMALL_ANIMAL_APPENDIX.get())
@@ -171,7 +173,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.SMALL_ANIMAL_MUSCLE.get())
             .setThirdRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get());
 
-    public static final ChestCavityType SMALL_HERBIVORE = register("small_herbivore")
+    public static final ChestCavityType SMALL_HERBIVORE = register(ChestCavityBeyond.of("small_herbivore"))
             .copyWith(SMALL_ANIMAL)
             .setThirdRow(2, InitItem.SMALL_HERBIVORE_INTESTINE.get())
             .setThirdRow(3, InitItem.SMALL_HERBIVORE_INTESTINE.get())
@@ -179,7 +181,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(5, InitItem.SMALL_HERBIVORE_INTESTINE.get())
             .setThirdRow(6, InitItem.SMALL_HERBIVORE_INTESTINE.get());
 
-    public static final ChestCavityType SMALL_CARNIVORE = register("small_carnivore")
+    public static final ChestCavityType SMALL_CARNIVORE = register(ChestCavityBeyond.of("small_carnivore"))
             .copyWith(SMALL_ANIMAL)
             .setThirdRow(2, InitItem.SMALL_CARNIVORE_INTESTINE.get())
             .setThirdRow(3, InitItem.SMALL_CARNIVORE_INTESTINE.get())
@@ -187,27 +189,27 @@ public class ChestCavityTypeManager {
             .setThirdRow(5, InitItem.SMALL_CARNIVORE_INTESTINE.get())
             .setThirdRow(6, InitItem.SMALL_CARNIVORE_INTESTINE.get());
 
-    public static final ChestCavityType AXOLOTL = register("axolotl")
+    public static final ChestCavityType AXOLOTL = register(ChestCavityBeyond.of("axolotl"))
             .copyWith(SMALL_ANIMAL)
 
             .addValueBonuses(InitItem.SMALL_ANIMAL_LUNG.get(), Map.of(
                     InitAttribute.WATER_BREATH, 0.5
             ));
 
-    public static final ChestCavityType TURTLE = register("turtle")
+    public static final ChestCavityType TURTLE = register(ChestCavityBeyond.of("turtle"))
             .copyWith(ANIMAL)
 
             .addValueBonuses(InitItem.ANIMAL_LUNG.get(), Map.of(
                     InitAttribute.WATER_BREATH, 0.5
             ));
 
-    public static final ChestCavityType FROG = register("frog")
+    public static final ChestCavityType FROG = register(ChestCavityBeyond.of("frog"))
             .copyWith(ANIMAL)
             .addValueBonuses(InitItem.ANIMAL_LUNG.get(), Map.of(
                     InitAttribute.WATER_BREATH, 0.5
             ));
 
-    public static final ChestCavityType RABBIT = register("rabbit")
+    public static final ChestCavityType RABBIT = register(ChestCavityBeyond.of("rabbit"))
             .setFirstRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
             .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
             .setFirstRow(2, InitItem.SMALL_ANIMAL_APPENDIX.get())
@@ -237,7 +239,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.SMALL_LEAPING_MUSCLE.get())
             .setThirdRow(8, InitItem.SMALL_LEAPING_MUSCLE.get());
 
-    public static final ChestCavityType SLIME = register("slime")
+    public static final ChestCavityType SLIME = register(ChestCavityBeyond.of("slime"))
             .setFirstRow(4, Items.SLIME_BALL)
 
             .setSecondRow(3, Items.SLIME_BALL)
@@ -252,7 +254,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
 
-    public static final ChestCavityType MAGMA_CUBE = register("magma_cube")
+    public static final ChestCavityType MAGMA_CUBE = register(ChestCavityBeyond.of("magma_cube"))
             .setFirstRow(4, Items.MAGMA_CREAM)
 
             .setSecondRow(3, Items.MAGMA_CREAM)
@@ -267,7 +269,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
 
-    public static final ChestCavityType FIREPROOF = register("fireproof")
+    public static final ChestCavityType FIREPROOF = register(ChestCavityBeyond.of("fireproof"))
             .setFirstRow(0, InitItem.FIREPROOF_MUSCLE.get())
             .setFirstRow(1, InitItem.FIREPROOF_RIB.get())
             .setFirstRow(2, InitItem.FIREPROOF_APPENDIX.get())
@@ -297,7 +299,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.FIREPROOF_MUSCLE.get())
             .setThirdRow(8, InitItem.FIREPROOF_MUSCLE.get());
 
-    public static final ChestCavityType GHAST = register("ghast")
+    public static final ChestCavityType GHAST = register(ChestCavityBeyond.of("ghast"))
             .copyWith(FIREPROOF)
             .setFirstRow(1, InitItem.GAS_SAC.get())
             .setFirstRow(3, InitItem.GAS_SAC.get())
@@ -305,7 +307,7 @@ public class ChestCavityTypeManager {
             .setFirstRow(7, InitItem.GAS_SAC.get())
             .setThirdRow(4, InitItem.GHAST_STOMACH.get());
 
-    public static final ChestCavityType ENDER = register("ender")
+    public static final ChestCavityType ENDER = register(ChestCavityBeyond.of("ender"))
             .setFirstRow(0, InitItem.ENDER_MUSCLE.get())
             .setFirstRow(1, InitItem.ENDER_RIB.get())
             .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
@@ -335,7 +337,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.ENDER_MUSCLE.get())
             .setThirdRow(8, InitItem.ENDER_MUSCLE.get());
 
-    public static final ChestCavityType ENDER_DRAGON = register("ender_dragon")
+    public static final ChestCavityType ENDER_DRAGON = register(ChestCavityBeyond.of("ender_dragon"))
             .setFirstRow(0, InitItem.DRAGON_MUSCLE.get())
             .setFirstRow(1, InitItem.DRAGON_RIB.get())
             .setFirstRow(2, InitItem.DRAGON_APPENDIX.get())
@@ -365,7 +367,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.DRAGON_MUSCLE.get())
             .setThirdRow(8, InitItem.DRAGON_MUSCLE.get());
 
-    public static final ChestCavityType UNDEAD = register("undead")
+    public static final ChestCavityType UNDEAD = register(ChestCavityBeyond.of("undead"))
             .setNeedHealth(false)
 
             .setFirstRow(0, InitItem.ROTTEN_MUSCLE.get())
@@ -406,7 +408,7 @@ public class ChestCavityTypeManager {
             .addConversion(InitItem.ROTTEN_SPLEEN.get(), InitItem.SPLEEN.get())
             .addConversion(InitItem.ROTTEN_LIVER.get(), InitItem.LIVER.get());
 
-    public static final ChestCavityType SKELETON = register("skeleton")
+    public static final ChestCavityType SKELETON = register(ChestCavityBeyond.of("skeleton"))
             .setNeedHealth(false)
 
             .setFirstRow(1, InitItem.ROTTEN_RIB.get())
@@ -422,7 +424,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.WATER_BREATH, 0.5
             ));
 
-    public static final ChestCavityType WITHER_SKELETON = register("wither_skeleton")
+    public static final ChestCavityType WITHER_SKELETON = register(ChestCavityBeyond.of("wither_skeleton"))
             .setNeedHealth(false)
 
             .setFirstRow(1, InitItem.WITHERED_RIB.get())
@@ -439,7 +441,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.WATER_BREATH, 0.5
             ));
 
-    public static final ChestCavityType WITHER = register("wither")
+    public static final ChestCavityType WITHER = register(ChestCavityBeyond.of("wither"))
             .setNeedHealth(false)
 
             .setFirstRow(0, InitItem.WRITHING_SOUL_SAND.get())
@@ -478,7 +480,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.WATER_BREATH, 1.0
             ));
 
-    public static final ChestCavityType ARTHROPOD = register("arthropod")
+    public static final ChestCavityType ARTHROPOD = register(ChestCavityBeyond.of("arthropod"))
             .setFirstRow(0, InitItem.ARTHROPOD_MUSCLE.get())
             .setFirstRow(1, InitItem.ARTHROPOD_CAECUM.get())
             .setFirstRow(3, InitItem.ARTHROPOD_LUNG.get())
@@ -505,16 +507,16 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.ARTHROPOD_MUSCLE.get())
             .setThirdRow(8, InitItem.ARTHROPOD_MUSCLE.get());
 
-    public static final ChestCavityType SPIDER = register("spider")
+    public static final ChestCavityType SPIDER = register(ChestCavityBeyond.of("spider"))
             .copyWith(ARTHROPOD)
             .setSecondRow(2, InitItem.SILK_GLAND.get())
             .setSecondRow(6, InitItem.SILK_GLAND.get());
 
-    public static final ChestCavityType CAVE_SPIDER = register("cave_spider")
+    public static final ChestCavityType CAVE_SPIDER = register(ChestCavityBeyond.of("cave_spider"))
             .copyWith(SPIDER)
             .setSecondRow(6, InitItem.VENOM_GLAND.get());
 
-    public static final ChestCavityType AQUATIC = register("aquatic")
+    public static final ChestCavityType AQUATIC = register(ChestCavityBeyond.of("aquatic"))
             .setFirstRow(0, InitItem.AQUATIC_MUSCLE.get())
             .setFirstRow(1, InitItem.ANIMAL_RIB.get())
             .setFirstRow(3, InitItem.GILL.get())
@@ -543,12 +545,12 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.AQUATIC_MUSCLE.get())
             .setThirdRow(8, InitItem.AQUATIC_MUSCLE.get());
 
-    public static final ChestCavityType DOLPHIN = register("dolphin")
+    public static final ChestCavityType DOLPHIN = register(ChestCavityBeyond.of("dolphin"))
             .copyWith(AQUATIC)
             .setFirstRow(3, InitItem.ANIMAL_LUNG.get())
             .setFirstRow(5, InitItem.ANIMAL_LUNG.get());
 
-    public static final ChestCavityType FISH = register("fish")
+    public static final ChestCavityType FISH = register(ChestCavityBeyond.of("fish"))
             .copyWith(AQUATIC)
             .setFirstRow(0, InitItem.FISH_MUSCLE.get())
             .setFirstRow(1, InitItem.FISH_BONE.get())
@@ -570,7 +572,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.FISH_MUSCLE.get())
             .setThirdRow(8, InitItem.FISH_MUSCLE.get());
 
-    public static final ChestCavityType SMALL_AQUATIC = register("small_aquatic")
+    public static final ChestCavityType SMALL_AQUATIC = register(ChestCavityBeyond.of("small_aquatic"))
             .setFirstRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
             .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
             .setFirstRow(3, InitItem.SMALL_GILL.get())
@@ -599,7 +601,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.SMALL_AQUATIC_MUSCLE.get())
             .setThirdRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get());
 
-    public static final ChestCavityType SMALL_FISH = register("small_fish")
+    public static final ChestCavityType SMALL_FISH = register(ChestCavityBeyond.of("small_fish"))
             .copyWith(SMALL_AQUATIC)
             .setFirstRow(0, InitItem.SMALL_FISH_MUSCLE.get())
             .setFirstRow(1, InitItem.SMALL_FISH_BONE.get())
@@ -621,7 +623,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.SMALL_FISH_MUSCLE.get())
             .setThirdRow(8, InitItem.SMALL_FISH_MUSCLE.get());
 
-    public static final ChestCavityType SALTWATER = register("saltwater")
+    public static final ChestCavityType SALTWATER = register(ChestCavityBeyond.of("saltwater"))
             .setFirstRow(0, InitItem.SALTWATER_MUSCLE.get())
             .setFirstRow(1, InitItem.RIB.get())
             .setFirstRow(2, InitItem.APPENDIX.get())
@@ -651,7 +653,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.SALTWATER_MUSCLE.get())
             .setThirdRow(8, InitItem.SALTWATER_MUSCLE.get());
 
-    public static final ChestCavityType CREEPER = register("creeper")
+    public static final ChestCavityType CREEPER = register(ChestCavityBeyond.of("creeper"))
             .setFirstRow(0, InitItem.CREEPER_LEAF.get())
             .setFirstRow(1, InitItem.ANIMAL_RIB.get())
             .setFirstRow(4, InitItem.CREEPER_APPENDIX.get())
@@ -683,7 +685,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
 
-    public static final ChestCavityType BLAZE = register("blaze")
+    public static final ChestCavityType BLAZE = register(ChestCavityBeyond.of("blaze"))
             .setFirstRow(1, InitItem.ACTIVE_BLAZE_ROD.get())
             .setFirstRow(2, InitItem.BLAZE_SHELL.get())
             .setFirstRow(3, Items.MAGMA_BLOCK)
@@ -710,7 +712,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
 
-    public static final ChestCavityType BREEZE = register("breeze")
+    public static final ChestCavityType BREEZE = register(ChestCavityBeyond.of("breeze"))
             .setFirstRow(3, InitItem.ACTIVE_BREEZE_ROD.get())
             .setFirstRow(4, InitItem.BREEZE_CORE.get())
             .setFirstRow(5, InitItem.ACTIVE_BREEZE_ROD.get())
@@ -729,7 +731,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.NERVES, 1.0
             ));
 
-    public static final ChestCavityType IRON_GOLEM = register("iron_golem")
+    public static final ChestCavityType IRON_GOLEM = register(ChestCavityBeyond.of("iron_golem"))
             .setNeedBreath(false)
 
             .setFirstRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
@@ -762,7 +764,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.PISTON_MUSCLE.get())
             .setThirdRow(8, InitItem.GOLEM_ARMOR_PLATE.get());
 
-    public static final ChestCavityType SNOW_GOLEM = register("snow_golem")
+    public static final ChestCavityType SNOW_GOLEM = register(ChestCavityBeyond.of("snow_golem"))
             .setFirstRow(3, Items.SNOWBALL)
             .setFirstRow(4, Items.SNOWBALL)
             .setFirstRow(5, Items.SNOWBALL)
@@ -781,7 +783,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
 
-    public static final ChestCavityType WARDEN = register("warden")
+    public static final ChestCavityType WARDEN = register(ChestCavityBeyond.of("warden"))
             .setFirstRow(0, InitItem.SCULK_MUSCLE.get())
             .setFirstRow(1, InitItem.SCULK_RIB.get())
             .setFirstRow(4, InitItem.SCULK_HEART.get())
@@ -804,7 +806,7 @@ public class ChestCavityTypeManager {
                     InitAttribute.BREATH_RECOVERY, 1.0
             ));
 
-    public static final ChestCavityType ELDER = register("elder")
+    public static final ChestCavityType ELDER = register(ChestCavityBeyond.of("elder"))
             .setFirstRow(0, InitItem.ELDER_MUSCLE.get())
             .setFirstRow(1, InitItem.ELDER_RIB.get())
             .setFirstRow(2, InitItem.ELDER_APPENDIX.get())
@@ -834,7 +836,7 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.ELDER_MUSCLE.get())
             .setThirdRow(8, InitItem.ELDER_MUSCLE.get());
 
-    public static final ChestCavityType ELDER_FISH = register("elder_fish")
+    public static final ChestCavityType ELDER_FISH = register(ChestCavityBeyond.of("elder_fish"))
             .copyWith(ELDER)
             .setFirstRow(0, InitItem.ELDER_FISH_MUSCLE.get())
             .setFirstRow(1, InitItem.ELDER_FISH_BONE.get())
@@ -859,17 +861,17 @@ public class ChestCavityTypeManager {
             .setThirdRow(7, InitItem.ELDER_FISH_MUSCLE.get())
             .setThirdRow(8, InitItem.ELDER_FISH_MUSCLE.get());
 
-    public static final ChestCavityType GUARDIAN = register("guardian")
+    public static final ChestCavityType GUARDIAN = register(ChestCavityBeyond.of("guardian"))
             .copyWith(FISH)
             .setFirstRow(2, InitItem.ANIMAL_HEART.get())
             .setFirstRow(4, InitItem.GUARDIAN_EYE.get());
 
-    public static final ChestCavityType ELDER_GUARDIAN = register("elder_guardian")
+    public static final ChestCavityType ELDER_GUARDIAN = register(ChestCavityBeyond.of("elder_guardian"))
             .copyWith(ELDER_FISH)
             .setFirstRow(2, InitItem.ELDER_HEART.get())
             .setFirstRow(4, InitItem.ELDER_GUARDIAN_EYE.get());
 
-    public static final ChestCavityType ARMOR_STAND = register("armor_stand")
+    public static final ChestCavityType ARMOR_STAND = register(ChestCavityBeyond.of("armor_stand"))
             .setFirstRow(3, Items.STICK)
             .setFirstRow(4, Items.STICK)
             .setFirstRow(5, Items.STICK)
@@ -925,7 +927,7 @@ public class ChestCavityTypeManager {
      * @param name 名字
      * @return 胸腔类型
      */
-    public static ChestCavityType getType(String name) {
+    public static ChestCavityType getType(ResourceLocation name) {
         // 找不到就返回人类器官
         return CHEST_CAVITY_TYPE_REGISTRY.getOrDefault(name, HUMAN);
     }
@@ -948,7 +950,7 @@ public class ChestCavityTypeManager {
      * @param name 类型名称
      * @return 胸腔类型
      */
-    public static ChestCavityType register(String name) {
+    public static ChestCavityType register(ResourceLocation name) {
         ChestCavityType chestCavityType = new ChestCavityType();
         CHEST_CAVITY_TYPE_REGISTRY.put(name, chestCavityType);
         return chestCavityType;

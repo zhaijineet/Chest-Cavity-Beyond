@@ -58,7 +58,7 @@ public class Organ implements IOrgan {
     private final Consumer<ChestCavitySlotContext> chestCavityCloseConsumer;
 
     private Organ(AbstractBuilder<?> builder) {
-        this.attributeEntries = List.copyOf(builder.attributeEntries);
+        this.attributeEntries = builder.attributeEntries;
         this.organModifierConsumer = builder.organModifierConsumer;
         this.tooltipConsumer = builder.tooltipConsumer;
         this.organTickConsumer = builder.organTickConsumer;

@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.api.event;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
@@ -15,7 +16,7 @@ public class ChestCavityRegisterCompletedEvent extends Event implements IModBusE
      *
      * @return 胸腔类型注册表
      */
-    public Map<String, ChestCavityType> getChestCavityTypeRegistry() {
+    public Map<ResourceLocation, ChestCavityType> getChestCavityTypeRegistry() {
         return ChestCavityTypeManager.CHEST_CAVITY_TYPE_REGISTRY;
     }
 

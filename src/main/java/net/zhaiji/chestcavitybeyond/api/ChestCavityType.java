@@ -31,25 +31,15 @@ import java.util.function.Predicate;
 
 public class ChestCavityType {
     private final NonNullList<Item> organs = NonNullList.withSize(54, Items.AIR);
-
     private final Map<EntityType<?>, Map<Holder<Attribute>, Double>> defaultAttributes = new HashMap<>();
-
     private final Map<EntityType<?>, Map<Holder<Attribute>, AttributeModifier>> defaultModifiers = new HashMap<>();
-
     private final Map<Item, List<AttributeBonus>> attributeBonuses = new HashMap<>();
-
     private final List<AttributeBonus> typeDefaultBonuses = new ArrayList<>();
-
     private final Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> conversionMap = new HashMap<>();
-
     private ChestCavitySize size = ChestCavitySize.ROW_3;
-
     private boolean needBreath = true;
-
     private boolean needHealth = true;
-
     private BiFunction<Player, LivingEntity, Boolean> canOpen = (player, entity) -> true;
-
     private String unopenableMessage;
 
     /**
@@ -200,6 +190,39 @@ public class ChestCavityType {
      */
     public ChestCavityType setThirdRow(int index, Item organ) {
         return setOrgan(index + 18, organ);
+    }
+
+    /**
+     * 为胸腔类型设置第四排默认器官
+     *
+     * @param index 0 ~ 8
+     * @param organ 器官
+     * @return 胸腔类型
+     */
+    public ChestCavityType setFourthRow(int index, Item organ) {
+        return setOrgan(index + 27, organ);
+    }
+
+    /**
+     * 为胸腔类型设置第五排默认器官
+     *
+     * @param index 0 ~ 8
+     * @param organ 器官
+     * @return 胸腔类型
+     */
+    public ChestCavityType setFifthRow(int index, Item organ) {
+        return setOrgan(index + 36, organ);
+    }
+
+    /**
+     * 为胸腔类型设置第六排默认器官
+     *
+     * @param index 0 ~ 8
+     * @param organ 器官
+     * @return 胸腔类型
+     */
+    public ChestCavityType setSixthRow(int index, Item organ) {
+        return setOrgan(index + 45, organ);
     }
 
     /**

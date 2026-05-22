@@ -17,7 +17,7 @@ public class ChestCavityRegisterEvent extends Event implements IModBusEvent {
     /**
      * 注册胸腔类型
      */
-    public ChestCavityType registerType(String name) {
+    public ChestCavityType registerType(ResourceLocation name) {
         return ChestCavityTypeManager.register(name);
     }
 

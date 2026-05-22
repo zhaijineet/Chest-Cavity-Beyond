@@ -2,6 +2,12 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.5
+
+- 胸腔类型注册名从 `String` 改为 `ResourceLocation`，避免不同模组之间的命名冲突，与 Minecraft 注册体系保持一致
+- 胸腔类型新增 `setFourthRow`、`setFifthRow`、`setSixthRow` 便捷方法，补全 4~6 行器官设置的支持
+- 轮盘菜单（技能选择界面）打开时自动聚焦到当前已激活的技能，方便快速切换
+
 ## 1.4.4
 
 - 新增 `chest_openers` 物品标签，并将相关附魔的支持物品改为标签引用
