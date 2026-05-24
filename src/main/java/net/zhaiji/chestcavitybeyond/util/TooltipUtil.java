@@ -192,7 +192,7 @@ public class TooltipUtil {
         );
         if (attributeModifiers.isEmpty()) return result;
         attributeModifiers.forEach((attribute, modifier) -> {
-            boolean isPercentage = attribute.value() instanceof PercentageAttribute;
+            boolean isPercentage = isPercentageAttribute(attribute);
             boolean isAddValue = modifier.operation() == AttributeModifier.Operation.ADD_VALUE;
             double value = modifier.amount();
             if (!isAddValue || isPercentage) {
@@ -259,6 +259,13 @@ public class TooltipUtil {
     }
 
     /**
+     * 判断属性是否为百分比属性
+     */
+    public static boolean isPercentageAttribute(Holder<Attribute> attribute) {
+        return attribute.value() instanceof PercentageAttribute;
+    }
+
+    /**
      * 向指定玩家发送目标实体的胸腔属性信息
      *
      * @param viewer 查看属性的玩家
@@ -279,8 +286,9 @@ public class TooltipUtil {
             if (instance == null) continue;
             double value = instance.getValue();
 
-            // 不显示值为0的属性（当 showWhenZero 为 false 时）
-            if (!display.showWhenZero() && value == 0) continue;
+            // 跳过显示判断：hideValue ≠ NaN 时匹配即跳过
+            boolean shouldSkip = !Double.isNaN(display.hideValue()) && value == display.hideValue();
+            if (shouldSkip) continue;
 
             // 属性名（高亮 + 悬停）
             Component nameComp =
@@ -294,7 +302,13 @@ public class TooltipUtil {
                     );
 
             // 属性值
-            String valueStr = (value > 0 ? "+" : "") + TooltipUtil.formatAttributeValue(value);
+            String valueStr;
+            if (display.percentageDisplay()) {
+                double displayValue = value * 100;
+                valueStr = TooltipUtil.formatAttributeValue(displayValue) + "%";
+            } else {
+                valueStr = (value > 0 ? "+" : "") + TooltipUtil.formatAttributeValue(value);
+            }
             Component valueComp = Component.literal(valueStr);
 
             viewer.sendSystemMessage(

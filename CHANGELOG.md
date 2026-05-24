@@ -2,6 +2,13 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.6
+
+- 修复其他模组添加的实体子类（如矿石苦力怕）因无法匹配胸腔类型而丢失功能的问题：`ChestCavityTypeManager.getType()` 的回退逻辑新增 17 种 `instanceof` 检测，覆盖多种实体
+- 创造模式玩家使用开胸器时跳过 `canOpen` 和胸甲阻挡检查，不再受到限制
+- `AttributeDisplay` 属性显示信息重构：`showWhenZero` 替换为 `hideValue`（通用隐藏值）+ `percentageDisplay`（百分比格式显示），Builder 支持自动推断 `PercentageAttribute` 和默认隐藏值
+- 开胸器交互取消判断从 `ItemStack.is(Item)` 改为 `ItemStack.is(TagKey)`，使其他模组通过 `chest_openers` 标签添加的开胸器物品也能正确触发交互取消
+
 ## 1.4.5
 
 - 胸腔类型注册名从 `String` 改为 `ResourceLocation`，避免不同模组之间的命名冲突，与 Minecraft 注册体系保持一致

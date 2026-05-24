@@ -7,9 +7,26 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.breeze.Breeze;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.Items;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
@@ -890,14 +907,87 @@ public class ChestCavityTypeManager {
         ChestCavityType type = ENTITY_CHEST_CAVITY_TYPE_MAP.get(entity.getType());
         if (type == null) {
             EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
+            // --- 以下为 instanceof 回退检测，子类必须在父类之前 ---
+
+            // 远古守卫者（Guardian 的子类，先于 Guardian 检测）
+            if (entity instanceof ElderGuardian) {
+                return registerEntity(entityType, ELDER_GUARDIAN);
+            }
+            // 守卫者（水生类别 WATER_CREATURE，需在水生检测之前）
+            if (entity instanceof Guardian) {
+                return registerEntity(entityType, GUARDIAN);
+            }
+            // 凋灵骷髅（AbstractSkeleton 的子类，先于普通骷髅检测）
+            if (entity instanceof WitherSkeleton) {
+                return registerEntity(entityType, WITHER_SKELETON);
+            }
             // 骷髅
             if (entity instanceof AbstractSkeleton) {
                 return registerEntity(entityType, SKELETON);
+            }
+            // 洞穴蜘蛛（Spider 的子类，先于蜘蛛检测）
+            if (entity instanceof CaveSpider) {
+                return registerEntity(entityType, CAVE_SPIDER);
+            }
+            // 蜘蛛
+            if (entity instanceof Spider) {
+                return registerEntity(entityType, SPIDER);
             }
             // 亡灵
             if (entity instanceof Zombie || entityType.is(EntityTypeTags.UNDEAD)) {
                 return registerEntity(entityType, UNDEAD);
             }
+            // 苦力怕
+            if (entity instanceof Creeper) {
+                return registerEntity(entityType, CREEPER);
+            }
+            // 烈焰人
+            if (entity instanceof Blaze) {
+                return registerEntity(entityType, BLAZE);
+            }
+            // 末影人
+            if (entity instanceof EnderMan) {
+                return registerEntity(entityType, ENDER);
+            }
+            // 末影龙
+            if (entity instanceof EnderDragon) {
+                return registerEntity(entityType, ENDER_DRAGON);
+            }
+            // 恶魂
+            if (entity instanceof Ghast) {
+                return registerEntity(entityType, GHAST);
+            }
+            // 凋灵
+            if (entity instanceof WitherBoss) {
+                return registerEntity(entityType, WITHER);
+            }
+            // 潜影贝
+            if (entity instanceof Shulker) {
+                return registerEntity(entityType, SHULKER);
+            }
+            // 铁傀儡
+            if (entity instanceof IronGolem) {
+                return registerEntity(entityType, IRON_GOLEM);
+            }
+            // 雪傀儡
+            if (entity instanceof SnowGolem) {
+                return registerEntity(entityType, SNOW_GOLEM);
+            }
+            // 旋风人
+            if (entity instanceof Breeze) {
+                return registerEntity(entityType, BREEZE);
+            }
+            // 监守者
+            if (entity instanceof Warden) {
+                return registerEntity(entityType, WARDEN);
+            }
+            // 羊驼（Animal 子类，需在动物检测之前）
+            if (entity instanceof Llama) {
+                return registerEntity(entityType, LLAMA);
+            }
+
+            // --- 以下是通用的类别回退 ---
+
             // 鱼类
             if (entity instanceof AbstractFish) {
                 return registerEntity(entityType, FISH);

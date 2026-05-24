@@ -61,8 +61,7 @@ public class ChestOpenerItem extends Item {
         boolean hasDoor;
         if (hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
             // 检查胸腔类型是否可开胸
-            ChestCavityType cavityType = ChestCavityTypeManager.getType(target);
-            if (!cavityType.canOpen(player, target)) {
+            if (!player.isCreative() && !ChestCavityTypeManager.getType(target).canOpen(player, target)) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     PacketDistributor.sendToPlayer(serverPlayer, new UnopenableChestCavityMessagePacket(target.getId()));
                 }
@@ -79,7 +78,7 @@ public class ChestOpenerItem extends Item {
             );
             hasDoor = ChestCavityUtil.getData(target).hasOrgan(ItemTags.DOORS);
             boolean hasChestPlate = !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
-            if ((!canOpenCavity && !hasDoor) || hasChestPlate) {
+            if ((!canOpenCavity && !hasDoor) || (hasChestPlate && !player.isCreative())) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     PacketDistributor.sendToPlayer(serverPlayer, new ChestOpenerMessagePacket(hasChestPlate));
                 } else {

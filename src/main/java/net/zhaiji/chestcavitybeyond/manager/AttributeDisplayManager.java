@@ -77,7 +77,7 @@ public class AttributeDisplayManager {
      * @return 已注册的属性显示信息
      */
     public static AttributeDisplay register(Holder<Attribute> attribute) {
-        return register(attribute, 0, false);
+        return AttributeDisplay.builder(attribute).build();
     }
 
     /**
@@ -88,32 +88,8 @@ public class AttributeDisplayManager {
      * @return 已注册的属性显示信息
      */
     public static AttributeDisplay register(Holder<Attribute> attribute, int priority) {
-        return register(attribute, priority, false);
-    }
-
-    /**
-     * 注册属性显示信息（自定义是否在值为0时显示）
-     *
-     * @param attribute    属性 Holder
-     * @param showWhenZero 值为0时是否显示
-     * @return 已注册的属性显示信息
-     */
-    public static AttributeDisplay register(Holder<Attribute> attribute, boolean showWhenZero) {
-        return register(attribute, 0, showWhenZero);
-    }
-
-    /**
-     * 注册属性显示信息（全部自定义）
-     *
-     * @param attribute    属性 Holder
-     * @param priority     显示优先级，值越高越靠前显示
-     * @param showWhenZero 值为0时是否显示
-     * @return 已注册的属性显示信息
-     */
-    public static AttributeDisplay register(Holder<Attribute> attribute, int priority, boolean showWhenZero) {
         return AttributeDisplay.builder(attribute)
             .priority(priority)
-            .showWhenZero(showWhenZero)
             .build();
     }
 

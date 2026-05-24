@@ -36,7 +36,6 @@ import net.zhaiji.chestcavitybeyond.network.server.packet.UseSkillPacket;
 import net.zhaiji.chestcavitybeyond.register.InitEntityType;
 import net.zhaiji.chestcavitybeyond.register.InitMenuType;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
-import org.lwjgl.glfw.GLFW;
 
 public class ClientEventHandler {
     /**

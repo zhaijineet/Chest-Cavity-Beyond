@@ -10,7 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -271,7 +270,7 @@ public class CommonEventHandler {
     public static void handlerPlayerInteractEvent$EntityInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getEntity().getItemInHand(event.getHand());
         // 当玩家手持开胸器或生物分析仪时，可能更希望使用物品的效果
-        if ((stack.is(InitItem.CHEST_OPENER.get()) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get())) && event.getTarget() instanceof LivingEntity) {
+        if ((stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get())) && event.getTarget() instanceof LivingEntity) {
             event.setCanceled(true);
         }
     }

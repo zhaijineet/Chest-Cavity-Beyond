@@ -6,9 +6,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
-import net.zhaiji.chestcavitybeyond.api.OrganTooltip;
 import net.zhaiji.chestcavitybeyond.client.event.ClientEventManager;
-import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 @Mod(value = ChestCavityBeyond.MOD_ID, dist = Dist.CLIENT)
 public class ChestCavityBeyondClient {
