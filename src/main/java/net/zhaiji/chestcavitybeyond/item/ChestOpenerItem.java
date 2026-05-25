@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
@@ -77,7 +78,7 @@ public class ChestOpenerItem extends Item {
                 target.getHealth()
             );
             hasDoor = ChestCavityUtil.getData(target).hasOrgan(ItemTags.DOORS);
-            boolean hasChestPlate = !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+            boolean hasChestPlate = ChestCavityBeyondConfig.chestplateBlocksChestOpener && !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
             if ((!canOpenCavity && !hasDoor) || (hasChestPlate && !player.isCreative())) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     PacketDistributor.sendToPlayer(serverPlayer, new ChestOpenerMessagePacket(hasChestPlate));

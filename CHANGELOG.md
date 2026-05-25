@@ -2,6 +2,10 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.7
+
+- 新增通用配置 `chestplateBlocksChestOpener`：控制胸甲是否阻挡开胸器打开胸腔（默认开启）
+
 ## 1.4.6
 
 - 修复其他模组添加的实体子类（如矿石苦力怕）因无法匹配胸腔类型而丢失功能的问题：`ChestCavityTypeManager.getType()` 的回退逻辑新增 17 种 `instanceof` 检测，覆盖多种实体
