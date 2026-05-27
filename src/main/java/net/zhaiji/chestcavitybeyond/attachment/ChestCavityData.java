@@ -565,11 +565,10 @@ public class ChestCavityData extends ItemStackHandler {
         Iterator<IChestCavityTask> iterator = tasks.iterator();
         while (iterator.hasNext()) {
             IChestCavityTask task = iterator.next();
+            task.tick(owner);
             if (task.canRemove(owner)) {
                 task.onRemoved(owner);
                 iterator.remove();
-            } else {
-                task.tick(owner);
             }
         }
     }

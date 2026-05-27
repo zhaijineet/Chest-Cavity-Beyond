@@ -2,6 +2,11 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.8
+
+- 修复默认器官配平机制对 `ADD_MULTIPLIED_TOTAL`（最终乘算）不生效的 Bug：补偿修饰符改为按操作类型分别生成（`default_value`、`default_base`、`default_total`），确保乘算类器官的配平正确抵消
+- 新增非玩家实体器官冷却机制（`OrganCooldownTask`）：非玩家实体现在也能正确使用器官技能冷却
+
 ## 1.4.7
 
 - 新增通用配置 `chestplateBlocksChestOpener`：控制胸甲是否阻挡开胸器打开胸腔（默认开启）

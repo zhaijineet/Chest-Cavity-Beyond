@@ -19,6 +19,7 @@ import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class OrganAttributeUtil {
@@ -236,8 +237,10 @@ public class OrganAttributeUtil {
      * 更新胸腔类型的默认属性调整修饰符
      */
     public static void updateDefaultModifier(ChestCavityData data, LivingEntity entity) {
-        for (Map.Entry<Holder<Attribute>, AttributeModifier> entry : data.getType().getDefaultModifier(entity.getType()).entrySet()) {
-            updateAttributeModifier(entity, entry.getKey(), entry.getValue());
+        for (Map.Entry<Holder<Attribute>, List<AttributeModifier>> entry : data.getType().getDefaultModifier(entity.getType()).entrySet()) {
+            for (AttributeModifier modifier : entry.getValue()) {
+                updateAttributeModifier(entity, entry.getKey(), modifier);
+            }
         }
     }
 

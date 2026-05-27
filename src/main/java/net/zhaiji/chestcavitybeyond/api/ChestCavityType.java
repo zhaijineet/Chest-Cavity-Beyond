@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 public class ChestCavityType {
     private final NonNullList<Item> organs = NonNullList.withSize(54, Items.AIR);
     private final Map<EntityType<?>, Map<Holder<Attribute>, Double>> defaultAttributes = new HashMap<>();
-    private final Map<EntityType<?>, Map<Holder<Attribute>, AttributeModifier>> defaultModifiers = new HashMap<>();
+    private final Map<EntityType<?>, Map<Holder<Attribute>, List<AttributeModifier>>> defaultModifiers = new HashMap<>();
     private final Map<Item, List<AttributeBonus>> attributeBonuses = new HashMap<>();
     private final List<AttributeBonus> typeDefaultBonuses = new ArrayList<>();
     private final Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> conversionMap = new HashMap<>();
@@ -53,41 +53,51 @@ public class ChestCavityType {
         Holder<Attribute> attribute,
         Collection<AttributeModifier> modifiers,
         Map<Holder<Attribute>, Double> defaultMap,
-        Map<Holder<Attribute>, AttributeModifier> modifierMap
+        Map<Holder<Attribute>, List<AttributeModifier>> modifierMap
     ) {
-        double value = 0;
         double baseValue = 0;
         boolean hasAttribute = false;
         if (DefaultAttributes.hasSupplier(entityType)) {
             AttributeSupplier attributeSupplier = DefaultAttributes.getSupplier(entityType);
             if (attributeSupplier.hasAttribute(attribute)) {
                 hasAttribute = true;
-                value = baseValue = attributeSupplier.getValue(attribute);
+                baseValue = attributeSupplier.getValue(attribute);
             }
         }
         if (!hasAttribute) {
             defaultMap.put(attribute, 0D);
+            return;
         }
+        // 按操作类型分别汇总
+        double sumAddValue = 0;
+        double sumMultipliedBase = 0;
+        double productMultipliedTotal = 1.0;
         for (AttributeModifier modifier : modifiers) {
-            if (modifier.operation() == AttributeModifier.Operation.ADD_VALUE) {
-                value += modifier.amount();
+            switch (modifier.operation()) {
+                case ADD_VALUE -> sumAddValue += modifier.amount();
+                case ADD_MULTIPLIED_BASE -> sumMultipliedBase += modifier.amount();
+                case ADD_MULTIPLIED_TOTAL -> productMultipliedTotal *= (1 + modifier.amount());
             }
         }
-        double copyValue = value;
-        for (AttributeModifier modifier : modifiers) {
-            if (modifier.operation() == AttributeModifier.Operation.ADD_MULTIPLIED_BASE) {
-                value += copyValue * modifier.amount();
-            }
-        }
-        for (AttributeModifier modifier : modifiers) {
-            if (modifier.operation() == AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) {
-                value *= 1 + modifier.amount();
-            }
-        }
+        // 用汇总值计算最终默认属性值
+        double value = (baseValue + sumAddValue) * (1 + sumMultipliedBase) * productMultipliedTotal;
         defaultMap.put(attribute, value);
-        // 当属性不是本模组添加的属性时，给予默认属性调整修饰符
+        // 当属性不是本模组添加的属性时，按操作类型分别配平
         if (!attribute.getKey().location().getNamespace().equals(ChestCavityBeyond.MOD_ID)) {
-            modifierMap.put(attribute, OrganAttributeUtil.createAddValueModifier("default", baseValue - value));
+            List<AttributeModifier> compensations = new ArrayList<>();
+            if (sumAddValue != 0) {
+                compensations.add(OrganAttributeUtil.createAddValueModifier("default_value", -sumAddValue));
+            }
+            if (sumMultipliedBase != 0) {
+                compensations.add(OrganAttributeUtil.createMultipliedBaseModifier("default_base", -sumMultipliedBase));
+            }
+            if (productMultipliedTotal != 1.0 && productMultipliedTotal != 0.0) {
+                // 乘法逆元：productMultipliedTotal = Π(1+amount)，补偿 = 1/productMultipliedTotal - 1
+                compensations.add(OrganAttributeUtil.createMultipliedTotalModifier("default_total", 1.0 / productMultipliedTotal - 1.0));
+            }
+            if (!compensations.isEmpty()) {
+                modifierMap.put(attribute, compensations);
+            }
         }
     }
 
@@ -364,7 +374,7 @@ public class ChestCavityType {
     public ChestCavityType builder(EntityType<? extends LivingEntity> entityType) {
         Multimap<Holder<Attribute>, AttributeModifier> modifierMultimap = HashMultimap.create();
         Map<Holder<Attribute>, Double> attributeMap = new HashMap<>();
-        Map<Holder<Attribute>, AttributeModifier> modifierMap = new HashMap<>();
+        Map<Holder<Attribute>, List<AttributeModifier>> modifierMap = new HashMap<>();
 
         // 收集器官的所有修饰符
         for (int i = 0; i < size.getSlots(); i++) {
@@ -415,7 +425,7 @@ public class ChestCavityType {
      * @param entityType 实体类型
      * @return 默认属性调整修饰符
      */
-    public Map<Holder<Attribute>, AttributeModifier> getDefaultModifier(EntityType<?> entityType) {
+    public Map<Holder<Attribute>, List<AttributeModifier>> getDefaultModifier(EntityType<?> entityType) {
         return defaultModifiers.get(entityType);
     }
 

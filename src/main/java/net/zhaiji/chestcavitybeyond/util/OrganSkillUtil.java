@@ -23,6 +23,7 @@ import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
@@ -40,6 +41,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.task.BlazeFireballTask;
 import net.zhaiji.chestcavitybeyond.api.task.GuardianLaserTask;
+import net.zhaiji.chestcavitybeyond.api.task.OrganCooldownTask;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.entity.ThrownCobweb;
 import net.zhaiji.chestcavitybeyond.register.InitEffect;
@@ -63,8 +65,18 @@ public class OrganSkillUtil {
      * @param cooldown 冷却时间
      */
     public static void addCooldown(LivingEntity entity, ItemStack stack, int cooldown) {
-        if (entity instanceof Player player && !player.isCreative()) {
-            player.getCooldowns().addCooldown(stack.getItem(), cooldown);
+        if (entity instanceof Player player) {
+            if (!player.isCreative()) {
+                player.getCooldowns().addCooldown(stack.getItem(), cooldown);
+            }
+        } else {
+            ChestCavityData data = ChestCavityUtil.getData(entity);
+            Item item = stack.getItem();
+            data.getFirstTaskIf(task -> task instanceof OrganCooldownTask ct && ct.isOnCooldown(item))
+                .ifPresentOrElse(
+                    task -> ((OrganCooldownTask) task).setOrRefresh(cooldown),
+                    () -> data.addTask(new OrganCooldownTask(item, cooldown))
+                );
         }
     }
 
@@ -76,10 +88,11 @@ public class OrganSkillUtil {
      * @return 是否在冷却
      */
     public static boolean hasCooldown(LivingEntity entity, ItemStack stack) {
-        if (entity instanceof Player player && !player.isCreative()) {
-            return player.getCooldowns().isOnCooldown(stack.getItem());
+        if (entity instanceof Player player) {
+            return !player.isCreative() && player.getCooldowns().isOnCooldown(stack.getItem());
         }
-        return false;
+        ChestCavityData data = ChestCavityUtil.getData(entity);
+        return data.hasTaskIf(task -> task instanceof OrganCooldownTask ct && ct.isOnCooldown(stack));
     }
 
     /**
