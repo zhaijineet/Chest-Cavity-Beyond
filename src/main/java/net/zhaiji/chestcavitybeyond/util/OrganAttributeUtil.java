@@ -303,7 +303,6 @@ public class OrganAttributeUtil {
     public static void updateLeaping(ChestCavityData data, LivingEntity entity) {
         double leaping = data.getDifferenceValue(InitAttribute.LEAPING);
         double jumpStrengthFactor = MathUtil.getLog10Scale(leaping);
-        double safeFallDistanceFactor = MathUtil.getDirectScale(leaping);
         updateAttributeModifier(
             entity,
             Attributes.JUMP_STRENGTH,
@@ -311,15 +310,15 @@ public class OrganAttributeUtil {
             ? createAddValueModifier("leaping", jumpStrengthFactor)
             : createMultipliedBaseModifier("leaping", -jumpStrengthFactor)
         );
-        if (leaping == 0) {
-            safeFallDistanceFactor = 0;
-        }
+        // 获取更新后的实际跳跃力，计算跳跃高度，按原版比例设置安全摔落距离
+        double currentJumpStr = entity.getAttributeValue(Attributes.JUMP_STRENGTH);
+        double jumpHeight = MathUtil.calcJumpHeight(currentJumpStr);
+        // 安全掉落距离按原版物理效果比例: SafeFall / JumpH = 3.0 / 1.25 = 2.4，然后减去原本的3点数值
+        double safeFallTarget = (jumpHeight * 2.4) - 3;
         updateAttributeModifier(
             entity,
             Attributes.SAFE_FALL_DISTANCE,
-            leaping >= 0
-            ? createMultipliedBaseModifier("leaping", safeFallDistanceFactor / 4)
-            : createMultipliedBaseModifier("leaping", safeFallDistanceFactor - 1)
+            createAddValueModifier("leaping", safeFallTarget)
         );
     }
 

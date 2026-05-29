@@ -1320,9 +1320,7 @@ public class InitItem {
         "slime_core",
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 0.5)
-            .addValueAttribute(InitAttribute.DIGESTION, 1)
             .addValueAttribute(InitAttribute.SCAVENGER_DIGESTION, 1)
-            .addValueAttribute(InitAttribute.NUTRITION, 1)
             .addValueAttribute(InitAttribute.SCAVENGER_NUTRITION, 1)
             .build()
     );
@@ -1331,10 +1329,8 @@ public class InitItem {
     public static final Supplier<Item> SLIME_STOMACH = ITEM.register(
         "slime_stomach",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DIGESTION, 2)
             .addValueAttribute(InitAttribute.SCAVENGER_DIGESTION, 2)
-            .addValueAttribute(InitAttribute.NUTRITION, 4)
-            .addValueAttribute(InitAttribute.SCAVENGER_NUTRITION, 4)
+            .addValueAttribute(InitAttribute.SCAVENGER_NUTRITION, 2)
             .build()
     );
 
@@ -1353,9 +1349,9 @@ public class InitItem {
     public static final Supplier<Item> MAGMA_STOMACH = ITEM.register(
         "magma_stomach",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 4)
-            .addValueAttribute(InitAttribute.DIGESTION, 3)
-            .addValueAttribute(InitAttribute.NUTRITION, 3)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 3)
+            .addValueAttribute(InitAttribute.DIGESTION, 2)
+            .addValueAttribute(InitAttribute.NUTRITION, 2)
             .build()
     );
 
