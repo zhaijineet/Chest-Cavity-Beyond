@@ -79,6 +79,14 @@ public class ChestOpenerItem extends Item {
             );
             hasDoor = ChestCavityUtil.getData(target).hasOrgan(ItemTags.DOORS);
             boolean hasChestPlate = ChestCavityBeyondConfig.chestplateBlocksChestOpener && !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+            // 液压钳：消耗胸甲耐久，如果胸甲被破坏则视为无胸甲
+            if (hasChestPlate && !player.isCreative()) {
+                if (EnchantmentUtil.getEnchantmentLevel(level, stack, InitEnchantment.HYDRAULIC_CLAMP) > 0) {
+                    hasChestPlate = !EnchantmentUtil.applyHydraulicClamp(level, stack, target);
+                    // 触发液压钳，添加3秒冷却
+                    player.getCooldowns().addCooldown(this, 60);
+                }
+            }
             if ((!canOpenCavity && !hasDoor) || (hasChestPlate && !player.isCreative())) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     PacketDistributor.sendToPlayer(serverPlayer, new ChestOpenerMessagePacket(hasChestPlate));

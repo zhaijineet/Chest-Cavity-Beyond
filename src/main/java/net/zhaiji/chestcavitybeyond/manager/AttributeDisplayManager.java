@@ -1,9 +1,13 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.AttributeDisplay;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
+import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -53,7 +57,22 @@ public class AttributeDisplayManager {
         register(InitAttribute.SCAVENGER_DIGESTION, 10);
         register(InitAttribute.SCAVENGER_NUTRITION, 10);
         // 特殊能力 (0)
-        register(InitAttribute.FIRE_RESISTANCE);
+        register(AttributeDisplay.builder(InitAttribute.FIRE_RESISTANCE)
+            .descriptionOverride(() -> {
+                MutableComponent hover = Component.empty();
+                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.0"));
+                hover.append(Component.literal("\n"));
+                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.1",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityHotFloor)));
+                hover.append(Component.literal("\n"));
+                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.2",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityFire)));
+                hover.append(Component.literal("\n"));
+                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.3",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityLava)));
+                return hover;
+            })
+            .build());
         register(InitAttribute.FROST_RESISTANCE);
         register(InitAttribute.WATER_ALLERGY);
         register(InitAttribute.ENDER);

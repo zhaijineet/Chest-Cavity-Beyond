@@ -20,6 +20,8 @@ public class InitEnchantment {
 
     public static final ResourceKey<Enchantment> PRUDENT_SURGERY = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("prudent_surgery"));
 
+    public static final ResourceKey<Enchantment> HYDRAULIC_CLAMP = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("hydraulic_clamp"));
+
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
 
@@ -77,6 +79,20 @@ public class InitEnchantment {
                                 .setMinCost(1, 11)
                                 .setMaxCost(12, 11)
                                 .setMaxLevel(3)
+                                .build()
+                )
+        );
+
+        register(
+                context,
+                HYDRAULIC_CLAMP,
+                Enchantment.enchantment(
+                        EnchantmentDefinitionBuilder.builder()
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
+                                .setMinCost(1, 11)
+                                .setMaxCost(12, 11)
+                                .setMaxLevel(5)
                                 .build()
                 )
         );

@@ -33,6 +33,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterCompletedEvent;
 import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterEvent;
@@ -54,6 +55,7 @@ import net.zhaiji.chestcavitybeyond.register.InitDamageType;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MathUtil;
+import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
 
 public class CommonEventHandler {
@@ -322,6 +324,17 @@ public class CommonEventHandler {
         ChestCavityUtil.incomingDamage(data, entity, event);
         // 检查事件是否已被取消
         if (event.isCanceled()) return;
+        // 阶梯式火焰免疫
+        if (source.is(DamageTypeTags.IS_FIRE)) {
+            double fireResistance = data.getDifferenceValue(InitAttribute.FIRE_RESISTANCE);
+            if (OrganAttributeUtil.isFireImmune(fireResistance, source)) {
+                if (fireResistance >= ChestCavityBeyondConfig.fireImmunityFire) {
+                    entity.clearFire();
+                }
+                event.setCanceled(true);
+                return;
+            }
+        }
         boolean isProjectile = source.is(DamageTypeTags.IS_PROJECTILE);
         boolean isWaterPotion = source.getDirectEntity() instanceof ThrownPotion potion
                                 && potion.getItem().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER);

@@ -138,21 +138,4 @@ public class MathUtil {
         }
         return 1 + Math.log1p(-input);
     }
-
-    /**
-     * 根据跳跃力计算跳跃高度
-     * 模拟 Minecraft 跳跃物理: velocity = (vy - 0.08) * 0.98
-     *
-     * @param jumpStrength 跳跃力
-     * @return 跳跃高度
-     */
-    public static double calcJumpHeight(double jumpStrength) {
-        double velocity = jumpStrength;
-        double height = 0;
-        while (velocity > 0) {
-            height += velocity;
-            velocity = (velocity - 0.08) * 0.98;
-        }
-        return height;
-    }
 }

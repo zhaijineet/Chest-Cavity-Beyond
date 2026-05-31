@@ -426,6 +426,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Safe Surgery",
             "Level 1: Sneak to open self and pets; Level 2: Only other entities"
         );
+        addEnchantment(
+            InitEnchantment.HYDRAULIC_CLAMP,
+            "Hydraulic Clamp",
+            "Each level consumes 25 durability from target's chestplate"
+        );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
         add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "Target is too healthy");
@@ -494,7 +499,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Affects movement speed"
         );
         addAttributeDescription(InitAttribute.FIRE_RESISTANCE,
-            "Reduces fire damage"
+            "Reduces fire damage taken",
+            "Immune to hot blocks (magma/campfire) at ≥ %s",
+            "Immune to fire/burning at ≥ %s, also clears fire status",
+            "Immune to lava at ≥ %s"
         );
         addAttributeDescription(InitAttribute.FROST_RESISTANCE,
             "Reduces freezing damage"
@@ -992,6 +1000,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "安全手术",
             "1级时下蹲可对自己和宠物开胸，2级时只能对其他生物开胸"
         );
+        addEnchantment(
+            InitEnchantment.HYDRAULIC_CLAMP,
+            "液压钳",
+            "每级消耗目标胸甲25点耐久"
+        );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");
         add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "目标太过健康");
@@ -1060,7 +1073,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "影响移动速度"
         );
         addAttributeDescription(InitAttribute.FIRE_RESISTANCE,
-            "减少火焰伤害"
+            "减少受到的火焰伤害",
+            "≥ %s 时免疫热方块（岩浆块/营火）伤害",
+            "≥ %s 时免疫火焰/燃烧伤害，并清除着火状态",
+            "≥ %s 时免疫岩浆伤害"
         );
         addAttributeDescription(InitAttribute.FROST_RESISTANCE,
             "减少冰冻伤害"

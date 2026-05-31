@@ -3,6 +3,7 @@
     "chestcavitybeyond:teleoperation",
     "chestcavitybeyond:advanced_surgery",
     "chestcavitybeyond:safe_surgery",
-    "chestcavitybeyond:prudent_surgery"
+    "chestcavitybeyond:prudent_surgery",
+    "chestcavitybeyond:hydraulic_clamp"
   ]
 }

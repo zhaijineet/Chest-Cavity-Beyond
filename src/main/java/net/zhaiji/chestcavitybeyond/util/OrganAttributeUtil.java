@@ -3,6 +3,9 @@ package net.zhaiji.chestcavitybeyond.util;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -312,7 +315,7 @@ public class OrganAttributeUtil {
         );
         // 获取更新后的实际跳跃力，计算跳跃高度，按原版比例设置安全摔落距离
         double currentJumpStr = entity.getAttributeValue(Attributes.JUMP_STRENGTH);
-        double jumpHeight = MathUtil.calcJumpHeight(currentJumpStr);
+        double jumpHeight = calcJumpHeight(currentJumpStr);
         // 安全掉落距离按原版物理效果比例: SafeFall / JumpH = 3.0 / 1.25 = 2.4，然后减去原本的3点数值
         double safeFallTarget = (jumpHeight * 2.4) - 3;
         updateAttributeModifier(
@@ -335,5 +338,53 @@ public class OrganAttributeUtil {
             bonus = 0.25 * extraRows;
         }
         updateAttributeModifier(entity, Attributes.SCALE, createMultipliedBaseModifier("chest_cavity_scale", bonus));
+    }
+
+    /**
+     * 判断火焰抗性是否足以完全免疫当前火焰伤害
+     * <p>
+     * 阶梯式免疫：
+     * <ul>
+     *   <li>≥ fireImmunityHotFloor：免疫热方块（岩浆块/营火）伤害</li>
+     *   <li>≥ fireImmunityFire：免疫火焰/燃烧伤害</li>
+     *   <li>≥ fireImmunityLava：免疫岩浆伤害</li>
+     * </ul>
+     * </p>
+     *
+     * @param fireResistance 火焰抗性差异值
+     * @param source         伤害源
+     * @return 是否完全免疫
+     */
+    public static boolean isFireImmune(double fireResistance, DamageSource source) {
+        if (!source.is(DamageTypeTags.IS_FIRE) || fireResistance < ChestCavityBeyondConfig.fireImmunityHotFloor) {
+            return false;
+        }
+        // 岩浆 → 需要 ≥ fireImmunityLava
+        if (source.is(DamageTypes.LAVA)) {
+            return fireResistance >= ChestCavityBeyondConfig.fireImmunityLava;
+        }
+        // 热地板/营火 → 需要 ≥ fireImmunityHotFloor
+        if (source.is(DamageTypes.HOT_FLOOR) || source.is(DamageTypes.CAMPFIRE)) {
+            return true;
+        }
+        // 其他火焰伤害（in_fire, on_fire, fireball 等）→ 需要 ≥ fireImmunityFire
+        return fireResistance >= ChestCavityBeyondConfig.fireImmunityFire;
+    }
+
+    /**
+     * 根据跳跃力计算跳跃高度
+     * 模拟 Minecraft 跳跃物理: velocity = (vy - 0.08) * 0.98
+     *
+     * @param jumpStrength 跳跃力
+     * @return 跳跃高度
+     */
+    public static double calcJumpHeight(double jumpStrength) {
+        double velocity = jumpStrength;
+        double height = 0;
+        while (velocity > 0) {
+            height += velocity;
+            velocity = (velocity - 0.08) * 0.98;
+        }
+        return height;
     }
 }

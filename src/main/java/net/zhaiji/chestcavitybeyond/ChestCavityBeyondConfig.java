@@ -14,6 +14,9 @@ public class ChestCavityBeyondConfig {
     public static int crystalEffectSearchRange;
     public static boolean enableChestCavityScaleSideEffect;
     public static boolean chestplateBlocksChestOpener;
+    public static double fireImmunityHotFloor;
+    public static double fireImmunityFire;
+    public static double fireImmunityLava;
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment(
@@ -138,6 +141,42 @@ public class ChestCavityBeyondConfig {
                     true
             );
 
+    private static final ModConfigSpec.DoubleValue FIRE_IMMUNITY_HOT_FLOOR = BUILDER
+            .comment(
+                    "火焰抗性阈值：免疫热方块（岩浆块/营火）伤害",
+                    "Fire resistance threshold: immune to hot block (magma block/campfire) damage"
+            )
+            .defineInRange(
+                    "fireImmunityHotFloor",
+                    2.0,
+                    0.0,
+                    100.0
+            );
+
+    private static final ModConfigSpec.DoubleValue FIRE_IMMUNITY_FIRE = BUILDER
+            .comment(
+                    "火焰抗性阈值：免疫火焰/燃烧伤害，并清除着火状态",
+                    "Fire resistance threshold: immune to fire/burn damage, and clear fire status"
+            )
+            .defineInRange(
+                    "fireImmunityFire",
+                    6.0,
+                    0.0,
+                    100.0
+            );
+
+    private static final ModConfigSpec.DoubleValue FIRE_IMMUNITY_LAVA = BUILDER
+            .comment(
+                    "火焰抗性阈值：免疫岩浆伤害",
+                    "Fire resistance threshold: immune to lava damage"
+            )
+            .defineInRange(
+                    "fireImmunityLava",
+                    10.0,
+                    0.0,
+                    100.0
+            );
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     public static void handlerModConfigEvent(ModConfigEvent event) {
@@ -152,6 +191,9 @@ public class ChestCavityBeyondConfig {
             crystalEffectSearchRange = CRYSTAL_EFFECT_SEARCH_RANGE.get();
             enableChestCavityScaleSideEffect = ENABLE_CHEST_CAVITY_SCALE_SIDE_EFFECT.get();
             chestplateBlocksChestOpener = CHESTPLATE_BLOCKS_CHEST_OPENER.get();
+            fireImmunityHotFloor = FIRE_IMMUNITY_HOT_FLOOR.get();
+            fireImmunityFire = FIRE_IMMUNITY_FIRE.get();
+            fireImmunityLava = FIRE_IMMUNITY_LAVA.get();
         }
     }
 }

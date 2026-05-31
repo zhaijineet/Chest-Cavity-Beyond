@@ -23,7 +23,8 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
                         InitEnchantment.TELEOPERATION,
                         InitEnchantment.ADVANCED_SURGERY,
                         InitEnchantment.SAFE_SURGERY,
-                        InitEnchantment.PRUDENT_SURGERY
+                        InitEnchantment.PRUDENT_SURGERY,
+                        InitEnchantment.HYDRAULIC_CLAMP
                 );
 //        tag(EnchantmentTags.TRADEABLE)
 //                .add(
@@ -31,6 +32,7 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
 //                        InitEnchantment.ADVANCED_SURGERY,
 //                        InitEnchantment.SAFE_SURGERY,
 //                        InitEnchantment.PRUDENT_SURGERY
+//                        InitEnchantment.HYDRAULIC_CLAMP
 //                );
     }
 }

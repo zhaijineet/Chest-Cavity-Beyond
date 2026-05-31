@@ -244,6 +244,11 @@ public class TooltipUtil {
      * @return 悬停文本组件
      */
     public static Component buildAttributeDescription(AttributeDisplay attributeDisplay) {
+        // 动态描述优先
+        java.util.function.Supplier<Component> override = attributeDisplay.descriptionOverride();
+        if (override != null) {
+            return override.get();
+        }
         MutableComponent hover = Component.empty();
         int i = 0;
         String lineKey;

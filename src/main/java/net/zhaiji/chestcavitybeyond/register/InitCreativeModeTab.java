@@ -44,6 +44,10 @@ public class InitCreativeModeTab {
                                                                   new EnchantmentInstance(parameters.holders().lookupOrThrow(Registries.ENCHANTMENT)
                                                                                                     .getOrThrow(InitEnchantment.PRUDENT_SURGERY), 3)
                                                           ));
+                                                          output.accept(EnchantedBookItem.createForEnchantment(
+                                                                  new EnchantmentInstance(parameters.holders().lookupOrThrow(Registries.ENCHANTMENT)
+                                                                                                    .getOrThrow(InitEnchantment.HYDRAULIC_CLAMP), 5)
+                                                          ));
                                                       }
                                                   });
                                  })

@@ -1,9 +1,12 @@
 package net.zhaiji.chestcavitybeyond.api;
 
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
+
+import java.util.function.Supplier;
 
 /**
  * 属性显示信息
@@ -36,19 +39,22 @@ public class AttributeDisplay {
     private final int priority;
     private final boolean percentageDisplay;
     private final double hideValue;
+    private final Supplier<Component> descriptionOverride;
 
     private AttributeDisplay(
         Holder<Attribute> attribute,
         String descriptionKey,
         int priority,
         boolean percentageDisplay,
-        double hideValue
+        double hideValue,
+        Supplier<Component> descriptionOverride
     ) {
         this.attribute = attribute;
         this.descriptionKey = descriptionKey;
         this.priority = priority;
         this.percentageDisplay = percentageDisplay;
         this.hideValue = hideValue;
+        this.descriptionOverride = descriptionOverride;
     }
 
     /**
@@ -93,12 +99,24 @@ public class AttributeDisplay {
         return hideValue;
     }
 
+    /**
+     * 动态描述覆盖
+     * <p>
+     * 将直接使用此 Supplier 返回的组件，而非静态翻译键。
+     * 适用于需要在运行时动态读取配置值等场景。
+     * </p>
+     */
+    public Supplier<Component> descriptionOverride() {
+        return descriptionOverride;
+    }
+
     public static class Builder {
         private final Holder<Attribute> attribute;
         private final String descriptionKey;
         private int priority;
         private Boolean percentageDisplay = null;  // null=自动推断, true/false=手动强制
         private Double hideValue = null;           // null=自动推断, 其他=手动设置（含0）
+        private Supplier<Component> descriptionOverride = null;
 
         private Builder(Holder<Attribute> attribute) {
             this.attribute = attribute;
@@ -145,6 +163,21 @@ public class AttributeDisplay {
         }
 
         /**
+         * 设置动态描述覆盖。
+         * <p>
+         * 设置后，{@link net.zhaiji.chestcavitybeyond.util.TooltipUtil#buildAttributeDescription}
+         * 将使用此 Supplier 生成描述组件，忽略静态翻译键。
+         * 适用于需要在运行时动态读取配置值等场景。
+         * </p>
+         *
+         * @param descriptionOverride 描述组件的 Supplier，传入 null 表示使用静态翻译
+         */
+        public Builder descriptionOverride(Supplier<Component> descriptionOverride) {
+            this.descriptionOverride = descriptionOverride;
+            return this;
+        }
+
+        /**
          * 构建并注册属性显示信息
          */
         public AttributeDisplay build() {
@@ -159,7 +192,8 @@ public class AttributeDisplay {
                 descriptionKey,
                 priority,
                 isPercentage,
-                hideVal
+                hideVal,
+                descriptionOverride
             );
             AttributeDisplayManager.register(display);
             return display;
