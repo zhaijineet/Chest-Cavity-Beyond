@@ -73,7 +73,16 @@ public class AttributeDisplayManager {
                 return hover;
             })
             .build());
-        register(InitAttribute.FROST_RESISTANCE);
+        register(AttributeDisplay.builder(InitAttribute.FROST_RESISTANCE)
+            .descriptionOverride(() -> {
+                MutableComponent hover = Component.empty();
+                hover.append(Component.translatable("attribute.chestcavitybeyond.frost_resistance.description.0"));
+                hover.append(Component.literal("\n"));
+                hover.append(Component.translatable("attribute.chestcavitybeyond.frost_resistance.description.1",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.frostImmunity)));
+                return hover;
+            })
+            .build());
         register(InitAttribute.WATER_ALLERGY);
         register(InitAttribute.ENDER);
         register(InitAttribute.PROJECTILE_DODGE);

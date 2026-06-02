@@ -2,6 +2,12 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.4.11
+
+- 新增冰霜抗性阶梯免疫机制：根据冰霜抗性数值免疫冻结伤害并清除冰冻进度，阈值可配置（`frostImmunity`）
+- `minChestOpenMaxHealth` 配置最大值上限从 40 提升至 Integer.MAX_VALUE
+- 新增 `chestOpenBaseHealthRatio` 配置：超出直接开胸阈值时，目标当前生命值需低于最大生命值的该比例才能开胸（默认 0.3）
+
 ## 1.4.10
 
 - 新增液压钳附魔：开胸时消耗目标胸甲耐久（每级 25 点），若胸甲被破坏则可正常开胸

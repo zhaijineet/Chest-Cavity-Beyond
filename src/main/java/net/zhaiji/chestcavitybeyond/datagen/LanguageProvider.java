@@ -505,7 +505,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Immune to lava at ≥ %s"
         );
         addAttributeDescription(InitAttribute.FROST_RESISTANCE,
-            "Reduces freezing damage"
+            "Reduces freezing damage taken",
+            "Immune to freezing damage at ≥ %s, also clears freezing progress"
         );
         addAttributeDescription(InitAttribute.WATER_ALLERGY,
             "Takes damage in water or rain"
@@ -1079,7 +1080,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "≥ %s 时免疫岩浆伤害"
         );
         addAttributeDescription(InitAttribute.FROST_RESISTANCE,
-            "减少冰冻伤害"
+            "减少受到的冰冻伤害",
+            "≥ %s 时免疫冰冻伤害，并清除冰冻进度"
         );
         addAttributeDescription(InitAttribute.WATER_ALLERGY,
             "在水中或雨中持续受到伤害"

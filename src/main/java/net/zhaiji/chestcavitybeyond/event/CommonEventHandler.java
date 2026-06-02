@@ -335,6 +335,15 @@ public class CommonEventHandler {
                 return;
             }
         }
+        // 冰霜免疫
+        if (source.is(DamageTypeTags.IS_FREEZING)) {
+            double frostResistance = data.getDifferenceValue(InitAttribute.FROST_RESISTANCE);
+            if (OrganAttributeUtil.isFrostImmune(frostResistance, source)) {
+                entity.setTicksFrozen(0);
+                event.setCanceled(true);
+                return;
+            }
+        }
         boolean isProjectile = source.is(DamageTypeTags.IS_PROJECTILE);
         boolean isWaterPotion = source.getDirectEntity() instanceof ThrownPotion potion
                                 && potion.getItem().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER);

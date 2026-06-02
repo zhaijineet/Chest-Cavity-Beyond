@@ -6,6 +6,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class ChestCavityBeyondConfig {
     public static int filtrationPeriod;
     public static int minChestOpenMaxHealth;
+    public static double chestOpenBaseHealthRatio;
     public static int guardianLaserDistance;
     public static int randomTeleportAttempts;
     public static int furnacePowerMaxDuration;
@@ -17,6 +18,7 @@ public class ChestCavityBeyondConfig {
     public static double fireImmunityHotFloor;
     public static double fireImmunityFire;
     public static double fireImmunityLava;
+    public static double frostImmunity;
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment(
@@ -39,14 +41,26 @@ public class ChestCavityBeyondConfig {
 
     private static final ModConfigSpec.IntValue MIN_CHEST_OPEN_MAX_HEALTH = BUILDER
             .comment(
-                    "无需高级手术即可打开胸腔的最大生命值阈值",
-                    "Minimum max health threshold to open chest cavity without advanced surgery"
+                    "目标最大生命值不超过此值时可直接开胸，无需削减当前生命值",
+                    "Target max health at or below this value can be opened directly without reducing current health"
             )
             .defineInRange(
                     "minChestOpenMaxHealth",
                     15,
                     1,
-                    40
+                    Integer.MAX_VALUE
+            );
+
+    private static final ModConfigSpec.DoubleValue CHEST_OPEN_BASE_HEALTH_RATIO = BUILDER
+            .comment(
+                    "超出直接开胸阈值时，目标当前生命值需低于最大生命值的该比例才能开胸（0.3 = 目标生命需≤30%，每级高级手术附魔额外+10%）",
+                    "When target max health exceeds direct-open threshold, target current health must be below this ratio of max health to open (0.3 = ≤30%, each Advanced Surgery level adds +10%)"
+            )
+            .defineInRange(
+                    "chestOpenBaseHealthRatio",
+                    0.3,
+                    0.0,
+                    1.0
             );
 
     private static final ModConfigSpec.IntValue GUARDIAN_LASER_DISTANCE = BUILDER
@@ -177,12 +191,25 @@ public class ChestCavityBeyondConfig {
                     100.0
             );
 
+    private static final ModConfigSpec.DoubleValue FROST_IMMUNITY = BUILDER
+            .comment(
+                    "冰霜抗性阈值：免疫冰冻伤害，并清除冰冻进度",
+                    "Frost resistance threshold: immune to freezing damage, and clear frozen ticks"
+            )
+            .defineInRange(
+                    "frostImmunity",
+                    4.0,
+                    0.0,
+                    100.0
+            );
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     public static void handlerModConfigEvent(ModConfigEvent event) {
         if (event.getConfig().getSpec() == SPEC) {
             filtrationPeriod = FILTRATION_PERIOD.get();
             minChestOpenMaxHealth = MIN_CHEST_OPEN_MAX_HEALTH.get();
+            chestOpenBaseHealthRatio = CHEST_OPEN_BASE_HEALTH_RATIO.get();
             guardianLaserDistance = GUARDIAN_LASER_DISTANCE.get();
             randomTeleportAttempts = RANDOM_TELEPORT_ATTEMPTS.get();
             furnacePowerMaxDuration = FURNACE_POWER_MAX_DURATION.get();
@@ -194,6 +221,7 @@ public class ChestCavityBeyondConfig {
             fireImmunityHotFloor = FIRE_IMMUNITY_HOT_FLOOR.get();
             fireImmunityFire = FIRE_IMMUNITY_FIRE.get();
             fireImmunityLava = FIRE_IMMUNITY_LAVA.get();
+            frostImmunity = FROST_IMMUNITY.get();
         }
     }
 }

@@ -372,6 +372,17 @@ public class OrganAttributeUtil {
     }
 
     /**
+     * 判断冰霜抗性是否足以完全免疫当前冻结伤害
+     *
+     * @param frostResistance 冰霜抗性差异值
+     * @param source          伤害源
+     * @return 是否完全免疫
+     */
+    public static boolean isFrostImmune(double frostResistance, DamageSource source) {
+        return source.is(DamageTypeTags.IS_FREEZING) && frostResistance >= ChestCavityBeyondConfig.frostImmunity;
+    }
+
+    /**
      * 根据跳跃力计算跳跃高度
      * 模拟 Minecraft 跳跃物理: velocity = (vy - 0.08) * 0.98
      *
