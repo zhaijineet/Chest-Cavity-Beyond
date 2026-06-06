@@ -27,6 +27,7 @@ public class CommonEventManager {
         gameBus.addListener(CommonEventHandler::handlerPlayerEvent$PlayerRespawnEvent);
         gameBus.addListener(CommonEventHandler::handlerPlayerInteractEvent$EntityInteract);
         gameBus.addListener(CommonEventHandler::handlerMobEffectEvent$Applicable);
+        gameBus.addListener(CommonEventHandler::handlerRegisterBrewingRecipesEvent);
         gameBus.addListener(CommonEventHandler::handlerLivingIncomingDamageEvent);
         gameBus.addListener(CommonEventHandler::handlerLivingHealEvent);
         gameBus.addListener(CommonEventHandler::handlerLivingDamageEvent$Pre);

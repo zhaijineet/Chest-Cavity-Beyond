@@ -15,6 +15,7 @@ import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 import net.neoforged.neoforge.common.crafting.IntersectionIngredient;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
+import net.zhaiji.chestcavitybeyond.recipe.AlchemistGlandRecipe;
 import net.zhaiji.chestcavitybeyond.recipe.VenomGlandRecipe;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 
@@ -51,6 +52,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .save(recipeOutput);
 
         SpecialRecipeBuilder.special(VenomGlandRecipe::new).save(recipeOutput, ChestCavityBeyond.of("venom_gland_recipe"));
+
+        SpecialRecipeBuilder.special(AlchemistGlandRecipe::new).save(recipeOutput, ChestCavityBeyond.of("alchemist_gland_recipe"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.BLAZE_ROD)
                 .requires(InitItem.ACTIVE_BLAZE_ROD.get())

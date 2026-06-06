@@ -2,24 +2,37 @@ package net.zhaiji.chestcavitybeyond.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import net.minecraft.core.Holder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.level.Level;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.mixinapi.ILivingEntity;
+import net.zhaiji.chestcavitybeyond.register.InitAttribute;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MixinUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements ILivingEntity {
+    @Unique
+    private final Set<Holder<Attribute>> chestCavityBeyond$dirtyDerivedAttributes = new HashSet<>();
+
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
@@ -74,5 +87,39 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
     @Override
     public void chestCavityBeyond$onEffectUpdated(MobEffectInstance effectInstance, boolean forced, @Nullable Entity entity) {
         onEffectUpdated(effectInstance, forced, entity);
+    }
+
+    /**
+     * 记录发生变更的模组派生属性
+     */
+    @Inject(
+        method = "onAttributeUpdated",
+        at = @At("HEAD")
+    )
+    public void chestCavityBeyond$onAttributeUpdated(Holder<Attribute> attribute, CallbackInfo ci) {
+        if (attribute.equals(InitAttribute.HEALTH)
+            || attribute.equals(InitAttribute.NERVES)
+            || attribute.equals(InitAttribute.STRENGTH)
+            || attribute.equals(InitAttribute.SPEED)
+            || attribute.equals(InitAttribute.LEAPING)) {
+            chestCavityBeyond$dirtyDerivedAttributes.add(attribute);
+        }
+    }
+
+    /**
+     * 在 refreshDirtyAttributes 的 set.clear() 之后安全更新原版派生属性
+     */
+    @Inject(
+        method = "refreshDirtyAttributes",
+        at = @At("RETURN")
+    )
+    public void chestCavityBeyond$refreshDirtyAttributes(CallbackInfo ci) {
+        if (chestCavityBeyond$dirtyDerivedAttributes.isEmpty()) return;
+        LivingEntity entity = (LivingEntity) (Object) this;
+        ChestCavityData data = ChestCavityUtil.getData(entity);
+        for (Holder<Attribute> attr : chestCavityBeyond$dirtyDerivedAttributes) {
+            OrganAttributeUtil.updateDerivedAttribute(data, entity, attr);
+        }
+        chestCavityBeyond$dirtyDerivedAttributes.clear();
     }
 }

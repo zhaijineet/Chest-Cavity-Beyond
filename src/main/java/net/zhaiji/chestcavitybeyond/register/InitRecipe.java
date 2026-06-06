@@ -5,6 +5,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
+import net.zhaiji.chestcavitybeyond.recipe.AlchemistGlandRecipe;
 import net.zhaiji.chestcavitybeyond.recipe.VenomGlandRecipe;
 
 import java.util.function.Supplier;
@@ -16,5 +17,10 @@ public class InitRecipe {
     public static final Supplier<RecipeSerializer<VenomGlandRecipe>> VENOM_GLAND = RECIPE_SERIALIZERS.register(
             "venom_gland",
             () -> new SimpleCraftingRecipeSerializer<>(VenomGlandRecipe::new)
+    );
+
+    public static final Supplier<RecipeSerializer<AlchemistGlandRecipe>> ALCHEMIST_GLAND = RECIPE_SERIALIZERS.register(
+            "alchemist_gland",
+            () -> new SimpleCraftingRecipeSerializer<>(AlchemistGlandRecipe::new)
     );
 }

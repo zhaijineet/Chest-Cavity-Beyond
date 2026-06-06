@@ -185,6 +185,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.SILK_GLAND, "Silk Gland");
         addItem(InitItem.VENOM_GLAND, "Venom Gland");
+        addItem(InitItem.ALCHEMIST_GLAND, "Alchemist Gland");
         addItem(InitItem.ARTHROPOD_HEART, "Arthropod Heart");
         addItem(InitItem.ARTHROPOD_INTESTINE, "Arthropod Intestine");
         addItem(InitItem.ARTHROPOD_LUNG, "Arthropod Lung");
@@ -346,6 +347,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Can be crafted with any potion to change stored effects",
             "Effect duration is reduced to 1/10 of original",
             "4 seconds cooldown"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.ALCHEMIST_GLAND, "Gain stored potion effects");
+        addOrganActiveSkill(InitItem.ALCHEMIST_GLAND,
+            "Gain stored potion effects on self",
+            "Can be crafted with any potion to change stored effects",
+            "Cooldown equals the duration of stored effects",
+            "Instant effects count as 60s cooldown"
         );
 
         addOrganActiveSkill(InitItem.LLAMA_LUNG,
@@ -743,6 +752,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.SILK_GLAND, "丝腺");
         addItem(InitItem.VENOM_GLAND, "毒腺");
+        addItem(InitItem.ALCHEMIST_GLAND, "炼金腺");
         addItem(InitItem.ARTHROPOD_HEART, "节肢生物心脏");
         addItem(InitItem.ARTHROPOD_INTESTINE, "节肢生物肠子");
         addItem(InitItem.ARTHROPOD_LUNG, "节肢生物肺脏");
@@ -904,6 +914,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "可与任意药水合成以更换存储的药水效果",
             "药水效果持续时间缩短为原来的1/10",
             "冷却时间：4秒"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.ALCHEMIST_GLAND, "获得药水效果");
+        addOrganActiveSkill(InitItem.ALCHEMIST_GLAND,
+            "获得存储的药水效果",
+            "可与任意药水合成以更换存储的药水效果",
+            "冷却时间等于存储效果的持续时间",
+            "瞬时效果按60秒冷却计算"
         );
 
         addOrganActiveSkill(InitItem.LLAMA_LUNG,

@@ -15,12 +15,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingConversionEvent;
@@ -68,6 +70,20 @@ public class CommonEventHandler {
         OrganManager.getRegistry().forEach((item, organ) -> {
             event.registerItem(CapabilityManager.ORGAN, (itemStack, context) -> organ, item);
         });
+    }
+
+    /**
+     * 注册酿造台配方
+     *
+     * @param event 注册酿造配方事件
+     */
+    public static void handlerRegisterBrewingRecipesEvent(RegisterBrewingRecipesEvent event) {
+        // 恶魂之泪 + 毒腺 → 炼金腺
+        event.getBuilder().addRecipe(
+            Ingredient.of(InitItem.VENOM_GLAND.get()),
+            Ingredient.of(Items.GHAST_TEAR),
+            InitItem.ALCHEMIST_GLAND.get().getDefaultInstance()
+        );
     }
 
     /**

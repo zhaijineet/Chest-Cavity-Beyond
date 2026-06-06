@@ -3,6 +3,9 @@ package net.zhaiji.chestcavitybeyond.register;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -1049,6 +1052,56 @@ public class InitItem {
                 context.stack()
                     .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
                     .forEachEffect(target::addEffect);
+            })
+            .build()
+    );
+
+    // 炼金腺
+    public static final Supplier<Item> ALCHEMIST_GLAND = ITEM.register(
+        "alchemist_gland",
+        () -> Organ.builder(
+                new Item(
+                    new Item.Properties()
+                        .stacksTo(1)
+                        .component(DataComponents.POTION_CONTENTS, new PotionContents(Potions.REGENERATION))
+                ) {
+                    @Override
+                    public void appendHoverText(
+                        ItemStack stack,
+                        TooltipContext context,
+                        List<Component> tooltipComponents,
+                        TooltipFlag tooltipFlag
+                    ) {
+                        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+                        PotionContents potioncontents = stack.get(DataComponents.POTION_CONTENTS);
+                        if (potioncontents != null) {
+                            potioncontents.addPotionTooltip(tooltipComponents::add, 1.0F, context.tickRate());
+                        }
+                    }
+
+                    @Override
+                    public ItemStack getDefaultInstance() {
+                        ItemStack stack = super.getDefaultInstance();
+                        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.REGENERATION));
+                        return stack;
+                    }
+                }
+            )
+            .cooldown(context -> {
+                PotionContents contents = context.stack().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+                int maxDuration = 0;
+                for (MobEffectInstance effect : contents.getAllEffects()) {
+                    // 瞬时效果记作60秒，非瞬时取实际时长，最终取最长
+                    int duration = effect.getEffect().value().isInstantenous() ? 60 * 20 : effect.getDuration();
+                    maxDuration = Math.max(maxDuration, duration);
+                }
+                return maxDuration;
+            })
+            .skill(context -> {
+                context.stack()
+                    .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
+                    .forEachEffect(context.entity()::addEffect);
+                return true;
             })
             .build()
     );

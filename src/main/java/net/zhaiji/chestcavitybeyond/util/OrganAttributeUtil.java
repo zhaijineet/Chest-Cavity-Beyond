@@ -174,11 +174,6 @@ public class OrganAttributeUtil {
         for (AttributeBonus bonus : type.getAttributeBonuses(newStack.getItem())) {
             addModifier(entity, bonus.attribute(), Collections.singleton(bonus.create(slotId)));
         }
-        updateHealth(data, entity);
-        updateNerves(data, entity);
-        updateStrength(data, entity);
-        updateSpeed(data, entity);
-        updateLeaping(data, entity);
     }
 
     /**
@@ -224,6 +219,21 @@ public class OrganAttributeUtil {
                 modifiers.forEach(instance::removeModifier);
             }
         }
+    }
+
+    /**
+     * 根据模组属性分发调用对应的原版属性更新方法
+     *
+     * @param data      胸腔数据
+     * @param entity    目标实体
+     * @param attribute 发生变化的模组属性
+     */
+    public static void updateDerivedAttribute(ChestCavityData data, LivingEntity entity, Holder<Attribute> attribute) {
+        if (attribute.equals(InitAttribute.HEALTH)) updateHealth(data, entity);
+        else if (attribute.equals(InitAttribute.NERVES)) updateNerves(data, entity);
+        else if (attribute.equals(InitAttribute.STRENGTH)) updateStrength(data, entity);
+        else if (attribute.equals(InitAttribute.SPEED)) updateSpeed(data, entity);
+        else if (attribute.equals(InitAttribute.LEAPING)) updateLeaping(data, entity);
     }
 
     /**

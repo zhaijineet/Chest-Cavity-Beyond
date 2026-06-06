@@ -13,45 +13,46 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 import net.zhaiji.chestcavitybeyond.register.InitRecipe;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
-public class VenomGlandRecipe extends CustomRecipe {
-    public VenomGlandRecipe(CraftingBookCategory category) {
+public class AlchemistGlandRecipe extends CustomRecipe {
+    public AlchemistGlandRecipe(CraftingBookCategory category) {
         super(category);
     }
 
     @Override
     public boolean matches(CraftingInput input, Level level) {
-        int venomGland = 0;
+        int alchemistGland = 0;
         int potion = 0;
         for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getItem(i);
-            if (stack.is(InitItem.VENOM_GLAND.get())) {
-                venomGland++;
+            if (stack.is(InitItem.ALCHEMIST_GLAND.get())) {
+                alchemistGland++;
             } else {
                 PotionContents potionContents = stack.get(DataComponents.POTION_CONTENTS);
                 if (potionContents != null && (potionContents.potion().isPresent() || !potionContents.customEffects().isEmpty())) {
                     potion++;
                 }
             }
-            if (venomGland > 1 || potion > 1) return false;
+            if (alchemistGland > 1 || potion > 1) return false;
         }
-        return venomGland == 1 && potion == 1;
+        return alchemistGland == 1 && potion == 1;
     }
 
     @Override
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
-        ItemStack venomGland = ItemStack.EMPTY;
+        ItemStack alchemistGland = ItemStack.EMPTY;
         ItemStack potion = ItemStack.EMPTY;
         for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getItem(i);
-            if (stack.is(InitItem.VENOM_GLAND.get())) {
-                venomGland = stack;
+            if (stack.is(InitItem.ALCHEMIST_GLAND.get())) {
+                alchemistGland = stack;
             } else if (stack.has(DataComponents.POTION_CONTENTS)) {
                 potion = stack;
             }
         }
-        return ChestCavityUtil.attachPotionContents(venomGland.copy(), potion.get(DataComponents.POTION_CONTENTS).getAllEffects());
+        ItemStack result = alchemistGland.copy();
+        result.set(DataComponents.POTION_CONTENTS, potion.get(DataComponents.POTION_CONTENTS));
+        return result;
     }
 
     @Override
@@ -59,10 +60,7 @@ public class VenomGlandRecipe extends CustomRecipe {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int i = 0; i < nonnulllist.size(); i++) {
             ItemStack item = input.getItem(i);
-            if (!item.is(InitItem.VENOM_GLAND.get()) && !item.isEmpty()) {
-                // 真有你的mojang，自己写了craftRemaining和usingConvertsTo
-                // 结果tmd不用，在PotionItem的finishUsingItem方法里直接new ItemStack(Items.GLASS_BOTTLE)
-                // 我没招了
+            if (!item.is(InitItem.ALCHEMIST_GLAND.get()) && !item.isEmpty()) {
                 nonnulllist.set(i, Items.GLASS_BOTTLE.getDefaultInstance());
             }
         }
@@ -76,6 +74,6 @@ public class VenomGlandRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return InitRecipe.VENOM_GLAND.get();
+        return InitRecipe.ALCHEMIST_GLAND.get();
     }
 }

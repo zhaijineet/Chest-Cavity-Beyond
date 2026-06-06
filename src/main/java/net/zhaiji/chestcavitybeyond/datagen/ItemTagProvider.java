@@ -236,6 +236,7 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .add(
                         InitItem.SILK_GLAND.get(),
                         InitItem.VENOM_GLAND.get(),
+                        InitItem.ALCHEMIST_GLAND.get(),
                         InitItem.ACTIVE_BLAZE_ROD.get(),
                         InitItem.ACTIVE_BREEZE_ROD.get(),
                         InitItem.MANA_REACTOR.get(),
@@ -296,7 +297,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.GOLEM_CORE.get(),
                         InitItem.GOLEM_CABLE.get(),
                         InitItem.GOLEM_ARMOR_PLATE.get(),
-                        InitItem.PISTON_MUSCLE.get()
+                        InitItem.PISTON_MUSCLE.get(),
+                        InitItem.INNER_FURNACE.get()
                 );
 
         // 器官
