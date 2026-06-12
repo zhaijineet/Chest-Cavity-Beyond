@@ -26,3 +26,4 @@ run-data
 repo
 .narrafork/
 .worktrees/
+src/generated/resources/.cache/

@@ -41,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -745,7 +746,12 @@ public class ChestCavityData extends ItemStackHandler {
      * @return 默认属性值
      */
     public double getDefaultValue(Holder<Attribute> attribute) {
-        return type.getDefaultAttributes(owner.getType()).getOrDefault(attribute, 0D);
+        Map<Holder<Attribute>, Double> typeAttrs = type.getDefaultAttributes(owner.getType());
+        if (typeAttrs.containsKey(attribute)) {
+            return typeAttrs.get(attribute);
+        }
+        AttributeInstance instance = owner.getAttribute(attribute);
+        return instance != null ? instance.getBaseValue() : 0;
     }
 
     /**
@@ -772,6 +778,10 @@ public class ChestCavityData extends ItemStackHandler {
      * @param sourceType 源胸腔类型，用于查找转换映射
      */
     public void convertOrgans(ChestCavityType sourceType) {
+        // 重置为目标胸腔类型的设置（size 保留旧值）
+        needBreath = type.getNeedBreath();
+        needHealth = type.getNeedHealth();
+
         // 检测当前器官是否为源类型原始默认器官（未被修改过）
         NonNullList<Item> sourceDefaults = sourceType.getOrgans();
         boolean unchanged = true;
@@ -793,7 +803,8 @@ public class ChestCavityData extends ItemStackHandler {
                 if (current.isEmpty()) continue;
 
                 ItemStack converted = sourceType.getConversionResult(
-                    ChestCavityUtil.createContext(this, i, current)
+                    ChestCavityUtil.createContext(this, i, current),
+                    type.getId()
                 );
                 if (converted != current || !ItemStack.isSameItemSameComponents(converted, current)) {
                     stacks.set(i, converted);

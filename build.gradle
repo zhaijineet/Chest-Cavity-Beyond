@@ -183,7 +183,8 @@ dependencies {
     // 苹果皮
     localRuntime "squeek.appleskin:appleskin-neoforge:mc1.21-3.0.7"
     // JEI
-    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.27.0.340"
+    compileOnly("mezz.jei:jei-1.21.1-neoforge-api:19.27.0.340")
+    runtimeOnly("mezz.jei:jei-1.21.1-neoforge:19.27.0.340")
     // Jade
     localRuntime "maven.modrinth:jade:15.10.4+neoforge"
     // Sable

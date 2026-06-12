@@ -323,7 +323,7 @@ public class MixinUtil {
             if (launch > 0) {
                 double knockbackResistance = ChestCavityUtil.getData(target).getCurrentValue(Attributes.KNOCKBACK_RESISTANCE) / 8;
                 double yAdd = Math.max(0.0, 1 - knockbackResistance);
-                target.setDeltaMovement(target.getDeltaMovement().add(0.0, 0.4 * yAdd, 0.0));
+                target.setDeltaMovement(target.getDeltaMovement().add(0.0, 0.04 * launch * yAdd, 0.0));
             }
         }
     }

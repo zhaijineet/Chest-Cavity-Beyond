@@ -20,14 +20,17 @@ import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondClientConfig;
+import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
 import net.zhaiji.chestcavitybeyond.api.AttributeDisplay;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
+import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.api.OrganTooltip;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.TooltipSectionFunction;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
+import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 
 import java.math.RoundingMode;
@@ -36,7 +39,9 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class TooltipUtil {
     public static final String PREFIX = "organ." + ChestCavityBeyond.MOD_ID + ".";
@@ -214,6 +219,36 @@ public class TooltipUtil {
     }
 
     /**
+     * 为胸腔类型的器官属性加值生成 tooltip 行
+     *
+     * @param bonuses 属性加成列表
+     * @return 格式化后的 tooltip 行
+     */
+    public static List<Component> attributeBonusTooltip(List<AttributeBonus> bonuses) {
+        List<Component> result = new ArrayList<>();
+        for (AttributeBonus bonus : bonuses) {
+            boolean isPercentage = isPercentageAttribute(bonus.attribute());
+            boolean isAddValue = bonus.operation() == AttributeModifier.Operation.ADD_VALUE;
+            double value = bonus.bonusValue();
+            if (!isAddValue || isPercentage) {
+                value *= 100;
+            }
+            String string = (value > 0 ? " +" : " ") + formatAttributeValue(value);
+            if (isAddValue && isPercentage) {
+                string += "%";
+            }
+            result.add(
+                Component.translatable(
+                    PREFIX + "attribute.tooltips_" + bonus.operation().ordinal(),
+                    string,
+                    Component.translatable(bonus.attribute().value().getDescriptionId())
+                )
+            );
+        }
+        return result;
+    }
+
+    /**
      * 简单工具提示添加（从索引1开始插入）
      *
      * @param total 总工具提示
@@ -284,6 +319,8 @@ public class TooltipUtil {
         );
 
         List<AttributeDisplay> displays = AttributeDisplayManager.getDisplays();
+        ChestCavityType type = ChestCavityTypeManager.getType(target);
+        Map<Holder<Attribute>, Double> typeAttrs = type.getDefaultAttributes(target.getType());
         int count = 0;
 
         for (AttributeDisplay display : displays) {
@@ -291,9 +328,14 @@ public class TooltipUtil {
             if (instance == null) continue;
             double value = instance.getValue();
 
-            // 跳过显示判断：hideValue ≠ NaN 时匹配即跳过
-            boolean shouldSkip = !Double.isNaN(display.hideValue()) && value == display.hideValue();
-            if (shouldSkip) continue;
+            if (typeAttrs.containsKey(display.attribute())) {
+                // 属性在类型默认属性集中：按 hidePredicate 逻辑过滤
+                boolean shouldSkip = display.hidePredicate() != null && display.hidePredicate().test(value);
+                if (shouldSkip) continue;
+            } else {
+                // 属性不在类型默认属性集中：当前值等于默认基础值则跳过，有变化则显示
+                if (value == instance.getBaseValue()) continue;
+            }
 
             // 属性名（高亮 + 悬停）
             Component nameComp =
@@ -322,6 +364,18 @@ public class TooltipUtil {
                     .append(Component.literal(": "))
                     .append(valueComp)
             );
+
+            // 实时效果（独立新行）
+            Function<LivingEntity, Component> effectFn = display.valueEffect();
+            if (effectFn != null) {
+                Component effectComp = effectFn.apply(target);
+                if (effectComp != null) {
+                    viewer.sendSystemMessage(
+                        Component.literal("   ↳ ").append(effectComp).withStyle(ChatFormatting.GRAY)
+                    );
+                }
+            }
+
             count++;
         }
 

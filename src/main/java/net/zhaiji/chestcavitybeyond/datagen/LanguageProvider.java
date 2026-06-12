@@ -11,7 +11,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
+import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
+import net.zhaiji.chestcavitybeyond.compat.jei.ChestCavityTypeDisplay;
+import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
+import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitCreativeModeTab;
@@ -301,28 +305,32 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s perished due to %2$s's medical error", 4);
 
         addOrganSimpleActiveSkill(InitItem.ENDER_APPENDIX, "Teleport in viewing direction");
-        addOrganActiveSkill(InitItem.ENDER_APPENDIX,
+        addOrganActiveSkill(
+            InitItem.ENDER_APPENDIX,
             "Teleport along the line of sight",
             "Teleport distance depends on Ender attribute value",
             "Can pass through thin walls when close"
         );
 
         addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "Eat grass");
-        addOrganActiveSkill(InitItem.HERBIVORE_RUMEN,
+        addOrganActiveSkill(
+            InitItem.HERBIVORE_RUMEN,
             "Consume grass, short grass, or tall grass for food",
             "Grass blocks turn into dirt",
             "Tall grass restores more hunger than short grass"
         );
 
         addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "Explode");
-        addOrganActiveSkill(InitItem.CREEPER_APPENDIX,
+        addOrganActiveSkill(
+            InitItem.CREEPER_APPENDIX,
             "Create an explosion centered on self",
             "Power equals 3 times Explosive attribute value",
             "Does not destroy blocks"
         );
 
         addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "Burn fuel for power");
-        addOrganActiveSkill(InitItem.INNER_FURNACE,
+        addOrganActiveSkill(
+            InitItem.INNER_FURNACE,
             "Consume burnable items in hand to gain Furnace Power",
             "Sneak to consume multiple items at once",
             "Effect level equals Furnace Power attribute",
@@ -330,19 +338,22 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
 
         addOrganSimpleActiveSkill(InitItem.GOLEM_ARMOR_PLATE, "Repair itself using iron ingots");
-        addOrganActiveSkill(InitItem.GOLEM_ARMOR_PLATE,
+        addOrganActiveSkill(
+            InitItem.GOLEM_ARMOR_PLATE,
             "Consume an iron ingot from inventory to heal",
             "Healing equals 2.5 times Iron Repair attribute"
         );
 
         addOrganSimpleActiveSkill(InitItem.SILK_GLAND, "Shoot cobwebs");
-        addOrganActiveSkill(InitItem.SILK_GLAND,
+        addOrganActiveSkill(
+            InitItem.SILK_GLAND,
             "Throw a cobweb that can trap entities",
             "Costs hunger to use"
         );
 
         addOrganSimplePassiveEffect(InitItem.VENOM_GLAND, "Apply potion effects on attack");
-        addOrganPassiveEffect(InitItem.VENOM_GLAND,
+        addOrganPassiveEffect(
+            InitItem.VENOM_GLAND,
             "Apply stored potion effects to target on attack",
             "Can be crafted with any potion to change stored effects",
             "Effect duration is reduced to 1/10 of original",
@@ -350,66 +361,77 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
 
         addOrganSimpleActiveSkill(InitItem.ALCHEMIST_GLAND, "Gain stored potion effects");
-        addOrganActiveSkill(InitItem.ALCHEMIST_GLAND,
+        addOrganActiveSkill(
+            InitItem.ALCHEMIST_GLAND,
             "Gain stored potion effects on self",
             "Can be crafted with any potion to change stored effects",
             "Cooldown equals the duration of stored effects",
             "Instant effects count as 60s cooldown"
         );
 
-        addOrganActiveSkill(InitItem.LLAMA_LUNG,
+        addOrganActiveSkill(
+            InitItem.LLAMA_LUNG,
             "Shoot a llama spit projectile"
         );
 
         addOrganSimpleActiveSkill(InitItem.ACTIVE_BLAZE_ROD, "Shoot continuous fireballs");
-        addOrganActiveSkill(InitItem.ACTIVE_BLAZE_ROD,
+        addOrganActiveSkill(
+            InitItem.ACTIVE_BLAZE_ROD,
             "Launch a barrage of small fireballs",
             "Number of fireballs equals Vomit Fireball attribute",
             "Fires one fireball every 6 ticks"
         );
 
-        addOrganActiveSkill(InitItem.SNOW_CORE,
+        addOrganActiveSkill(
+            InitItem.SNOW_CORE,
             "Throw a snowball projectile"
         );
 
         addOrganSimpleActiveSkill(InitItem.GHAST_STOMACH, "Shoot large fireballs");
-        addOrganActiveSkill(InitItem.GHAST_STOMACH,
+        addOrganActiveSkill(
+            InitItem.GHAST_STOMACH,
             "Launch a ghast-style large fireball",
             "Explosion power equals Ghastly attribute value"
         );
 
-        addOrganActiveSkill(InitItem.SHULKER_SPLEEN,
+        addOrganActiveSkill(
+            InitItem.SHULKER_SPLEEN,
             "Fire a homing shulker bullet at target in sight"
         );
 
         addOrganSimpleActiveSkill(InitItem.BREEZE_CORE, "Shoot wind charges");
-        addOrganActiveSkill(InitItem.BREEZE_CORE,
+        addOrganActiveSkill(
+            InitItem.BREEZE_CORE,
             "Launch a wind charge projectile",
             "Creates wind burst on impact"
         );
 
         addOrganSimpleActiveSkill(InitItem.DRAGON_LUNG, "Shoot dragon fireballs");
-        addOrganActiveSkill(InitItem.DRAGON_LUNG,
+        addOrganActiveSkill(
+            InitItem.DRAGON_LUNG,
             "Launch a dragon fireball",
             "Creates area-of-effect dragon breath on impact"
         );
 
         addOrganSimpleActiveSkill(InitItem.SCULK_CORE, "Sonic boom");
-        addOrganActiveSkill(InitItem.SCULK_CORE,
+        addOrganActiveSkill(
+            InitItem.SCULK_CORE,
             "Emit a sonic boom in the looking direction",
             "Deals 10 damage to all targets in the path",
             "Passes through entities"
         );
 
         addOrganSimpleActiveSkill(InitItem.GUARDIAN_EYE, "Shoot charged laser");
-        addOrganActiveSkill(InitItem.GUARDIAN_EYE,
+        addOrganActiveSkill(
+            InitItem.GUARDIAN_EYE,
             "Charge and fire a laser beam at target in sight",
             "Deals 2 magic damage plus 3 attack damage",
             "Target must remain in range during charging"
         );
 
         addOrganSimpleActiveSkill(InitItem.ELDER_GUARDIAN_EYE, "Shoot charged laser");
-        addOrganActiveSkill(InitItem.ELDER_GUARDIAN_EYE,
+        addOrganActiveSkill(
+            InitItem.ELDER_GUARDIAN_EYE,
             "Charge and fire a laser beam at target in sight",
             "Deals 4 magic damage plus 6 attack damage",
             "Target must remain in range during charging"
@@ -457,130 +479,205 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("commands.chestcavitybeyond.attributes.no_description", "No detailed description available");
         add("commands.chestcavitybeyond.attributes.failed.not_player", "The attributes command can only be executed by a player");
 
-        addAttributeDescription(InitAttribute.HEALTH,
+        addAttributeDescription(
+            InitAttribute.HEALTH,
             "+2 max health per point",
             "Takes continuous damage when value ≤ 0"
         );
-        addAttributeDescription(InitAttribute.NERVES,
-            "Affects movement speed and attack speed",
-            "Cannot move when value ≤ 0"
+        addAttributeDescription(
+            InitAttribute.NERVES,
+            "Affects attack speed and movement speed",
+            "Cannot move when current value ≤ 0"
         );
-        addAttributeDescription(InitAttribute.DEFENSE,
-            "Reduces non-bypassing damage"
+        addAttributeDescription(
+            InitAttribute.DEFENSE,
+            "Reduces non-bypassing damage",
+            "The higher the damage, the lower the damage reduction ratio"
         );
-        addAttributeDescription(InitAttribute.DIGESTION,
+        addAttributeDescription(
+            InitAttribute.DIGESTION,
             "Affects hunger restoration from food",
             "Cannot digest food when value ≤ 0"
         );
-        addAttributeDescription(InitAttribute.NUTRITION,
+        addAttributeDescription(
+            InitAttribute.NUTRITION,
             "Affects saturation from food",
             "Cannot gain saturation from food when value ≤ 0"
         );
-        addAttributeDescription(InitAttribute.ENDURANCE,
+        addAttributeDescription(
+            InitAttribute.ENDURANCE,
             "Affects hunger consumption rate, higher = slower"
         );
-        addAttributeDescription(InitAttribute.METABOLISM,
+        addAttributeDescription(
+            InitAttribute.METABOLISM,
             "Affects natural regeneration and hunger drain speed"
         );
-        addAttributeDescription(InitAttribute.BREATH_CAPACITY,
+        addAttributeDescription(
+            InitAttribute.BREATH_CAPACITY,
             "Affects maximum air supply",
             "Can only breathe when value > 0"
         );
-        addAttributeDescription(InitAttribute.BREATH_RECOVERY,
+        addAttributeDescription(
+            InitAttribute.BREATH_RECOVERY,
             "Affects air recovery rate in air",
             "Can breathe in air when value > 0"
         );
-        addAttributeDescription(InitAttribute.WATER_BREATH,
+        addAttributeDescription(
+            InitAttribute.WATER_BREATH,
             "Affects air recovery rate underwater",
             "Can breathe underwater when value > 0"
         );
-        addAttributeDescription(InitAttribute.DETOXIFICATION,
+        addAttributeDescription(
+            InitAttribute.DETOXIFICATION,
             "Reduces duration of harmful potion effects"
         );
-        addAttributeDescription(InitAttribute.FILTRATION,
+        addAttributeDescription(
+            InitAttribute.FILTRATION,
             "When below default value, periodically applies poison",
             "Lower values cause stronger poison"
         );
-        addAttributeDescription(InitAttribute.STRENGTH,
+        addAttributeDescription(
+            InitAttribute.STRENGTH,
             "Affects attack damage"
         );
-        addAttributeDescription(InitAttribute.SPEED,
+        addAttributeDescription(
+            InitAttribute.SPEED,
             "Affects movement speed"
         );
-        addAttributeDescription(InitAttribute.FIRE_RESISTANCE,
+        addAttributeDescription(
+            InitAttribute.FIRE_RESISTANCE,
             "Reduces fire damage taken",
+            "The higher the damage, the lower the damage reduction ratio",
             "Immune to hot blocks (magma/campfire) at ≥ %s",
             "Immune to fire/burning at ≥ %s, also clears fire status",
             "Immune to lava at ≥ %s"
         );
-        addAttributeDescription(InitAttribute.FROST_RESISTANCE,
+        addAttributeDescription(
+            InitAttribute.FROST_RESISTANCE,
             "Reduces freezing damage taken",
+            "The higher the damage, the lower the damage reduction ratio",
             "Immune to freezing damage at ≥ %s, also clears freezing progress"
         );
-        addAttributeDescription(InitAttribute.WATER_ALLERGY,
+        addAttributeDescription(
+            InitAttribute.WATER_ALLERGY,
             "Takes damage in water or rain"
         );
-        addAttributeDescription(InitAttribute.ENDER,
+        addAttributeDescription(
+            InitAttribute.ENDER,
             "Randomly teleports nearby when taking drowning damage",
             "Affects teleport distance of Ender Appendix skill",
             "Prerequisite for Projectile Dodge attribute to activate"
         );
-        addAttributeDescription(InitAttribute.PROJECTILE_DODGE,
+        addAttributeDescription(
+            InitAttribute.PROJECTILE_DODGE,
             "Requires Ender attribute > 0 to activate",
             "Cancels projectile/water potion damage and teleports randomly"
         );
-        addAttributeDescription(InitAttribute.LEAPING,
+        addAttributeDescription(
+            InitAttribute.LEAPING,
             "Affects jump strength and safe fall distance"
         );
-        addAttributeDescription(InitAttribute.CARNIVOROUS_DIGESTION,
+        addAttributeDescription(
+            InitAttribute.CARNIVOROUS_DIGESTION,
             "Additional hunger restoration from meat"
         );
-        addAttributeDescription(InitAttribute.CARNIVOROUS_NUTRITION,
+        addAttributeDescription(
+            InitAttribute.CARNIVOROUS_NUTRITION,
             "Additional saturation from meat"
         );
-        addAttributeDescription(InitAttribute.HERBIVOROUS_DIGESTION,
+        addAttributeDescription(
+            InitAttribute.HERBIVOROUS_DIGESTION,
             "Additional hunger restoration from plants"
         );
-        addAttributeDescription(InitAttribute.HERBIVOROUS_NUTRITION,
+        addAttributeDescription(
+            InitAttribute.HERBIVOROUS_NUTRITION,
             "Additional saturation from plants"
         );
-        addAttributeDescription(InitAttribute.SCAVENGER_DIGESTION,
+        addAttributeDescription(
+            InitAttribute.SCAVENGER_DIGESTION,
             "Additional hunger restoration from rotten food",
             "Prevents poison and hunger effects from toxic food"
         );
-        addAttributeDescription(InitAttribute.SCAVENGER_NUTRITION,
+        addAttributeDescription(
+            InitAttribute.SCAVENGER_NUTRITION,
             "Additional saturation from rotten food",
             "Harmful effects in food add extra saturation"
         );
-        addAttributeDescription(InitAttribute.EXPLOSIVE,
-            "Affects Creeper Appendix explosion power"
+        addAttributeDescription(
+            InitAttribute.EXPLOSIVE,
+            "Affects Creeper Appendix explosion power",
+            "Explosion power equals 3 × attribute value"
         );
-        addAttributeDescription(InitAttribute.PHOTOSYNTHESIS,
-            "Restores hunger and saturation over time in daylight with sky visibility"
+        addAttributeDescription(
+            InitAttribute.PHOTOSYNTHESIS,
+            "Restores hunger and saturation over time in daylight with sky visibility",
+            "Each trigger +1 hunger, or +1 saturation when hunger is full"
         );
-        addAttributeDescription(InitAttribute.LAUNCH,
+        addAttributeDescription(
+            InitAttribute.LAUNCH,
             "Launches target upward on attack",
             "Knockup is reduced by target's knockback resistance"
         );
-        addAttributeDescription(InitAttribute.IRON_REPAIR,
+        addAttributeDescription(
+            InitAttribute.IRON_REPAIR,
             "Affects Golem Armor Plate healing with iron ingots"
         );
-        addAttributeDescription(InitAttribute.FURNACE_POWER,
+        addAttributeDescription(
+            InitAttribute.FURNACE_POWER,
             "Affects Furnace Power effect level from Inner Furnace skill"
         );
-        addAttributeDescription(InitAttribute.WITHERED,
+        addAttributeDescription(
+            InitAttribute.WITHERED,
             "Applies Wither effect to target on attack",
             "With Nether Star organ in chest cavity, extends effect duration and +1 level"
         );
-        addAttributeDescription(InitAttribute.VOMIT_FIREBALL,
+        addAttributeDescription(
+            InitAttribute.VOMIT_FIREBALL,
             "Affects number of small fireballs from Active Blaze Rod skill"
         );
-        addAttributeDescription(InitAttribute.GHASTLY,
+        addAttributeDescription(
+            InitAttribute.GHASTLY,
             "Affects ghast fireball explosion power from Ghast Stomach skill"
         );
-        addAttributeDescription(InitAttribute.CRYSTALLIZATION,
+        addAttributeDescription(
+            InitAttribute.CRYSTALLIZATION,
             "Restores health and hunger when near End Crystals"
         );
+
+        addAttributeValueEffect(InitAttribute.HEALTH, "Max Health %s");
+        addAttributeValueEffect(InitAttribute.NERVES, "Attack Speed %s%% | Move Speed %s%%");
+        addAttributeValueEffect(InitAttribute.DEFENSE, "Damage Reduction ~%s%% (vs 10 dmg)");
+        addAttributeValueEffect(InitAttribute.ENDURANCE, "Hunger Consumption %s%%");
+        addAttributeValueEffect(InitAttribute.STRENGTH, "Melee Damage %s%%");
+        addAttributeValueEffect(InitAttribute.SPEED, "Move Speed %s%%");
+        addAttributeValueEffect(InitAttribute.DIGESTION, "Food Hunger %s%%");
+        addAttributeValueEffect(InitAttribute.NUTRITION, "Food Saturation %s%%");
+        addAttributeValueEffect(InitAttribute.METABOLISM, "Regen Rate %s%%");
+        addAttributeValueEffect(InitAttribute.BREATH_CAPACITY, "Air Consumption %s%%");
+        addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "Air Recovery %s%%");
+        addAttributeValueEffect(InitAttribute.WATER_BREATH, "Underwater Recovery %s%%");
+        addAttributeValueEffect(InitAttribute.DETOXIFICATION, "Harmful Effect Duration %s%%");
+        addAttributeValueEffect(InitAttribute.FILTRATION, "Poison Lv%s for %ss");
+        add(AttributeDisplayManager.getValueEffectKey(InitAttribute.FILTRATION) + ".safe", "Blood filtration normal, no poisoning risk");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "Meat Hunger %s%%");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "Meat Saturation %s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_DIGESTION, "Plant Hunger %s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_NUTRITION, "Plant Saturation %s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_DIGESTION, "Rotten Hunger %s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_NUTRITION, "Rotten Saturation %s%%");
+        addAttributeValueEffect(InitAttribute.FIRE_RESISTANCE, "Fire Damage Reduction ~%s%% (vs 10 dmg)");
+        addAttributeValueEffect(InitAttribute.FROST_RESISTANCE, "Frost Damage Reduction ~%s%% (vs 10 dmg)");
+        addAttributeValueEffect(InitAttribute.ENDER, "Teleport Range %s");
+        addAttributeValueEffect(InitAttribute.LEAPING, "Jump Height %s");
+        addAttributeValueEffect(InitAttribute.EXPLOSIVE, "Explosion Power %s");
+        addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "Interval %ss");
+        addAttributeValueEffect(InitAttribute.IRON_REPAIR, "Iron Heal %s");
+        addAttributeValueEffect(InitAttribute.WITHERED, "Wither Duration %ss, Lv%s");
+        addAttributeValueEffect(InitAttribute.GHASTLY, "Fireball Power %s");
+        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "Heal %s/s");
+        addAttributeValueEffect(InitAttribute.LAUNCH, "Knockup Force %s");
+        addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "Fireball Count %s");
+        addAttributeValueEffect(InitAttribute.FURNACE_POWER, "Effect Lv%s, Max Duration %ss, e.g. 1 coal = 80s");
 
         add(ItemTagManager.ORGANS, "Organs");
         add(ItemTagManager.HEART, "Hearts");
@@ -599,6 +696,61 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add(ItemTagManager.ROTTEN, "Rotten");
         add(ItemTagManager.IRON, "Iron");
 
+        add("jei." + ChestCavityBeyond.MOD_ID + ".chest_cavity_type", "Chest Cavity Type");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".need_breath", "Needs Breathing");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_breath", "No Breathing Needed");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".need_health", "Needs Health");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_health", "No Health Needed");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_spawn_egg", "%s (No Spawn Egg)");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".type_bonus_header", "Chest Cavity Type Bonus:");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".type_default_bonus_header", "Type Default Bonus:");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_type_default_bonus", "No Type Default Bonus");
+
+        addChestCavityTypeName(ChestCavityTypeManager.HUMAN, "Human");
+        addChestCavityTypeName(ChestCavityTypeManager.ANIMAL, "Animal");
+        addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE1, "Herbivore");
+        addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE2, "Ruminant Herbivore");
+        addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE3, "Multi-stomached Herbivore");
+        addChestCavityTypeName(ChestCavityTypeManager.LLAMA, "Llama");
+        addChestCavityTypeName(ChestCavityTypeManager.CARNIVORE, "Carnivore");
+        addChestCavityTypeName(ChestCavityTypeManager.SHULKER, "Shulker");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_ANIMAL, "Small Animal");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_HERBIVORE, "Small Herbivore");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_CARNIVORE, "Small Carnivore");
+        addChestCavityTypeName(ChestCavityTypeManager.AXOLOTL, "Axolotl");
+        addChestCavityTypeName(ChestCavityTypeManager.TURTLE, "Turtle");
+        addChestCavityTypeName(ChestCavityTypeManager.FROG, "Frog");
+        addChestCavityTypeName(ChestCavityTypeManager.RABBIT, "Rabbit");
+        addChestCavityTypeName(ChestCavityTypeManager.SLIME, "Slime");
+        addChestCavityTypeName(ChestCavityTypeManager.MAGMA_CUBE, "Magma Cube");
+        addChestCavityTypeName(ChestCavityTypeManager.FIREPROOF, "Fireproof");
+        addChestCavityTypeName(ChestCavityTypeManager.GHAST, "Ghast");
+        addChestCavityTypeName(ChestCavityTypeManager.ENDER, "Ender");
+        addChestCavityTypeName(ChestCavityTypeManager.ENDER_DRAGON, "Ender Dragon");
+        addChestCavityTypeName(ChestCavityTypeManager.UNDEAD, "Undead");
+        addChestCavityTypeName(ChestCavityTypeManager.SKELETON, "Skeleton");
+        addChestCavityTypeName(ChestCavityTypeManager.WITHER_SKELETON, "Wither Skeleton");
+        addChestCavityTypeName(ChestCavityTypeManager.WITHER, "Wither");
+        addChestCavityTypeName(ChestCavityTypeManager.ARTHROPOD, "Arthropod");
+        addChestCavityTypeName(ChestCavityTypeManager.SPIDER, "Spider");
+        addChestCavityTypeName(ChestCavityTypeManager.CAVE_SPIDER, "Cave Spider");
+        addChestCavityTypeName(ChestCavityTypeManager.AQUATIC, "Aquatic");
+        addChestCavityTypeName(ChestCavityTypeManager.DOLPHIN, "Dolphin");
+        addChestCavityTypeName(ChestCavityTypeManager.FISH, "Fish");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_AQUATIC, "Small Aquatic");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_FISH, "Small Fish");
+        addChestCavityTypeName(ChestCavityTypeManager.SALTWATER, "Saltwater");
+        addChestCavityTypeName(ChestCavityTypeManager.CREEPER, "Creeper");
+        addChestCavityTypeName(ChestCavityTypeManager.BLAZE, "Blaze");
+        addChestCavityTypeName(ChestCavityTypeManager.BREEZE, "Breeze");
+        addChestCavityTypeName(ChestCavityTypeManager.IRON_GOLEM, "Iron Golem");
+        addChestCavityTypeName(ChestCavityTypeManager.SNOW_GOLEM, "Snow Golem");
+        addChestCavityTypeName(ChestCavityTypeManager.WARDEN, "Warden");
+        addChestCavityTypeName(ChestCavityTypeManager.ELDER, "Elder");
+        addChestCavityTypeName(ChestCavityTypeManager.ELDER_FISH, "Elder Fish");
+        addChestCavityTypeName(ChestCavityTypeManager.GUARDIAN, "Guardian");
+        addChestCavityTypeName(ChestCavityTypeManager.ELDER_GUARDIAN, "Elder Guardian");
+        addChestCavityTypeName(ChestCavityTypeManager.ARMOR_STAND, "Armor Stand");
     }
 
     public void Chinese() {
@@ -868,28 +1020,32 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addDamageType(InitDamageType.OPEN_CHEST, "%1$s因%2$s的医疗失误而丧命", 4);
 
         addOrganSimpleActiveSkill(InitItem.ENDER_APPENDIX, "向视线方向传送");
-        addOrganActiveSkill(InitItem.ENDER_APPENDIX,
+        addOrganActiveSkill(
+            InitItem.ENDER_APPENDIX,
             "沿视线方向进行传送",
             "传送距离取决于末影属性值",
             "近距离时可穿墙传送"
         );
 
         addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "吃草");
-        addOrganActiveSkill(InitItem.HERBIVORE_RUMEN,
+        addOrganActiveSkill(
+            InitItem.HERBIVORE_RUMEN,
             "食用草方块、矮草丛或高草丛",
             "草方块会变成泥土",
             "高草丛比矮草丛恢复更多饱食度"
         );
 
         addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "自爆");
-        addOrganActiveSkill(InitItem.CREEPER_APPENDIX,
+        addOrganActiveSkill(
+            InitItem.CREEPER_APPENDIX,
             "以自身为中心制造爆炸",
             "威力等于3倍爆炸属性值",
             "不会破坏方块"
         );
 
         addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "燃烧燃料获得动力");
-        addOrganActiveSkill(InitItem.INNER_FURNACE,
+        addOrganActiveSkill(
+            InitItem.INNER_FURNACE,
             "消耗手持可燃物品获得熔炉之力效果",
             "潜行时一次性消耗多个物品",
             "效果等级等于熔炉之力属性值",
@@ -897,19 +1053,22 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
 
         addOrganSimpleActiveSkill(InitItem.GOLEM_ARMOR_PLATE, "使用铁锭修补自身");
-        addOrganActiveSkill(InitItem.GOLEM_ARMOR_PLATE,
+        addOrganActiveSkill(
+            InitItem.GOLEM_ARMOR_PLATE,
             "消耗背包中的铁锭来治疗自身",
             "治疗量等于2.5倍铁修复属性值"
         );
 
         addOrganSimpleActiveSkill(InitItem.SILK_GLAND, "发射蛛网");
-        addOrganActiveSkill(InitItem.SILK_GLAND,
+        addOrganActiveSkill(
+            InitItem.SILK_GLAND,
             "投掷蛛网困住实体",
             "使用消耗饱食度"
         );
 
         addOrganSimplePassiveEffect(InitItem.VENOM_GLAND, "攻击时施加药水效果");
-        addOrganPassiveEffect(InitItem.VENOM_GLAND,
+        addOrganPassiveEffect(
+            InitItem.VENOM_GLAND,
             "攻击时对目标施加存储的药水效果",
             "可与任意药水合成以更换存储的药水效果",
             "药水效果持续时间缩短为原来的1/10",
@@ -917,66 +1076,77 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
 
         addOrganSimpleActiveSkill(InitItem.ALCHEMIST_GLAND, "获得药水效果");
-        addOrganActiveSkill(InitItem.ALCHEMIST_GLAND,
+        addOrganActiveSkill(
+            InitItem.ALCHEMIST_GLAND,
             "获得存储的药水效果",
             "可与任意药水合成以更换存储的药水效果",
             "冷却时间等于存储效果的持续时间",
             "瞬时效果按60秒冷却计算"
         );
 
-        addOrganActiveSkill(InitItem.LLAMA_LUNG,
+        addOrganActiveSkill(
+            InitItem.LLAMA_LUNG,
             "发射羊驼口水弹"
         );
 
         addOrganSimpleActiveSkill(InitItem.ACTIVE_BLAZE_ROD, "发射连续的火球");
-        addOrganActiveSkill(InitItem.ACTIVE_BLAZE_ROD,
+        addOrganActiveSkill(
+            InitItem.ACTIVE_BLAZE_ROD,
             "连续发射小型火球",
             "火球数量等于呕火属性值",
             "每6tick发射一颗火球"
         );
 
-        addOrganActiveSkill(InitItem.SNOW_CORE,
+        addOrganActiveSkill(
+            InitItem.SNOW_CORE,
             "投掷雪球"
         );
 
         addOrganSimpleActiveSkill(InitItem.GHAST_STOMACH, "发射大型火球");
-        addOrganActiveSkill(InitItem.GHAST_STOMACH,
+        addOrganActiveSkill(
+            InitItem.GHAST_STOMACH,
             "发射恶魂式大型火球",
             "爆炸威力等于可怖属性值"
         );
 
-        addOrganActiveSkill(InitItem.SHULKER_SPLEEN,
+        addOrganActiveSkill(
+            InitItem.SHULKER_SPLEEN,
             "向视线中的目标发射追踪潜影子弹"
         );
 
         addOrganSimpleActiveSkill(InitItem.BREEZE_CORE, "发射风弹");
-        addOrganActiveSkill(InitItem.BREEZE_CORE,
+        addOrganActiveSkill(
+            InitItem.BREEZE_CORE,
             "发射风弹",
             "击中后产生风爆效果"
         );
 
         addOrganSimpleActiveSkill(InitItem.DRAGON_LUNG, "发射龙息弹");
-        addOrganActiveSkill(InitItem.DRAGON_LUNG,
+        addOrganActiveSkill(
+            InitItem.DRAGON_LUNG,
             "发射龙息弹",
             "击中后产生范围龙息效果"
         );
 
         addOrganSimpleActiveSkill(InitItem.SCULK_CORE, "发射音爆");
-        addOrganActiveSkill(InitItem.SCULK_CORE,
+        addOrganActiveSkill(
+            InitItem.SCULK_CORE,
             "向视线方向发射音爆",
             "对路径上所有目标造成10点伤害",
             "穿透实体"
         );
 
         addOrganSimpleActiveSkill(InitItem.GUARDIAN_EYE, "发射充能光线");
-        addOrganActiveSkill(InitItem.GUARDIAN_EYE,
+        addOrganActiveSkill(
+            InitItem.GUARDIAN_EYE,
             "对视线中的目标充能并发射光线",
             "造成2点魔法伤害加3点攻击伤害",
             "充能期间目标需保持在范围内"
         );
 
         addOrganSimpleActiveSkill(InitItem.ELDER_GUARDIAN_EYE, "发射充能光线");
-        addOrganActiveSkill(InitItem.ELDER_GUARDIAN_EYE,
+        addOrganActiveSkill(
+            InitItem.ELDER_GUARDIAN_EYE,
             "对视线中的目标充能并发射光线",
             "造成4点魔法伤害加6点攻击伤害",
             "充能期间目标需保持在范围内"
@@ -1041,130 +1211,261 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("commands.chestcavitybeyond.attributes.no_description", "暂无详细描述");
         add("commands.chestcavitybeyond.attributes.failed.not_player", "属性查询指令只能由玩家执行");
 
-        addAttributeDescription(InitAttribute.HEALTH,
+        addAttributeDescription(
+            InitAttribute.HEALTH,
             "每1点增加2点最大生命值",
             "当前值≤0时会持续受伤"
         );
-        addAttributeDescription(InitAttribute.NERVES,
-            "影响移动速度和攻击速度",
+        addAttributeDescription(
+            InitAttribute.NERVES,
+            "影响攻击速度和移动速度",
             "当前值≤0时无法移动"
         );
-        addAttributeDescription(InitAttribute.DEFENSE,
-            "减少非穿透性伤害"
+        addAttributeDescription(
+            InitAttribute.DEFENSE,
+            "减少非穿透性伤害",
+            "伤害越高，减伤比例越低"
         );
-        addAttributeDescription(InitAttribute.DIGESTION,
+        addAttributeDescription(
+            InitAttribute.DIGESTION,
             "影响食物提供的饥饿值恢复量",
             "值≤0时无法消化任何食物"
         );
-        addAttributeDescription(InitAttribute.NUTRITION,
+        addAttributeDescription(
+            InitAttribute.NUTRITION,
             "影响食物提供的饱和度",
             "值≤0时无法从食物获取饱和度"
         );
-        addAttributeDescription(InitAttribute.ENDURANCE,
+        addAttributeDescription(
+            InitAttribute.ENDURANCE,
             "影响饱食度消耗速率，值越高消耗越慢"
         );
-        addAttributeDescription(InitAttribute.METABOLISM,
+        addAttributeDescription(
+            InitAttribute.METABOLISM,
             "影响自然回血和饥饿消耗的速度"
         );
-        addAttributeDescription(InitAttribute.BREATH_CAPACITY,
+        addAttributeDescription(
+            InitAttribute.BREATH_CAPACITY,
             "影响氧气上限",
             "值>0时才能呼吸"
         );
-        addAttributeDescription(InitAttribute.BREATH_RECOVERY,
+        addAttributeDescription(
+            InitAttribute.BREATH_RECOVERY,
             "影响在空气中的氧气恢复速率",
             "值>0时才能在空气中呼吸"
         );
-        addAttributeDescription(InitAttribute.WATER_BREATH,
+        addAttributeDescription(
+            InitAttribute.WATER_BREATH,
             "影响在水中的氧气恢复速率",
             "值>0时才能在水中呼吸"
         );
-        addAttributeDescription(InitAttribute.DETOXIFICATION,
+        addAttributeDescription(
+            InitAttribute.DETOXIFICATION,
             "缩短受到的有害药水效果持续时间"
         );
-        addAttributeDescription(InitAttribute.FILTRATION,
+        addAttributeDescription(
+            InitAttribute.FILTRATION,
             "值低于默认值时，会定期受到中毒效果",
             "值越低中毒效果越强"
         );
-        addAttributeDescription(InitAttribute.STRENGTH,
+        addAttributeDescription(
+            InitAttribute.STRENGTH,
             "影响攻击伤害"
         );
-        addAttributeDescription(InitAttribute.SPEED,
+        addAttributeDescription(
+            InitAttribute.SPEED,
             "影响移动速度"
         );
-        addAttributeDescription(InitAttribute.FIRE_RESISTANCE,
+        addAttributeDescription(
+            InitAttribute.FIRE_RESISTANCE,
             "减少受到的火焰伤害",
+            "伤害越高，减伤比例越低",
             "≥ %s 时免疫热方块（岩浆块/营火）伤害",
             "≥ %s 时免疫火焰/燃烧伤害，并清除着火状态",
             "≥ %s 时免疫岩浆伤害"
         );
-        addAttributeDescription(InitAttribute.FROST_RESISTANCE,
+        addAttributeDescription(
+            InitAttribute.FROST_RESISTANCE,
             "减少受到的冰冻伤害",
+            "伤害越高，减伤比例越低",
             "≥ %s 时免疫冰冻伤害，并清除冰冻进度"
         );
-        addAttributeDescription(InitAttribute.WATER_ALLERGY,
+        addAttributeDescription(
+            InitAttribute.WATER_ALLERGY,
             "在水中或雨中持续受到伤害"
         );
-        addAttributeDescription(InitAttribute.ENDER,
+        addAttributeDescription(
+            InitAttribute.ENDER,
             "受到溺水伤害时随机传送到附近位置",
             "影响末影阑尾传送技能的传送距离",
             "是弹射物闪避属性生效的前提条件"
         );
-        addAttributeDescription(InitAttribute.PROJECTILE_DODGE,
+        addAttributeDescription(
+            InitAttribute.PROJECTILE_DODGE,
             "需要末影属性>0才能生效",
             "受到弹射物或喷溅水药水伤害时，取消伤害并随机传送"
         );
-        addAttributeDescription(InitAttribute.LEAPING,
+        addAttributeDescription(
+            InitAttribute.LEAPING,
             "影响跳跃力度和安全掉落距离"
         );
-        addAttributeDescription(InitAttribute.CARNIVOROUS_DIGESTION,
+        addAttributeDescription(
+            InitAttribute.CARNIVOROUS_DIGESTION,
             "额外影响肉类食物的饥饿值恢复量"
         );
-        addAttributeDescription(InitAttribute.CARNIVOROUS_NUTRITION,
+        addAttributeDescription(
+            InitAttribute.CARNIVOROUS_NUTRITION,
             "额外影响肉类食物的饱和度"
         );
-        addAttributeDescription(InitAttribute.HERBIVOROUS_DIGESTION,
+        addAttributeDescription(
+            InitAttribute.HERBIVOROUS_DIGESTION,
             "额外影响植物食物的饥饿值恢复量"
         );
-        addAttributeDescription(InitAttribute.HERBIVOROUS_NUTRITION,
+        addAttributeDescription(
+            InitAttribute.HERBIVOROUS_NUTRITION,
             "额外影响植物食物的饱和度"
         );
-        addAttributeDescription(InitAttribute.SCAVENGER_DIGESTION,
+        addAttributeDescription(
+            InitAttribute.SCAVENGER_DIGESTION,
             "额外影响腐肉等有毒食物的饥饿值恢复量",
             "拥有此属性时食用有毒食物不会附加中毒和饥饿效果"
         );
-        addAttributeDescription(InitAttribute.SCAVENGER_NUTRITION,
+        addAttributeDescription(
+            InitAttribute.SCAVENGER_NUTRITION,
             "额外影响腐肉等有毒食物的饱和度",
             "食物中的有害效果会额外增加饱和度"
         );
-        addAttributeDescription(InitAttribute.EXPLOSIVE,
-            "影响苦力怕阑尾自爆技能的爆炸威力"
+        addAttributeDescription(
+            InitAttribute.EXPLOSIVE,
+            "影响苦力怕阑尾自爆技能的爆炸威力",
+            "爆炸威力等于属性值 × 3"
         );
-        addAttributeDescription(InitAttribute.PHOTOSYNTHESIS,
-            "在白天且能看见天空时，随时间恢复饥饿值和饱和度"
+        addAttributeDescription(
+            InitAttribute.PHOTOSYNTHESIS,
+            "在白天且能看见天空时，随时间恢复饥饿值和饱和度",
+            "每次触发 +1 饥饿值，当饥饿值满时 +1 饱和度"
         );
-        addAttributeDescription(InitAttribute.LAUNCH,
+        addAttributeDescription(
+            InitAttribute.LAUNCH,
             "攻击目标时将其向上击飞",
             "击飞力度会被目标的击退抗性削弱"
         );
-        addAttributeDescription(InitAttribute.IRON_REPAIR,
+        addAttributeDescription(
+            InitAttribute.IRON_REPAIR,
             "影响傀儡装甲板技能使用铁锭的治疗量"
         );
-        addAttributeDescription(InitAttribute.FURNACE_POWER,
+        addAttributeDescription(
+            InitAttribute.FURNACE_POWER,
             "影响熔炉内核技能的熔炉之力效果等级"
         );
-        addAttributeDescription(InitAttribute.WITHERED,
+        addAttributeDescription(
+            InitAttribute.WITHERED,
             "攻击目标时施加凋零效果",
             "胸腔内存在下界之星器官时，延长效果持续时间并+1等级"
         );
-        addAttributeDescription(InitAttribute.VOMIT_FIREBALL,
+        addAttributeDescription(
+            InitAttribute.VOMIT_FIREBALL,
             "影响活性烈焰棒技能连续发射小型火球的数量"
         );
-        addAttributeDescription(InitAttribute.GHASTLY,
+        addAttributeDescription(
+            InitAttribute.GHASTLY,
             "影响恶魂胃技能发射的恶魂火球爆炸威力"
         );
-        addAttributeDescription(InitAttribute.CRYSTALLIZATION,
+        addAttributeDescription(
+            InitAttribute.CRYSTALLIZATION,
             "靠近末影水晶时持续恢复生命值和饥饿值"
         );
+
+        addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值 %s");
+        addAttributeValueEffect(InitAttribute.NERVES, "攻击速度 %s%% | 移动速度 %s%%");
+        addAttributeValueEffect(InitAttribute.DEFENSE, "减伤比例 ~%s%%（以10点伤害计）");
+        addAttributeValueEffect(InitAttribute.ENDURANCE, "饥饿消耗 %s%%");
+        addAttributeValueEffect(InitAttribute.STRENGTH, "近战伤害 %s%%");
+        addAttributeValueEffect(InitAttribute.SPEED, "移动速度 %s%%");
+        addAttributeValueEffect(InitAttribute.DIGESTION, "食物饥饿值 %s%%");
+        addAttributeValueEffect(InitAttribute.NUTRITION, "食物饱和度 %s%%");
+        addAttributeValueEffect(InitAttribute.METABOLISM, "回血速率 %s%%");
+        addAttributeValueEffect(InitAttribute.BREATH_CAPACITY, "氧气消耗 %s%%");
+        addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "空气回复 %s%%");
+        addAttributeValueEffect(InitAttribute.WATER_BREATH, "水中回复 %s%%");
+        addAttributeValueEffect(InitAttribute.DETOXIFICATION, "有害效果持续时间 %s%%");
+        addAttributeValueEffect(InitAttribute.FILTRATION, "中毒效果 Lv%s 持续 %s秒");
+        add(AttributeDisplayManager.getValueEffectKey(InitAttribute.FILTRATION) + ".safe", "血液过滤正常，无中毒风险");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "肉类饥饿值 %s%%");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "肉类饱和度 %s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_DIGESTION, "植物饥饿值 %s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_NUTRITION, "植物饱和度 %s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_DIGESTION, "腐肉饥饿值 %s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_NUTRITION, "腐肉饱和度 %s%%");
+        addAttributeValueEffect(InitAttribute.FIRE_RESISTANCE, "火焰减伤比例 ~%s%%（以10点伤害计）");
+        addAttributeValueEffect(InitAttribute.FROST_RESISTANCE, "冰霜减伤比例 ~%s%%（以10点伤害计）");
+        addAttributeValueEffect(InitAttribute.ENDER, "传送范围 %s");
+        addAttributeValueEffect(InitAttribute.LEAPING, "跳跃高度 %s");
+        addAttributeValueEffect(InitAttribute.EXPLOSIVE, "爆炸威力 %s");
+        addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "触发间隔 %s秒");
+        addAttributeValueEffect(InitAttribute.IRON_REPAIR, "铁锭回复 %s");
+        addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续 %s秒，Lv%s");
+        addAttributeValueEffect(InitAttribute.GHASTLY, "火球威力 %s");
+        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "回复 %s/秒");
+        addAttributeValueEffect(InitAttribute.LAUNCH, "击飞力度 %s");
+        addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "火球数量 %s");
+        addAttributeValueEffect(InitAttribute.FURNACE_POWER, "效果等级 Lv%s，最大持续 %s秒，例：1煤炭 = 80秒");
+
+        add("jei." + ChestCavityBeyond.MOD_ID + ".chest_cavity_type", "胸腔类型");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".need_breath", "需要呼吸");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_breath", "不需要呼吸");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".need_health", "需要健康");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_health", "不需要健康");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_spawn_egg", "%s（无刷怪蛋）");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".type_bonus_header", "胸腔类型额外加成：");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".type_default_bonus_header", "自带属性加成：");
+        add("jei." + ChestCavityBeyond.MOD_ID + ".no_type_default_bonus", "无自带属性加成");
+
+        addChestCavityTypeName(ChestCavityTypeManager.HUMAN, "人类");
+        addChestCavityTypeName(ChestCavityTypeManager.ANIMAL, "动物");
+        addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE1, "食草动物");
+        addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE2, "反刍食草动物");
+        addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE3, "多胃食草动物");
+        addChestCavityTypeName(ChestCavityTypeManager.LLAMA, "羊驼");
+        addChestCavityTypeName(ChestCavityTypeManager.CARNIVORE, "食肉动物");
+        addChestCavityTypeName(ChestCavityTypeManager.SHULKER, "潜影贝");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_ANIMAL, "小型动物");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_HERBIVORE, "小型食草动物");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_CARNIVORE, "小型食肉动物");
+        addChestCavityTypeName(ChestCavityTypeManager.AXOLOTL, "美西螈");
+        addChestCavityTypeName(ChestCavityTypeManager.TURTLE, "海龟");
+        addChestCavityTypeName(ChestCavityTypeManager.FROG, "青蛙");
+        addChestCavityTypeName(ChestCavityTypeManager.RABBIT, "兔子");
+        addChestCavityTypeName(ChestCavityTypeManager.SLIME, "史莱姆");
+        addChestCavityTypeName(ChestCavityTypeManager.MAGMA_CUBE, "岩浆怪");
+        addChestCavityTypeName(ChestCavityTypeManager.FIREPROOF, "抗火生物");
+        addChestCavityTypeName(ChestCavityTypeManager.GHAST, "恶魂");
+        addChestCavityTypeName(ChestCavityTypeManager.ENDER, "末影");
+        addChestCavityTypeName(ChestCavityTypeManager.ENDER_DRAGON, "末影龙");
+        addChestCavityTypeName(ChestCavityTypeManager.UNDEAD, "亡灵");
+        addChestCavityTypeName(ChestCavityTypeManager.SKELETON, "骷髅");
+        addChestCavityTypeName(ChestCavityTypeManager.WITHER_SKELETON, "凋灵骷髅");
+        addChestCavityTypeName(ChestCavityTypeManager.WITHER, "凋灵");
+        addChestCavityTypeName(ChestCavityTypeManager.ARTHROPOD, "节肢生物");
+        addChestCavityTypeName(ChestCavityTypeManager.SPIDER, "蜘蛛");
+        addChestCavityTypeName(ChestCavityTypeManager.CAVE_SPIDER, "洞穴蜘蛛");
+        addChestCavityTypeName(ChestCavityTypeManager.AQUATIC, "水生生物");
+        addChestCavityTypeName(ChestCavityTypeManager.DOLPHIN, "海豚");
+        addChestCavityTypeName(ChestCavityTypeManager.FISH, "鱼类");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_AQUATIC, "小型水生生物");
+        addChestCavityTypeName(ChestCavityTypeManager.SMALL_FISH, "小型鱼类");
+        addChestCavityTypeName(ChestCavityTypeManager.SALTWATER, "盐水型");
+        addChestCavityTypeName(ChestCavityTypeManager.CREEPER, "苦力怕");
+        addChestCavityTypeName(ChestCavityTypeManager.BLAZE, "烈焰人");
+        addChestCavityTypeName(ChestCavityTypeManager.BREEZE, "旋风人");
+        addChestCavityTypeName(ChestCavityTypeManager.IRON_GOLEM, "铁傀儡");
+        addChestCavityTypeName(ChestCavityTypeManager.SNOW_GOLEM, "雪傀儡");
+        addChestCavityTypeName(ChestCavityTypeManager.WARDEN, "监守者");
+        addChestCavityTypeName(ChestCavityTypeManager.ELDER, "远古生物");
+        addChestCavityTypeName(ChestCavityTypeManager.ELDER_FISH, "远古鱼类");
+        addChestCavityTypeName(ChestCavityTypeManager.GUARDIAN, "守卫者");
+        addChestCavityTypeName(ChestCavityTypeManager.ELDER_GUARDIAN, "远古守卫者");
+        addChestCavityTypeName(ChestCavityTypeManager.ARMOR_STAND, "盔甲架");
     }
 
     private void addAttribute(Holder<Attribute> attribute, String value) {
@@ -1176,6 +1477,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         for (int i = 0; i < lines.length; i++) {
             add(base + i, lines[i]);
         }
+    }
+
+    private void addAttributeValueEffect(Holder<Attribute> attribute, String value) {
+        add(AttributeDisplayManager.getValueEffectKey(attribute), value);
     }
 
     private void addDamageType(ResourceKey<DamageType> damageType, String value) {
@@ -1198,7 +1503,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     }
 
     private void addOrganSimpleActiveSkill(Supplier<Item> item, String... lines) {
-        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".active_skill.simple.";
+        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get())
+            .getPath() + ".active_skill.simple.";
         for (int i = 0; i < lines.length; i++) {
             add(base + i, lines[i]);
         }
@@ -1212,7 +1518,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     }
 
     private void addOrganSimplePassiveEffect(Supplier<Item> item, String... lines) {
-        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get()).getPath() + ".passive_effect.simple.";
+        String base = "organ." + ChestCavityBeyond.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(item.get())
+            .getPath() + ".passive_effect.simple.";
         for (int i = 0; i < lines.length; i++) {
             add(base + i, lines[i]);
         }
@@ -1228,6 +1535,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     private void addEnchantment(ResourceKey<Enchantment> resourceKey, String value, String desc) {
         add("enchantment." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath(), value);
         add("enchantment." + resourceKey.location().getNamespace() + "." + resourceKey.location().getPath() + ".desc", desc);
+    }
+
+    private void addChestCavityTypeName(ChestCavityType type, String name) {
+        add(ChestCavityTypeDisplay.getTranslationKey(type.getId()), name);
     }
 
     @Override

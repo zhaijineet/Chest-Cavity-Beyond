@@ -30,12 +30,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ChestCavityType {
+    private ResourceLocation id;
     private final NonNullList<Item> organs = NonNullList.withSize(54, Items.AIR);
     private final Map<EntityType<?>, Map<Holder<Attribute>, Double>> defaultAttributes = new HashMap<>();
     private final Map<EntityType<?>, Map<Holder<Attribute>, List<AttributeModifier>>> defaultModifiers = new HashMap<>();
     private final Map<Item, List<AttributeBonus>> attributeBonuses = new HashMap<>();
     private final List<AttributeBonus> typeDefaultBonuses = new ArrayList<>();
-    private final Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> conversionMap = new HashMap<>();
+    private final Map<ResourceLocation, Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>>> conversionMap = new HashMap<>();
     private ChestCavitySize size = ChestCavitySize.ROW_3;
     private boolean needBreath = true;
     private boolean needHealth = true;
@@ -56,17 +57,11 @@ public class ChestCavityType {
         Map<Holder<Attribute>, List<AttributeModifier>> modifierMap
     ) {
         double baseValue = 0;
-        boolean hasAttribute = false;
         if (DefaultAttributes.hasSupplier(entityType)) {
             AttributeSupplier attributeSupplier = DefaultAttributes.getSupplier(entityType);
             if (attributeSupplier.hasAttribute(attribute)) {
-                hasAttribute = true;
                 baseValue = attributeSupplier.getValue(attribute);
             }
-        }
-        if (!hasAttribute) {
-            defaultMap.put(attribute, 0D);
-            return;
         }
         // 按操作类型分别汇总
         double sumAddValue = 0;
@@ -99,6 +94,21 @@ public class ChestCavityType {
                 modifierMap.put(attribute, compensations);
             }
         }
+    }
+
+    /**
+     * 获取胸腔类型的注册名
+     */
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    /**
+     * 设置胸腔类型的注册名
+     */
+    public ChestCavityType setId(ResourceLocation id) {
+        this.id = id;
+        return this;
     }
 
     public NonNullList<Item> getOrgans() {
@@ -146,14 +156,20 @@ public class ChestCavityType {
         for (int i = 0; i < organs.size(); i++) {
             organs.set(i, copyTarget.organs.get(i));
         }
-        attributeBonuses.putAll(copyTarget.attributeBonuses);
+        // 深拷贝 attributeBonuses：内层 List 需要独立副本，防止子类型修改影响父类型
+        for (Map.Entry<Item, List<AttributeBonus>> entry : copyTarget.attributeBonuses.entrySet()) {
+            attributeBonuses.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
         typeDefaultBonuses.addAll(copyTarget.typeDefaultBonuses);
         needBreath = copyTarget.needBreath;
         needHealth = copyTarget.needHealth;
         canOpen = copyTarget.canOpen;
         unopenableMessage = copyTarget.unopenableMessage;
         size = copyTarget.size;
-        conversionMap.putAll(copyTarget.conversionMap);
+        // 深拷贝 conversionMap：内层 Map 需要独立副本，防止子类型修改影响父类型
+        for (Map.Entry<ResourceLocation, Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>>> entry : copyTarget.conversionMap.entrySet()) {
+            conversionMap.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
         return this;
     }
 
@@ -283,6 +299,15 @@ public class ChestCavityType {
      */
     public List<AttributeBonus> getAttributeBonuses(Item item) {
         return attributeBonuses.getOrDefault(item, List.of());
+    }
+
+    /**
+     * 获取所有器官的属性加成映射
+     *
+     * @return 不可修改的器官→属性加成列表映射
+     */
+    public Map<Item, List<AttributeBonus>> getAllAttributeBonuses() {
+        return Collections.unmodifiableMap(attributeBonuses);
     }
 
     /**
@@ -416,7 +441,7 @@ public class ChestCavityType {
      * @return 默认胸腔属性
      */
     public Map<Holder<Attribute>, Double> getDefaultAttributes(EntityType<?> entityType) {
-        return defaultAttributes.get(entityType);
+        return defaultAttributes.getOrDefault(entityType, Map.of());
     }
 
     /**
@@ -426,7 +451,7 @@ public class ChestCavityType {
      * @return 默认属性调整修饰符
      */
     public Map<Holder<Attribute>, List<AttributeModifier>> getDefaultModifier(EntityType<?> entityType) {
-        return defaultModifiers.get(entityType);
+        return defaultModifiers.getOrDefault(entityType, Map.of());
     }
 
     /**
@@ -472,48 +497,56 @@ public class ChestCavityType {
     /**
      * 注册器官转换映射（简单映射，精确物品匹配）
      *
-     * @param from 原始器官
-     * @param to   转换后的器官
+     * @param targetTypeId 目标胸腔类型的注册名
+     * @param from         原始器官
+     * @param to           转换后的器官
      * @return 胸腔类型
      */
-    public ChestCavityType addConversion(Item from, Item to) {
-        conversionMap.put(ctx -> ctx.stack().is(from), ctx -> to.getDefaultInstance());
+    public ChestCavityType addConversion(ResourceLocation targetTypeId, Item from, Item to) {
+        conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
+            .put(ctx -> ctx.stack().is(from), ctx -> to.getDefaultInstance());
         return this;
     }
 
     /**
      * 注册器官转换映射（携带 NBT/组件的 ItemStack，精确物品匹配）
      *
-     * @param from 原始器官
-     * @param to   转换后的器官物品栈（保留 NBT/组件）
+     * @param targetTypeId 目标胸腔类型的注册名
+     * @param from         原始器官
+     * @param to           转换后的器官物品栈（保留 NBT/组件）
      * @return 胸腔类型
      */
-    public ChestCavityType addConversion(Item from, ItemStack to) {
-        conversionMap.put(ctx -> ctx.stack().is(from), ctx -> to.copy());
+    public ChestCavityType addConversion(ResourceLocation targetTypeId, Item from, ItemStack to) {
+        conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
+            .put(ctx -> ctx.stack().is(from), ctx -> to.copy());
         return this;
     }
 
     /**
      * 注册器官转换映射（条件匹配 + 简单目标）
      *
-     * @param condition 匹配条件（首个命中即用）
-     * @param to        转换后的器官
+     * @param targetTypeId 目标胸腔类型的注册名
+     * @param condition    匹配条件（首个命中即用）
+     * @param to           转换后的器官
      * @return 胸腔类型
      */
-    public ChestCavityType addConversion(Predicate<ChestCavitySlotContext> condition, Item to) {
-        conversionMap.put(condition, ctx -> to.getDefaultInstance());
+    public ChestCavityType addConversion(ResourceLocation targetTypeId, Predicate<ChestCavitySlotContext> condition, Item to) {
+        conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
+            .put(condition, ctx -> to.getDefaultInstance());
         return this;
     }
 
     /**
      * 注册器官转换映射（条件匹配 + 指定 ItemStack）
      *
-     * @param condition 匹配条件（首个命中即用）
-     * @param to        转换后的器官物品栈（保留 NBT/组件）
+     * @param targetTypeId 目标胸腔类型的注册名
+     * @param condition    匹配条件（首个命中即用）
+     * @param to           转换后的器官物品栈（保留 NBT/组件）
      * @return 胸腔类型
      */
-    public ChestCavityType addConversion(Predicate<ChestCavitySlotContext> condition, ItemStack to) {
-        conversionMap.put(condition, ctx -> to.copy());
+    public ChestCavityType addConversion(ResourceLocation targetTypeId, Predicate<ChestCavitySlotContext> condition, ItemStack to) {
+        conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
+            .put(condition, ctx -> to.copy());
         return this;
     }
 
@@ -526,31 +559,49 @@ public class ChestCavityType {
      * - 返回 {@link ItemStack#EMPTY} → 清除槽位
      * </p>
      *
-     * @param condition 匹配条件（首个命中即用）
-     * @param converter 转换函数
+     * @param targetTypeId 目标胸腔类型的注册名
+     * @param condition    匹配条件（首个命中即用）
+     * @param converter    转换函数
      * @return 胸腔类型
      */
     public ChestCavityType addConversion(
+        ResourceLocation targetTypeId,
         Predicate<ChestCavitySlotContext> condition,
         Function<ChestCavitySlotContext, ItemStack> converter
     ) {
-        conversionMap.put(condition, converter);
+        conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
+            .put(condition, converter);
         return this;
     }
 
     /**
      * 获取器官转换结果（匹配顺序不保证，首个命中即用）
      *
-     * @param context 当前槽位的上下文
+     * @param context     当前槽位的上下文
+     * @param targetTypeId 目标胸腔类型的注册名
      * @return 转换后的 ItemStack，无匹配则返回 {@code context.stack()}（保持不变）
      */
-    public ItemStack getConversionResult(ChestCavitySlotContext context) {
-        for (Map.Entry<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> entry : conversionMap.entrySet()) {
-            if (entry.getKey().test(context)) {
-                return entry.getValue().apply(context);
+    public ItemStack getConversionResult(ChestCavitySlotContext context, ResourceLocation targetTypeId) {
+        Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> targetMap = conversionMap.get(targetTypeId);
+        if (targetMap != null) {
+            for (Map.Entry<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>> entry : targetMap.entrySet()) {
+                if (entry.getKey().test(context)) {
+                    return entry.getValue().apply(context);
+                }
             }
         }
         return context.stack();
+    }
+
+    /**
+     * 清空指定目标的器官转换规则
+     *
+     * @param targetTypeId 目标胸腔类型的注册名
+     * @return 胸腔类型
+     */
+    public ChestCavityType clearConversions(ResourceLocation targetTypeId) {
+        conversionMap.remove(targetTypeId);
+        return this;
     }
 
     /**

@@ -2,10 +2,13 @@ package net.zhaiji.chestcavitybeyond.api;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
 
+import java.util.function.DoublePredicate;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -21,14 +24,19 @@ import java.util.function.Supplier;
  *     .priority(40)
  *     .build();
  *
- * // 百分比属性（自动检测 PercentageAttribute，默认隐藏 1.0）
+ * // 百分比属性（自动检测 PercentageAttribute）
  * AttributeDisplay.builder(myPercentageAttr)
  *     .build();
  *
  * // 附属模组自定义属性
  * AttributeDisplay.builder(myAttribute)
  *     .priority(10)
- *     .hideValue(1)
+ *     .hideValue(0)
+ *     .build();
+ *
+ * // 自定义隐藏条件（如值 ≤ 0 时隐藏）
+ * AttributeDisplay.builder(myAttribute)
+ *     .hideWhen(v -> v <= 0)
  *     .build();
  * }
  * </pre>
@@ -38,23 +46,26 @@ public class AttributeDisplay {
     private final String descriptionKey;
     private final int priority;
     private final boolean percentageDisplay;
-    private final double hideValue;
+    private final DoublePredicate hidePredicate;
     private final Supplier<Component> descriptionOverride;
+    private final Function<LivingEntity, Component> valueEffect;
 
     private AttributeDisplay(
         Holder<Attribute> attribute,
         String descriptionKey,
         int priority,
         boolean percentageDisplay,
-        double hideValue,
-        Supplier<Component> descriptionOverride
+        DoublePredicate hidePredicate,
+        Supplier<Component> descriptionOverride,
+        Function<LivingEntity, Component> valueEffect
     ) {
         this.attribute = attribute;
         this.descriptionKey = descriptionKey;
         this.priority = priority;
         this.percentageDisplay = percentageDisplay;
-        this.hideValue = hideValue;
+        this.hidePredicate = hidePredicate;
         this.descriptionOverride = descriptionOverride;
+        this.valueEffect = valueEffect;
     }
 
     /**
@@ -89,14 +100,14 @@ public class AttributeDisplay {
     }
 
     /**
-     * 隐藏值
+     * 隐藏判定谓词
      * <p>
-     * 当属性的原始值等于此值时，跳过不显示。
-     * {@link Double#NaN} 表示不启用（永不跳过）。
+     * 当谓词对当前属性值返回 true 时，跳过不显示。
+     * 返回 null 表示不启用隐藏（永不跳过）。
      * </p>
      */
-    public double hideValue() {
-        return hideValue;
+    public DoublePredicate hidePredicate() {
+        return hidePredicate;
     }
 
     /**
@@ -110,13 +121,26 @@ public class AttributeDisplay {
         return descriptionOverride;
     }
 
+    /**
+     * 实时效果描述
+     * <p>
+     * 接收目标实体，返回基于当前属性值计算后的动态效果描述组件。
+     * 用于在属性显示时展示实际生效的数值（如 "增加8点最大生命值"）。
+     * 返回 null 表示该属性无实时效果描述。
+     * </p>
+     */
+    public Function<LivingEntity, Component> valueEffect() {
+        return valueEffect;
+    }
+
     public static class Builder {
         private final Holder<Attribute> attribute;
         private final String descriptionKey;
         private int priority;
         private Boolean percentageDisplay = null;  // null=自动推断, true/false=手动强制
-        private Double hideValue = null;           // null=自动推断, 其他=手动设置（含0）
+        private DoublePredicate hidePredicate = null; // null=不隐藏
         private Supplier<Component> descriptionOverride = null;
+        private Function<LivingEntity, Component> valueEffect = null;
 
         private Builder(Holder<Attribute> attribute) {
             this.attribute = attribute;
@@ -150,15 +174,28 @@ public class AttributeDisplay {
         /**
          * 设置隐藏值。
          * <p>
-         * 当属性的原始值等于此值时，跳过不显示（通用逻辑，适用于所有属性类型）。
-         * 设为 {@link Double#NaN} 可禁用隐藏（永不跳过）。
-         * 不调用此方法时，自动推断：百分比属性默认 {@code 1.0}（=100%），其他属性默认 {@code 0}。
+         * 当属性的原始值等于此值时，跳过不显示。
+         * 不调用此方法或 {@link #hideWhen(DoublePredicate)} 时，默认不隐藏。
          * </p>
          *
          * @param hideValue 不显示的值
          */
         public Builder hideValue(double hideValue) {
-            this.hideValue = hideValue;
+            this.hidePredicate = v -> v == hideValue;
+            return this;
+        }
+
+        /**
+         * 设置隐藏判定谓词。
+         * <p>
+         * 当谓词对当前属性值返回 true 时，跳过不显示。
+         * 不调用此方法或 {@link #hideValue(double)} 时，默认不隐藏。
+         * </p>
+         *
+         * @param predicate 隐藏判定谓词，传入 null 表示不隐藏
+         */
+        public Builder hideWhen(DoublePredicate predicate) {
+            this.hidePredicate = predicate;
             return this;
         }
 
@@ -178,22 +215,34 @@ public class AttributeDisplay {
         }
 
         /**
+         * 设置实时效果描述。
+         * <p>
+         * 接收目标实体，返回基于当前属性值计算后的动态效果描述组件。
+         * 用于在属性显示时展示实际生效的数值（如 "增加8点最大生命值"）。
+         * </p>
+         *
+         * @param valueEffect 实时效果描述函数，传入 null 表示无实时效果
+         */
+        public Builder valueEffect(Function<LivingEntity, Component> valueEffect) {
+            this.valueEffect = valueEffect;
+            return this;
+        }
+
+        /**
          * 构建并注册属性显示信息
          */
         public AttributeDisplay build() {
             // 自动推断 percentageDisplay
             boolean isPercentage = percentageDisplay != null ? percentageDisplay : attribute.value() instanceof PercentageAttribute;
 
-            // 自动推断 hideValue：null → 百分比 1.0，非百分比 0；非 null → 直接使用
-            double hideVal = hideValue != null ? hideValue : (isPercentage ? 1.0 : 0);
-
             AttributeDisplay display = new AttributeDisplay(
                 attribute,
                 descriptionKey,
                 priority,
                 isPercentage,
-                hideVal,
-                descriptionOverride
+                hidePredicate,
+                descriptionOverride,
+                valueEffect
             );
             AttributeDisplayManager.register(display);
             return display;

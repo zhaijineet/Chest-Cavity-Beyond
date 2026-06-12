@@ -42,860 +42,884 @@ public class ChestCavityTypeManager {
     public static final Map<EntityType<? extends LivingEntity>, ChestCavityType> ENTITY_CHEST_CAVITY_TYPE_MAP = new HashMap<>();
 
     public static final ChestCavityType HUMAN = register(ChestCavityBeyond.of("human"))
-            .setFirstRow(0, InitItem.MUSCLE.get())
-            .setFirstRow(1, InitItem.RIB.get())
-            .setFirstRow(2, InitItem.APPENDIX.get())
-            .setFirstRow(3, InitItem.LUNG.get())
-            .setFirstRow(4, InitItem.HEART.get())
-            .setFirstRow(5, InitItem.LUNG.get())
-            .setFirstRow(7, InitItem.RIB.get())
-            .setFirstRow(8, InitItem.MUSCLE.get())
+        .setFirstRow(0, InitItem.MUSCLE.get())
+        .setFirstRow(1, InitItem.RIB.get())
+        .setFirstRow(2, InitItem.APPENDIX.get())
+        .setFirstRow(3, InitItem.LUNG.get())
+        .setFirstRow(4, InitItem.HEART.get())
+        .setFirstRow(5, InitItem.LUNG.get())
+        .setFirstRow(7, InitItem.RIB.get())
+        .setFirstRow(8, InitItem.MUSCLE.get())
 
-            .setSecondRow(0, InitItem.MUSCLE.get())
-            .setSecondRow(1, InitItem.RIB.get())
-            .setSecondRow(2, InitItem.SPLEEN.get())
-            .setSecondRow(3, InitItem.KIDNEY.get())
-            .setSecondRow(4, InitItem.SPINE.get())
-            .setSecondRow(5, InitItem.KIDNEY.get())
-            .setSecondRow(6, InitItem.LIVER.get())
-            .setSecondRow(7, InitItem.RIB.get())
-            .setSecondRow(8, InitItem.MUSCLE.get())
+        .setSecondRow(0, InitItem.MUSCLE.get())
+        .setSecondRow(1, InitItem.RIB.get())
+        .setSecondRow(2, InitItem.SPLEEN.get())
+        .setSecondRow(3, InitItem.KIDNEY.get())
+        .setSecondRow(4, InitItem.SPINE.get())
+        .setSecondRow(5, InitItem.KIDNEY.get())
+        .setSecondRow(6, InitItem.LIVER.get())
+        .setSecondRow(7, InitItem.RIB.get())
+        .setSecondRow(8, InitItem.MUSCLE.get())
 
-            .setThirdRow(0, InitItem.MUSCLE.get())
-            .setThirdRow(1, InitItem.MUSCLE.get())
-            .setThirdRow(2, InitItem.INTESTINE.get())
-            .setThirdRow(3, InitItem.INTESTINE.get())
-            .setThirdRow(4, InitItem.STOMACH.get())
-            .setThirdRow(5, InitItem.INTESTINE.get())
-            .setThirdRow(6, InitItem.INTESTINE.get())
-            .setThirdRow(7, InitItem.MUSCLE.get())
-            .setThirdRow(8, InitItem.MUSCLE.get())
-            // HUMAN → UNDEAD 器官转换映射
-            .addConversion(InitItem.MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
-            .addConversion(InitItem.RIB.get(), InitItem.ROTTEN_RIB.get())
-            .addConversion(InitItem.APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
-            .addConversion(InitItem.HEART.get(), InitItem.ROTTEN_HEART.get())
-            .addConversion(InitItem.LUNG.get(), InitItem.ROTTEN_LUNG.get())
-            .addConversion(InitItem.SPINE.get(), InitItem.ROTTEN_SPINE.get())
-            .addConversion(InitItem.STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
-            .addConversion(InitItem.INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
-            .addConversion(InitItem.KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
-            .addConversion(InitItem.SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
-            .addConversion(InitItem.LIVER.get(), InitItem.ROTTEN_LIVER.get());
+        .setThirdRow(0, InitItem.MUSCLE.get())
+        .setThirdRow(1, InitItem.MUSCLE.get())
+        .setThirdRow(2, InitItem.INTESTINE.get())
+        .setThirdRow(3, InitItem.INTESTINE.get())
+        .setThirdRow(4, InitItem.STOMACH.get())
+        .setThirdRow(5, InitItem.INTESTINE.get())
+        .setThirdRow(6, InitItem.INTESTINE.get())
+        .setThirdRow(7, InitItem.MUSCLE.get())
+        .setThirdRow(8, InitItem.MUSCLE.get())
+        // HUMAN → UNDEAD 器官转换映射
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.RIB.get(), InitItem.ROTTEN_RIB.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.HEART.get(), InitItem.ROTTEN_HEART.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.LUNG.get(), InitItem.ROTTEN_LUNG.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.SPINE.get(), InitItem.ROTTEN_SPINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
     public static final ChestCavityType ANIMAL = register(ChestCavityBeyond.of("animal"))
-            .setFirstRow(0, InitItem.ANIMAL_MUSCLE.get())
-            .setFirstRow(1, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(2, InitItem.ANIMAL_APPENDIX.get())
-            .setFirstRow(3, InitItem.ANIMAL_LUNG.get())
-            .setFirstRow(4, InitItem.ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.ANIMAL_LUNG.get())
-            .setFirstRow(7, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(8, InitItem.ANIMAL_MUSCLE.get())
+        .setFirstRow(0, InitItem.ANIMAL_MUSCLE.get())
+        .setFirstRow(1, InitItem.ANIMAL_RIB.get())
+        .setFirstRow(2, InitItem.ANIMAL_APPENDIX.get())
+        .setFirstRow(3, InitItem.ANIMAL_LUNG.get())
+        .setFirstRow(4, InitItem.ANIMAL_HEART.get())
+        .setFirstRow(5, InitItem.ANIMAL_LUNG.get())
+        .setFirstRow(7, InitItem.ANIMAL_RIB.get())
+        .setFirstRow(8, InitItem.ANIMAL_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.ANIMAL_MUSCLE.get())
-            .setSecondRow(1, InitItem.ANIMAL_RIB.get())
-            .setSecondRow(2, InitItem.ANIMAL_SPLEEN.get())
-            .setSecondRow(3, InitItem.ANIMAL_KIDNEY.get())
-            .setSecondRow(4, InitItem.ANIMAL_SPINE.get())
-            .setSecondRow(5, InitItem.ANIMAL_KIDNEY.get())
-            .setSecondRow(6, InitItem.ANIMAL_LIVER.get())
-            .setSecondRow(7, InitItem.ANIMAL_RIB.get())
-            .setSecondRow(8, InitItem.ANIMAL_MUSCLE.get())
+        .setSecondRow(0, InitItem.ANIMAL_MUSCLE.get())
+        .setSecondRow(1, InitItem.ANIMAL_RIB.get())
+        .setSecondRow(2, InitItem.ANIMAL_SPLEEN.get())
+        .setSecondRow(3, InitItem.ANIMAL_KIDNEY.get())
+        .setSecondRow(4, InitItem.ANIMAL_SPINE.get())
+        .setSecondRow(5, InitItem.ANIMAL_KIDNEY.get())
+        .setSecondRow(6, InitItem.ANIMAL_LIVER.get())
+        .setSecondRow(7, InitItem.ANIMAL_RIB.get())
+        .setSecondRow(8, InitItem.ANIMAL_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.ANIMAL_MUSCLE.get())
-            .setThirdRow(1, InitItem.ANIMAL_MUSCLE.get())
-            .setThirdRow(2, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(3, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(4, InitItem.ANIMAL_STOMACH.get())
-            .setThirdRow(5, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(6, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(7, InitItem.ANIMAL_MUSCLE.get())
-            .setThirdRow(8, InitItem.ANIMAL_MUSCLE.get())
-            // ANIMAL → UNDEAD 器官转换映射（用于Hoglin→Zoglin）
-            .addConversion(InitItem.ANIMAL_MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
-            .addConversion(InitItem.ANIMAL_RIB.get(), InitItem.ROTTEN_RIB.get())
-            .addConversion(InitItem.ANIMAL_APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
-            .addConversion(InitItem.ANIMAL_HEART.get(), InitItem.ROTTEN_HEART.get())
-            .addConversion(InitItem.ANIMAL_LUNG.get(), InitItem.ROTTEN_LUNG.get())
-            .addConversion(InitItem.ANIMAL_SPINE.get(), InitItem.ROTTEN_SPINE.get())
-            .addConversion(InitItem.ANIMAL_STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
-            .addConversion(InitItem.ANIMAL_INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
-            .addConversion(InitItem.ANIMAL_KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
-            .addConversion(InitItem.ANIMAL_SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
-            .addConversion(InitItem.ANIMAL_LIVER.get(), InitItem.ROTTEN_LIVER.get());
+        .setThirdRow(0, InitItem.ANIMAL_MUSCLE.get())
+        .setThirdRow(1, InitItem.ANIMAL_MUSCLE.get())
+        .setThirdRow(2, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(3, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(4, InitItem.ANIMAL_STOMACH.get())
+        .setThirdRow(5, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(6, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(7, InitItem.ANIMAL_MUSCLE.get())
+        .setThirdRow(8, InitItem.ANIMAL_MUSCLE.get())
+        // ANIMAL → UNDEAD 器官转换映射（用于Hoglin→Zoglin）
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_RIB.get(), InitItem.ROTTEN_RIB.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_HEART.get(), InitItem.ROTTEN_HEART.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_LUNG.get(), InitItem.ROTTEN_LUNG.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_SPINE.get(), InitItem.ROTTEN_SPINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.ANIMAL_LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
     public static final ChestCavityType HERBIVORE1 = register(ChestCavityBeyond.of("herbivore1"))
-            .copyWith(ANIMAL)
-            .setThirdRow(2, InitItem.HERBIVORE_INTESTINE.get())
-            .setThirdRow(3, InitItem.HERBIVORE_INTESTINE.get())
-            .setThirdRow(4, InitItem.HERBIVORE_STOMACH.get())
-            .setThirdRow(5, InitItem.HERBIVORE_INTESTINE.get())
-            .setThirdRow(6, InitItem.HERBIVORE_INTESTINE.get());
+        .copyWith(ANIMAL)
+        .setThirdRow(2, InitItem.HERBIVORE_INTESTINE.get())
+        .setThirdRow(3, InitItem.HERBIVORE_INTESTINE.get())
+        .setThirdRow(4, InitItem.HERBIVORE_STOMACH.get())
+        .setThirdRow(5, InitItem.HERBIVORE_INTESTINE.get())
+        .setThirdRow(6, InitItem.HERBIVORE_INTESTINE.get());
 
     public static final ChestCavityType HERBIVORE2 = register(ChestCavityBeyond.of("herbivore2"))
-            .copyWith(HERBIVORE1)
-            .setThirdRow(5, InitItem.HERBIVORE_RUMEN.get());
+        .copyWith(HERBIVORE1)
+        .setThirdRow(5, InitItem.HERBIVORE_RUMEN.get());
 
     public static final ChestCavityType HERBIVORE3 = register(ChestCavityBeyond.of("herbivore3"))
-            .copyWith(HERBIVORE2)
-            .setThirdRow(3, InitItem.HERBIVORE_RUMEN.get());
+        .copyWith(HERBIVORE2)
+        .setThirdRow(3, InitItem.HERBIVORE_RUMEN.get());
 
     public static final ChestCavityType LLAMA = register(ChestCavityBeyond.of("llama"))
-            .copyWith(HERBIVORE1)
-            .setFirstRow(3, InitItem.LLAMA_LUNG.get())
-            .setFirstRow(5, InitItem.LLAMA_LUNG.get());
+        .copyWith(HERBIVORE1)
+        .setFirstRow(3, InitItem.LLAMA_LUNG.get())
+        .setFirstRow(5, InitItem.LLAMA_LUNG.get());
 
     public static final ChestCavityType CARNIVORE = register(ChestCavityBeyond.of("carnivore"))
-            .copyWith(ANIMAL)
-            .setThirdRow(2, InitItem.CARNIVORE_INTESTINE.get())
-            .setThirdRow(3, InitItem.CARNIVORE_INTESTINE.get())
-            .setThirdRow(4, InitItem.CARNIVORE_STOMACH.get())
-            .setThirdRow(5, InitItem.CARNIVORE_INTESTINE.get())
-            .setThirdRow(6, InitItem.CARNIVORE_INTESTINE.get());
+        .copyWith(ANIMAL)
+        .setThirdRow(2, InitItem.CARNIVORE_INTESTINE.get())
+        .setThirdRow(3, InitItem.CARNIVORE_INTESTINE.get())
+        .setThirdRow(4, InitItem.CARNIVORE_STOMACH.get())
+        .setThirdRow(5, InitItem.CARNIVORE_INTESTINE.get())
+        .setThirdRow(6, InitItem.CARNIVORE_INTESTINE.get());
 
     public static final ChestCavityType SHULKER = register(ChestCavityBeyond.of("shulker"))
-            .copyWith(ANIMAL)
-            .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
-            .setSecondRow(2, InitItem.SHULKER_SPLEEN.get())
-            .setSecondRow(6, InitItem.SHULKER_SPLEEN.get());
-
-    public static final ChestCavityType SMALL_ANIMAL = register(ChestCavityBeyond.of("small_animal"))
-            .setFirstRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
-            .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(2, InitItem.SMALL_ANIMAL_APPENDIX.get())
-            .setFirstRow(3, InitItem.SMALL_ANIMAL_LUNG.get())
-            .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.SMALL_ANIMAL_LUNG.get())
-            .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get())
-
-            .setSecondRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
-            .setSecondRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setSecondRow(2, InitItem.SMALL_ANIMAL_SPLEEN.get())
-            .setSecondRow(3, InitItem.SMALL_ANIMAL_KIDNEY.get())
-            .setSecondRow(4, InitItem.SMALL_ANIMAL_SPINE.get())
-            .setSecondRow(5, InitItem.SMALL_ANIMAL_KIDNEY.get())
-            .setSecondRow(6, InitItem.SMALL_ANIMAL_LIVER.get())
-            .setSecondRow(7, InitItem.SMALL_ANIMAL_RIB.get())
-            .setSecondRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get())
-
-            .setThirdRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
-            .setThirdRow(1, InitItem.SMALL_ANIMAL_MUSCLE.get())
-            .setThirdRow(2, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(3, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(4, InitItem.SMALL_ANIMAL_STOMACH.get())
-            .setThirdRow(5, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(6, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(7, InitItem.SMALL_ANIMAL_MUSCLE.get())
-            .setThirdRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get());
-
-    public static final ChestCavityType SMALL_HERBIVORE = register(ChestCavityBeyond.of("small_herbivore"))
-            .copyWith(SMALL_ANIMAL)
-            .setThirdRow(2, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(3, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(4, InitItem.SMALL_HERBIVORE_STOMACH.get())
-            .setThirdRow(5, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(6, InitItem.SMALL_HERBIVORE_INTESTINE.get());
-
-    public static final ChestCavityType SMALL_CARNIVORE = register(ChestCavityBeyond.of("small_carnivore"))
-            .copyWith(SMALL_ANIMAL)
-            .setThirdRow(2, InitItem.SMALL_CARNIVORE_INTESTINE.get())
-            .setThirdRow(3, InitItem.SMALL_CARNIVORE_INTESTINE.get())
-            .setThirdRow(4, InitItem.SMALL_CARNIVORE_STOMACH.get())
-            .setThirdRow(5, InitItem.SMALL_CARNIVORE_INTESTINE.get())
-            .setThirdRow(6, InitItem.SMALL_CARNIVORE_INTESTINE.get());
-
-    public static final ChestCavityType AXOLOTL = register(ChestCavityBeyond.of("axolotl"))
-            .copyWith(SMALL_ANIMAL)
-
-            .addValueBonuses(InitItem.SMALL_ANIMAL_LUNG.get(), Map.of(
-                    InitAttribute.WATER_BREATH, 0.5
-            ));
-
+        .copyWith(ANIMAL)
+        .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
+        .setSecondRow(2, InitItem.SHULKER_SPLEEN.get())
+        .setSecondRow(6, InitItem.SHULKER_SPLEEN.get());
     public static final ChestCavityType TURTLE = register(ChestCavityBeyond.of("turtle"))
-            .copyWith(ANIMAL)
+        .copyWith(ANIMAL)
 
-            .addValueBonuses(InitItem.ANIMAL_LUNG.get(), Map.of(
-                    InitAttribute.WATER_BREATH, 0.5
-            ));
-
+        .addValueBonuses(
+            InitItem.ANIMAL_LUNG.get(), Map.of(
+                InitAttribute.WATER_BREATH, 0.5
+            )
+        );
     public static final ChestCavityType FROG = register(ChestCavityBeyond.of("frog"))
-            .copyWith(ANIMAL)
-            .addValueBonuses(InitItem.ANIMAL_LUNG.get(), Map.of(
-                    InitAttribute.WATER_BREATH, 0.5
-            ));
+        .copyWith(ANIMAL)
+        .addValueBonuses(
+            InitItem.ANIMAL_LUNG.get(), Map.of(
+                InitAttribute.WATER_BREATH, 0.5
+            )
+        );
+    public static final ChestCavityType SMALL_ANIMAL = register(ChestCavityBeyond.of("small_animal"))
+        .setFirstRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
+        .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
+        .setFirstRow(2, InitItem.SMALL_ANIMAL_APPENDIX.get())
+        .setFirstRow(3, InitItem.SMALL_ANIMAL_LUNG.get())
+        .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
+        .setFirstRow(5, InitItem.SMALL_ANIMAL_LUNG.get())
+        .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
+        .setFirstRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get())
 
+        .setSecondRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
+        .setSecondRow(1, InitItem.SMALL_ANIMAL_RIB.get())
+        .setSecondRow(2, InitItem.SMALL_ANIMAL_SPLEEN.get())
+        .setSecondRow(3, InitItem.SMALL_ANIMAL_KIDNEY.get())
+        .setSecondRow(4, InitItem.SMALL_ANIMAL_SPINE.get())
+        .setSecondRow(5, InitItem.SMALL_ANIMAL_KIDNEY.get())
+        .setSecondRow(6, InitItem.SMALL_ANIMAL_LIVER.get())
+        .setSecondRow(7, InitItem.SMALL_ANIMAL_RIB.get())
+        .setSecondRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get())
+
+        .setThirdRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
+        .setThirdRow(1, InitItem.SMALL_ANIMAL_MUSCLE.get())
+        .setThirdRow(2, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(3, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(4, InitItem.SMALL_ANIMAL_STOMACH.get())
+        .setThirdRow(5, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(6, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(7, InitItem.SMALL_ANIMAL_MUSCLE.get())
+        .setThirdRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get());
+    public static final ChestCavityType SMALL_HERBIVORE = register(ChestCavityBeyond.of("small_herbivore"))
+        .copyWith(SMALL_ANIMAL)
+        .setThirdRow(2, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(3, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(4, InitItem.SMALL_HERBIVORE_STOMACH.get())
+        .setThirdRow(5, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(6, InitItem.SMALL_HERBIVORE_INTESTINE.get());
+    public static final ChestCavityType SMALL_CARNIVORE = register(ChestCavityBeyond.of("small_carnivore"))
+        .copyWith(SMALL_ANIMAL)
+        .setThirdRow(2, InitItem.SMALL_CARNIVORE_INTESTINE.get())
+        .setThirdRow(3, InitItem.SMALL_CARNIVORE_INTESTINE.get())
+        .setThirdRow(4, InitItem.SMALL_CARNIVORE_STOMACH.get())
+        .setThirdRow(5, InitItem.SMALL_CARNIVORE_INTESTINE.get())
+        .setThirdRow(6, InitItem.SMALL_CARNIVORE_INTESTINE.get());
+    public static final ChestCavityType AXOLOTL = register(ChestCavityBeyond.of("axolotl"))
+        .copyWith(SMALL_ANIMAL)
+
+        .addValueBonuses(
+            InitItem.SMALL_ANIMAL_LUNG.get(), Map.of(
+                InitAttribute.WATER_BREATH, 0.5
+            )
+        );
     public static final ChestCavityType RABBIT = register(ChestCavityBeyond.of("rabbit"))
-            .setFirstRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
-            .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(2, InitItem.SMALL_ANIMAL_APPENDIX.get())
-            .setFirstRow(3, InitItem.SMALL_ANIMAL_LUNG.get())
-            .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.SMALL_ANIMAL_LUNG.get())
-            .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(8, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setFirstRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
+        .setFirstRow(2, InitItem.SMALL_ANIMAL_APPENDIX.get())
+        .setFirstRow(3, InitItem.SMALL_ANIMAL_LUNG.get())
+        .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
+        .setFirstRow(5, InitItem.SMALL_ANIMAL_LUNG.get())
+        .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
+        .setFirstRow(8, InitItem.SMALL_LEAPING_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
-            .setSecondRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setSecondRow(2, InitItem.SMALL_ANIMAL_SPLEEN.get())
-            .setSecondRow(3, InitItem.SMALL_ANIMAL_KIDNEY.get())
-            .setSecondRow(4, InitItem.SMALL_ANIMAL_SPINE.get())
-            .setSecondRow(5, InitItem.SMALL_ANIMAL_KIDNEY.get())
-            .setSecondRow(6, InitItem.SMALL_ANIMAL_LIVER.get())
-            .setSecondRow(7, InitItem.SMALL_ANIMAL_RIB.get())
-            .setSecondRow(8, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setSecondRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setSecondRow(1, InitItem.SMALL_ANIMAL_RIB.get())
+        .setSecondRow(2, InitItem.SMALL_ANIMAL_SPLEEN.get())
+        .setSecondRow(3, InitItem.SMALL_ANIMAL_KIDNEY.get())
+        .setSecondRow(4, InitItem.SMALL_ANIMAL_SPINE.get())
+        .setSecondRow(5, InitItem.SMALL_ANIMAL_KIDNEY.get())
+        .setSecondRow(6, InitItem.SMALL_ANIMAL_LIVER.get())
+        .setSecondRow(7, InitItem.SMALL_ANIMAL_RIB.get())
+        .setSecondRow(8, InitItem.SMALL_LEAPING_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
-            .setThirdRow(1, InitItem.SMALL_LEAPING_MUSCLE.get())
-            .setThirdRow(2, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(3, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(4, InitItem.SMALL_HERBIVORE_STOMACH.get())
-            .setThirdRow(5, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(6, InitItem.SMALL_HERBIVORE_INTESTINE.get())
-            .setThirdRow(7, InitItem.SMALL_LEAPING_MUSCLE.get())
-            .setThirdRow(8, InitItem.SMALL_LEAPING_MUSCLE.get());
+        .setThirdRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setThirdRow(1, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setThirdRow(2, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(3, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(4, InitItem.SMALL_HERBIVORE_STOMACH.get())
+        .setThirdRow(5, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(6, InitItem.SMALL_HERBIVORE_INTESTINE.get())
+        .setThirdRow(7, InitItem.SMALL_LEAPING_MUSCLE.get())
+        .setThirdRow(8, InitItem.SMALL_LEAPING_MUSCLE.get());
 
     public static final ChestCavityType SLIME = register(ChestCavityBeyond.of("slime"))
-            .setFirstRow(4, Items.SLIME_BALL)
+        .setFirstRow(4, Items.SLIME_BALL)
 
-            .setSecondRow(3, Items.SLIME_BALL)
-            .setSecondRow(4, InitItem.SLIME_CORE.get())
-            .setSecondRow(5, Items.SLIME_BALL)
+        .setSecondRow(3, Items.SLIME_BALL)
+        .setSecondRow(4, InitItem.SLIME_CORE.get())
+        .setSecondRow(5, Items.SLIME_BALL)
 
-            .setThirdRow(4, Items.SLIME_BALL)
+        .setThirdRow(4, Items.SLIME_BALL)
 
-            .addValueBonuses(InitItem.SLIME_CORE.get(), Map.of(
-                    InitAttribute.NERVES, 1.0,
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0
-            ));
+        .addValueBonuses(
+            InitItem.SLIME_CORE.get(), Map.of(
+                InitAttribute.NERVES, 1.0,
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0
+            )
+        );
 
     public static final ChestCavityType MAGMA_CUBE = register(ChestCavityBeyond.of("magma_cube"))
-            .setFirstRow(4, Items.MAGMA_CREAM)
+        .setFirstRow(4, Items.MAGMA_CREAM)
 
-            .setSecondRow(3, Items.MAGMA_CREAM)
-            .setSecondRow(4, InitItem.MAGMA_CUBE_CORE.get())
-            .setSecondRow(5, Items.MAGMA_CREAM)
+        .setSecondRow(3, Items.MAGMA_CREAM)
+        .setSecondRow(4, InitItem.MAGMA_CUBE_CORE.get())
+        .setSecondRow(5, Items.MAGMA_CREAM)
 
-            .setThirdRow(4, Items.MAGMA_CREAM)
+        .setThirdRow(4, Items.MAGMA_CREAM)
 
-            .addValueBonuses(InitItem.MAGMA_CUBE_CORE.get(), Map.of(
-                    InitAttribute.NERVES, 1.0,
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0
-            ));
+        .addValueBonuses(
+            InitItem.MAGMA_CUBE_CORE.get(), Map.of(
+                InitAttribute.NERVES, 1.0,
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0
+            )
+        );
 
     public static final ChestCavityType FIREPROOF = register(ChestCavityBeyond.of("fireproof"))
-            .setFirstRow(0, InitItem.FIREPROOF_MUSCLE.get())
-            .setFirstRow(1, InitItem.FIREPROOF_RIB.get())
-            .setFirstRow(2, InitItem.FIREPROOF_APPENDIX.get())
-            .setFirstRow(3, InitItem.FIREPROOF_LUNG.get())
-            .setFirstRow(4, InitItem.FIREPROOF_HEART.get())
-            .setFirstRow(5, InitItem.FIREPROOF_LUNG.get())
-            .setFirstRow(7, InitItem.FIREPROOF_RIB.get())
-            .setFirstRow(8, InitItem.FIREPROOF_MUSCLE.get())
+        .setFirstRow(0, InitItem.FIREPROOF_MUSCLE.get())
+        .setFirstRow(1, InitItem.FIREPROOF_RIB.get())
+        .setFirstRow(2, InitItem.FIREPROOF_APPENDIX.get())
+        .setFirstRow(3, InitItem.FIREPROOF_LUNG.get())
+        .setFirstRow(4, InitItem.FIREPROOF_HEART.get())
+        .setFirstRow(5, InitItem.FIREPROOF_LUNG.get())
+        .setFirstRow(7, InitItem.FIREPROOF_RIB.get())
+        .setFirstRow(8, InitItem.FIREPROOF_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.FIREPROOF_MUSCLE.get())
-            .setSecondRow(1, InitItem.FIREPROOF_RIB.get())
-            .setSecondRow(2, InitItem.FIREPROOF_SPLEEN.get())
-            .setSecondRow(3, InitItem.FIREPROOF_KIDNEY.get())
-            .setSecondRow(4, InitItem.FIREPROOF_SPINE.get())
-            .setSecondRow(5, InitItem.FIREPROOF_KIDNEY.get())
-            .setSecondRow(6, InitItem.FIREPROOF_LIVER.get())
-            .setSecondRow(7, InitItem.FIREPROOF_RIB.get())
-            .setSecondRow(8, InitItem.FIREPROOF_MUSCLE.get())
+        .setSecondRow(0, InitItem.FIREPROOF_MUSCLE.get())
+        .setSecondRow(1, InitItem.FIREPROOF_RIB.get())
+        .setSecondRow(2, InitItem.FIREPROOF_SPLEEN.get())
+        .setSecondRow(3, InitItem.FIREPROOF_KIDNEY.get())
+        .setSecondRow(4, InitItem.FIREPROOF_SPINE.get())
+        .setSecondRow(5, InitItem.FIREPROOF_KIDNEY.get())
+        .setSecondRow(6, InitItem.FIREPROOF_LIVER.get())
+        .setSecondRow(7, InitItem.FIREPROOF_RIB.get())
+        .setSecondRow(8, InitItem.FIREPROOF_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.FIREPROOF_MUSCLE.get())
-            .setThirdRow(1, InitItem.FIREPROOF_MUSCLE.get())
-            .setThirdRow(2, InitItem.FIREPROOF_INTESTINE.get())
-            .setThirdRow(3, InitItem.FIREPROOF_INTESTINE.get())
-            .setThirdRow(4, InitItem.FIREPROOF_STOMACH.get())
-            .setThirdRow(5, InitItem.FIREPROOF_INTESTINE.get())
-            .setThirdRow(6, InitItem.FIREPROOF_INTESTINE.get())
-            .setThirdRow(7, InitItem.FIREPROOF_MUSCLE.get())
-            .setThirdRow(8, InitItem.FIREPROOF_MUSCLE.get());
+        .setThirdRow(0, InitItem.FIREPROOF_MUSCLE.get())
+        .setThirdRow(1, InitItem.FIREPROOF_MUSCLE.get())
+        .setThirdRow(2, InitItem.FIREPROOF_INTESTINE.get())
+        .setThirdRow(3, InitItem.FIREPROOF_INTESTINE.get())
+        .setThirdRow(4, InitItem.FIREPROOF_STOMACH.get())
+        .setThirdRow(5, InitItem.FIREPROOF_INTESTINE.get())
+        .setThirdRow(6, InitItem.FIREPROOF_INTESTINE.get())
+        .setThirdRow(7, InitItem.FIREPROOF_MUSCLE.get())
+        .setThirdRow(8, InitItem.FIREPROOF_MUSCLE.get());
 
     public static final ChestCavityType GHAST = register(ChestCavityBeyond.of("ghast"))
-            .copyWith(FIREPROOF)
-            .setFirstRow(1, InitItem.GAS_SAC.get())
-            .setFirstRow(3, InitItem.GAS_SAC.get())
-            .setFirstRow(5, InitItem.GAS_SAC.get())
-            .setFirstRow(7, InitItem.GAS_SAC.get())
-            .setThirdRow(4, InitItem.GHAST_STOMACH.get());
+        .copyWith(FIREPROOF)
+        .setFirstRow(1, InitItem.GAS_SAC.get())
+        .setFirstRow(3, InitItem.GAS_SAC.get())
+        .setFirstRow(5, InitItem.GAS_SAC.get())
+        .setFirstRow(7, InitItem.GAS_SAC.get())
+        .setThirdRow(4, InitItem.GHAST_STOMACH.get());
 
     public static final ChestCavityType ENDER = register(ChestCavityBeyond.of("ender"))
-            .setFirstRow(0, InitItem.ENDER_MUSCLE.get())
-            .setFirstRow(1, InitItem.ENDER_RIB.get())
-            .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
-            .setFirstRow(3, InitItem.ENDER_LUNG.get())
-            .setFirstRow(4, InitItem.ENDER_HEART.get())
-            .setFirstRow(5, InitItem.ENDER_LUNG.get())
-            .setFirstRow(7, InitItem.ENDER_RIB.get())
-            .setFirstRow(8, InitItem.ENDER_MUSCLE.get())
+        .setFirstRow(0, InitItem.ENDER_MUSCLE.get())
+        .setFirstRow(1, InitItem.ENDER_RIB.get())
+        .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
+        .setFirstRow(3, InitItem.ENDER_LUNG.get())
+        .setFirstRow(4, InitItem.ENDER_HEART.get())
+        .setFirstRow(5, InitItem.ENDER_LUNG.get())
+        .setFirstRow(7, InitItem.ENDER_RIB.get())
+        .setFirstRow(8, InitItem.ENDER_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.ENDER_MUSCLE.get())
-            .setSecondRow(1, InitItem.ENDER_RIB.get())
-            .setSecondRow(2, InitItem.ENDER_SPLEEN.get())
-            .setSecondRow(3, InitItem.ENDER_KIDNEY.get())
-            .setSecondRow(4, InitItem.ENDER_SPINE.get())
-            .setSecondRow(5, InitItem.ENDER_KIDNEY.get())
-            .setSecondRow(6, InitItem.ENDER_LIVER.get())
-            .setSecondRow(7, InitItem.ENDER_RIB.get())
-            .setSecondRow(8, InitItem.ENDER_MUSCLE.get())
+        .setSecondRow(0, InitItem.ENDER_MUSCLE.get())
+        .setSecondRow(1, InitItem.ENDER_RIB.get())
+        .setSecondRow(2, InitItem.ENDER_SPLEEN.get())
+        .setSecondRow(3, InitItem.ENDER_KIDNEY.get())
+        .setSecondRow(4, InitItem.ENDER_SPINE.get())
+        .setSecondRow(5, InitItem.ENDER_KIDNEY.get())
+        .setSecondRow(6, InitItem.ENDER_LIVER.get())
+        .setSecondRow(7, InitItem.ENDER_RIB.get())
+        .setSecondRow(8, InitItem.ENDER_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.ENDER_MUSCLE.get())
-            .setThirdRow(1, InitItem.ENDER_MUSCLE.get())
-            .setThirdRow(2, InitItem.ENDER_INTESTINE.get())
-            .setThirdRow(3, InitItem.ENDER_INTESTINE.get())
-            .setThirdRow(4, InitItem.ENDER_STOMACH.get())
-            .setThirdRow(5, InitItem.ENDER_INTESTINE.get())
-            .setThirdRow(6, InitItem.ENDER_INTESTINE.get())
-            .setThirdRow(7, InitItem.ENDER_MUSCLE.get())
-            .setThirdRow(8, InitItem.ENDER_MUSCLE.get());
+        .setThirdRow(0, InitItem.ENDER_MUSCLE.get())
+        .setThirdRow(1, InitItem.ENDER_MUSCLE.get())
+        .setThirdRow(2, InitItem.ENDER_INTESTINE.get())
+        .setThirdRow(3, InitItem.ENDER_INTESTINE.get())
+        .setThirdRow(4, InitItem.ENDER_STOMACH.get())
+        .setThirdRow(5, InitItem.ENDER_INTESTINE.get())
+        .setThirdRow(6, InitItem.ENDER_INTESTINE.get())
+        .setThirdRow(7, InitItem.ENDER_MUSCLE.get())
+        .setThirdRow(8, InitItem.ENDER_MUSCLE.get());
 
     public static final ChestCavityType ENDER_DRAGON = register(ChestCavityBeyond.of("ender_dragon"))
-            .setFirstRow(0, InitItem.DRAGON_MUSCLE.get())
-            .setFirstRow(1, InitItem.DRAGON_RIB.get())
-            .setFirstRow(2, InitItem.DRAGON_APPENDIX.get())
-            .setFirstRow(3, InitItem.DRAGON_LUNG.get())
-            .setFirstRow(4, InitItem.DRAGON_HEART.get())
-            .setFirstRow(5, InitItem.DRAGON_LUNG.get())
-            .setFirstRow(7, InitItem.DRAGON_RIB.get())
-            .setFirstRow(8, InitItem.DRAGON_MUSCLE.get())
+        .setFirstRow(0, InitItem.DRAGON_MUSCLE.get())
+        .setFirstRow(1, InitItem.DRAGON_RIB.get())
+        .setFirstRow(2, InitItem.DRAGON_APPENDIX.get())
+        .setFirstRow(3, InitItem.DRAGON_LUNG.get())
+        .setFirstRow(4, InitItem.DRAGON_HEART.get())
+        .setFirstRow(5, InitItem.DRAGON_LUNG.get())
+        .setFirstRow(7, InitItem.DRAGON_RIB.get())
+        .setFirstRow(8, InitItem.DRAGON_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.DRAGON_MUSCLE.get())
-            .setSecondRow(1, InitItem.DRAGON_RIB.get())
-            .setSecondRow(2, InitItem.DRAGON_SPLEEN.get())
-            .setSecondRow(3, InitItem.DRAGON_KIDNEY.get())
-            .setSecondRow(4, InitItem.DRAGON_SPINE.get())
-            .setSecondRow(5, InitItem.DRAGON_KIDNEY.get())
-            .setSecondRow(6, InitItem.DRAGON_LIVER.get())
-            .setSecondRow(7, InitItem.DRAGON_RIB.get())
-            .setSecondRow(8, InitItem.DRAGON_MUSCLE.get())
+        .setSecondRow(0, InitItem.DRAGON_MUSCLE.get())
+        .setSecondRow(1, InitItem.DRAGON_RIB.get())
+        .setSecondRow(2, InitItem.DRAGON_SPLEEN.get())
+        .setSecondRow(3, InitItem.DRAGON_KIDNEY.get())
+        .setSecondRow(4, InitItem.DRAGON_SPINE.get())
+        .setSecondRow(5, InitItem.DRAGON_KIDNEY.get())
+        .setSecondRow(6, InitItem.DRAGON_LIVER.get())
+        .setSecondRow(7, InitItem.DRAGON_RIB.get())
+        .setSecondRow(8, InitItem.DRAGON_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.DRAGON_MUSCLE.get())
-            .setThirdRow(1, InitItem.DRAGON_MUSCLE.get())
-            .setThirdRow(2, InitItem.MANA_REACTOR.get())
-            .setThirdRow(3, InitItem.MANA_REACTOR.get())
-            .setThirdRow(4, InitItem.MANA_REACTOR.get())
-            .setThirdRow(5, InitItem.MANA_REACTOR.get())
-            .setThirdRow(6, InitItem.MANA_REACTOR.get())
-            .setThirdRow(7, InitItem.DRAGON_MUSCLE.get())
-            .setThirdRow(8, InitItem.DRAGON_MUSCLE.get());
+        .setThirdRow(0, InitItem.DRAGON_MUSCLE.get())
+        .setThirdRow(1, InitItem.DRAGON_MUSCLE.get())
+        .setThirdRow(2, InitItem.MANA_REACTOR.get())
+        .setThirdRow(3, InitItem.MANA_REACTOR.get())
+        .setThirdRow(4, InitItem.MANA_REACTOR.get())
+        .setThirdRow(5, InitItem.MANA_REACTOR.get())
+        .setThirdRow(6, InitItem.MANA_REACTOR.get())
+        .setThirdRow(7, InitItem.DRAGON_MUSCLE.get())
+        .setThirdRow(8, InitItem.DRAGON_MUSCLE.get());
 
     public static final ChestCavityType UNDEAD = register(ChestCavityBeyond.of("undead"))
-            .setNeedHealth(false)
+        .setNeedHealth(false)
 
-            .setFirstRow(0, InitItem.ROTTEN_MUSCLE.get())
-            .setFirstRow(1, InitItem.ROTTEN_RIB.get())
-            .setFirstRow(2, InitItem.ROTTEN_APPENDIX.get())
-            .setFirstRow(4, InitItem.ROTTEN_HEART.get())
-            .setFirstRow(5, InitItem.ROTTEN_LUNG.get())
-            .setFirstRow(7, InitItem.ROTTEN_RIB.get())
-            .setFirstRow(8, InitItem.ROTTEN_MUSCLE.get())
+        .setFirstRow(0, InitItem.ROTTEN_MUSCLE.get())
+        .setFirstRow(1, InitItem.ROTTEN_RIB.get())
+        .setFirstRow(2, InitItem.ROTTEN_APPENDIX.get())
+        .setFirstRow(4, InitItem.ROTTEN_HEART.get())
+        .setFirstRow(5, InitItem.ROTTEN_LUNG.get())
+        .setFirstRow(7, InitItem.ROTTEN_RIB.get())
+        .setFirstRow(8, InitItem.ROTTEN_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.ROTTEN_MUSCLE.get())
-            .setSecondRow(1, InitItem.ROTTEN_RIB.get())
-            .setSecondRow(2, InitItem.ROTTEN_SPLEEN.get())
-            .setSecondRow(3, InitItem.ROTTEN_KIDNEY.get())
-            .setSecondRow(4, InitItem.ROTTEN_SPINE.get())
-            .setSecondRow(6, InitItem.ROTTEN_LIVER.get())
-            .setSecondRow(7, InitItem.ROTTEN_RIB.get())
+        .setSecondRow(0, InitItem.ROTTEN_MUSCLE.get())
+        .setSecondRow(1, InitItem.ROTTEN_RIB.get())
+        .setSecondRow(2, InitItem.ROTTEN_SPLEEN.get())
+        .setSecondRow(3, InitItem.ROTTEN_KIDNEY.get())
+        .setSecondRow(4, InitItem.ROTTEN_SPINE.get())
+        .setSecondRow(6, InitItem.ROTTEN_LIVER.get())
+        .setSecondRow(7, InitItem.ROTTEN_RIB.get())
 
-            .setThirdRow(0, InitItem.ROTTEN_MUSCLE.get())
-            .setThirdRow(2, InitItem.ROTTEN_INTESTINE.get())
-            .setThirdRow(4, InitItem.ROTTEN_STOMACH.get())
-            .setThirdRow(6, InitItem.ROTTEN_INTESTINE.get())
-            .setThirdRow(8, InitItem.ROTTEN_MUSCLE.get())
+        .setThirdRow(0, InitItem.ROTTEN_MUSCLE.get())
+        .setThirdRow(2, InitItem.ROTTEN_INTESTINE.get())
+        .setThirdRow(4, InitItem.ROTTEN_STOMACH.get())
+        .setThirdRow(6, InitItem.ROTTEN_INTESTINE.get())
+        .setThirdRow(8, InitItem.ROTTEN_MUSCLE.get())
 
-            .addValueBonuses(InitItem.ROTTEN_LUNG.get(), Map.of(
-                    InitAttribute.WATER_BREATH, 0.5
-            ))
-            // UNDEAD → HUMAN 器官转换映射（用于僵尸村民治愈）
-            .addConversion(InitItem.ROTTEN_MUSCLE.get(), InitItem.MUSCLE.get())
-            .addConversion(InitItem.ROTTEN_RIB.get(), InitItem.RIB.get())
-            .addConversion(InitItem.ROTTEN_APPENDIX.get(), InitItem.APPENDIX.get())
-            .addConversion(InitItem.ROTTEN_HEART.get(), InitItem.HEART.get())
-            .addConversion(InitItem.ROTTEN_LUNG.get(), InitItem.LUNG.get())
-            .addConversion(InitItem.ROTTEN_SPINE.get(), InitItem.SPINE.get())
-            .addConversion(InitItem.ROTTEN_STOMACH.get(), InitItem.STOMACH.get())
-            .addConversion(InitItem.ROTTEN_INTESTINE.get(), InitItem.INTESTINE.get())
-            .addConversion(InitItem.ROTTEN_KIDNEY.get(), InitItem.KIDNEY.get())
-            .addConversion(InitItem.ROTTEN_SPLEEN.get(), InitItem.SPLEEN.get())
-            .addConversion(InitItem.ROTTEN_LIVER.get(), InitItem.LIVER.get());
+        .addValueBonuses(
+            InitItem.ROTTEN_LUNG.get(), Map.of(
+                InitAttribute.WATER_BREATH, 0.5
+            )
+        )
+        // UNDEAD → HUMAN 器官转换映射（用于僵尸村民治愈）
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_MUSCLE.get(), InitItem.MUSCLE.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_RIB.get(), InitItem.RIB.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_APPENDIX.get(), InitItem.APPENDIX.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_HEART.get(), InitItem.HEART.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_LUNG.get(), InitItem.LUNG.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_SPINE.get(), InitItem.SPINE.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_STOMACH.get(), InitItem.STOMACH.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_INTESTINE.get(), InitItem.INTESTINE.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_KIDNEY.get(), InitItem.KIDNEY.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_SPLEEN.get(), InitItem.SPLEEN.get())
+        .addConversion(ChestCavityBeyond.of("human"), InitItem.ROTTEN_LIVER.get(), InitItem.LIVER.get());
 
     public static final ChestCavityType SKELETON = register(ChestCavityBeyond.of("skeleton"))
-            .setNeedHealth(false)
+        .setNeedHealth(false)
 
-            .setFirstRow(1, InitItem.ROTTEN_RIB.get())
-            .setFirstRow(7, InitItem.ROTTEN_RIB.get())
-            .setSecondRow(1, InitItem.ROTTEN_RIB.get())
-            .setSecondRow(4, InitItem.ROTTEN_SPINE.get())
-            .setSecondRow(7, InitItem.ROTTEN_RIB.get())
+        .setFirstRow(1, InitItem.ROTTEN_RIB.get())
+        .setFirstRow(7, InitItem.ROTTEN_RIB.get())
+        .setSecondRow(1, InitItem.ROTTEN_RIB.get())
+        .setSecondRow(4, InitItem.ROTTEN_SPINE.get())
+        .setSecondRow(7, InitItem.ROTTEN_RIB.get())
 
-            .addValueBonuses(InitItem.ROTTEN_SPINE.get(), Map.of(
-                    InitAttribute.HEALTH, 0.5,
-                    InitAttribute.BREATH_CAPACITY, 0.5,
-                    InitAttribute.BREATH_RECOVERY, 0.5,
-                    InitAttribute.WATER_BREATH, 0.5
-            ));
+        .addValueBonuses(
+            InitItem.ROTTEN_SPINE.get(), Map.of(
+                InitAttribute.HEALTH, 0.5,
+                InitAttribute.BREATH_CAPACITY, 0.5,
+                InitAttribute.BREATH_RECOVERY, 0.5,
+                InitAttribute.WATER_BREATH, 0.5
+            )
+        );
 
     public static final ChestCavityType WITHER_SKELETON = register(ChestCavityBeyond.of("wither_skeleton"))
-            .setNeedHealth(false)
+        .setNeedHealth(false)
 
-            .setFirstRow(1, InitItem.WITHERED_RIB.get())
-            .setFirstRow(7, InitItem.WITHERED_RIB.get())
+        .setFirstRow(1, InitItem.WITHERED_RIB.get())
+        .setFirstRow(7, InitItem.WITHERED_RIB.get())
 
-            .setSecondRow(1, InitItem.WITHERED_RIB.get())
-            .setSecondRow(4, InitItem.WITHERED_SPINE.get())
-            .setSecondRow(7, InitItem.WITHERED_RIB.get())
+        .setSecondRow(1, InitItem.WITHERED_RIB.get())
+        .setSecondRow(4, InitItem.WITHERED_SPINE.get())
+        .setSecondRow(7, InitItem.WITHERED_RIB.get())
 
-            .addValueBonuses(InitItem.WITHERED_SPINE.get(), Map.of(
-                    InitAttribute.HEALTH, 0.5,
-                    InitAttribute.BREATH_CAPACITY, 0.5,
-                    InitAttribute.BREATH_RECOVERY, 0.5,
-                    InitAttribute.WATER_BREATH, 0.5
-            ));
+        .addValueBonuses(
+            InitItem.WITHERED_SPINE.get(), Map.of(
+                InitAttribute.HEALTH, 0.5,
+                InitAttribute.BREATH_CAPACITY, 0.5,
+                InitAttribute.BREATH_RECOVERY, 0.5,
+                InitAttribute.WATER_BREATH, 0.5
+            )
+        );
 
     public static final ChestCavityType WITHER = register(ChestCavityBeyond.of("wither"))
-            .setNeedHealth(false)
+        .setNeedHealth(false)
 
-            .setFirstRow(0, InitItem.WRITHING_SOUL_SAND.get())
-            .setFirstRow(1, InitItem.WITHERED_RIB.get())
-            .setFirstRow(2, InitItem.WRITHING_SOUL_SAND.get())
-            .setFirstRow(3, InitItem.WRITHING_SOUL_SAND.get())
-            .setFirstRow(4, Items.NETHER_STAR)
-            .setFirstRow(5, InitItem.WRITHING_SOUL_SAND.get())
-            .setFirstRow(6, InitItem.WRITHING_SOUL_SAND.get())
-            .setFirstRow(7, InitItem.WITHERED_RIB.get())
-            .setFirstRow(8, InitItem.WRITHING_SOUL_SAND.get())
+        .setFirstRow(0, InitItem.WRITHING_SOUL_SAND.get())
+        .setFirstRow(1, InitItem.WITHERED_RIB.get())
+        .setFirstRow(2, InitItem.WRITHING_SOUL_SAND.get())
+        .setFirstRow(3, InitItem.WRITHING_SOUL_SAND.get())
+        .setFirstRow(4, Items.NETHER_STAR)
+        .setFirstRow(5, InitItem.WRITHING_SOUL_SAND.get())
+        .setFirstRow(6, InitItem.WRITHING_SOUL_SAND.get())
+        .setFirstRow(7, InitItem.WITHERED_RIB.get())
+        .setFirstRow(8, InitItem.WRITHING_SOUL_SAND.get())
 
-            .setSecondRow(0, InitItem.WRITHING_SOUL_SAND.get())
-            .setSecondRow(1, InitItem.WITHERED_RIB.get())
-            .setSecondRow(2, InitItem.WRITHING_SOUL_SAND.get())
-            .setSecondRow(3, InitItem.WRITHING_SOUL_SAND.get())
-            .setSecondRow(4, InitItem.WITHERED_SPINE.get())
-            .setSecondRow(5, InitItem.WRITHING_SOUL_SAND.get())
-            .setSecondRow(6, InitItem.WRITHING_SOUL_SAND.get())
-            .setSecondRow(7, InitItem.WITHERED_RIB.get())
-            .setSecondRow(8, InitItem.WRITHING_SOUL_SAND.get())
+        .setSecondRow(0, InitItem.WRITHING_SOUL_SAND.get())
+        .setSecondRow(1, InitItem.WITHERED_RIB.get())
+        .setSecondRow(2, InitItem.WRITHING_SOUL_SAND.get())
+        .setSecondRow(3, InitItem.WRITHING_SOUL_SAND.get())
+        .setSecondRow(4, InitItem.WITHERED_SPINE.get())
+        .setSecondRow(5, InitItem.WRITHING_SOUL_SAND.get())
+        .setSecondRow(6, InitItem.WRITHING_SOUL_SAND.get())
+        .setSecondRow(7, InitItem.WITHERED_RIB.get())
+        .setSecondRow(8, InitItem.WRITHING_SOUL_SAND.get())
 
-            .setThirdRow(0, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(1, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(2, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(3, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(4, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(5, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(6, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(7, InitItem.WRITHING_SOUL_SAND.get())
-            .setThirdRow(8, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(0, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(1, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(2, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(3, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(4, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(5, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(6, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(7, InitItem.WRITHING_SOUL_SAND.get())
+        .setThirdRow(8, InitItem.WRITHING_SOUL_SAND.get())
 
-            .addValueBonuses(Items.NETHER_STAR, Map.of(
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0,
-                    InitAttribute.WATER_BREATH, 1.0
-            ));
+        .addValueBonuses(
+            Items.NETHER_STAR, Map.of(
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0,
+                InitAttribute.WATER_BREATH, 1.0
+            )
+        );
 
     public static final ChestCavityType ARTHROPOD = register(ChestCavityBeyond.of("arthropod"))
-            .setFirstRow(0, InitItem.ARTHROPOD_MUSCLE.get())
-            .setFirstRow(1, InitItem.ARTHROPOD_CAECUM.get())
-            .setFirstRow(3, InitItem.ARTHROPOD_LUNG.get())
-            .setFirstRow(4, InitItem.ARTHROPOD_HEART.get())
-            .setFirstRow(5, InitItem.ARTHROPOD_LUNG.get())
-            .setFirstRow(7, InitItem.ARTHROPOD_CAECUM.get())
-            .setFirstRow(8, InitItem.ARTHROPOD_MUSCLE.get())
+        .setFirstRow(0, InitItem.ARTHROPOD_MUSCLE.get())
+        .setFirstRow(1, InitItem.ARTHROPOD_CAECUM.get())
+        .setFirstRow(3, InitItem.ARTHROPOD_LUNG.get())
+        .setFirstRow(4, InitItem.ARTHROPOD_HEART.get())
+        .setFirstRow(5, InitItem.ARTHROPOD_LUNG.get())
+        .setFirstRow(7, InitItem.ARTHROPOD_CAECUM.get())
+        .setFirstRow(8, InitItem.ARTHROPOD_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.ARTHROPOD_MUSCLE.get())
-            .setSecondRow(2, InitItem.ARTHROPOD_INTESTINE.get())
-            .setSecondRow(3, InitItem.ARTHROPOD_INTESTINE.get())
-            .setSecondRow(4, InitItem.ARTHROPOD_STOMACH.get())
-            .setSecondRow(5, InitItem.ARTHROPOD_INTESTINE.get())
-            .setSecondRow(6, InitItem.ARTHROPOD_INTESTINE.get())
-            .setSecondRow(8, InitItem.ARTHROPOD_MUSCLE.get())
+        .setSecondRow(0, InitItem.ARTHROPOD_MUSCLE.get())
+        .setSecondRow(2, InitItem.ARTHROPOD_INTESTINE.get())
+        .setSecondRow(3, InitItem.ARTHROPOD_INTESTINE.get())
+        .setSecondRow(4, InitItem.ARTHROPOD_STOMACH.get())
+        .setSecondRow(5, InitItem.ARTHROPOD_INTESTINE.get())
+        .setSecondRow(6, InitItem.ARTHROPOD_INTESTINE.get())
+        .setSecondRow(8, InitItem.ARTHROPOD_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.ARTHROPOD_MUSCLE.get())
-            .setThirdRow(1, InitItem.ARTHROPOD_MUSCLE.get())
-            .setThirdRow(2, InitItem.ARTHROPOD_MUSCLE.get())
-            .setThirdRow(3, InitItem.ARTHROPOD_INTESTINE.get())
-            .setThirdRow(4, InitItem.ARTHROPOD_STOMACH.get())
-            .setThirdRow(5, InitItem.ARTHROPOD_INTESTINE.get())
-            .setThirdRow(6, InitItem.ARTHROPOD_MUSCLE.get())
-            .setThirdRow(7, InitItem.ARTHROPOD_MUSCLE.get())
-            .setThirdRow(8, InitItem.ARTHROPOD_MUSCLE.get());
+        .setThirdRow(0, InitItem.ARTHROPOD_MUSCLE.get())
+        .setThirdRow(1, InitItem.ARTHROPOD_MUSCLE.get())
+        .setThirdRow(2, InitItem.ARTHROPOD_MUSCLE.get())
+        .setThirdRow(3, InitItem.ARTHROPOD_INTESTINE.get())
+        .setThirdRow(4, InitItem.ARTHROPOD_STOMACH.get())
+        .setThirdRow(5, InitItem.ARTHROPOD_INTESTINE.get())
+        .setThirdRow(6, InitItem.ARTHROPOD_MUSCLE.get())
+        .setThirdRow(7, InitItem.ARTHROPOD_MUSCLE.get())
+        .setThirdRow(8, InitItem.ARTHROPOD_MUSCLE.get());
 
     public static final ChestCavityType SPIDER = register(ChestCavityBeyond.of("spider"))
-            .copyWith(ARTHROPOD)
-            .setSecondRow(2, InitItem.SILK_GLAND.get())
-            .setSecondRow(6, InitItem.SILK_GLAND.get());
+        .copyWith(ARTHROPOD)
+        .setSecondRow(2, InitItem.SILK_GLAND.get())
+        .setSecondRow(6, InitItem.SILK_GLAND.get());
 
     public static final ChestCavityType CAVE_SPIDER = register(ChestCavityBeyond.of("cave_spider"))
-            .copyWith(SPIDER)
-            .setSecondRow(6, InitItem.VENOM_GLAND.get());
+        .copyWith(SPIDER)
+        .setSecondRow(6, InitItem.VENOM_GLAND.get());
 
     public static final ChestCavityType AQUATIC = register(ChestCavityBeyond.of("aquatic"))
-            .setFirstRow(0, InitItem.AQUATIC_MUSCLE.get())
-            .setFirstRow(1, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(3, InitItem.GILL.get())
-            .setFirstRow(4, InitItem.ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.GILL.get())
-            .setFirstRow(7, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(8, InitItem.AQUATIC_MUSCLE.get())
+        .setFirstRow(0, InitItem.AQUATIC_MUSCLE.get())
+        .setFirstRow(1, InitItem.ANIMAL_RIB.get())
+        .setFirstRow(3, InitItem.GILL.get())
+        .setFirstRow(4, InitItem.ANIMAL_HEART.get())
+        .setFirstRow(5, InitItem.GILL.get())
+        .setFirstRow(7, InitItem.ANIMAL_RIB.get())
+        .setFirstRow(8, InitItem.AQUATIC_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.AQUATIC_MUSCLE.get())
-            .setSecondRow(1, InitItem.ANIMAL_RIB.get())
-            .setSecondRow(2, InitItem.ANIMAL_SPLEEN.get())
-            .setSecondRow(3, InitItem.ANIMAL_KIDNEY.get())
-            .setSecondRow(4, InitItem.ANIMAL_SPINE.get())
-            .setSecondRow(5, InitItem.ANIMAL_KIDNEY.get())
-            .setSecondRow(6, InitItem.ANIMAL_LIVER.get())
-            .setSecondRow(7, InitItem.ANIMAL_RIB.get())
-            .setSecondRow(8, InitItem.AQUATIC_MUSCLE.get())
+        .setSecondRow(0, InitItem.AQUATIC_MUSCLE.get())
+        .setSecondRow(1, InitItem.ANIMAL_RIB.get())
+        .setSecondRow(2, InitItem.ANIMAL_SPLEEN.get())
+        .setSecondRow(3, InitItem.ANIMAL_KIDNEY.get())
+        .setSecondRow(4, InitItem.ANIMAL_SPINE.get())
+        .setSecondRow(5, InitItem.ANIMAL_KIDNEY.get())
+        .setSecondRow(6, InitItem.ANIMAL_LIVER.get())
+        .setSecondRow(7, InitItem.ANIMAL_RIB.get())
+        .setSecondRow(8, InitItem.AQUATIC_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.AQUATIC_MUSCLE.get())
-            .setThirdRow(1, InitItem.AQUATIC_MUSCLE.get())
-            .setThirdRow(2, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(3, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(4, InitItem.ANIMAL_STOMACH.get())
-            .setThirdRow(5, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(6, InitItem.ANIMAL_INTESTINE.get())
-            .setThirdRow(7, InitItem.AQUATIC_MUSCLE.get())
-            .setThirdRow(8, InitItem.AQUATIC_MUSCLE.get());
+        .setThirdRow(0, InitItem.AQUATIC_MUSCLE.get())
+        .setThirdRow(1, InitItem.AQUATIC_MUSCLE.get())
+        .setThirdRow(2, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(3, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(4, InitItem.ANIMAL_STOMACH.get())
+        .setThirdRow(5, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(6, InitItem.ANIMAL_INTESTINE.get())
+        .setThirdRow(7, InitItem.AQUATIC_MUSCLE.get())
+        .setThirdRow(8, InitItem.AQUATIC_MUSCLE.get());
 
     public static final ChestCavityType DOLPHIN = register(ChestCavityBeyond.of("dolphin"))
-            .copyWith(AQUATIC)
-            .setFirstRow(3, InitItem.ANIMAL_LUNG.get())
-            .setFirstRow(5, InitItem.ANIMAL_LUNG.get());
+        .copyWith(AQUATIC)
+        .setFirstRow(3, InitItem.ANIMAL_LUNG.get())
+        .setFirstRow(5, InitItem.ANIMAL_LUNG.get());
 
     public static final ChestCavityType FISH = register(ChestCavityBeyond.of("fish"))
-            .copyWith(AQUATIC)
-            .setFirstRow(0, InitItem.FISH_MUSCLE.get())
-            .setFirstRow(1, InitItem.FISH_BONE.get())
-            .setFirstRow(7, InitItem.FISH_BONE.get())
-            .setFirstRow(8, InitItem.FISH_MUSCLE.get())
+        .copyWith(AQUATIC)
+        .setFirstRow(0, InitItem.FISH_MUSCLE.get())
+        .setFirstRow(1, InitItem.FISH_BONE.get())
+        .setFirstRow(7, InitItem.FISH_BONE.get())
+        .setFirstRow(8, InitItem.FISH_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.FISH_MUSCLE.get())
-            .setSecondRow(1, InitItem.FISH_BONE.get())
-            .setSecondRow(4, InitItem.FISH_SPINE.get())
-            .setSecondRow(7, InitItem.FISH_BONE.get())
-            .setSecondRow(8, InitItem.FISH_MUSCLE.get())
+        .setSecondRow(0, InitItem.FISH_MUSCLE.get())
+        .setSecondRow(1, InitItem.FISH_BONE.get())
+        .setSecondRow(4, InitItem.FISH_SPINE.get())
+        .setSecondRow(7, InitItem.FISH_BONE.get())
+        .setSecondRow(8, InitItem.FISH_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.FISH_MUSCLE.get())
-            .setThirdRow(1, InitItem.FISH_MUSCLE.get())
-            .setThirdRow(2, InitItem.FISH_INTESTINE.get())
-            .setThirdRow(3, InitItem.FISH_INTESTINE.get())
-            .setThirdRow(5, InitItem.FISH_INTESTINE.get())
-            .setThirdRow(6, InitItem.FISH_INTESTINE.get())
-            .setThirdRow(7, InitItem.FISH_MUSCLE.get())
-            .setThirdRow(8, InitItem.FISH_MUSCLE.get());
+        .setThirdRow(0, InitItem.FISH_MUSCLE.get())
+        .setThirdRow(1, InitItem.FISH_MUSCLE.get())
+        .setThirdRow(2, InitItem.FISH_INTESTINE.get())
+        .setThirdRow(3, InitItem.FISH_INTESTINE.get())
+        .setThirdRow(5, InitItem.FISH_INTESTINE.get())
+        .setThirdRow(6, InitItem.FISH_INTESTINE.get())
+        .setThirdRow(7, InitItem.FISH_MUSCLE.get())
+        .setThirdRow(8, InitItem.FISH_MUSCLE.get());
 
     public static final ChestCavityType SMALL_AQUATIC = register(ChestCavityBeyond.of("small_aquatic"))
-            .setFirstRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
-            .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(3, InitItem.SMALL_GILL.get())
-            .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
-            .setFirstRow(5, InitItem.SMALL_GILL.get())
-            .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
-            .setFirstRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setFirstRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
+        .setFirstRow(3, InitItem.SMALL_GILL.get())
+        .setFirstRow(4, InitItem.SMALL_ANIMAL_HEART.get())
+        .setFirstRow(5, InitItem.SMALL_GILL.get())
+        .setFirstRow(7, InitItem.SMALL_ANIMAL_RIB.get())
+        .setFirstRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
-            .setSecondRow(1, InitItem.SMALL_ANIMAL_RIB.get())
-            .setSecondRow(2, InitItem.SMALL_ANIMAL_SPLEEN.get())
-            .setSecondRow(3, InitItem.SMALL_ANIMAL_KIDNEY.get())
-            .setSecondRow(4, InitItem.SMALL_ANIMAL_SPINE.get())
-            .setSecondRow(5, InitItem.SMALL_ANIMAL_KIDNEY.get())
-            .setSecondRow(6, InitItem.SMALL_ANIMAL_LIVER.get())
-            .setSecondRow(7, InitItem.SMALL_ANIMAL_RIB.get())
-            .setSecondRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setSecondRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setSecondRow(1, InitItem.SMALL_ANIMAL_RIB.get())
+        .setSecondRow(2, InitItem.SMALL_ANIMAL_SPLEEN.get())
+        .setSecondRow(3, InitItem.SMALL_ANIMAL_KIDNEY.get())
+        .setSecondRow(4, InitItem.SMALL_ANIMAL_SPINE.get())
+        .setSecondRow(5, InitItem.SMALL_ANIMAL_KIDNEY.get())
+        .setSecondRow(6, InitItem.SMALL_ANIMAL_LIVER.get())
+        .setSecondRow(7, InitItem.SMALL_ANIMAL_RIB.get())
+        .setSecondRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
-            .setThirdRow(1, InitItem.SMALL_AQUATIC_MUSCLE.get())
-            .setThirdRow(2, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(3, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(4, InitItem.SMALL_ANIMAL_STOMACH.get())
-            .setThirdRow(5, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(6, InitItem.SMALL_ANIMAL_INTESTINE.get())
-            .setThirdRow(7, InitItem.SMALL_AQUATIC_MUSCLE.get())
-            .setThirdRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get());
-
+        .setThirdRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setThirdRow(1, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setThirdRow(2, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(3, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(4, InitItem.SMALL_ANIMAL_STOMACH.get())
+        .setThirdRow(5, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(6, InitItem.SMALL_ANIMAL_INTESTINE.get())
+        .setThirdRow(7, InitItem.SMALL_AQUATIC_MUSCLE.get())
+        .setThirdRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get());
     public static final ChestCavityType SMALL_FISH = register(ChestCavityBeyond.of("small_fish"))
-            .copyWith(SMALL_AQUATIC)
-            .setFirstRow(0, InitItem.SMALL_FISH_MUSCLE.get())
-            .setFirstRow(1, InitItem.SMALL_FISH_BONE.get())
-            .setFirstRow(7, InitItem.SMALL_FISH_BONE.get())
-            .setFirstRow(8, InitItem.SMALL_FISH_MUSCLE.get())
+        .copyWith(SMALL_AQUATIC)
+        .setFirstRow(0, InitItem.SMALL_FISH_MUSCLE.get())
+        .setFirstRow(1, InitItem.SMALL_FISH_BONE.get())
+        .setFirstRow(7, InitItem.SMALL_FISH_BONE.get())
+        .setFirstRow(8, InitItem.SMALL_FISH_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.SMALL_FISH_MUSCLE.get())
-            .setSecondRow(1, InitItem.SMALL_FISH_BONE.get())
-            .setSecondRow(4, InitItem.SMALL_FISH_SPINE.get())
-            .setSecondRow(7, InitItem.SMALL_FISH_BONE.get())
-            .setSecondRow(8, InitItem.SMALL_FISH_MUSCLE.get())
+        .setSecondRow(0, InitItem.SMALL_FISH_MUSCLE.get())
+        .setSecondRow(1, InitItem.SMALL_FISH_BONE.get())
+        .setSecondRow(4, InitItem.SMALL_FISH_SPINE.get())
+        .setSecondRow(7, InitItem.SMALL_FISH_BONE.get())
+        .setSecondRow(8, InitItem.SMALL_FISH_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.SMALL_FISH_MUSCLE.get())
-            .setThirdRow(1, InitItem.SMALL_FISH_MUSCLE.get())
-            .setThirdRow(2, InitItem.SMALL_FISH_INTESTINE.get())
-            .setThirdRow(3, InitItem.SMALL_FISH_INTESTINE.get())
-            .setThirdRow(5, InitItem.SMALL_FISH_INTESTINE.get())
-            .setThirdRow(6, InitItem.SMALL_FISH_INTESTINE.get())
-            .setThirdRow(7, InitItem.SMALL_FISH_MUSCLE.get())
-            .setThirdRow(8, InitItem.SMALL_FISH_MUSCLE.get());
-
+        .setThirdRow(0, InitItem.SMALL_FISH_MUSCLE.get())
+        .setThirdRow(1, InitItem.SMALL_FISH_MUSCLE.get())
+        .setThirdRow(2, InitItem.SMALL_FISH_INTESTINE.get())
+        .setThirdRow(3, InitItem.SMALL_FISH_INTESTINE.get())
+        .setThirdRow(5, InitItem.SMALL_FISH_INTESTINE.get())
+        .setThirdRow(6, InitItem.SMALL_FISH_INTESTINE.get())
+        .setThirdRow(7, InitItem.SMALL_FISH_MUSCLE.get())
+        .setThirdRow(8, InitItem.SMALL_FISH_MUSCLE.get());
     public static final ChestCavityType SALTWATER = register(ChestCavityBeyond.of("saltwater"))
-            .setFirstRow(0, InitItem.SALTWATER_MUSCLE.get())
-            .setFirstRow(1, InitItem.RIB.get())
-            .setFirstRow(2, InitItem.APPENDIX.get())
-            .setFirstRow(3, InitItem.SALTWATER_LUNG.get())
-            .setFirstRow(4, InitItem.SALTWATER_HEART.get())
-            .setFirstRow(5, InitItem.SALTWATER_LUNG.get())
-            .setFirstRow(7, InitItem.RIB.get())
-            .setFirstRow(8, InitItem.SALTWATER_MUSCLE.get())
+        .setFirstRow(0, InitItem.SALTWATER_MUSCLE.get())
+        .setFirstRow(1, InitItem.RIB.get())
+        .setFirstRow(2, InitItem.APPENDIX.get())
+        .setFirstRow(3, InitItem.SALTWATER_LUNG.get())
+        .setFirstRow(4, InitItem.SALTWATER_HEART.get())
+        .setFirstRow(5, InitItem.SALTWATER_LUNG.get())
+        .setFirstRow(7, InitItem.RIB.get())
+        .setFirstRow(8, InitItem.SALTWATER_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.SALTWATER_MUSCLE.get())
-            .setSecondRow(1, InitItem.RIB.get())
-            .setSecondRow(2, InitItem.SPLEEN.get())
-            .setSecondRow(3, InitItem.KIDNEY.get())
-            .setSecondRow(4, InitItem.SPINE.get())
-            .setSecondRow(5, InitItem.KIDNEY.get())
-            .setSecondRow(6, InitItem.LIVER.get())
-            .setSecondRow(7, InitItem.RIB.get())
-            .setSecondRow(8, InitItem.SALTWATER_MUSCLE.get())
+        .setSecondRow(0, InitItem.SALTWATER_MUSCLE.get())
+        .setSecondRow(1, InitItem.RIB.get())
+        .setSecondRow(2, InitItem.SPLEEN.get())
+        .setSecondRow(3, InitItem.KIDNEY.get())
+        .setSecondRow(4, InitItem.SPINE.get())
+        .setSecondRow(5, InitItem.KIDNEY.get())
+        .setSecondRow(6, InitItem.LIVER.get())
+        .setSecondRow(7, InitItem.RIB.get())
+        .setSecondRow(8, InitItem.SALTWATER_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.SALTWATER_MUSCLE.get())
-            .setThirdRow(1, InitItem.SALTWATER_MUSCLE.get())
-            .setThirdRow(2, InitItem.INTESTINE.get())
-            .setThirdRow(3, InitItem.INTESTINE.get())
-            .setThirdRow(4, InitItem.STOMACH.get())
-            .setThirdRow(5, InitItem.INTESTINE.get())
-            .setThirdRow(6, InitItem.INTESTINE.get())
-            .setThirdRow(7, InitItem.SALTWATER_MUSCLE.get())
-            .setThirdRow(8, InitItem.SALTWATER_MUSCLE.get());
-
+        .setThirdRow(0, InitItem.SALTWATER_MUSCLE.get())
+        .setThirdRow(1, InitItem.SALTWATER_MUSCLE.get())
+        .setThirdRow(2, InitItem.INTESTINE.get())
+        .setThirdRow(3, InitItem.INTESTINE.get())
+        .setThirdRow(4, InitItem.STOMACH.get())
+        .setThirdRow(5, InitItem.INTESTINE.get())
+        .setThirdRow(6, InitItem.INTESTINE.get())
+        .setThirdRow(7, InitItem.SALTWATER_MUSCLE.get())
+        .setThirdRow(8, InitItem.SALTWATER_MUSCLE.get());
     public static final ChestCavityType CREEPER = register(ChestCavityBeyond.of("creeper"))
-            .setFirstRow(0, InitItem.CREEPER_LEAF.get())
-            .setFirstRow(1, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(4, InitItem.CREEPER_APPENDIX.get())
-            .setFirstRow(7, InitItem.ANIMAL_RIB.get())
-            .setFirstRow(8, InitItem.CREEPER_LEAF.get())
+        .setFirstRow(0, InitItem.CREEPER_LEAF.get())
+        .setFirstRow(1, InitItem.ANIMAL_RIB.get())
+        .setFirstRow(4, InitItem.CREEPER_APPENDIX.get())
+        .setFirstRow(7, InitItem.ANIMAL_RIB.get())
+        .setFirstRow(8, InitItem.CREEPER_LEAF.get())
 
-            .setSecondRow(0, InitItem.CREEPER_LEAF.get())
-            .setSecondRow(1, InitItem.ANIMAL_RIB.get())
-            .setSecondRow(3, Items.GUNPOWDER)
-            .setSecondRow(4, Items.OAK_LOG)
-            .setSecondRow(5, Items.GUNPOWDER)
-            .setSecondRow(7, InitItem.ANIMAL_RIB.get())
-            .setSecondRow(8, InitItem.CREEPER_LEAF.get())
+        .setSecondRow(0, InitItem.CREEPER_LEAF.get())
+        .setSecondRow(1, InitItem.ANIMAL_RIB.get())
+        .setSecondRow(3, Items.GUNPOWDER)
+        .setSecondRow(4, Items.OAK_LOG)
+        .setSecondRow(5, Items.GUNPOWDER)
+        .setSecondRow(7, InitItem.ANIMAL_RIB.get())
+        .setSecondRow(8, InitItem.CREEPER_LEAF.get())
 
-            .setThirdRow(0, InitItem.CREEPER_LEAF.get())
-            .setThirdRow(1, InitItem.CREEPER_LEAF.get())
-            .setThirdRow(2, InitItem.CREEPER_LEAF.get())
-            .setThirdRow(4, Items.GUNPOWDER)
-            .setThirdRow(6, InitItem.CREEPER_LEAF.get())
-            .setThirdRow(7, InitItem.CREEPER_LEAF.get())
-            .setThirdRow(8, InitItem.CREEPER_LEAF.get())
+        .setThirdRow(0, InitItem.CREEPER_LEAF.get())
+        .setThirdRow(1, InitItem.CREEPER_LEAF.get())
+        .setThirdRow(2, InitItem.CREEPER_LEAF.get())
+        .setThirdRow(4, Items.GUNPOWDER)
+        .setThirdRow(6, InitItem.CREEPER_LEAF.get())
+        .setThirdRow(7, InitItem.CREEPER_LEAF.get())
+        .setThirdRow(8, InitItem.CREEPER_LEAF.get())
 
-            .addValueBonuses(Items.OAK_LOG, Map.of(
-                    InitAttribute.HEALTH, 1.0,
-                    InitAttribute.NERVES, 1.0
-            ))
-            .addValueBonuses(InitItem.CREEPER_LEAF.get(), Map.of(
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0
-            ));
-
+        .addValueBonuses(
+            Items.OAK_LOG, Map.of(
+                InitAttribute.HEALTH, 1.0,
+                InitAttribute.NERVES, 1.0
+            )
+        )
+        .addValueBonuses(
+            InitItem.CREEPER_LEAF.get(), Map.of(
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0
+            )
+        );
     public static final ChestCavityType BLAZE = register(ChestCavityBeyond.of("blaze"))
-            .setFirstRow(1, InitItem.ACTIVE_BLAZE_ROD.get())
-            .setFirstRow(2, InitItem.BLAZE_SHELL.get())
-            .setFirstRow(3, Items.MAGMA_BLOCK)
-            .setFirstRow(4, Items.MAGMA_BLOCK)
-            .setFirstRow(5, Items.MAGMA_BLOCK)
-            .setFirstRow(6, InitItem.BLAZE_SHELL.get())
+        .setFirstRow(1, InitItem.ACTIVE_BLAZE_ROD.get())
+        .setFirstRow(2, InitItem.BLAZE_SHELL.get())
+        .setFirstRow(3, Items.MAGMA_BLOCK)
+        .setFirstRow(4, Items.MAGMA_BLOCK)
+        .setFirstRow(5, Items.MAGMA_BLOCK)
+        .setFirstRow(6, InitItem.BLAZE_SHELL.get())
 
-            .setSecondRow(2, InitItem.BLAZE_SHELL.get())
-            .setSecondRow(3, Items.MAGMA_BLOCK)
-            .setSecondRow(4, InitItem.BLAZE_CORE.get())
-            .setSecondRow(5, Items.MAGMA_BLOCK)
-            .setSecondRow(6, InitItem.BLAZE_SHELL.get())
-            .setSecondRow(7, InitItem.ACTIVE_BLAZE_ROD.get())
+        .setSecondRow(2, InitItem.BLAZE_SHELL.get())
+        .setSecondRow(3, Items.MAGMA_BLOCK)
+        .setSecondRow(4, InitItem.BLAZE_CORE.get())
+        .setSecondRow(5, Items.MAGMA_BLOCK)
+        .setSecondRow(6, InitItem.BLAZE_SHELL.get())
+        .setSecondRow(7, InitItem.ACTIVE_BLAZE_ROD.get())
 
-            .setThirdRow(0, InitItem.ACTIVE_BLAZE_ROD.get())
-            .setThirdRow(2, InitItem.BLAZE_SHELL.get())
-            .setThirdRow(3, Items.MAGMA_BLOCK)
-            .setThirdRow(4, Items.MAGMA_BLOCK)
-            .setThirdRow(5, Items.MAGMA_BLOCK)
-            .setThirdRow(6, InitItem.BLAZE_SHELL.get())
+        .setThirdRow(0, InitItem.ACTIVE_BLAZE_ROD.get())
+        .setThirdRow(2, InitItem.BLAZE_SHELL.get())
+        .setThirdRow(3, Items.MAGMA_BLOCK)
+        .setThirdRow(4, Items.MAGMA_BLOCK)
+        .setThirdRow(5, Items.MAGMA_BLOCK)
+        .setThirdRow(6, InitItem.BLAZE_SHELL.get())
 
-            .addValueBonuses(Items.MAGMA_BLOCK, Map.of(
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0
-            ));
-
+        .addValueBonuses(
+            Items.MAGMA_BLOCK, Map.of(
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0
+            )
+        );
     public static final ChestCavityType BREEZE = register(ChestCavityBeyond.of("breeze"))
-            .setFirstRow(3, InitItem.ACTIVE_BREEZE_ROD.get())
-            .setFirstRow(4, InitItem.BREEZE_CORE.get())
-            .setFirstRow(5, InitItem.ACTIVE_BREEZE_ROD.get())
+        .setFirstRow(3, InitItem.ACTIVE_BREEZE_ROD.get())
+        .setFirstRow(4, InitItem.BREEZE_CORE.get())
+        .setFirstRow(5, InitItem.ACTIVE_BREEZE_ROD.get())
 
-            .setSecondRow(3, Items.WIND_CHARGE)
-            .setSecondRow(4, InitItem.ACTIVE_BREEZE_ROD.get())
-            .setSecondRow(5, Items.WIND_CHARGE)
+        .setSecondRow(3, Items.WIND_CHARGE)
+        .setSecondRow(4, InitItem.ACTIVE_BREEZE_ROD.get())
+        .setSecondRow(5, Items.WIND_CHARGE)
 
-            .setThirdRow(4, Items.WIND_CHARGE)
+        .setThirdRow(4, Items.WIND_CHARGE)
 
-            .addValueBonuses(Items.WIND_CHARGE, Map.of(
-                    InitAttribute.BREATH_CAPACITY, 2.0,
-                    InitAttribute.BREATH_RECOVERY, 2.0
-            ))
-            .addValueBonuses(InitItem.BREEZE_CORE.get(), Map.of(
-                    InitAttribute.NERVES, 1.0
-            ));
-
+        .addValueBonuses(
+            Items.WIND_CHARGE, Map.of(
+                InitAttribute.BREATH_CAPACITY, 2.0,
+                InitAttribute.BREATH_RECOVERY, 2.0
+            )
+        )
+        .addValueBonuses(
+            InitItem.BREEZE_CORE.get(), Map.of(
+                InitAttribute.NERVES, 1.0
+            )
+        );
     public static final ChestCavityType IRON_GOLEM = register(ChestCavityBeyond.of("iron_golem"))
-            .setNeedBreath(false)
+        .setNeedBreath(false)
 
-            .setFirstRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setFirstRow(1, InitItem.PISTON_MUSCLE.get())
-            .setFirstRow(2, InitItem.PISTON_MUSCLE.get())
-            .setFirstRow(3, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setFirstRow(4, InitItem.GOLEM_CORE.get())
-            .setFirstRow(5, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setFirstRow(6, InitItem.PISTON_MUSCLE.get())
-            .setFirstRow(7, InitItem.PISTON_MUSCLE.get())
-            .setFirstRow(8, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setFirstRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setFirstRow(1, InitItem.PISTON_MUSCLE.get())
+        .setFirstRow(2, InitItem.PISTON_MUSCLE.get())
+        .setFirstRow(3, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setFirstRow(4, InitItem.GOLEM_CORE.get())
+        .setFirstRow(5, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setFirstRow(6, InitItem.PISTON_MUSCLE.get())
+        .setFirstRow(7, InitItem.PISTON_MUSCLE.get())
+        .setFirstRow(8, InitItem.GOLEM_ARMOR_PLATE.get())
 
-            .setSecondRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setSecondRow(1, InitItem.PISTON_MUSCLE.get())
-            .setSecondRow(2, InitItem.PISTON_MUSCLE.get())
-            .setSecondRow(3, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setSecondRow(4, InitItem.GOLEM_CABLE.get())
-            .setSecondRow(5, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setSecondRow(6, InitItem.PISTON_MUSCLE.get())
-            .setSecondRow(7, InitItem.PISTON_MUSCLE.get())
-            .setSecondRow(8, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setSecondRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setSecondRow(1, InitItem.PISTON_MUSCLE.get())
+        .setSecondRow(2, InitItem.PISTON_MUSCLE.get())
+        .setSecondRow(3, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setSecondRow(4, InitItem.GOLEM_CABLE.get())
+        .setSecondRow(5, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setSecondRow(6, InitItem.PISTON_MUSCLE.get())
+        .setSecondRow(7, InitItem.PISTON_MUSCLE.get())
+        .setSecondRow(8, InitItem.GOLEM_ARMOR_PLATE.get())
 
-            .setThirdRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
-            .setThirdRow(1, InitItem.PISTON_MUSCLE.get())
-            .setThirdRow(2, InitItem.INNER_FURNACE.get())
-            .setThirdRow(3, InitItem.INNER_FURNACE.get())
-            .setThirdRow(4, InitItem.INNER_FURNACE.get())
-            .setThirdRow(5, InitItem.INNER_FURNACE.get())
-            .setThirdRow(6, InitItem.INNER_FURNACE.get())
-            .setThirdRow(7, InitItem.PISTON_MUSCLE.get())
-            .setThirdRow(8, InitItem.GOLEM_ARMOR_PLATE.get());
+        .setThirdRow(0, InitItem.GOLEM_ARMOR_PLATE.get())
+        .setThirdRow(1, InitItem.PISTON_MUSCLE.get())
+        .setThirdRow(2, InitItem.INNER_FURNACE.get())
+        .setThirdRow(3, InitItem.INNER_FURNACE.get())
+        .setThirdRow(4, InitItem.INNER_FURNACE.get())
+        .setThirdRow(5, InitItem.INNER_FURNACE.get())
+        .setThirdRow(6, InitItem.INNER_FURNACE.get())
+        .setThirdRow(7, InitItem.PISTON_MUSCLE.get())
+        .setThirdRow(8, InitItem.GOLEM_ARMOR_PLATE.get());
 
     public static final ChestCavityType SNOW_GOLEM = register(ChestCavityBeyond.of("snow_golem"))
-            .setFirstRow(3, Items.SNOWBALL)
-            .setFirstRow(4, Items.SNOWBALL)
-            .setFirstRow(5, Items.SNOWBALL)
+        .setFirstRow(3, Items.SNOWBALL)
+        .setFirstRow(4, Items.SNOWBALL)
+        .setFirstRow(5, Items.SNOWBALL)
 
-            .setSecondRow(3, Items.SNOWBALL)
-            .setSecondRow(4, InitItem.SNOW_CORE.get())
-            .setSecondRow(5, Items.SNOWBALL)
+        .setSecondRow(3, Items.SNOWBALL)
+        .setSecondRow(4, InitItem.SNOW_CORE.get())
+        .setSecondRow(5, Items.SNOWBALL)
 
-            .setThirdRow(3, Items.SNOWBALL)
-            .setThirdRow(4, Items.SNOWBALL)
-            .setThirdRow(5, Items.SNOWBALL)
+        .setThirdRow(3, Items.SNOWBALL)
+        .setThirdRow(4, Items.SNOWBALL)
+        .setThirdRow(5, Items.SNOWBALL)
 
-            .addValueBonuses(InitItem.SNOW_CORE.get(), Map.of(
-                    InitAttribute.NERVES, 1.0,
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0
-            ));
-
+        .addValueBonuses(
+            InitItem.SNOW_CORE.get(), Map.of(
+                InitAttribute.NERVES, 1.0,
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0
+            )
+        );
     public static final ChestCavityType WARDEN = register(ChestCavityBeyond.of("warden"))
-            .setFirstRow(0, InitItem.SCULK_MUSCLE.get())
-            .setFirstRow(1, InitItem.SCULK_RIB.get())
-            .setFirstRow(4, InitItem.SCULK_HEART.get())
-            .setFirstRow(7, InitItem.SCULK_RIB.get())
-            .setFirstRow(8, InitItem.SCULK_MUSCLE.get())
+        .setFirstRow(0, InitItem.SCULK_MUSCLE.get())
+        .setFirstRow(1, InitItem.SCULK_RIB.get())
+        .setFirstRow(4, InitItem.SCULK_HEART.get())
+        .setFirstRow(7, InitItem.SCULK_RIB.get())
+        .setFirstRow(8, InitItem.SCULK_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.SCULK_MUSCLE.get())
-            .setSecondRow(1, InitItem.SCULK_RIB.get())
-            .setSecondRow(4, InitItem.SCULK_CORE.get())
-            .setSecondRow(7, InitItem.SCULK_RIB.get())
-            .setSecondRow(8, InitItem.SCULK_MUSCLE.get())
+        .setSecondRow(0, InitItem.SCULK_MUSCLE.get())
+        .setSecondRow(1, InitItem.SCULK_RIB.get())
+        .setSecondRow(4, InitItem.SCULK_CORE.get())
+        .setSecondRow(7, InitItem.SCULK_RIB.get())
+        .setSecondRow(8, InitItem.SCULK_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.SCULK_MUSCLE.get())
-            .setThirdRow(1, InitItem.SCULK_MUSCLE.get())
-            .setThirdRow(7, InitItem.SCULK_MUSCLE.get())
-            .setThirdRow(8, InitItem.SCULK_MUSCLE.get())
+        .setThirdRow(0, InitItem.SCULK_MUSCLE.get())
+        .setThirdRow(1, InitItem.SCULK_MUSCLE.get())
+        .setThirdRow(7, InitItem.SCULK_MUSCLE.get())
+        .setThirdRow(8, InitItem.SCULK_MUSCLE.get())
 
-            .addValueBonuses(InitItem.SCULK_CORE.get(), Map.of(
-                    InitAttribute.BREATH_CAPACITY, 1.0,
-                    InitAttribute.BREATH_RECOVERY, 1.0
-            ));
+        .addValueBonuses(
+            InitItem.SCULK_CORE.get(), Map.of(
+                InitAttribute.BREATH_CAPACITY, 1.0,
+                InitAttribute.BREATH_RECOVERY, 1.0
+            )
+        );
 
     public static final ChestCavityType ELDER = register(ChestCavityBeyond.of("elder"))
-            .setFirstRow(0, InitItem.ELDER_MUSCLE.get())
-            .setFirstRow(1, InitItem.ELDER_RIB.get())
-            .setFirstRow(2, InitItem.ELDER_APPENDIX.get())
-            .setFirstRow(3, InitItem.ELDER_GILL.get())
-            .setFirstRow(4, InitItem.ELDER_HEART.get())
-            .setFirstRow(5, InitItem.ELDER_GILL.get())
-            .setFirstRow(7, InitItem.ELDER_RIB.get())
-            .setFirstRow(8, InitItem.ELDER_MUSCLE.get())
+        .setFirstRow(0, InitItem.ELDER_MUSCLE.get())
+        .setFirstRow(1, InitItem.ELDER_RIB.get())
+        .setFirstRow(2, InitItem.ELDER_APPENDIX.get())
+        .setFirstRow(3, InitItem.ELDER_GILL.get())
+        .setFirstRow(4, InitItem.ELDER_HEART.get())
+        .setFirstRow(5, InitItem.ELDER_GILL.get())
+        .setFirstRow(7, InitItem.ELDER_RIB.get())
+        .setFirstRow(8, InitItem.ELDER_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.ELDER_MUSCLE.get())
-            .setSecondRow(1, InitItem.ELDER_RIB.get())
-            .setSecondRow(2, InitItem.ELDER_SPLEEN.get())
-            .setSecondRow(3, InitItem.ELDER_KIDNEY.get())
-            .setSecondRow(4, InitItem.ELDER_SPINE.get())
-            .setSecondRow(5, InitItem.ELDER_KIDNEY.get())
-            .setSecondRow(6, InitItem.ELDER_LIVER.get())
-            .setSecondRow(7, InitItem.ELDER_RIB.get())
-            .setSecondRow(8, InitItem.ELDER_MUSCLE.get())
+        .setSecondRow(0, InitItem.ELDER_MUSCLE.get())
+        .setSecondRow(1, InitItem.ELDER_RIB.get())
+        .setSecondRow(2, InitItem.ELDER_SPLEEN.get())
+        .setSecondRow(3, InitItem.ELDER_KIDNEY.get())
+        .setSecondRow(4, InitItem.ELDER_SPINE.get())
+        .setSecondRow(5, InitItem.ELDER_KIDNEY.get())
+        .setSecondRow(6, InitItem.ELDER_LIVER.get())
+        .setSecondRow(7, InitItem.ELDER_RIB.get())
+        .setSecondRow(8, InitItem.ELDER_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.ELDER_MUSCLE.get())
-            .setThirdRow(1, InitItem.ELDER_MUSCLE.get())
-            .setThirdRow(2, InitItem.ELDER_INTESTINE.get())
-            .setThirdRow(3, InitItem.ELDER_INTESTINE.get())
-            .setThirdRow(4, InitItem.ELDER_STOMACH.get())
-            .setThirdRow(5, InitItem.ELDER_INTESTINE.get())
-            .setThirdRow(6, InitItem.ELDER_INTESTINE.get())
-            .setThirdRow(7, InitItem.ELDER_MUSCLE.get())
-            .setThirdRow(8, InitItem.ELDER_MUSCLE.get());
+        .setThirdRow(0, InitItem.ELDER_MUSCLE.get())
+        .setThirdRow(1, InitItem.ELDER_MUSCLE.get())
+        .setThirdRow(2, InitItem.ELDER_INTESTINE.get())
+        .setThirdRow(3, InitItem.ELDER_INTESTINE.get())
+        .setThirdRow(4, InitItem.ELDER_STOMACH.get())
+        .setThirdRow(5, InitItem.ELDER_INTESTINE.get())
+        .setThirdRow(6, InitItem.ELDER_INTESTINE.get())
+        .setThirdRow(7, InitItem.ELDER_MUSCLE.get())
+        .setThirdRow(8, InitItem.ELDER_MUSCLE.get());
 
     public static final ChestCavityType ELDER_FISH = register(ChestCavityBeyond.of("elder_fish"))
-            .copyWith(ELDER)
-            .setFirstRow(0, InitItem.ELDER_FISH_MUSCLE.get())
-            .setFirstRow(1, InitItem.ELDER_FISH_BONE.get())
-            .setFirstRow(3, InitItem.ELDER_GILL.get())
-            .setFirstRow(4, InitItem.ELDER_HEART.get())
-            .setFirstRow(5, InitItem.ELDER_GILL.get())
-            .setFirstRow(7, InitItem.ELDER_FISH_BONE.get())
-            .setFirstRow(8, InitItem.ELDER_FISH_MUSCLE.get())
+        .copyWith(ELDER)
+        .setFirstRow(0, InitItem.ELDER_FISH_MUSCLE.get())
+        .setFirstRow(1, InitItem.ELDER_FISH_BONE.get())
+        .setFirstRow(3, InitItem.ELDER_GILL.get())
+        .setFirstRow(4, InitItem.ELDER_HEART.get())
+        .setFirstRow(5, InitItem.ELDER_GILL.get())
+        .setFirstRow(7, InitItem.ELDER_FISH_BONE.get())
+        .setFirstRow(8, InitItem.ELDER_FISH_MUSCLE.get())
 
-            .setSecondRow(0, InitItem.ELDER_FISH_MUSCLE.get())
-            .setSecondRow(1, InitItem.ELDER_FISH_BONE.get())
-            .setSecondRow(4, InitItem.ELDER_FISH_SPINE.get())
-            .setSecondRow(7, InitItem.ELDER_FISH_BONE.get())
-            .setSecondRow(8, InitItem.ELDER_FISH_MUSCLE.get())
+        .setSecondRow(0, InitItem.ELDER_FISH_MUSCLE.get())
+        .setSecondRow(1, InitItem.ELDER_FISH_BONE.get())
+        .setSecondRow(4, InitItem.ELDER_FISH_SPINE.get())
+        .setSecondRow(7, InitItem.ELDER_FISH_BONE.get())
+        .setSecondRow(8, InitItem.ELDER_FISH_MUSCLE.get())
 
-            .setThirdRow(0, InitItem.ELDER_FISH_MUSCLE.get())
-            .setThirdRow(1, InitItem.ELDER_FISH_MUSCLE.get())
-            .setThirdRow(2, InitItem.ELDER_FISH_INTESTINE.get())
-            .setThirdRow(3, InitItem.ELDER_FISH_INTESTINE.get())
-            .setThirdRow(5, InitItem.ELDER_FISH_INTESTINE.get())
-            .setThirdRow(6, InitItem.ELDER_FISH_INTESTINE.get())
-            .setThirdRow(7, InitItem.ELDER_FISH_MUSCLE.get())
-            .setThirdRow(8, InitItem.ELDER_FISH_MUSCLE.get());
+        .setThirdRow(0, InitItem.ELDER_FISH_MUSCLE.get())
+        .setThirdRow(1, InitItem.ELDER_FISH_MUSCLE.get())
+        .setThirdRow(2, InitItem.ELDER_FISH_INTESTINE.get())
+        .setThirdRow(3, InitItem.ELDER_FISH_INTESTINE.get())
+        .setThirdRow(5, InitItem.ELDER_FISH_INTESTINE.get())
+        .setThirdRow(6, InitItem.ELDER_FISH_INTESTINE.get())
+        .setThirdRow(7, InitItem.ELDER_FISH_MUSCLE.get())
+        .setThirdRow(8, InitItem.ELDER_FISH_MUSCLE.get());
 
     public static final ChestCavityType GUARDIAN = register(ChestCavityBeyond.of("guardian"))
-            .copyWith(FISH)
-            .setFirstRow(2, InitItem.ANIMAL_HEART.get())
-            .setFirstRow(4, InitItem.GUARDIAN_EYE.get());
+        .copyWith(FISH)
+        .setFirstRow(2, InitItem.GILL.get())
+        .setFirstRow(3, Items.AIR)
+        .setFirstRow(4, InitItem.GUARDIAN_EYE.get())
+        .setFirstRow(5, InitItem.ANIMAL_HEART.get())
+        .setFirstRow(6, InitItem.GILL.get());
 
     public static final ChestCavityType ELDER_GUARDIAN = register(ChestCavityBeyond.of("elder_guardian"))
-            .copyWith(ELDER_FISH)
-            .setFirstRow(2, InitItem.ELDER_HEART.get())
-            .setFirstRow(4, InitItem.ELDER_GUARDIAN_EYE.get());
+        .copyWith(ELDER_FISH)
+        .setFirstRow(2, InitItem.ELDER_GILL.get())
+        .setFirstRow(3, Items.AIR)
+        .setFirstRow(4, InitItem.ELDER_GUARDIAN_EYE.get())
+        .setFirstRow(5, InitItem.ELDER_HEART.get())
+        .setFirstRow(6, InitItem.ELDER_GILL.get());
 
     public static final ChestCavityType ARMOR_STAND = register(ChestCavityBeyond.of("armor_stand"))
-            .setFirstRow(3, Items.STICK)
-            .setFirstRow(4, Items.STICK)
-            .setFirstRow(5, Items.STICK)
+        .setFirstRow(3, Items.STICK)
+        .setFirstRow(4, Items.STICK)
+        .setFirstRow(5, Items.STICK)
 
-            .setSecondRow(4, Items.STICK)
+        .setSecondRow(4, Items.STICK)
 
-            .setThirdRow(4, Items.STICK);
+        .setThirdRow(4, Items.STICK);
 
     /**
      * 获取实体的胸腔类型
@@ -996,9 +1020,9 @@ public class ChestCavityTypeManager {
             // 但如果陆地和水下都能呼吸，这个检测就不管用了
             // 只能手动注册了
             if (entityType.is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
-                    || entity instanceof WaterAnimal
-                    || entityType.getCategory() == MobCategory.WATER_CREATURE
-                    || entityType.getCategory() == MobCategory.WATER_AMBIENT) {
+                || entity instanceof WaterAnimal
+                || entityType.getCategory() == MobCategory.WATER_CREATURE
+                || entityType.getCategory() == MobCategory.WATER_AMBIENT) {
                 return registerEntity(entityType, AQUATIC);
             }
             // 动物
@@ -1042,6 +1066,7 @@ public class ChestCavityTypeManager {
      */
     public static ChestCavityType register(ResourceLocation name) {
         ChestCavityType chestCavityType = new ChestCavityType();
+        chestCavityType.setId(name);
         CHEST_CAVITY_TYPE_REGISTRY.put(name, chestCavityType);
         return chestCavityType;
     }

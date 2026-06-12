@@ -1594,6 +1594,7 @@ public class InitItem {
         "guardian_eye",
         () -> Organ.builder()
             .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
+            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 1)
             .cooldown(5 * 20)
             .skill(context -> OrganSkillUtil.guardianLaser(
                 context.entity(),
@@ -1606,7 +1607,8 @@ public class InitItem {
     public static final Supplier<Item> ELDER_GUARDIAN_EYE = ITEM.register(
         "elder_guardian_eye",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
+            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 2)
+            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 2)
             .cooldown(8 * 20)
             .skill(context -> OrganSkillUtil.guardianLaser(
                 context.entity(),

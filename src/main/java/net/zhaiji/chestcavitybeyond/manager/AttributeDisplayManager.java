@@ -3,15 +3,24 @@ package net.zhaiji.chestcavitybeyond.manager;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Items;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.AttributeDisplay;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
+import net.zhaiji.chestcavitybeyond.util.MathUtil;
+import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.DoublePredicate;
+import java.util.function.Function;
 
 /**
  * 属性显示注册中心
@@ -24,6 +33,9 @@ import java.util.List;
 public class AttributeDisplayManager {
     private static final List<AttributeDisplay> DISPLAYS = new ArrayList<>();
 
+    /** 值 ≤ 0 时隐藏（适用于"需要 > 0 才生效"的属性） */
+    private static final DoublePredicate HIDE_WHEN_NOT_POSITIVE = v -> v <= 0;
+
     /**
      * 排序比较器：priority 降序 → attribute descriptionId 字典序
      */
@@ -32,45 +44,281 @@ public class AttributeDisplayManager {
         .thenComparing(display -> display.attribute().value().getDescriptionId());
 
     static {
-        // 生存核心 (40)
-        register(InitAttribute.HEALTH, 40);
-        // 体能基础 (30)
-        register(InitAttribute.NERVES, 30);
-        register(InitAttribute.DEFENSE, 30);
-        register(InitAttribute.ENDURANCE, 30);
-        register(InitAttribute.STRENGTH, 30);
-        register(InitAttribute.SPEED, 30);
-        // 代谢系统 (20)
-        register(InitAttribute.DIGESTION, 20);
-        register(InitAttribute.NUTRITION, 20);
-        register(InitAttribute.METABOLISM, 20);
-        register(InitAttribute.BREATH_CAPACITY, 20);
-        register(InitAttribute.BREATH_RECOVERY, 20);
-        register(InitAttribute.WATER_BREATH, 20);
-        register(InitAttribute.DETOXIFICATION, 20);
-        register(InitAttribute.FILTRATION, 20);
-        // 专食消化 (10)
-        register(InitAttribute.CARNIVOROUS_DIGESTION, 10);
-        register(InitAttribute.CARNIVOROUS_NUTRITION, 10);
-        register(InitAttribute.HERBIVOROUS_DIGESTION, 10);
-        register(InitAttribute.HERBIVOROUS_NUTRITION, 10);
-        register(InitAttribute.SCAVENGER_DIGESTION, 10);
-        register(InitAttribute.SCAVENGER_NUTRITION, 10);
-        // 特殊能力 (0)
+        // ==================== 生存核心 (40) ====================
+        register(
+            InitAttribute.HEALTH, 40, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.HEALTH);
+                double maxHealthBonus = diff * 2;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.HEALTH),
+                    TooltipUtil.formatAttributeValue(maxHealthBonus)
+                );
+            }
+        );
+
+        // ==================== 体能基础 (30) ====================
+        register(
+            InitAttribute.NERVES, 30, entity -> {
+                ChestCavityData data = ChestCavityUtil.getData(entity);
+                double diff = data.getDifferenceValue(InitAttribute.NERVES);
+                double atkSpeedFactor = MathUtil.getLog10Scale(diff);
+                double atkSpeedPercent = (1 + (diff >= 0 ? atkSpeedFactor : -atkSpeedFactor)) * 100;
+                double movePercent = data.getCurrentValue(InitAttribute.NERVES) <= 0 ? 0 : (1 + diff / 10.0) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.NERVES),
+                    TooltipUtil.formatAttributeValue(atkSpeedPercent),
+                    TooltipUtil.formatAttributeValue(movePercent)
+                );
+            }
+        );
+        register(
+            InitAttribute.DEFENSE, 30, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.DEFENSE);
+                // 以10点伤害为例计算减伤比例
+                double scale = MathUtil.getAttenuationScale(10, diff);
+                double damageReduction = (1 - scale) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.DEFENSE),
+                    TooltipUtil.formatAttributeValue(damageReduction)
+                );
+            }
+        );
+        register(
+            InitAttribute.ENDURANCE, 30, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.ENDURANCE);
+                double scale = MathUtil.getInverseScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.ENDURANCE),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.STRENGTH, 30, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.STRENGTH);
+                double factor = MathUtil.getLog10Scale(diff);
+                double damagePercent = (1 + (diff >= 0 ? factor : -factor)) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.STRENGTH),
+                    TooltipUtil.formatAttributeValue(damagePercent)
+                );
+            }
+        );
+        register(
+            InitAttribute.SPEED, 30, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.SPEED);
+                double factor = MathUtil.getLog10Scale(diff) / 2;
+                double speedPercent = (1 + (diff >= 0 ? factor : -factor)) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.SPEED),
+                    TooltipUtil.formatAttributeValue(speedPercent)
+                );
+            }
+        );
+
+        // ==================== 代谢系统 (20) ====================
+        register(
+            InitAttribute.DIGESTION, 20, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.DIGESTION);
+                double scale = MathUtil.getDirectScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.DIGESTION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.NUTRITION, 20, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.NUTRITION);
+                double effectiveDiff = diff > 0 ? diff / 4.0 : diff;
+                double scale = MathUtil.getDirectScale(effectiveDiff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.NUTRITION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.METABOLISM, 20, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.METABOLISM);
+                double scale = MathUtil.getDirectScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.METABOLISM),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.BREATH_CAPACITY, 20, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.BREATH_CAPACITY);
+                double scale = MathUtil.getInverseScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.BREATH_CAPACITY),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.BREATH_RECOVERY, 20, entity -> {
+                ChestCavityData data = ChestCavityUtil.getData(entity);
+                double curr = data.getCurrentValue(InitAttribute.BREATH_RECOVERY);
+                double def = data.getDefaultValue(InitAttribute.BREATH_RECOVERY);
+                double diff = curr - def;
+                double percent = (1 + diff / 2.0) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.BREATH_RECOVERY),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.WATER_BREATH, 20, entity -> {
+                ChestCavityData data = ChestCavityUtil.getData(entity);
+                double curr = data.getCurrentValue(InitAttribute.WATER_BREATH);
+                double def = data.getDefaultValue(InitAttribute.WATER_BREATH);
+                double diff = curr - def;
+                double percent = (1 + diff / 2.0) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.WATER_BREATH),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.DETOXIFICATION, 20, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.DETOXIFICATION);
+                double scale = MathUtil.getInverseScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.DETOXIFICATION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.FILTRATION, 20, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.FILTRATION);
+                if (diff >= 0) {
+                    return Component.translatable(getValueEffectKey(InitAttribute.FILTRATION) + ".safe");
+                }
+                int amplifier = Math.max(0, (int) Math.floor(-diff / 2));
+                double scale = MathUtil.getInverseScale(diff);
+                int duration = (int) (30 * scale);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.FILTRATION),
+                    amplifier,
+                    TooltipUtil.formatAttributeValue(duration / 20.0)
+                );
+            }
+        );
+
+        // ==================== 专食消化 (10) ====================
+        register(
+            InitAttribute.CARNIVOROUS_DIGESTION, 10, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.CARNIVOROUS_DIGESTION);
+                double scale = MathUtil.getDirectScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.CARNIVOROUS_DIGESTION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.CARNIVOROUS_NUTRITION, 10, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.CARNIVOROUS_NUTRITION);
+                double effectiveDiff = diff > 0 ? diff / 4.0 : diff;
+                double scale = MathUtil.getDirectScale(effectiveDiff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.CARNIVOROUS_NUTRITION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.HERBIVOROUS_DIGESTION, 10, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.HERBIVOROUS_DIGESTION);
+                double scale = MathUtil.getDirectScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.HERBIVOROUS_DIGESTION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.HERBIVOROUS_NUTRITION, 10, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.HERBIVOROUS_NUTRITION);
+                double effectiveDiff = diff > 0 ? diff / 4.0 : diff;
+                double scale = MathUtil.getDirectScale(effectiveDiff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.HERBIVOROUS_NUTRITION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.SCAVENGER_DIGESTION, 10, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.SCAVENGER_DIGESTION);
+                double scale = MathUtil.getDirectScale(diff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.SCAVENGER_DIGESTION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            InitAttribute.SCAVENGER_NUTRITION, 10, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.SCAVENGER_NUTRITION);
+                double effectiveDiff = diff > 0 ? diff / 4.0 : diff;
+                double scale = MathUtil.getDirectScale(effectiveDiff);
+                double percent = scale * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.SCAVENGER_NUTRITION),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+
+        // ==================== 特殊能力 (0) ====================
         register(AttributeDisplay.builder(InitAttribute.FIRE_RESISTANCE)
             .descriptionOverride(() -> {
                 MutableComponent hover = Component.empty();
                 hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.0"));
                 hover.append(Component.literal("\n"));
-                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.1",
-                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityHotFloor)));
+                hover.append(Component.translatable(
+                    "attribute.chestcavitybeyond.fire_resistance.description.1",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityHotFloor)
+                ));
                 hover.append(Component.literal("\n"));
-                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.2",
-                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityFire)));
+                hover.append(Component.translatable(
+                    "attribute.chestcavitybeyond.fire_resistance.description.2",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityFire)
+                ));
                 hover.append(Component.literal("\n"));
-                hover.append(Component.translatable("attribute.chestcavitybeyond.fire_resistance.description.3",
-                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityLava)));
+                hover.append(Component.translatable(
+                    "attribute.chestcavitybeyond.fire_resistance.description.3",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.fireImmunityLava)
+                ));
                 return hover;
+            })
+            .valueEffect(entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.FIRE_RESISTANCE);
+                // 以10点伤害为例计算减伤比例
+                double scale = MathUtil.getAttenuationScale(10, diff);
+                double damageReduction = (1 - scale) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.FIRE_RESISTANCE),
+                    TooltipUtil.formatAttributeValue(damageReduction)
+                );
             })
             .build());
         register(AttributeDisplay.builder(InitAttribute.FROST_RESISTANCE)
@@ -78,24 +326,153 @@ public class AttributeDisplayManager {
                 MutableComponent hover = Component.empty();
                 hover.append(Component.translatable("attribute.chestcavitybeyond.frost_resistance.description.0"));
                 hover.append(Component.literal("\n"));
-                hover.append(Component.translatable("attribute.chestcavitybeyond.frost_resistance.description.1",
-                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.frostImmunity)));
+                hover.append(Component.translatable(
+                    "attribute.chestcavitybeyond.frost_resistance.description.1",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.frostImmunity)
+                ));
                 return hover;
+            })
+            .valueEffect(entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.FROST_RESISTANCE);
+                double scale = MathUtil.getAttenuationScale(10, diff);
+                double damageReduction = (1 - scale) * 100;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.FROST_RESISTANCE),
+                    TooltipUtil.formatAttributeValue(damageReduction)
+                );
             })
             .build());
         register(InitAttribute.WATER_ALLERGY);
-        register(InitAttribute.ENDER);
-        register(InitAttribute.PROJECTILE_DODGE);
-        register(InitAttribute.LEAPING);
-        register(InitAttribute.EXPLOSIVE);
-        register(InitAttribute.PHOTOSYNTHESIS);
-        register(InitAttribute.LAUNCH);
-        register(InitAttribute.IRON_REPAIR);
-        register(InitAttribute.FURNACE_POWER);
-        register(InitAttribute.WITHERED);
-        register(InitAttribute.VOMIT_FIREBALL);
-        register(InitAttribute.GHASTLY);
-        register(InitAttribute.CRYSTALLIZATION);
+        register(
+            InitAttribute.ENDER, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.ENDER);
+                double distance = MathUtil.getDirectScale(curr);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.ENDER),
+                    TooltipUtil.formatAttributeValue(distance)
+                );
+            }
+        );
+        register(AttributeDisplay.builder(InitAttribute.PROJECTILE_DODGE)
+            .hideWhen(HIDE_WHEN_NOT_POSITIVE)
+            .build());
+        register(
+            InitAttribute.LEAPING, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double currentJumpStr = entity.getAttributeValue(Attributes.JUMP_STRENGTH);
+                double jumpHeight = OrganAttributeUtil.calcJumpHeight(currentJumpStr);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.LEAPING),
+                    TooltipUtil.formatAttributeValue(jumpHeight)
+                );
+            }
+        );
+        register(
+            InitAttribute.EXPLOSIVE, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.EXPLOSIVE);
+                double power = 3 * curr;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.EXPLOSIVE),
+                    TooltipUtil.formatAttributeValue(power)
+                );
+            }
+        );
+        register(
+            InitAttribute.PHOTOSYNTHESIS, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.PHOTOSYNTHESIS);
+                double interval = 800 / curr / 20.0;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.PHOTOSYNTHESIS),
+                    TooltipUtil.formatAttributeValue(interval)
+                );
+            }
+        );
+        register(
+            InitAttribute.LAUNCH, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.LAUNCH);
+                double force = 0.04 * curr;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.LAUNCH),
+                    TooltipUtil.formatAttributeValue(force)
+                );
+            }
+        );
+        register(
+            InitAttribute.IRON_REPAIR, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.IRON_REPAIR);
+                double healAmount = 2.5 * curr;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.IRON_REPAIR),
+                    TooltipUtil.formatAttributeValue(healAmount)
+                );
+            }
+        );
+        register(
+            InitAttribute.FURNACE_POWER, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FURNACE_POWER);
+                int amplifier = Math.max(0, (int) (curr - 1));
+                double maxDuration = ChestCavityBeyondConfig.furnacePowerMaxDuration / 20.0;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.FURNACE_POWER),
+                    amplifier,
+                    TooltipUtil.formatAttributeValue(maxDuration)
+                );
+            }
+        );
+        register(
+            InitAttribute.WITHERED, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                ChestCavityData data = ChestCavityUtil.getData(entity);
+                double curr = data.getCurrentValue(InitAttribute.WITHERED);
+                int duration = (int) (40 * curr);
+                int amplifier = 0;
+                if (data.hasOrgan(Items.NETHER_STAR)) {
+                    duration += 200;
+                    amplifier++;
+                }
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.WITHERED),
+                    TooltipUtil.formatAttributeValue(duration / 20.0),
+                    amplifier
+                );
+            }
+        );
+        register(
+            InitAttribute.VOMIT_FIREBALL, 0, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.VOMIT_FIREBALL);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.VOMIT_FIREBALL),
+                    TooltipUtil.formatAttributeValue(curr)
+                );
+            }
+        );
+        register(
+            InitAttribute.GHASTLY, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.GHASTLY);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.GHASTLY),
+                    TooltipUtil.formatAttributeValue(curr)
+                );
+            }
+        );
+        register(
+            InitAttribute.CRYSTALLIZATION, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.CRYSTALLIZATION);
+                double healPerSec = curr * 2.0 / 5;
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.CRYSTALLIZATION),
+                    TooltipUtil.formatAttributeValue(healPerSec)
+                );
+            }
+        );
+    }
+
+    /**
+     * 获取属性实时效果描述的翻译键
+     *
+     * @param attribute 属性 Holder
+     * @return 翻译键，格式为 {@code <descriptionId>.value_effect}
+     */
+    public static String getValueEffectKey(Holder<Attribute> attribute) {
+        return attribute.value().getDescriptionId() + ".value_effect";
     }
 
     /**
@@ -118,6 +495,38 @@ public class AttributeDisplayManager {
     public static AttributeDisplay register(Holder<Attribute> attribute, int priority) {
         return AttributeDisplay.builder(attribute)
             .priority(priority)
+            .build();
+    }
+
+    /**
+     * 注册属性显示信息（自定义优先级 + 实时效果描述）
+     *
+     * @param attribute   属性 Holder
+     * @param priority    显示优先级，值越高越靠前显示
+     * @param valueEffect 实时效果描述函数，接收目标实体返回动态描述组件
+     * @return 已注册的属性显示信息
+     */
+    public static AttributeDisplay register(Holder<Attribute> attribute, int priority, Function<LivingEntity, Component> valueEffect) {
+        return AttributeDisplay.builder(attribute)
+            .priority(priority)
+            .valueEffect(valueEffect)
+            .build();
+    }
+
+    /**
+     * 注册属性显示信息（自定义优先级 + 隐藏条件 + 实时效果描述）
+     *
+     * @param attribute      属性 Holder
+     * @param priority       显示优先级，值越高越靠前显示
+     * @param hideWhen       隐藏判定谓词，对当前属性值返回 true 时跳过显示
+     * @param valueEffect    实时效果描述函数，接收目标实体返回动态描述组件
+     * @return 已注册的属性显示信息
+     */
+    public static AttributeDisplay register(Holder<Attribute> attribute, int priority, DoublePredicate hideWhen, Function<LivingEntity, Component> valueEffect) {
+        return AttributeDisplay.builder(attribute)
+            .priority(priority)
+            .hideWhen(hideWhen)
+            .valueEffect(valueEffect)
             .build();
     }
 
