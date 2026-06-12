@@ -78,8 +78,8 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
     private static final int ICON_TEX_WIDTH = 21;
     private static final int ICON_TEX_HEIGHT = 14;
     // 滚动翻页追踪
-    private static final int CONTINUOUS_SCROLL_PAGE_TICKS = 16;
-    private static final int SCROLL_INTERRUPT_TICKS = 4;
+    private static final int CONTINUOUS_SCROLL_PAGE_TICKS = 8;
+    private static final int SCROLL_INTERRUPT_TICKS = 2;
     private final ChestCavityTypeDisplay display;
     private final IDrawable[] backgrounds;
     private final IDrawableStatic slotBackground;
@@ -278,7 +278,9 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         if (hadScrollThisTick) {
             idleTicks = 0;
             if (scrollDirection != 0) {
-                continuousScrollTicks++;
+                if (scrollOffsetY <= 0.0F || scrollOffsetY >= 1.0F) {
+                    continuousScrollTicks++;
+                }
             }
         } else {
             idleTicks++;
@@ -408,20 +410,15 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
             int direction = scrollDeltaY > 0 ? 1 : (scrollDeltaY < 0 ? -1 : 0);
 
             if (direction != 0) {
-                // 边界处 + 滚动中断后 + 继续同方向 → 翻页
+                // 边界处翻页：停顿后向外滚 或 持续同方向滚到边界 → 翻页
                 boolean atBottom = scrollOffsetY >= 1.0F;
                 boolean atTop = scrollOffsetY <= 0.0F;
                 if ((atBottom && direction == -1) || (atTop && direction == 1)) {
-                    if (idleTicks > SCROLL_INTERRUPT_TICKS) {
+                    if (idleTicks > SCROLL_INTERRUPT_TICKS
+                        || continuousScrollTicks >= CONTINUOUS_SCROLL_PAGE_TICKS) {
                         resetScrollTracking();
                         return false;
                     }
-                }
-
-                // 持续同方向滚动超时 → 翻页
-                if (direction == scrollDirection && continuousScrollTicks >= CONTINUOUS_SCROLL_PAGE_TICKS) {
-                    resetScrollTracking();
-                    return false;
                 }
 
                 // 方向变化时重置连续计数
@@ -431,6 +428,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
                 }
 
                 hadScrollThisTick = true;
+                idleTicks = 0;
             }
 
             // 正常滚动
