@@ -36,6 +36,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
+import net.zhaiji.chestcavitybeyond.api.TargetResolver;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterCompletedEvent;
 import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterEvent;
@@ -282,13 +283,34 @@ public class CommonEventHandler {
 
     /**
      * 开胸器打开生物胸腔 / 生物分析仪查看属性
+     * <p>
+     * 拦截不带命中位置的普通实体交互（interact 路径），
+     * </p>
      *
      * @param event 玩家交互实体事件
      */
     public static void handlerPlayerInteractEvent$EntityInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getEntity().getItemInHand(event.getHand());
         // 当玩家手持开胸器或生物分析仪时，可能更希望使用物品的效果
-        if ((stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get())) && event.getTarget() instanceof LivingEntity) {
+        if ((stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get()))
+            && TargetResolver.resolve(event.getTarget()) instanceof LivingEntity) {
+            event.setCanceled(true);
+        }
+    }
+
+    /**
+     * 开胸器打开生物胸腔 / 生物分析仪查看属性
+     * <p>
+     * 拦截带命中位置的精确实体交互（interactAt 路径）
+     * </p>
+     *
+     * @param event 玩家交互实体事件（带命中位置）
+     */
+    public static void handlerPlayerInteractEvent$EntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event) {
+        ItemStack stack = event.getEntity().getItemInHand(event.getHand());
+        // 当玩家手持开胸器或生物分析仪时，可能更希望使用物品的效果
+        if ((stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get()))
+            && TargetResolver.resolve(event.getTarget()) instanceof LivingEntity) {
             event.setCanceled(true);
         }
     }

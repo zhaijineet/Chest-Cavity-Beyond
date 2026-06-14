@@ -79,7 +79,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
                 if (organ != Items.AIR) {
                     int slotX = ChestCavityPageScrollWidget.BG_OFFSET_X + ChestCavityPageScrollWidget.FIRST_SLOT_INNER_X + col * ChestCavityPageScrollWidget.SLOT_SIZE;
                     int slotY = ChestCavityPageScrollWidget.FIRST_SLOT_Y + row * ChestCavityPageScrollWidget.SLOT_SIZE;
-                    IRecipeSlotBuilder slotBuilder = builder.addInputSlot(slotX, slotY)
+                    IRecipeSlotBuilder slotBuilder = builder.addOutputSlot(slotX, slotY)
                         .addItemStack(organ.getDefaultInstance());
                     List<AttributeBonus> bonuses = display.getType().getAttributeBonuses(organ);
                     if (!bonuses.isEmpty()) {
@@ -109,7 +109,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
             IRecipeSlotBuilder slotBuilder;
             SpawnEggItem spawnEgg = SpawnEggItem.byId(entityType);
             if (spawnEgg != null) {
-                slotBuilder = builder.addInputSlot(slotX, slotY)
+                slotBuilder = builder.addOutputSlot(slotX, slotY)
                     .addItemStack(spawnEgg.getDefaultInstance());
             } else {
                 ItemStack barrierStack = Items.BARRIER.getDefaultInstance();
@@ -117,7 +117,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
                     DataComponents.CUSTOM_NAME,
                     entityType.getDescription().copy().withStyle(style -> style.withItalic(false))
                 );
-                slotBuilder = builder.addInputSlot(slotX, slotY).addItemStack(barrierStack);
+                slotBuilder = builder.addOutputSlot(slotX, slotY).addItemStack(barrierStack);
             }
             slotBuilder.setSlotName(ENTITY_SLOT_PREFIX + i);
         }

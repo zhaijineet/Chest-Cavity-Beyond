@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.zhaiji.chestcavitybeyond.api.TargetResolver;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 public class BiologicalAnalyzerItem extends Item {
@@ -27,12 +28,12 @@ public class BiologicalAnalyzerItem extends Item {
             // 射线检测视线中的实体
             HitResult hitResult = ProjectileUtil.getHitResultOnViewVector(
                 player,
-                entity -> entity != player && entity instanceof LivingEntity,
+                entity -> entity != player && TargetResolver.resolve(entity) instanceof LivingEntity,
                 player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).getValue()
             );
 
             if (hitResult instanceof EntityHitResult entityHitResult
-                && entityHitResult.getEntity() instanceof LivingEntity target) {
+                && TargetResolver.resolve(entityHitResult.getEntity()) instanceof LivingEntity target) {
                 // 查看目标属性
                 TooltipUtil.sendAttributeDisplay(serverPlayer, target);
             } else {

@@ -19,6 +19,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
+import net.zhaiji.chestcavitybeyond.api.TargetResolver;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.network.client.packet.ChestOpenerMessagePacket;
@@ -59,7 +60,7 @@ public class ChestOpenerItem extends Item {
         DamageSource source = DamageSourceManager.openChest(level, player);
         float damage = EnchantmentUtil.calculateOpenDamage(level, stack, baseDamage);
         boolean hasDoor;
-        if (hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
+        if (hitResult instanceof EntityHitResult entityHitResult && TargetResolver.resolve(entityHitResult.getEntity()) instanceof LivingEntity target) {
             // 检查胸腔类型是否可开胸
             if (!player.isCreative() && !ChestCavityTypeManager.getType(target).canOpen(player, target)) {
                 if (player instanceof ServerPlayer serverPlayer) {

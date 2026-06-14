@@ -2,6 +2,14 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.6.2
+
+- 新增 TargetResolver，将射线命中的子部件解析为父 LivingEntity
+- 同时拦截 interact 和 interactAt 两条交互路径，确保 Item.use() 正常触发
+- 开放 ChestCavityRegisterEvent#registerTargetResolver 供第三方模组注册
+- JEI 催化剂改为遍历 chest_openers tag，支持所有开胸器变体
+- JEI 胸腔槽位从 InputSlot 改为 OutputSlot
+
 ## 1.6.1
 
 - 修复 JEI 胸腔类型页面滚动翻页检测逻辑，不再在非边界处误翻页

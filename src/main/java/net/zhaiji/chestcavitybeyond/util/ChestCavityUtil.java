@@ -81,9 +81,9 @@ public class ChestCavityUtil {
     /**
      * 创建胸腔槽位上下文
      *
-     * @param data   胸腔数据 (可能为null)
-     * @param index  位置索引
-     * @param stack  对应物品
+     * @param data  胸腔数据 (可能为null)
+     * @param index 位置索引
+     * @param stack 对应物品
      * @return 胸腔槽位上下文
      */
     public static ChestCavitySlotContext createContext(
