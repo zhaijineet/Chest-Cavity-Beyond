@@ -16,6 +16,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.zhaiji.chestcavitybeyond.compat.CompatManager;
@@ -74,24 +75,24 @@ public class TeleportUtil {
     public static boolean teleport(LivingEntity entity, double ender) {
         Level level = entity.level();
         Optional<Vec3> pos = teleportPosition(level, entity, ender);
-        if (pos.isPresent() && entity instanceof ServerPlayer serverPlayer) {
-            Optional<Vec3> eventPos = teleportEvent(entity, pos.get());
-            if (eventPos.isPresent()) {
-                Vec3 targetPos = eventPos.get();
-                entity.teleportTo(targetPos.x(), targetPos.y(), targetPos.z());
-                onTeleportComplete(entity, level, targetPos);
-                serverPlayer.connection.resetPosition();
-                entity.resetFallDistance();
-                if (entity.isInWall()) {
-                    // 当玩家卡进墙里的时候，改变成游泳动作，预防受伤
-                    entity.setPose(Pose.SWIMMING);
-                }
-                return true;
-            } else {
-                level.playSound(null, entity.blockPosition(), SoundEvents.DISPENSER_FAIL, entity.getSoundSource());
+        if (pos.isEmpty()) return false;
+        Optional<Vec3> eventPos = teleportEvent(entity, pos.get());
+        if (eventPos.isEmpty()) {
+            level.playSound(null, entity.blockPosition(), SoundEvents.DISPENSER_FAIL, entity.getSoundSource());
+            return false;
+        }
+        Vec3 targetPos = eventPos.get();
+        entity.teleportTo(targetPos.x(), targetPos.y(), targetPos.z());
+        onTeleportComplete(entity, level, targetPos);
+        entity.resetFallDistance();
+        if (entity instanceof ServerPlayer serverPlayer) {
+            serverPlayer.connection.resetPosition();
+            if (entity.isInWall()) {
+                // 当玩家卡进墙里的时候，改变成游泳动作，预防受伤
+                entity.setPose(Pose.SWIMMING);
             }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -188,7 +189,7 @@ public class TeleportUtil {
     @Nullable
     public static BlockPos traversalCheck(Level level, BlockPos traversePos) {
         BlockState blockState = level.getBlockState(traversePos);
-        var collision = blockState.getCollisionShape(level, traversePos);
+        VoxelShape collision = blockState.getCollisionShape(level, traversePos);
         if (collision.isEmpty() && isTeleportPositionClear(level, traversePos.below()).isPresent()) {
             return traversePos;
         }
@@ -242,5 +243,39 @@ public class TeleportUtil {
             level.playSound(null, entity.xo, entity.yo, entity.zo, SoundEvents.ENDERMAN_TELEPORT, entity.getSoundSource());
             entity.playSound(SoundEvents.ENDERMAN_TELEPORT);
         }
+    }
+
+    /**
+     * 传送到指定位置
+     * <p>
+     * 检查位置安全性后传送，适用于 Mob 的逃跑/战术传送。
+     * </p>
+     *
+     * @param entity    传送实体
+     * @param targetPos 目标位置
+     * @return 是否传送成功
+     */
+    public static boolean teleportTo(LivingEntity entity, Vec3 targetPos) {
+        Level level = entity.level();
+        if (level.isClientSide() || !entity.isAlive()) return false;
+
+        BlockPos blockPos = BlockPos.containing(targetPos);
+        if (level.isOutsideBuildHeight(blockPos)) return false;
+
+        // 检查目标位置是否安全（有立足点 + 上方无碰撞）
+        Optional<Double> groundHeight = isTeleportPositionClear(level, blockPos.below());
+        if (groundHeight.isEmpty()) return false;
+
+        double floorHeight = groundHeight.get();
+        Vec3 finalPos = blockPos.getBottomCenter().add(0, floorHeight, 0);
+
+        Optional<Vec3> eventPos = teleportEvent(entity, finalPos);
+        if (eventPos.isEmpty()) return false;
+
+        Vec3 pos = eventPos.get();
+        entity.teleportTo(pos.x(), pos.y(), pos.z());
+        entity.resetFallDistance();
+        onTeleportComplete(entity, level, pos);
+        return true;
     }
 }

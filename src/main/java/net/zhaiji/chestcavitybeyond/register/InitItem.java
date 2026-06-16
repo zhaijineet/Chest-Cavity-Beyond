@@ -4,10 +4,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -20,12 +17,16 @@ import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.item.BiologicalAnalyzerItem;
 import net.zhaiji.chestcavitybeyond.item.ChestOpenerItem;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
+import net.zhaiji.chestcavitybeyond.util.GoalSkillUtil;
+import net.zhaiji.chestcavitybeyond.util.OrganInteractUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
+import net.zhaiji.chestcavitybeyond.util.PlayerSkillUtil;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 public class InitItem {
+
     public static final DeferredRegister<Item> ITEM = DeferredRegister.create(BuiltInRegistries.ITEM, ChestCavityBeyond.MOD_ID);
     // 开胸器
     public static final Supplier<Item> CHEST_OPENER = ITEM.register(
@@ -643,10 +644,8 @@ public class InitItem {
             .addValueAttribute(Attributes.LUCK, 1.25)
             .addValueAttribute(InitAttribute.ENDER, 8)
             .cooldown(8 * 20)
-            .skill(context -> OrganSkillUtil.teleport(
-                context.entity(),
-                context.data().getCurrentValue(InitAttribute.ENDER)
-            ))
+            .skill(PlayerSkillUtil::teleport)
+            .goalSkill(GoalSkillUtil.enderAppendixGoalSkill())
             .build()
     );
 
@@ -785,12 +784,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.CARNIVOROUS_DIGESTION, -0.5)
             .addValueAttribute(InitAttribute.HERBIVOROUS_DIGESTION, 1)
             .cooldown(2 * 20)
-            .skill(context -> {
-                if (context.entity() instanceof Player player) {
-                    return OrganSkillUtil.graze(player);
-                }
-                return false;
-            })
+            .skill(PlayerSkillUtil::graze)
+            .goalSkill(GoalSkillUtil.herbivoreRumenGoalSkill())
             .build()
     );
 
@@ -801,10 +796,8 @@ public class InitItem {
             .addValueAttribute(Attributes.LUCK, 0.75)
             .addValueAttribute(InitAttribute.EXPLOSIVE, 1)
             .cooldown(20 * 20)
-            .skill(context -> OrganSkillUtil.explosion(
-                context.entity(),
-                context.data().getCurrentValue(InitAttribute.EXPLOSIVE)
-            ))
+            .skill(PlayerSkillUtil::explosion)
+            .goalSkill(GoalSkillUtil.creeperAppendixGoalSkill())
             .build()
     );
 
@@ -968,12 +961,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.DEFENSE, 0.25)
             .addValueAttribute(InitAttribute.FURNACE_POWER, 1)
             .cooldown(20)
-            .skill(context -> {
-                if (context.entity() instanceof Player player) {
-                    return OrganSkillUtil.furnacePower(player, context.data().getCurrentValue(InitAttribute.FURNACE_POWER));
-                }
-                return false;
-            })
+            .skill(PlayerSkillUtil::furnacePower)
             .build()
     );
 
@@ -995,12 +983,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.IRON_REPAIR, 1)
             .addValueAttribute(InitAttribute.METABOLISM, -0.5)
             .cooldown(20)
-            .skill(context -> {
-                if (context.entity() instanceof Player player) {
-                    return OrganSkillUtil.ironRepair(player, context.data().getCurrentValue(InitAttribute.IRON_REPAIR));
-                }
-                return false;
-            })
+            .skill(PlayerSkillUtil::ironRepair)
+            .interact(OrganInteractUtil::ironRepair)
             .build()
     );
 
@@ -1009,7 +993,8 @@ public class InitItem {
         "silk_gland",
         () -> Organ.builder()
             .cooldown(4 * 20)
-            .skill(context -> OrganSkillUtil.silk(context.entity()))
+            .skill(PlayerSkillUtil::silk)
+            .goalSkill(GoalSkillUtil.silkGlandGoalSkill())
             .build()
     );
 
@@ -1097,12 +1082,8 @@ public class InitItem {
                 }
                 return maxDuration;
             })
-            .skill(context -> {
-                context.stack()
-                    .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
-                    .forEachEffect(context.entity()::addEffect);
-                return true;
-            })
+            .skill(PlayerSkillUtil::alchemistGland)
+            .goalSkill(GoalSkillUtil.alchemistGlandGoalSkill())
             .build()
     );
 
@@ -1172,7 +1153,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.BREATH_RECOVERY, 0.75)
             .addValueAttribute(InitAttribute.BREATH_CAPACITY, 0.75)
             .addValueAttribute(InitAttribute.ENDURANCE, 0.75)
-            .skill(context -> OrganSkillUtil.spit(context.entity()))
+            .skill(PlayerSkillUtil::spit)
+            .goalSkill(GoalSkillUtil.llamaLungGoalSkill())
             .build()
     );
 
@@ -1205,11 +1187,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 3)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 3)
             .cooldown(15 * 20)
-            .skill(context -> OrganSkillUtil.smallFireball(
-                context.data(),
-                context.entity(),
-                (int) context.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL)
-            ))
+            .skill(PlayerSkillUtil::smallFireball)
+            .goalSkill(GoalSkillUtil.activeBlazeRodGoalSkill())
             .build()
     );
 
@@ -1219,7 +1198,8 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 0.25)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
-            .skill(context -> OrganSkillUtil.snowball(context.entity()))
+            .skill(PlayerSkillUtil::snowball)
+            .goalSkill(GoalSkillUtil.snowCoreGoalSkill())
             .build()
     );
 
@@ -1231,7 +1211,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .addValueAttribute(InitAttribute.GHASTLY, 1)
             .cooldown(15 * 20)
-            .skill(context -> OrganSkillUtil.largeFireball(context.entity(), context.data().getCurrentValue(InitAttribute.GHASTLY)))
+            .skill(PlayerSkillUtil::largeFireball)
+            .goalSkill(GoalSkillUtil.ghastStomachGoalSkill())
             .build()
     );
 
@@ -1252,7 +1233,8 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.METABOLISM, 0.75)
             .cooldown(5 * 20)
-            .skill(context -> OrganSkillUtil.shulkerBullet(context.entity()))
+            .skill(PlayerSkillUtil::shulkerBullet)
+            .goalSkill(GoalSkillUtil.shulkerSpleenGoalSkill())
             .build()
     );
 
@@ -1262,12 +1244,8 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 0.75)
             .cooldown(8 * 20)
-            .skill(context -> {
-                if (context.entity() instanceof Player player) {
-                    return OrganSkillUtil.windCharge(player);
-                }
-                return false;
-            })
+            .skill(PlayerSkillUtil::windCharge)
+            .goalSkill(GoalSkillUtil.breezeCoreGoalSkill())
             .build()
     );
 
@@ -1296,7 +1274,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.BREATH_CAPACITY, 5)
             .addValueAttribute(InitAttribute.ENDURANCE, 5)
             .cooldown(60 * 20)
-            .skill(context -> OrganSkillUtil.dragonFireball(context.entity()))
+            .skill(PlayerSkillUtil::dragonFireball)
+            .goalSkill(GoalSkillUtil.dragonLungGoalSkill())
             .build()
     );
 
@@ -1441,7 +1420,8 @@ public class InitItem {
             .addValueAttribute(InitAttribute.NERVES, 2)
             .addValueAttribute(Attributes.KNOCKBACK_RESISTANCE, 1)
             .cooldown(60 * 20)
-            .skill(context -> OrganSkillUtil.sonicBoom(context.entity()))
+            .skill(PlayerSkillUtil::sonicBoom)
+            .goalSkill(GoalSkillUtil.sculkCoreGoalSkill())
             .build()
     );
 
@@ -1596,10 +1576,8 @@ public class InitItem {
             .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
             .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 1)
             .cooldown(5 * 20)
-            .skill(context -> OrganSkillUtil.guardianLaser(
-                context.entity(),
-                false
-            ))
+            .skill(PlayerSkillUtil::guardianLaser)
+            .goalSkill(GoalSkillUtil.guardianEyeGoalSkill())
             .build()
     );
 
@@ -1610,10 +1588,8 @@ public class InitItem {
             .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 2)
             .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 2)
             .cooldown(8 * 20)
-            .skill(context -> OrganSkillUtil.guardianLaser(
-                context.entity(),
-                true
-            ))
+            .skill(PlayerSkillUtil::elderGuardianLaser)
+            .goalSkill(GoalSkillUtil.elderGuardianEyeGoalSkill())
             .build()
     );
 }

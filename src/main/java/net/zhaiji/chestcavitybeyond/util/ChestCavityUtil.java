@@ -4,22 +4,29 @@ import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
+import net.zhaiji.chestcavitybeyond.api.OrganInteractContext;
+import net.zhaiji.chestcavitybeyond.api.TargetResolver;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
 import net.zhaiji.chestcavitybeyond.api.event.OrganChangeEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -29,12 +36,15 @@ import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
+import net.zhaiji.chestcavitybeyond.register.InitItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public class ChestCavityUtil {
     /**
@@ -79,6 +89,23 @@ public class ChestCavityUtil {
     }
 
     /**
+     * 判断玩家手持物品是否应取消实体交互
+     * <p>
+     * 当玩家手持开胸器或生物分析仪，且目标可被 {@link TargetResolver} 解析为 {@link LivingEntity} 时，
+     * 取消原版交互以使 {@code Item.use()} 正常触发。
+     * </p>
+     *
+     * @param player 玩家
+     * @param hand   交互手
+     * @param target 射线命中的目标实体
+     * @return 是否应取消交互
+     */
+    public static boolean shouldCancelEntityInteract(Player player, InteractionHand hand, Entity target) {
+        ItemStack stack = player.getItemInHand(hand);
+        return (stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get())) && TargetResolver.resolve(target) instanceof LivingEntity;
+    }
+
+    /**
      * 创建胸腔槽位上下文
      *
      * @param data  胸腔数据 (可能为null)
@@ -117,6 +144,8 @@ public class ChestCavityUtil {
         triggerOtherOrganChange(data, entity, index, oldStack, newStack);
         // 发布器官更换事件
         NeoForge.EVENT_BUS.post(new OrganChangeEvent(data, entity, index, oldStack, newStack));
+        // 递增变更计数，通知使用方重建缓存
+        data.bumpOrganChangeCount();
     }
 
     /**
@@ -254,6 +283,30 @@ public class ChestCavityUtil {
             if (!stack.isEmpty()) {
                 getOrganCap(stack).heal(createContext(data, i, stack), event);
             }
+        }
+    }
+
+    /**
+     * 遍历所有器官触发被动交互回调
+     */
+    public static void interact(ChestCavityData data, LivingEntity entity, Player player, InteractionHand hand, PlayerInteractEvent.EntityInteractSpecific event) {
+        OrganInteractContext interactContext = new OrganInteractContext(player, hand, event.getPos(), event.getLocalPos());
+        Set<Item> skippedTypes = new HashSet<>();
+        for (int i = 0; i < data.getSlots(); i++) {
+            ItemStack stack = data.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            Item item = stack.getItem();
+            if (skippedTypes.contains(item)) continue;
+            getOrganCap(stack).interact(createContext(data, i, stack), interactContext);
+            if (interactContext.consumeSkipSameTypeFlag()) {
+                skippedTypes.add(item);
+            }
+            if (interactContext.shouldStopAll()) break;
+        }
+        // 遍历结束：只要有任意回调标记了 consume，就取消事件 + SUCCESS
+        if (interactContext.isConsumed()) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
         }
     }
 

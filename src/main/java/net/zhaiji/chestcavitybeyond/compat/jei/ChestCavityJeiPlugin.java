@@ -16,7 +16,6 @@ import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
-import net.zhaiji.chestcavitybeyond.register.InitItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

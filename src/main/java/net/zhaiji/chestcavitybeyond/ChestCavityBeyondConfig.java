@@ -19,6 +19,10 @@ public class ChestCavityBeyondConfig {
     public static double fireImmunityFire;
     public static double fireImmunityLava;
     public static double frostImmunity;
+    public static int goalSkillEvalInterval;
+    public static double goalSkillEnemyDetectRange;
+    public static int goalSkillTargetMemoryTicks;
+    public static boolean enableMobGoalSkill;
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment(
@@ -203,6 +207,54 @@ public class ChestCavityBeyondConfig {
                     100.0
             );
 
+    private static final ModConfigSpec.BooleanValue ENABLE_MOB_ORGAN_SKILL = BUILDER
+            .comment(
+                    "是否启用非玩家实体自动使用器官技能",
+                    "Enable non-player entities to automatically use organ skills"
+            )
+            .define(
+                    "enableMobGoalSkill",
+                    true
+            );
+
+    private static final ModConfigSpec.IntValue GOAL_SKILL_EVAL_INTERVAL = BUILDER
+            .comment(
+                    "Goal 器官技能评估间隔（tick），值越大性能越好但反应越慢",
+                    "注意：因 Mob AI 的双 tick 机制，奇数会自动向上取偶（如 3→4），最小有效值为 2",
+                    "Goal organ skill evaluation interval (ticks), higher = better performance but slower reaction",
+                    "Note: odd values are rounded up to even (e.g. 3→4) due to Mob AI dual-tick, minimum effective value is 2"
+            )
+            .defineInRange(
+                    "goalSkillEvalInterval",
+                    100,
+                    2,
+                    1000
+            );
+
+    private static final ModConfigSpec.DoubleValue GOAL_SKILL_ENEMY_DETECT_RANGE = BUILDER
+            .comment(
+                    "Goal 器官技能的敌人检测范围（格）",
+                    "Enemy detection range for Goal organ skill (blocks)"
+            )
+            .defineInRange(
+                    "goalSkillEnemyDetectRange",
+                    16.0,
+                    4.0,
+                    64.0
+            );
+
+    private static final ModConfigSpec.IntValue GOAL_SKILL_TARGET_MEMORY_TICKS = BUILDER
+            .comment(
+                    "Goal 器官技能的目标记忆时长（tick），目标丢失后仍继续攻击的保持时间（0 = 禁用记忆，300 = 15秒）",
+                    "Goal organ skill target memory duration (ticks), how long the mob keeps attacking after losing target (0 = disabled, 300 = 15s)"
+            )
+            .defineInRange(
+                    "goalSkillTargetMemoryTicks",
+                    300,
+                    0,
+                    1200
+            );
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     public static void handlerModConfigEvent(ModConfigEvent event) {
@@ -222,6 +274,10 @@ public class ChestCavityBeyondConfig {
             fireImmunityFire = FIRE_IMMUNITY_FIRE.get();
             fireImmunityLava = FIRE_IMMUNITY_LAVA.get();
             frostImmunity = FROST_IMMUNITY.get();
+            enableMobGoalSkill = ENABLE_MOB_ORGAN_SKILL.get();
+            goalSkillEvalInterval = GOAL_SKILL_EVAL_INTERVAL.get();
+            goalSkillEnemyDetectRange = GOAL_SKILL_ENEMY_DETECT_RANGE.get();
+            goalSkillTargetMemoryTicks = GOAL_SKILL_TARGET_MEMORY_TICKS.get();
         }
     }
 }

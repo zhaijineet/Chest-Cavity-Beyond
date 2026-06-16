@@ -54,7 +54,7 @@ public class ChestOpenerItem extends Item {
         ItemStack stack = player.getItemInHand(usedHand);
         HitResult hitResult = ProjectileUtil.getHitResultOnViewVector(
             player,
-            entity -> entity != player,
+            entity -> entity != player && TargetResolver.resolve(entity) instanceof LivingEntity,
             EnchantmentUtil.calculateOpenDistance(level, stack, player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).getValue())
         );
         DamageSource source = DamageSourceManager.openChest(level, player);

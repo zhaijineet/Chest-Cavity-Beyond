@@ -16,15 +16,18 @@ import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.zhaiji.chestcavitybeyond.api.AttributeEntry;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
+import net.zhaiji.chestcavitybeyond.api.OrganInteractContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HealConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HurtConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.IncomingDamageConsumer;
+import net.zhaiji.chestcavitybeyond.api.function.OrganInteractConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganModifierConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OrganSkillFunction;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OtherOrganChangeConsumer;
+import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
@@ -56,6 +59,8 @@ public class Organ implements IOrgan {
     private final IncomingDamageConsumer incomingDamageConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityOpenConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityCloseConsumer;
+    private final OrganInteractConsumer interactConsumer;
+    private final GoalSkillMetadata goalSkillMetadata;
 
     private Organ(AbstractBuilder<?> builder) {
         this.attributeEntries = builder.attributeEntries;
@@ -75,6 +80,8 @@ public class Organ implements IOrgan {
         this.incomingDamageConsumer = builder.incomingDamageConsumer;
         this.chestCavityOpenConsumer = builder.chestCavityOpenConsumer;
         this.chestCavityCloseConsumer = builder.chestCavityCloseConsumer;
+        this.interactConsumer = builder.interactConsumer;
+        this.goalSkillMetadata = builder.goalSkillMetadata;
     }
 
     /**
@@ -232,6 +239,16 @@ public class Organ implements IOrgan {
         chestCavityCloseConsumer.accept(context);
     }
 
+    @Override
+    public void interact(ChestCavitySlotContext context, OrganInteractContext interactContext) {
+        interactConsumer.accept(context, interactContext);
+    }
+
+    @Override
+    public GoalSkillMetadata getGoalSkillMetadata() {
+        return goalSkillMetadata;
+    }
+
     /**
      * 器官行为构建基类。
      * <p>
@@ -260,6 +277,8 @@ public class Organ implements IOrgan {
         private static final OtherOrganChangeConsumer EMPTY_OTHER_ORGAN_CHANGE = (context, changedIndex, oldStack, newStack) -> {
         };
         private static final OrganSkillFunction EMPTY_SKILL = context -> false;
+        private static final OrganInteractConsumer EMPTY_INTERACT = (context, interactContext) -> {
+        };
 
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
         private OrganModifierConsumer organModifierConsumer = EMPTY_MODIFIER;
@@ -278,6 +297,8 @@ public class Organ implements IOrgan {
         private IncomingDamageConsumer incomingDamageConsumer = EMPTY_INCOMING_DAMAGE;
         private Consumer<ChestCavitySlotContext> chestCavityOpenConsumer = EMPTY_CHEST_CAVITY_OPEN;
         private Consumer<ChestCavitySlotContext> chestCavityCloseConsumer = EMPTY_CHEST_CAVITY_CLOSE;
+        private OrganInteractConsumer interactConsumer = EMPTY_INTERACT;
+        private GoalSkillMetadata goalSkillMetadata = GoalSkillMetadata.EMPTY;
 
         protected AbstractBuilder() {
         }
@@ -304,6 +325,8 @@ public class Organ implements IOrgan {
             incomingDamageConsumer = organ.incomingDamageConsumer;
             chestCavityOpenConsumer = organ.chestCavityOpenConsumer;
             chestCavityCloseConsumer = organ.chestCavityCloseConsumer;
+            interactConsumer = organ.interactConsumer;
+            goalSkillMetadata = organ.goalSkillMetadata;
         }
 
         /**
@@ -407,6 +430,24 @@ public class Organ implements IOrgan {
             return self();
         }
 
+        /**
+         * 声明器官技能可被 Goal 自动使用
+         *
+         * @param metadata 技能元数据
+         */
+        public T goalSkill(GoalSkillMetadata metadata) {
+            this.goalSkillMetadata = Objects.requireNonNull(metadata, "goalSkillMetadata");
+            return self();
+        }
+
+        /**
+         * 清除 Goal 技能元数据
+         */
+        public T clearGoalSkill() {
+            goalSkillMetadata = GoalSkillMetadata.EMPTY;
+            return self();
+        }
+
         public T attack(AttackConsumer attackConsumer) {
             this.attackConsumer = Objects.requireNonNull(attackConsumer, "attackConsumer");
             return self();
@@ -434,6 +475,11 @@ public class Organ implements IOrgan {
 
         public T chestCavityClose(Consumer<ChestCavitySlotContext> chestCavityCloseConsumer) {
             this.chestCavityCloseConsumer = Objects.requireNonNull(chestCavityCloseConsumer, "chestCavityCloseConsumer");
+            return self();
+        }
+
+        public T interact(OrganInteractConsumer interactConsumer) {
+            this.interactConsumer = Objects.requireNonNull(interactConsumer, "interactConsumer");
             return self();
         }
 

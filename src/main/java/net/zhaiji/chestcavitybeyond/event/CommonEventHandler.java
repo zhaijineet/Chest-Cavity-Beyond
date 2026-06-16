@@ -6,8 +6,10 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.ThrownPotion;
@@ -45,6 +47,7 @@ import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterCompletedEvent;
 import net.zhaiji.chestcavitybeyond.api.event.OrganRegisterEvent;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.command.ChestCavityCommand;
+import net.zhaiji.chestcavitybeyond.entity.goal.UseOrganSkillGoal;
 import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
 import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
@@ -57,9 +60,11 @@ import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitDamageType;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
+import net.zhaiji.chestcavitybeyond.util.GoalSkillUtil;
 import net.zhaiji.chestcavitybeyond.util.MathUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
+import net.zhaiji.chestcavitybeyond.util.PlayerSkillUtil;
 
 public class CommonEventHandler {
     /**
@@ -98,8 +103,9 @@ public class CommonEventHandler {
         // 下界之星器官注册
         Organ.builder(Items.NETHER_STAR)
             .addValueAttribute(InitAttribute.HEALTH, 2.5)
-            .skill(context -> OrganSkillUtil.witherSkull(context.entity()))
+            .skill(PlayerSkillUtil::witherSkull)
             .cooldown(20 * 3)
+            .goalSkill(GoalSkillUtil.netherStarGoalSkill())
             .build();
 
         ModLoader.postEvent(new OrganRegisterEvent());
@@ -250,12 +256,27 @@ public class CommonEventHandler {
      * @param event 实体加入维度事件
      */
     public static void handlerEntityJoinLevelEvent(EntityJoinLevelEvent event) {
-        if (!event.getLevel().isClientSide() && !event.loadedFromDisk() && event.getEntity() instanceof LivingEntity entity) {
+        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) return;
+
+        if (!event.loadedFromDisk()) {
             ChestCavityData data = entity.getData(InitAttachmentType.CHEST_CAVITY);
             data.init();
             if (entity instanceof ServerPlayer player) {
                 PacketDistributor.sendToPlayer(player, new SyncChestCavityDataPacket(data.getOrgans(), data.selectedSlot, data.getSize()));
             }
+        }
+        // Goal 注入对所有 Mob 执行（含从存档加载的，因 goalSelector 不序列化）
+        if (entity instanceof Mob mob) {
+            UseOrganSkillGoal skillGoal = mob.goalSelector.getAvailableGoals().stream()
+                .filter(wrapped -> wrapped.getGoal() instanceof UseOrganSkillGoal)
+                .map(wrapped -> (UseOrganSkillGoal) wrapped.getGoal())
+                .findFirst()
+                .orElse(null);
+            if (skillGoal == null) {
+                skillGoal = new UseOrganSkillGoal(mob);
+                mob.goalSelector.addGoal(3, skillGoal);
+            }
+            ChestCavityUtil.getData(mob).setSkillGoal(skillGoal);
         }
     }
 
@@ -290,29 +311,29 @@ public class CommonEventHandler {
      * @param event 玩家交互实体事件
      */
     public static void handlerPlayerInteractEvent$EntityInteract(PlayerInteractEvent.EntityInteract event) {
-        ItemStack stack = event.getEntity().getItemInHand(event.getHand());
-        // 当玩家手持开胸器或生物分析仪时，可能更希望使用物品的效果
-        if ((stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get()))
-            && TargetResolver.resolve(event.getTarget()) instanceof LivingEntity) {
+        if (ChestCavityUtil.shouldCancelEntityInteract(event.getEntity(), event.getHand(), event.getTarget())) {
             event.setCanceled(true);
         }
     }
 
     /**
-     * 开胸器打开生物胸腔 / 生物分析仪查看属性
+     * 开胸器打开生物胸腔 / 生物分析仪查看属性 / 器官被动交互
      * <p>
-     * 拦截带命中位置的精确实体交互（interactAt 路径）
+     * 拦截带命中位置的精确实体交互（interactAt 路径）。优先处理开胸器/分析仪取消；
+     * 之后遍历所有器官的 interact 回调，框架根据回调中是否标记 consume 统一处理事件取消。
      * </p>
      *
      * @param event 玩家交互实体事件（带命中位置）
      */
     public static void handlerPlayerInteractEvent$EntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event) {
-        ItemStack stack = event.getEntity().getItemInHand(event.getHand());
-        // 当玩家手持开胸器或生物分析仪时，可能更希望使用物品的效果
-        if ((stack.is(ItemTagManager.CHEST_OPENERS) || stack.is(InitItem.BIOLOGICAL_ANALYZER.get()))
-            && TargetResolver.resolve(event.getTarget()) instanceof LivingEntity) {
+        if (ChestCavityUtil.shouldCancelEntityInteract(event.getEntity(), event.getHand(), event.getTarget())) {
             event.setCanceled(true);
+            return;
         }
+        // 遍历器官被动交互回调（使用 TargetResolver 解析多碰撞箱部件）
+        if (!(TargetResolver.resolve(event.getTarget()) instanceof LivingEntity target)) return;
+        ChestCavityData data = ChestCavityUtil.getData(target);
+        ChestCavityUtil.interact(data, target, event.getEntity(), event.getHand(), event);
     }
 
     /**
@@ -395,6 +416,13 @@ public class CommonEventHandler {
         }
         if (source.is(DamageTypeTags.IS_FALL) && entity.getAttribute(Attributes.GRAVITY).getValue() <= 0) {
             event.setCanceled(true);
+        }
+        // Mob 受伤时主动刷新 Goal 技能目标记忆
+        if (attacker != null && attacker.isAlive() && entity instanceof Mob mob) {
+            UseOrganSkillGoal goal = ChestCavityUtil.getData(mob).getSkillGoal();
+            if (goal != null) {
+                goal.refreshTargetMemory(attacker, mob.tickCount);
+            }
         }
     }
 

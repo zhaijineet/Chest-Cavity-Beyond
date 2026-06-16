@@ -15,7 +15,9 @@ import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
+import net.zhaiji.chestcavitybeyond.api.OrganInteractContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
+import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
 import java.util.List;
@@ -174,5 +176,23 @@ public interface IOrgan {
      * @param context 胸腔槽位上下文
      */
     default void chestCavityClose(ChestCavitySlotContext context) {
+    }
+
+    /**
+     * 器官拥有者被玩家右键交互时调用。
+     *
+     * @param context         胸腔槽位上下文
+     * @param interactContext 交互上下文
+     */
+    default void interact(ChestCavitySlotContext context, OrganInteractContext interactContext) {
+    }
+
+    /**
+     * 获取器官的 Goal 技能元数据
+     *
+     * @return 技能元数据，{@link GoalSkillMetadata#EMPTY} 表示此器官不支持 Goal 自动使用技能
+     */
+    default GoalSkillMetadata getGoalSkillMetadata() {
+        return GoalSkillMetadata.EMPTY;
     }
 }

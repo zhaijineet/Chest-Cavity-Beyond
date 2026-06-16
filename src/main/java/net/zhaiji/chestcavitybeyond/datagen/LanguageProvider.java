@@ -343,6 +343,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Consume an iron ingot from inventory to heal",
             "Healing equals 2.5 times Iron Repair attribute"
         );
+        addOrganSimplePassiveEffect(InitItem.GOLEM_ARMOR_PLATE, "Can be healed by other players using iron ingots");
+        addOrganPassiveEffect(
+            InitItem.GOLEM_ARMOR_PLATE,
+            "Can be healed by other players using iron ingots",
+            "Healing equals 2.5 times Iron Repair attribute"
+        );
 
         addOrganSimpleActiveSkill(InitItem.SILK_GLAND, "Shoot cobwebs");
         addOrganActiveSkill(
@@ -1056,6 +1062,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addOrganActiveSkill(
             InitItem.GOLEM_ARMOR_PLATE,
             "消耗背包中的铁锭来治疗自身",
+            "治疗量等于2.5倍铁修复属性值"
+        );
+        addOrganSimplePassiveEffect(InitItem.GOLEM_ARMOR_PLATE, "可被其他玩家使用铁锭进行治疗");
+        addOrganPassiveEffect(
+            InitItem.GOLEM_ARMOR_PLATE,
+            "可被其他玩家使用铁锭进行治疗",
             "治疗量等于2.5倍铁修复属性值"
         );
 

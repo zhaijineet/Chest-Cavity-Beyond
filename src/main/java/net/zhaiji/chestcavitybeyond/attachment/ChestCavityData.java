@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -27,6 +28,7 @@ import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.api.task.IChestCavityTask;
 import net.zhaiji.chestcavitybeyond.api.task.ISerializableTask;
+import net.zhaiji.chestcavitybeyond.entity.goal.UseOrganSkillGoal;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.manager.TaskManager;
@@ -47,6 +49,11 @@ import java.util.function.Predicate;
 
 public class ChestCavityData extends ItemStackHandler {
     private final List<IChestCavityTask> tasks = new ArrayList<>();
+
+    /**
+     * 非玩家实体的物品冷却管理器
+     */
+    private final ItemCooldowns itemCooldowns = new ItemCooldowns();
 
     /**
      * 选择使用技能的槽位索引
@@ -91,6 +98,18 @@ public class ChestCavityData extends ItemStackHandler {
      * </P>
      */
     private int filtrationTickOffset;
+
+    /**
+     * 器官变更计数
+     */
+    private int organChangeCount;
+
+    /**
+     * 缓存的 UseOrganSkillGoal 引用，避免受伤时遍历 goalSelector。
+     * 不序列化，由 EntityJoinLevelEvent 设置。
+     */
+    @Nullable
+    private UseOrganSkillGoal skillGoal;
 
     public ChestCavityData(IAttachmentHolder attachmentHolder) {
         // TODO: 此处槽位是硬编码54，但大概率不会改？先写个TODO后续再优化
@@ -146,6 +165,41 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public ChestCavitySize getSize() {
         return size;
+    }
+
+    /**
+     * 获取器官变更计数
+     *
+     * @return 器官变更计数
+     */
+    public int getOrganChangeCount() {
+        return organChangeCount;
+    }
+
+    /**
+     * 递增器官变更计数，通知使用方器官已变化、需要重建缓存
+     */
+    public void bumpOrganChangeCount() {
+        organChangeCount++;
+    }
+
+    /**
+     * 获取缓存的 UseOrganSkillGoal 引用
+     *
+     * @return 缓存的 Goal 引用，未设置时为 null
+     */
+    @Nullable
+    public UseOrganSkillGoal getSkillGoal() {
+        return skillGoal;
+    }
+
+    /**
+     * 设置缓存的 UseOrganSkillGoal 引用
+     *
+     * @param skillGoal Goal 引用
+     */
+    public void setSkillGoal(@Nullable UseOrganSkillGoal skillGoal) {
+        this.skillGoal = skillGoal;
     }
 
     @Override
@@ -562,6 +616,9 @@ public class ChestCavityData extends ItemStackHandler {
                 ChestCavityUtil.organTick(this, owner, i, stack);
             }
         }
+        if (!(owner instanceof Player) && !owner.level().isClientSide()) {
+            itemCooldowns.tick();
+        }
         // 客户端和服务端都要执行task
         Iterator<IChestCavityTask> iterator = tasks.iterator();
         while (iterator.hasNext()) {
@@ -572,6 +629,15 @@ public class ChestCavityData extends ItemStackHandler {
                 iterator.remove();
             }
         }
+    }
+
+    /**
+     * 获取非玩家实体的物品冷却管理器
+     *
+     * @return 物品冷却管理器
+     */
+    public ItemCooldowns getItemCooldowns() {
+        return itemCooldowns;
     }
 
     /**
@@ -822,5 +888,11 @@ public class ChestCavityData extends ItemStackHandler {
                 }
             }
         }
+        // 器官转换直接操作 stacks，不经 changeOrgan，需单独标记变更计数
+        bumpOrganChangeCount();
+        // 注意：此处不能 setSkillGoal(null)。
+        // Mob.convertTo() 的执行顺序为 addFreshEntity(outcome)（触发 EntityJoinLevelEvent
+        // → 注入 Goal + setSkillGoal）→ onLivingConvert（触发 convertOrgans）。
+        // 若在此清空，EntityJoinLevelEvent 已设置的 skillGoal 会被抹掉，且不会再次触发。
     }
 }

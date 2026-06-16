@@ -47,7 +47,7 @@ public class TargetResolver {
         if (entity instanceof PartEntity<?> part && part.getParent() instanceof LivingEntity livingEntity) return livingEntity;
         for (Function<Entity, LivingEntity> resolver : RESOLVERS) {
             LivingEntity livingEntity = resolver.apply(entity);
-            if (livingEntity != null) return livingEntity;
+            if (livingEntity != null && livingEntity.isAlive() && !livingEntity.isRemoved()) return livingEntity;
         }
         return entity;
     }
