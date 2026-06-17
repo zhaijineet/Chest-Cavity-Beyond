@@ -38,8 +38,6 @@ import java.util.List;
  * </p>
  */
 public class MixinUtil {
-    // ======================== 食物数据相关 ========================
-
     /**
      * 计算食物消化后的饥饿值和饱食度并添加
      *
@@ -171,8 +169,6 @@ public class MixinUtil {
         return (float) (value * MathUtil.getInverseScale(data.getDifferenceValue(InitAttribute.ENDURANCE)));
     }
 
-    // ======================== 呼吸系统相关 ========================
-
     /**
      * 处理实体呼吸逻辑
      * <p>
@@ -281,8 +277,6 @@ public class MixinUtil {
         }
     }
 
-    // ======================== 末影水晶相关 ========================
-
     /**
      * 应用结晶治疗效果
      *
@@ -308,8 +302,6 @@ public class MixinUtil {
             }
         }
     }
-
-    // ======================== 战斗相关 ========================
 
     /**
      * 应用发射效果（攻击时将目标向上弹起）

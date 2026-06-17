@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
@@ -159,6 +160,7 @@ public class ChestCavityTypeManager {
         .setFirstRow(2, InitItem.ENDER_APPENDIX.get())
         .setSecondRow(2, InitItem.SHULKER_SPLEEN.get())
         .setSecondRow(6, InitItem.SHULKER_SPLEEN.get());
+
     public static final ChestCavityType TURTLE = register(ChestCavityBeyond.of("turtle"))
         .copyWith(ANIMAL)
 
@@ -167,6 +169,7 @@ public class ChestCavityTypeManager {
                 InitAttribute.WATER_BREATH, 0.5
             )
         );
+
     public static final ChestCavityType FROG = register(ChestCavityBeyond.of("frog"))
         .copyWith(ANIMAL)
         .addValueBonuses(
@@ -174,6 +177,7 @@ public class ChestCavityTypeManager {
                 InitAttribute.WATER_BREATH, 0.5
             )
         );
+
     public static final ChestCavityType SMALL_ANIMAL = register(ChestCavityBeyond.of("small_animal"))
         .setFirstRow(0, InitItem.SMALL_ANIMAL_MUSCLE.get())
         .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
@@ -203,6 +207,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(6, InitItem.SMALL_ANIMAL_INTESTINE.get())
         .setThirdRow(7, InitItem.SMALL_ANIMAL_MUSCLE.get())
         .setThirdRow(8, InitItem.SMALL_ANIMAL_MUSCLE.get());
+
     public static final ChestCavityType SMALL_HERBIVORE = register(ChestCavityBeyond.of("small_herbivore"))
         .copyWith(SMALL_ANIMAL)
         .setThirdRow(2, InitItem.SMALL_HERBIVORE_INTESTINE.get())
@@ -210,6 +215,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(4, InitItem.SMALL_HERBIVORE_STOMACH.get())
         .setThirdRow(5, InitItem.SMALL_HERBIVORE_INTESTINE.get())
         .setThirdRow(6, InitItem.SMALL_HERBIVORE_INTESTINE.get());
+
     public static final ChestCavityType SMALL_CARNIVORE = register(ChestCavityBeyond.of("small_carnivore"))
         .copyWith(SMALL_ANIMAL)
         .setThirdRow(2, InitItem.SMALL_CARNIVORE_INTESTINE.get())
@@ -217,14 +223,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(4, InitItem.SMALL_CARNIVORE_STOMACH.get())
         .setThirdRow(5, InitItem.SMALL_CARNIVORE_INTESTINE.get())
         .setThirdRow(6, InitItem.SMALL_CARNIVORE_INTESTINE.get());
-    public static final ChestCavityType AXOLOTL = register(ChestCavityBeyond.of("axolotl"))
-        .copyWith(SMALL_ANIMAL)
 
-        .addValueBonuses(
-            InitItem.SMALL_ANIMAL_LUNG.get(), Map.of(
-                InitAttribute.WATER_BREATH, 0.5
-            )
-        );
     public static final ChestCavityType RABBIT = register(ChestCavityBeyond.of("rabbit"))
         .setFirstRow(0, InitItem.SMALL_LEAPING_MUSCLE.get())
         .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
@@ -600,6 +599,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(7, InitItem.FISH_MUSCLE.get())
         .setThirdRow(8, InitItem.FISH_MUSCLE.get());
 
+
     public static final ChestCavityType SMALL_AQUATIC = register(ChestCavityBeyond.of("small_aquatic"))
         .setFirstRow(0, InitItem.SMALL_AQUATIC_MUSCLE.get())
         .setFirstRow(1, InitItem.SMALL_ANIMAL_RIB.get())
@@ -628,6 +628,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(6, InitItem.SMALL_ANIMAL_INTESTINE.get())
         .setThirdRow(7, InitItem.SMALL_AQUATIC_MUSCLE.get())
         .setThirdRow(8, InitItem.SMALL_AQUATIC_MUSCLE.get());
+
     public static final ChestCavityType SMALL_FISH = register(ChestCavityBeyond.of("small_fish"))
         .copyWith(SMALL_AQUATIC)
         .setFirstRow(0, InitItem.SMALL_FISH_MUSCLE.get())
@@ -649,6 +650,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(6, InitItem.SMALL_FISH_INTESTINE.get())
         .setThirdRow(7, InitItem.SMALL_FISH_MUSCLE.get())
         .setThirdRow(8, InitItem.SMALL_FISH_MUSCLE.get());
+
     public static final ChestCavityType SALTWATER = register(ChestCavityBeyond.of("saltwater"))
         .setFirstRow(0, InitItem.SALTWATER_MUSCLE.get())
         .setFirstRow(1, InitItem.RIB.get())
@@ -678,6 +680,7 @@ public class ChestCavityTypeManager {
         .setThirdRow(6, InitItem.INTESTINE.get())
         .setThirdRow(7, InitItem.SALTWATER_MUSCLE.get())
         .setThirdRow(8, InitItem.SALTWATER_MUSCLE.get());
+
     public static final ChestCavityType CREEPER = register(ChestCavityBeyond.of("creeper"))
         .setFirstRow(0, InitItem.CREEPER_LEAF.get())
         .setFirstRow(1, InitItem.ANIMAL_RIB.get())
@@ -713,6 +716,7 @@ public class ChestCavityTypeManager {
                 InitAttribute.BREATH_RECOVERY, 1.0
             )
         );
+
     public static final ChestCavityType BLAZE = register(ChestCavityBeyond.of("blaze"))
         .setFirstRow(1, InitItem.ACTIVE_BLAZE_ROD.get())
         .setFirstRow(2, InitItem.BLAZE_SHELL.get())
@@ -741,6 +745,7 @@ public class ChestCavityTypeManager {
                 InitAttribute.BREATH_RECOVERY, 1.0
             )
         );
+
     public static final ChestCavityType BREEZE = register(ChestCavityBeyond.of("breeze"))
         .setFirstRow(3, InitItem.ACTIVE_BREEZE_ROD.get())
         .setFirstRow(4, InitItem.BREEZE_CORE.get())
@@ -763,6 +768,7 @@ public class ChestCavityTypeManager {
                 InitAttribute.NERVES, 1.0
             )
         );
+
     public static final ChestCavityType IRON_GOLEM = register(ChestCavityBeyond.of("iron_golem"))
         .setNeedBreath(false)
 
@@ -816,6 +822,7 @@ public class ChestCavityTypeManager {
                 InitAttribute.BREATH_RECOVERY, 1.0
             )
         );
+
     public static final ChestCavityType WARDEN = register(ChestCavityBeyond.of("warden"))
         .setFirstRow(0, InitItem.SCULK_MUSCLE.get())
         .setFirstRow(1, InitItem.SCULK_RIB.get())
@@ -931,7 +938,7 @@ public class ChestCavityTypeManager {
         ChestCavityType type = ENTITY_CHEST_CAVITY_TYPE_MAP.get(entity.getType());
         if (type == null) {
             EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
-            // --- 以下为 instanceof 回退检测，子类必须在父类之前 ---
+            // 以下为 instanceof 回退检测，子类必须在父类之前
 
             // 远古守卫者（Guardian 的子类，先于 Guardian 检测）
             if (entity instanceof ElderGuardian) {
@@ -1009,23 +1016,21 @@ public class ChestCavityTypeManager {
             if (entity instanceof Llama) {
                 return registerEntity(entityType, LLAMA);
             }
-
-            // --- 以下是通用的类别回退 ---
-
-            // 鱼类
+            // 鱼类（AbstractFish 子类，含蝌蚪等）
             if (entity instanceof AbstractFish) {
                 return registerEntity(entityType, FISH);
             }
-            // 不是鱼，但能在水下呼吸，注册水生生物器官
-            // 但如果陆地和水下都能呼吸，这个检测就不管用了
-            // 只能手动注册了
-            if (entityType.is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
-                || entity instanceof WaterAnimal
+            // 水生生物（鳃呼吸）
+            // 注意：此处会拦住部分 Animal 子类的水生生物（如美西螈，在水中呼吸、上岸窒息）
+            // 也会提前拦住一些可以在水下呼吸的生物，但难以通过简单的 instanceof/category 判断来区分真正的两栖生物，因此需要注意一下
+            if (entity instanceof WaterAnimal
                 || entityType.getCategory() == MobCategory.WATER_CREATURE
-                || entityType.getCategory() == MobCategory.WATER_AMBIENT) {
+                || entityType.getCategory() == MobCategory.WATER_AMBIENT
+                || entityType.getCategory() == MobCategory.UNDERGROUND_WATER_CREATURE) {
                 return registerEntity(entityType, AQUATIC);
             }
-            // 动物
+            // 动物（陆地动物）
+            // 上方水生检测可能已提前拦住部分可在水下呼吸的 Animal 子类
             if (entity instanceof Animal || entityType.getCategory() == MobCategory.CREATURE) {
                 return registerEntity(entityType, ANIMAL);
             }
@@ -1056,6 +1061,20 @@ public class ChestCavityTypeManager {
     public static ChestCavityType registerEntity(EntityType<? extends LivingEntity> entityType, ChestCavityType chestCavityType) {
         ENTITY_CHEST_CAVITY_TYPE_MAP.put(entityType, chestCavityType.builder(entityType));
         return chestCavityType;
+    }
+
+    /**
+     * 通过注册名为实体类型注册胸腔类型
+     * <p>
+     * 用于第三方模组实体兼容注册
+     * </p>
+     *
+     * @param entityTypeId    实体类型的注册名
+     * @param chestCavityType 要分配的胸腔类型
+     */
+    public static void registerEntity(ResourceLocation entityTypeId, ChestCavityType chestCavityType) {
+        BuiltInRegistries.ENTITY_TYPE.getOptional(entityTypeId)
+            .ifPresent(entityType -> registerEntity((EntityType<? extends LivingEntity>) entityType, chestCavityType));
     }
 
     /**

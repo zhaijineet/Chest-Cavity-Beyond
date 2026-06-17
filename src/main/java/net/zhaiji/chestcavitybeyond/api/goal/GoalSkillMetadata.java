@@ -7,13 +7,14 @@ import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.function.GoalSkillFunction;
+import net.zhaiji.chestcavitybeyond.api.function.GoalSkillRangeFunction;
 import net.zhaiji.chestcavitybeyond.api.function.GoalSkillWeightFunction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.function.Function;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToIntFunction;
 
 /**
@@ -26,26 +27,26 @@ public final class GoalSkillMetadata {
     public static final GoalSkillMetadata EMPTY = new GoalSkillMetadata(
         GoalSkillIntent.NONE,
         GoalSkillTargetRequirement.NONE,
-        mob -> false,
-        (mob, target) -> 0,
-        (mob, target) -> 0,
+        (mob, skillEntry) -> false,
+        (mob, target, skillEntry) -> 0,
+        (mob, target, skillEntry) -> 0,
         null,
         mob -> true,
         null, null, null,
         false,
         false,
-        (goalCtx, slotCtx) -> false
+        (combatContext, slotContext) -> false
     );
 
     private final GoalSkillIntent intent;
     private final GoalSkillTargetRequirement targetRequirement;
-    private final Predicate<Mob> canUse;
-    private final ToDoubleBiFunction<Mob, LivingEntity> entityRangeProvider;
-    private final ToDoubleBiFunction<Mob, BlockPos> blockRangeProvider;
+    private final BiPredicate<Mob, SkillCacheEntry> canUse;
+    private final GoalSkillRangeFunction<LivingEntity> entityRangeProvider;
+    private final GoalSkillRangeFunction<BlockPos> blockRangeProvider;
     private final GoalSkillWeightFunction weightOverride;
     private final Predicate<Mob> entityFilter;
-    private final @Nullable Function<Mob, LivingEntity> entityTargetResolver;
-    private final @Nullable Function<Mob, BlockPos> blockTargetResolver;
+    private final @Nullable BiFunction<Mob, SkillCacheEntry, LivingEntity> entityTargetResolver;
+    private final @Nullable BiFunction<Mob, SkillCacheEntry, BlockPos> blockTargetResolver;
     private final @Nullable ToIntFunction<ChestCavitySlotContext> cooldownProvider;
     private final boolean requireLineOfSight;
     private final boolean useMemoryFallback;
@@ -54,13 +55,13 @@ public final class GoalSkillMetadata {
     public GoalSkillMetadata(
         GoalSkillIntent intent,
         GoalSkillTargetRequirement targetRequirement,
-        Predicate<Mob> canUse,
-        ToDoubleBiFunction<Mob, LivingEntity> entityRangeProvider,
-        ToDoubleBiFunction<Mob, BlockPos> blockRangeProvider,
+        BiPredicate<Mob, SkillCacheEntry> canUse,
+        GoalSkillRangeFunction<LivingEntity> entityRangeProvider,
+        GoalSkillRangeFunction<BlockPos> blockRangeProvider,
         @Nullable GoalSkillWeightFunction weightOverride,
         Predicate<Mob> entityFilter,
-        @Nullable Function<Mob, LivingEntity> entityTargetResolver,
-        @Nullable Function<Mob, BlockPos> blockTargetResolver,
+        @Nullable BiFunction<Mob, SkillCacheEntry, LivingEntity> entityTargetResolver,
+        @Nullable BiFunction<Mob, SkillCacheEntry, BlockPos> blockTargetResolver,
         @Nullable ToIntFunction<ChestCavitySlotContext> cooldownProvider,
         boolean requireLineOfSight,
         boolean useMemoryFallback,
@@ -84,7 +85,7 @@ public final class GoalSkillMetadata {
     /**
      * 默认实体距离：使用 Goal 敌人检测范围配置值
      */
-    public static double defaultRange(Mob mob, LivingEntity target) {
+    public static double defaultRange(Mob mob, LivingEntity target, SkillCacheEntry skillEntry) {
         return ChestCavityBeyondConfig.goalSkillEnemyDetectRange;
     }
 
@@ -100,7 +101,7 @@ public final class GoalSkillMetadata {
     /**
      * 需要目标实体的攻击：潜影子弹等
      */
-    public static Builder targetedAttack(ToDoubleBiFunction<Mob, LivingEntity> range, GoalSkillFunction useSkill) {
+    public static Builder targetedAttack(GoalSkillRangeFunction<LivingEntity> range, GoalSkillFunction useSkill) {
         return new Builder(GoalSkillIntent.ATTACK, useSkill)
             .targetRequirement(GoalSkillTargetRequirement.HAS_ENTITY_TARGET)
             .entityRange(range)
@@ -137,7 +138,7 @@ public final class GoalSkillMetadata {
     public static Builder blockInteract(GoalSkillFunction useSkill) {
         return new Builder(GoalSkillIntent.BLOCK_INTERACT, useSkill)
             .targetRequirement(GoalSkillTargetRequirement.HAS_BLOCK_TARGET)
-            .blockRange((mob, target) -> 2.0);
+            .blockRange((mob, target, skillEntry) -> 2.0);
     }
 
     /**
@@ -157,15 +158,15 @@ public final class GoalSkillMetadata {
         return targetRequirement;
     }
 
-    public Predicate<Mob> getCanUse() {
+    public BiPredicate<Mob, SkillCacheEntry> getCanUse() {
         return canUse;
     }
 
-    public ToDoubleBiFunction<Mob, LivingEntity> getEntityRangeProvider() {
+    public GoalSkillRangeFunction<LivingEntity> getEntityRangeProvider() {
         return entityRangeProvider;
     }
 
-    public ToDoubleBiFunction<Mob, BlockPos> getBlockRangeProvider() {
+    public GoalSkillRangeFunction<BlockPos> getBlockRangeProvider() {
         return blockRangeProvider;
     }
 
@@ -177,11 +178,11 @@ public final class GoalSkillMetadata {
         return entityFilter;
     }
 
-    public @Nullable Function<Mob, LivingEntity> getEntityTargetResolver() {
+    public @Nullable BiFunction<Mob, SkillCacheEntry, LivingEntity> getEntityTargetResolver() {
         return entityTargetResolver;
     }
 
-    public @Nullable Function<Mob, BlockPos> getBlockTargetResolver() {
+    public @Nullable BiFunction<Mob, SkillCacheEntry, BlockPos> getBlockTargetResolver() {
         return blockTargetResolver;
     }
 
@@ -210,13 +211,13 @@ public final class GoalSkillMetadata {
         private final GoalSkillIntent intent;
         private final GoalSkillFunction useSkill;
         private GoalSkillTargetRequirement targetRequirement = GoalSkillTargetRequirement.NONE;
-        private Predicate<Mob> canUse = mob -> true;
-        private ToDoubleBiFunction<Mob, LivingEntity> entityRangeProvider = GoalSkillMetadata::defaultRange;
-        private ToDoubleBiFunction<Mob, BlockPos> blockRangeProvider = (mob, target) -> 0;
+        private BiPredicate<Mob, SkillCacheEntry> canUse = (mob, skillEntry) -> true;
+        private GoalSkillRangeFunction<LivingEntity> entityRangeProvider = GoalSkillMetadata::defaultRange;
+        private GoalSkillRangeFunction<BlockPos> blockRangeProvider = (mob, target, skillEntry) -> 0;
         private GoalSkillWeightFunction weightOverride = null;
         private Predicate<Mob> entityFilter = mob -> true;
-        private @Nullable Function<Mob, LivingEntity> entityTargetResolver = null;
-        private @Nullable Function<Mob, BlockPos> blockTargetResolver = null;
+        private @Nullable BiFunction<Mob, SkillCacheEntry, LivingEntity> entityTargetResolver = null;
+        private @Nullable BiFunction<Mob, SkillCacheEntry, BlockPos> blockTargetResolver = null;
         private @Nullable ToIntFunction<ChestCavitySlotContext> cooldownProvider = null;
         private boolean requireLineOfSight = false;
         private boolean useMemoryFallback = false;
@@ -231,7 +232,7 @@ public final class GoalSkillMetadata {
             return this;
         }
 
-        public Builder canUse(Predicate<Mob> predicate) {
+        public Builder canUse(BiPredicate<Mob, SkillCacheEntry> predicate) {
             this.canUse = predicate;
             return this;
         }
@@ -242,7 +243,7 @@ public final class GoalSkillMetadata {
          *
          * @param entityRangeProvider 实体目标射程函数
          */
-        public Builder entityRange(ToDoubleBiFunction<Mob, LivingEntity> entityRangeProvider) {
+        public Builder entityRange(GoalSkillRangeFunction<LivingEntity> entityRangeProvider) {
             this.entityRangeProvider = entityRangeProvider;
             return this;
         }
@@ -253,7 +254,7 @@ public final class GoalSkillMetadata {
          *
          * @param blockRangeProvider 方块目标射程函数
          */
-        public Builder blockRange(ToDoubleBiFunction<Mob, BlockPos> blockRangeProvider) {
+        public Builder blockRange(GoalSkillRangeFunction<BlockPos> blockRangeProvider) {
             this.blockRangeProvider = blockRangeProvider;
             return this;
         }
@@ -271,7 +272,7 @@ public final class GoalSkillMetadata {
          * <p>
          * <strong>注意</strong>：此谓词仅在器官变更时执行（缓存重建阶段），
          * 因此不可依赖运行时状态（血量/目标/位置等），只能依赖实体类型等稳定属性。
-         * 如需运行时过滤，请使用 {@link #canUse(Predicate)}。
+         * 如需运行时过滤，请使用 {@link #canUse(BiPredicate)}。
          * </p>
          *
          * @param entityFilter 实体过滤谓词
@@ -286,7 +287,7 @@ public final class GoalSkillMetadata {
          *
          * @param entityTargetResolver 实体目标解析函数，返回 null 表示无目标
          */
-        public Builder entityTargetResolver(Function<Mob, LivingEntity> entityTargetResolver) {
+        public Builder entityTargetResolver(BiFunction<Mob, SkillCacheEntry, LivingEntity> entityTargetResolver) {
             this.entityTargetResolver = entityTargetResolver;
             return this;
         }
@@ -296,7 +297,7 @@ public final class GoalSkillMetadata {
          *
          * @param blockTargetResolver 方块目标解析函数，返回 null 表示未找到
          */
-        public Builder blockTargetResolver(Function<Mob, BlockPos> blockTargetResolver) {
+        public Builder blockTargetResolver(BiFunction<Mob, SkillCacheEntry, BlockPos> blockTargetResolver) {
             this.blockTargetResolver = blockTargetResolver;
             return this;
         }

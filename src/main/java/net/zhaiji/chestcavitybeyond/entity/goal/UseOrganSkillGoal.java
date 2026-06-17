@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -39,9 +40,9 @@ import java.util.function.Function;
 public class UseOrganSkillGoal extends Goal {
     private final Mob mob;
     /**
-     * 静态候选缓存：仅在器官变化时重建
+     * 静态技能条目缓存：仅在器官变化时重建
      */
-    private final List<SkillCacheEntry> cachedCandidates = new ArrayList<>();
+    private final List<SkillCacheEntry> cachedSkillEntries = new ArrayList<>();
     /**
      * start() 重试候选列表：canUse() 中通过过滤且权重 > 0 的候选（排除首选）
      */
@@ -57,7 +58,7 @@ public class UseOrganSkillGoal extends Goal {
 
     private GoalSkillIntent lastUsedIntent = GoalSkillIntent.NONE;
     @Nullable
-    private SkillCacheEntry selectedCandidate = null;
+    private SkillCacheEntry selectedSkillEntry = null;
 
     /**
      * 目标记忆：resolver 无目标时尝试用上次记住的目标
@@ -126,15 +127,15 @@ public class UseOrganSkillGoal extends Goal {
 
         ChestCavityData data = ChestCavityUtil.getData(mob);
 
-        // 仅在器官变更计数变化时重建静态候选缓存
+        // 仅在器官变更计数变化时重建静态技能条目缓存
         if (cachedChangeCount != data.getOrganChangeCount()) {
             rebuildCache(data);
         }
 
         // 没有 Goal 技能器官的 Mob 直接返回
-        if (cachedCandidates.isEmpty()) {
+        if (cachedSkillEntries.isEmpty()) {
             cleanupRememberedTarget();
-            selectedCandidate = null;
+            selectedSkillEntry = null;
             return false;
         }
 
@@ -148,10 +149,10 @@ public class UseOrganSkillGoal extends Goal {
 
         // 动态过滤 + 权重计算
         List<WeightedCandidate> weightedCandidates = new ArrayList<>();
-        for (SkillCacheEntry candidate : cachedCandidates) {
-            GoalSkillMetadata metadata = candidate.metadata();
-            if (OrganSkillUtil.hasCooldown(mob, candidate.stack())) continue;
-            if (!metadata.getCanUse().test(mob)) continue;
+        for (SkillCacheEntry skillEntry : cachedSkillEntries) {
+            GoalSkillMetadata metadata = skillEntry.metadata();
+            if (OrganSkillUtil.hasCooldown(mob, skillEntry.stack())) continue;
+            if (!metadata.getCanUse().test(mob, skillEntry)) continue;
 
             // 按目标需求分支过滤 + 确定战斗上下文
             GoalCombatContext combatContext;
@@ -160,13 +161,13 @@ public class UseOrganSkillGoal extends Goal {
                     // 无自定义 resolver 时直接复用循环前预计算的 defaultTarget，避免重复执行 resolveTargetWithMemory
                     LivingEntity effectiveTarget;
                     if (metadata.getEntityTargetResolver() != null) {
-                        effectiveTarget = resolveEntityTarget(metadata);
+                        effectiveTarget = resolveEntityTarget(metadata, skillEntry);
                     } else {
                         effectiveTarget = defaultTarget;
                     }
                     if (effectiveTarget == null) continue;
                     // 射程过滤
-                    double entityRange = metadata.getEntityRangeProvider().applyAsDouble(mob, effectiveTarget);
+                    double entityRange = metadata.getEntityRangeProvider().apply(mob, effectiveTarget, skillEntry);
                     if (entityRange > 0 && mob.distanceTo(effectiveTarget) > entityRange) continue;
                     // 视线过滤（复用 context 已计算的 LOS 避免重复检测）
                     if (metadata.isRequireLineOfSight()) {
@@ -175,18 +176,18 @@ public class UseOrganSkillGoal extends Goal {
                                          : mob.getSensing().hasLineOfSight(effectiveTarget);
                         if (!hasLos) continue;
                     }
-                    // 用 effectiveTarget 构建 per-candidate context（相同引用则复用 defaultContext，避免重算）
+                    // 用 effectiveTarget 构建 per-entry context（相同引用则复用 defaultContext，避免重算）
                     combatContext = effectiveTarget == defaultTarget
                                     ? defaultContext
                                     : buildCombatContext(effectiveTarget, null, selfHealthPercent, nearbyEnemyCount);
                 }
                 case HAS_BLOCK_TARGET -> {
                     BlockPos blockTarget = null;
-                    Function<Mob, BlockPos> blockResolver = metadata.getBlockTargetResolver();
+                    BiFunction<Mob, SkillCacheEntry, BlockPos> blockResolver = metadata.getBlockTargetResolver();
                     if (blockResolver != null) {
-                        blockTarget = blockResolver.apply(mob);
+                        blockTarget = blockResolver.apply(mob, skillEntry);
                         if (blockTarget == null) continue;
-                        double blockRange = metadata.getBlockRangeProvider().applyAsDouble(mob, blockTarget);
+                        double blockRange = metadata.getBlockRangeProvider().apply(mob, blockTarget, skillEntry);
                         if (blockRange > 0 && !mob.blockPosition().closerThan(blockTarget, blockRange)) continue;
                     }
                     combatContext = buildCombatContext(defaultTarget, blockTarget, selfHealthPercent, nearbyEnemyCount);
@@ -194,24 +195,24 @@ public class UseOrganSkillGoal extends Goal {
                 default -> combatContext = defaultContext;
             }
 
-            double weight = calculateWeight(metadata, combatContext);
+            double weight = calculateWeight(skillEntry, combatContext);
             if (weight > 0) {
-                weightedCandidates.add(new WeightedCandidate(candidate, weight));
+                weightedCandidates.add(new WeightedCandidate(skillEntry, weight));
             }
         }
         if (weightedCandidates.isEmpty()) {
-            selectedCandidate = null;
+            selectedSkillEntry = null;
             return false;
         }
 
-        selectedCandidate = weightedRandomSelect(weightedCandidates);
-        if (selectedCandidate == null) return false;
+        selectedSkillEntry = weightedRandomSelect(weightedCandidates);
+        if (selectedSkillEntry == null) return false;
         // 按权重降序保存候选（排除首选）用于 start() 重试，使重试优先尝试次优候选，权重相同时保持原顺序
         weightedCandidates.sort((a, b) -> Double.compare(b.weight(), a.weight()));
         availableCandidates.clear();
         for (WeightedCandidate weightedCandidate : weightedCandidates) {
-            if (weightedCandidate.candidate() == selectedCandidate) continue;
-            availableCandidates.add(weightedCandidate.candidate());
+            if (weightedCandidate.skillEntry() == selectedSkillEntry) continue;
+            availableCandidates.add(weightedCandidate.skillEntry());
         }
         return true;
     }
@@ -228,34 +229,34 @@ public class UseOrganSkillGoal extends Goal {
         int nearbyEnemyCount = countNearbyEnemies();
         ChestCavityData data = ChestCavityUtil.getData(mob);
 
-        // 先尝试首选候选（加权随机选出）
-        if (selectedCandidate != null && tryUseCandidate(selectedCandidate, data, selfHealthPercent, nearbyEnemyCount)) {
-            selectedCandidate = null;
+        // 先尝试首选技能条目（加权随机选出）
+        if (selectedSkillEntry != null && tryUseSkill(selectedSkillEntry, data, selfHealthPercent, nearbyEnemyCount)) {
+            selectedSkillEntry = null;
             availableCandidates.clear();
             return;
         }
         // 首选失败（或为 null），遍历其余候选重试
-        for (SkillCacheEntry candidate : availableCandidates) {
-            if (tryUseCandidate(candidate, data, selfHealthPercent, nearbyEnemyCount)) {
+        for (SkillCacheEntry skillEntry : availableCandidates) {
+            if (tryUseSkill(skillEntry, data, selfHealthPercent, nearbyEnemyCount)) {
                 break;
             }
         }
-        selectedCandidate = null;
+        selectedSkillEntry = null;
         availableCandidates.clear();
     }
 
     /**
      * 解析目标（实体/方块）→ null 守卫 → 执行技能 → 成功时设置冷却/刷新记忆/更新 lastUsedIntent。
      *
-     * @param candidate 要尝试的候选
-     * @param data      胸腔数据（由 start() 预计算传入，避免重试链重复查询）
+     * @param skillEntry 要尝试的技能条目
+     * @param data       胸腔数据（由 start() 预计算传入，避免重试链重复查询）
      * @return 技能是否执行成功
      */
-    private boolean tryUseCandidate(SkillCacheEntry candidate, ChestCavityData data, double selfHealthPercent, int nearbyEnemyCount) {
-        GoalSkillMetadata metadata = candidate.metadata();
+    private boolean tryUseSkill(SkillCacheEntry skillEntry, ChestCavityData data, double selfHealthPercent, int nearbyEnemyCount) {
+        GoalSkillMetadata metadata = skillEntry.metadata();
 
         // 解析实体目标
-        LivingEntity entityTarget = resolveEntityTarget(metadata);
+        LivingEntity entityTarget = resolveEntityTarget(metadata, skillEntry);
 
         // 目标 null 守卫：HAS_ENTITY_TARGET 技能在目标最终为 null 时跳过执行，避免下游 NPE
         if (entityTarget == null && metadata.getTargetRequirement() == GoalSkillTargetRequirement.HAS_ENTITY_TARGET) {
@@ -264,18 +265,18 @@ public class UseOrganSkillGoal extends Goal {
 
         // 解析方块目标
         BlockPos blockTarget = metadata.getBlockTargetResolver() != null
-                               ? metadata.getBlockTargetResolver().apply(mob)
+                               ? metadata.getBlockTargetResolver().apply(mob, skillEntry)
                                : null;
 
-        GoalCombatContext ctx = buildCombatContext(entityTarget, blockTarget, selfHealthPercent, nearbyEnemyCount);
+        GoalCombatContext combatContext = buildCombatContext(entityTarget, blockTarget, selfHealthPercent, nearbyEnemyCount);
 
-        ChestCavitySlotContext slotContext = ChestCavityUtil.createContext(data, candidate.slot(), candidate.stack());
+        ChestCavitySlotContext slotContext = ChestCavityUtil.createContext(data, skillEntry.slot(), skillEntry.stack());
 
-        boolean success = metadata.getUseSkill().useSkill(ctx, slotContext);
+        boolean success = metadata.getUseSkill().useSkill(combatContext, slotContext);
         if (!success) return false;
 
         // 技能成功且有目标 → 刷新记忆，被动生物的 lastHurtByMob 过期后，靠持续攻击保持记忆不超时
-        if (entityTarget != null && entityTarget.isAlive() && !entityTarget.isRemoved()) {
+        if (entityTarget != null && entityTarget != mob && entityTarget.isAlive() && !entityTarget.isRemoved()) {
             rememberedTarget = entityTarget;
             rememberedTargetTick = mob.tickCount;
         }
@@ -283,10 +284,10 @@ public class UseOrganSkillGoal extends Goal {
         if (metadata.getCooldownProvider() != null) {
             cooldown = metadata.getCooldownProvider().applyAsInt(slotContext);
         } else {
-            cooldown = ChestCavityUtil.getOrganCap(candidate.stack()).getCooldownTicks(slotContext);
+            cooldown = ChestCavityUtil.getOrganCap(skillEntry.stack()).getCooldownTicks(slotContext);
         }
         if (cooldown > 0) {
-            OrganSkillUtil.addCooldown(mob, candidate.stack(), cooldown);
+            OrganSkillUtil.addCooldown(mob, skillEntry.stack(), cooldown);
         }
         // lastUsedIntent 只在成功时更新，避免失败的技能也触发重复惩罚
         lastUsedIntent = metadata.getIntent();
@@ -300,7 +301,7 @@ public class UseOrganSkillGoal extends Goal {
      * @param tickCount 当前 tick
      */
     public void refreshTargetMemory(LivingEntity target, int tickCount) {
-        if (target != null && target.isAlive() && !target.isRemoved() && !GoalSkillTargetResolver.isOwnerTarget(mob, target)) {
+        if (target != null && target != mob && target.isAlive() && !target.isRemoved() && !GoalSkillTargetResolver.isOwnerTarget(mob, target)) {
             this.rememberedTarget = target;
             this.rememberedTargetTick = tickCount;
         }
@@ -329,9 +330,11 @@ public class UseOrganSkillGoal extends Goal {
         LivingEntity immediate = resolver.apply(mob);
 
         if (immediate != null && immediate.isAlive() && !immediate.isRemoved()) {
-            // resolver 有有效目标 → 刷新记忆
-            rememberedTarget = immediate;
-            rememberedTargetTick = mob.tickCount;
+            // 仅非自身目标刷新记忆，避免自伤污染记忆导致 Mob 攻击自己
+            if (immediate != mob) {
+                rememberedTarget = immediate;
+                rememberedTargetTick = mob.tickCount;
+            }
             return immediate;
         }
 
@@ -344,13 +347,14 @@ public class UseOrganSkillGoal extends Goal {
     /**
      * 解析技能的有效实体目标。
      *
-     * @param metadata 技能元数据
+     * @param metadata   技能元数据
+     * @param skillEntry 当前技能缓存条目
      * @return 有效目标实体，null 表示无目标
      */
-    private @Nullable LivingEntity resolveEntityTarget(GoalSkillMetadata metadata) {
-        Function<Mob, @Nullable LivingEntity> customResolver = metadata.getEntityTargetResolver();
+    private @Nullable LivingEntity resolveEntityTarget(GoalSkillMetadata metadata, SkillCacheEntry skillEntry) {
+        BiFunction<Mob, SkillCacheEntry, @Nullable LivingEntity> customResolver = metadata.getEntityTargetResolver();
         if (customResolver != null) {
-            LivingEntity custom = customResolver.apply(mob);
+            LivingEntity custom = customResolver.apply(mob, skillEntry);
             if (custom != null && custom.isAlive() && !custom.isRemoved()) {
                 return custom;
             }
@@ -362,10 +366,10 @@ public class UseOrganSkillGoal extends Goal {
     }
 
     /**
-     * 重建静态候选缓存
+     * 重建静态技能条目缓存
      */
     private void rebuildCache(ChestCavityData data) {
-        cachedCandidates.clear();
+        cachedSkillEntries.clear();
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (stack.isEmpty()) continue;
@@ -374,7 +378,7 @@ public class UseOrganSkillGoal extends Goal {
             if (metadata.isEmpty()) continue;
             // entityFilter 在构建缓存时就过滤（只依赖 mob 类型，不依赖运行时状态）
             if (!metadata.getEntityFilter().test(mob)) continue;
-            cachedCandidates.add(new SkillCacheEntry(i, stack, metadata));
+            cachedSkillEntries.add(new SkillCacheEntry(i, stack, metadata));
         }
         cachedChangeCount = data.getOrganChangeCount();
     }
@@ -419,7 +423,7 @@ public class UseOrganSkillGoal extends Goal {
 
         for (WeightedCandidate wc : weightedCandidates) {
             totalWeight += wc.weight();
-            weightedMap.put(totalWeight, wc.candidate());
+            weightedMap.put(totalWeight, wc.skillEntry());
         }
 
         if (totalWeight <= 0) return null;
@@ -428,44 +432,45 @@ public class UseOrganSkillGoal extends Goal {
         return entry != null ? entry.getValue() : null;
     }
 
-    private double calculateWeight(GoalSkillMetadata metadata, GoalCombatContext goalCombatContext) {
+    private double calculateWeight(SkillCacheEntry skillEntry, GoalCombatContext combatContext) {
+        GoalSkillMetadata metadata = skillEntry.metadata();
         GoalSkillWeightFunction weightOverride = metadata.getWeightOverride();
         if (weightOverride != null) {
-            return Math.max(0, weightOverride.calculate(mob, goalCombatContext));
+            return Math.max(0, weightOverride.calculate(mob, combatContext, skillEntry));
         }
 
-        boolean hasThreat = goalCombatContext.target() != null || goalCombatContext.nearbyEnemyCount() > 0;
+        boolean hasThreat = combatContext.target() != null || combatContext.nearbyEnemyCount() > 0;
 
         switch (metadata.getIntent()) {
             case ATTACK:
                 if (!hasThreat) return 0;
                 return 80
-                       + (goalCombatContext.hasLineOfSight() ? 20 : -40)
-                       + (goalCombatContext.target() != null ? (1 - goalCombatContext.targetHealthPercent()) * 40 : 0)
-                       + (goalCombatContext.lastUsedIntent() == GoalSkillIntent.ATTACK ? -30 : 0);
+                       + (combatContext.hasLineOfSight() ? 20 : -40)
+                       + (combatContext.target() != null ? (1 - combatContext.targetHealthPercent()) * 40 : 0)
+                       + (combatContext.lastUsedIntent() == GoalSkillIntent.ATTACK ? -30 : 0);
 
             case ATTACK_AOE:
-                if (goalCombatContext.nearbyEnemyCount() == 0) return 0;
+                if (combatContext.nearbyEnemyCount() == 0) return 0;
                 return 60
-                       + goalCombatContext.nearbyEnemyCount() * 15
-                       + (goalCombatContext.target() != null && goalCombatContext.distanceToTarget() < 4 ? 20 : 0)
-                       + (goalCombatContext.lastUsedIntent() == GoalSkillIntent.ATTACK_AOE ? -40 : 0);
+                       + combatContext.nearbyEnemyCount() * 15
+                       + (combatContext.target() != null && combatContext.distanceToTarget() < 4 ? 20 : 0)
+                       + (combatContext.lastUsedIntent() == GoalSkillIntent.ATTACK_AOE ? -40 : 0);
 
             case DEFENSE:
                 if (!hasThreat) return 0;
-                double healthFactor = 1 - goalCombatContext.selfHealthPercent();
+                double healthFactor = 1 - combatContext.selfHealthPercent();
                 return 1
                        + healthFactor * healthFactor * healthFactor * 200
-                       + healthFactor * (goalCombatContext.target() != null ? goalCombatContext.targetHealthPercent() * 30 : 0)
-                       + (goalCombatContext.lastUsedIntent() == GoalSkillIntent.DEFENSE ? -50 : 0);
+                       + healthFactor * (combatContext.target() != null ? combatContext.targetHealthPercent() * 30 : 0)
+                       + (combatContext.lastUsedIntent() == GoalSkillIntent.DEFENSE ? -50 : 0);
 
             case RECOVERY:
                 // 血量越低惩罚越小（低血量时即使危险也该恢复）
                 return -15
-                       + (1 - goalCombatContext.selfHealthPercent()) * 200
-                       + (goalCombatContext.nearbyEnemyCount() > 0 && goalCombatContext.target() != null && goalCombatContext.distanceToTarget() < 5
-                          ? -goalCombatContext.selfHealthPercent() * 50 : 0)
-                       + (goalCombatContext.lastUsedIntent() == GoalSkillIntent.RECOVERY ? -50 : 0);
+                       + (1 - combatContext.selfHealthPercent()) * 200
+                       + (combatContext.nearbyEnemyCount() > 0 && combatContext.target() != null && combatContext.distanceToTarget() < 5
+                          ? -combatContext.selfHealthPercent() * 50 : 0)
+                       + (combatContext.lastUsedIntent() == GoalSkillIntent.RECOVERY ? -50 : 0);
 
             case BLOCK_INTERACT:
                 return hasThreat ? 2 : 10;

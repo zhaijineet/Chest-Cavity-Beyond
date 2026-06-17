@@ -37,6 +37,16 @@ import java.util.List;
  */
 public class OrganSkillUtil {
     /**
+     * 获取用于计算发射点偏移的有效眼高（含保底下限）。
+     *
+     * @param entity 实体
+     * @return 不低于 0.5F 的眼高
+     */
+    public static float effectiveEyeHeight(LivingEntity entity) {
+        return Math.max(entity.getEyeHeight(), 0.5F);
+    }
+
+    /**
      * 尝试为实体添加物品冷却
      *
      * @param entity   实体
@@ -177,12 +187,12 @@ public class OrganSkillUtil {
     public static boolean silk(LivingEntity entity, Vec3 direction) {
         Level level = entity.level();
         level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.EGG_THROW,
-                SoundSource.PLAYERS,
-                0.5F,
-                0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
+            null,
+            entity.blockPosition(),
+            SoundEvents.EGG_THROW,
+            SoundSource.PLAYERS,
+            0.5F,
+            0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
         ThrownCobweb thrownCobweb = new ThrownCobweb(entity, level);
         thrownCobweb.shoot(direction.x, direction.y, direction.z, 1, 1);
@@ -199,16 +209,18 @@ public class OrganSkillUtil {
     public static boolean spit(LivingEntity entity, Vec3 direction) {
         Level level = entity.level();
         level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.LLAMA_SPIT,
-                entity.getSoundSource(),
-                1.0F,
-                1.0F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F
+            null,
+            entity.blockPosition(),
+            SoundEvents.LLAMA_SPIT,
+            entity.getSoundSource(),
+            1.0F,
+            1.0F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F
         );
         LlamaSpit llamaspit = new LlamaSpit(EntityType.LLAMA_SPIT, level);
         llamaspit.setOwner(entity);
-        llamaspit.setPos(entity.getX(), entity.getEyeY() - 0.5, entity.getZ());
+        float eyeHeight = effectiveEyeHeight(entity);
+        // Y偏移 0.31 ≈ 原0.5格 / 玩家眼高1.62
+        llamaspit.setPos(entity.getX(), entity.getEyeY() - eyeHeight * 0.31F, entity.getZ());
         llamaspit.shoot(direction.x, direction.y, direction.z, 1, 1);
         level.addFreshEntity(llamaspit);
         return true;
@@ -223,15 +235,21 @@ public class OrganSkillUtil {
     public static boolean snowball(LivingEntity entity, Vec3 direction) {
         Level level = entity.level();
         level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.SNOW_GOLEM_SHOOT,
-                entity.getSoundSource(),
-                1,
-                0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
+            null,
+            entity.blockPosition(),
+            SoundEvents.SNOW_GOLEM_SHOOT,
+            entity.getSoundSource(),
+            1,
+            0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
         Snowball snowball = new Snowball(level, entity);
-        snowball.setPos(entity.getX() + direction.x / 2, entity.getEyeY() - 0.2, entity.getZ() + direction.z / 2);
+        float eyeHeight = effectiveEyeHeight(entity);
+        // 水平0.31≈原0.5格、Y0.12≈原0.2格（均 / 玩家眼高1.62）
+        snowball.setPos(
+            entity.getX() + direction.x * 0.31F * eyeHeight,
+            entity.getEyeY() - eyeHeight * 0.12F,
+            entity.getZ() + direction.z * 0.31F * eyeHeight
+        );
         snowball.shoot(direction.x, direction.y, direction.z, 1.6F, 12);
         level.addFreshEntity(snowball);
         return true;
@@ -248,7 +266,9 @@ public class OrganSkillUtil {
         Level level = entity.level();
         level.levelEvent(null, 1016, entity.blockPosition(), 0);
         LargeFireball largefireball = new LargeFireball(level, entity, direction, (int) ghastly);
-        largefireball.setPos(entity.getX(), entity.getEyeY() - 0.9, entity.getZ());
+        float eyeHeight = effectiveEyeHeight(entity);
+        // Y偏移 0.56 ≈ 原0.9格 / 玩家眼高1.62
+        largefireball.setPos(entity.getX(), entity.getEyeY() - eyeHeight * 0.56F, entity.getZ());
         level.addFreshEntity(largefireball);
         return true;
     }
@@ -256,9 +276,9 @@ public class OrganSkillUtil {
     /**
      * 连续发射小火球（通过 Task）
      *
-     * @param data          胸腔数据
-     * @param count         发射数量
-     * @param target        目标实体，null 时沿视线发射（由 Task 内部处理）
+     * @param data   胸腔数据
+     * @param count  发射数量
+     * @param target 目标实体，null 时沿视线发射（由 Task 内部处理）
      */
     public static boolean smallFireball(ChestCavityData data, int count, @Nullable LivingEntity target) {
         if (count <= 0) return false;
@@ -276,7 +296,13 @@ public class OrganSkillUtil {
         Level level = entity.level();
         level.levelEvent(null, 1024, entity.blockPosition(), 0);
         WitherSkull witherSkull = new WitherSkull(level, entity, direction);
-        witherSkull.setPos(entity.getX() + direction.x, entity.getEyeY() - 0.5, entity.getZ() + direction.z);
+        float eyeHeight = effectiveEyeHeight(entity);
+        // 水平0.62≈原1.0格、Y0.31≈原0.5格（均 / 玩家眼高1.62）
+        witherSkull.setPos(
+            entity.getX() + direction.x * 0.62F * eyeHeight,
+            entity.getEyeY() - eyeHeight * 0.31F,
+            entity.getZ() + direction.z * 0.62F * eyeHeight
+        );
         level.addFreshEntity(witherSkull);
         return true;
     }
@@ -291,7 +317,9 @@ public class OrganSkillUtil {
         Level level = entity.level();
         level.levelEvent(null, 1017, entity.blockPosition(), 0);
         DragonFireball dragonfireball = new DragonFireball(level, entity, direction);
-        dragonfireball.setPos(entity.getX(), entity.getEyeY() - 0.6, entity.getZ());
+        float eyeHeight = effectiveEyeHeight(entity);
+        // Y偏移 0.37 ≈ 原0.6格 / 玩家眼高1.62
+        dragonfireball.setPos(entity.getX(), entity.getEyeY() - eyeHeight * 0.37F, entity.getZ());
         dragonfireball.shoot(direction.x, direction.y, direction.z, 1, 1);
         level.addFreshEntity(dragonfireball);
         return true;
@@ -306,14 +334,20 @@ public class OrganSkillUtil {
     public static boolean windCharge(LivingEntity entity, Vec3 direction) {
         Level level = entity.level();
         level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.BREEZE_SHOOT,
-                entity.getSoundSource(),
-                1.5F,
-                1.0F
+            null,
+            entity.blockPosition(),
+            SoundEvents.BREEZE_SHOOT,
+            entity.getSoundSource(),
+            1.5F,
+            1.0F
         );
-        WindCharge windcharge = new WindCharge(level, entity.position().x(), entity.getEyePosition().y(), entity.position().z(), entity.getDeltaMovement());
+        WindCharge windcharge = new WindCharge(
+            level,
+            entity.position().x(),
+            entity.getEyePosition().y(),
+            entity.position().z(),
+            entity.getDeltaMovement()
+        );
         windcharge.setOwner(entity);
         windcharge.shoot(direction.x, direction.y, direction.z, 1.5F, 1);
         level.addFreshEntity(windcharge);
@@ -329,12 +363,12 @@ public class OrganSkillUtil {
     public static void shulkerBullet(LivingEntity entity, Entity target) {
         Level level = entity.level();
         level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.SHULKER_SHOOT,
-                entity.getSoundSource(),
-                2.0F,
-                (level.random.nextFloat() - level.random.nextFloat()) * 0.2F + 1.0F
+            null,
+            entity.blockPosition(),
+            SoundEvents.SHULKER_SHOOT,
+            entity.getSoundSource(),
+            2.0F,
+            (level.random.nextFloat() - level.random.nextFloat()) * 0.2F + 1.0F
         );
         level.addFreshEntity(new ShulkerBullet(level, entity, target, Direction.UP.getAxis()));
     }
@@ -352,25 +386,25 @@ public class OrganSkillUtil {
         Vec3 to = from.add(direction.scale(sonicBoomDist));
         AABB searchBox = new AABB(from, to).inflate(1.0);
         List<LivingEntity> targets = level.getEntitiesOfClass(
-                LivingEntity.class,
-                searchBox,
-                target -> {
-                    if (target == entity) return false;
-                    Vec3 targetPos = target.position().add(0, target.getBbHeight() / 2, 0);
-                    Vec3 relative = targetPos.subtract(from);
-                    double distance = relative.length();
-                    if (distance > sonicBoomDist) return false;
-                    Vec3 projected = from.add(direction.scale(distance));
-                    return projected.distanceTo(targetPos) < 1.5;
-                }
+            LivingEntity.class,
+            searchBox,
+            target -> {
+                if (target == entity) return false;
+                Vec3 targetPos = target.position().add(0, target.getBbHeight() / 2, 0);
+                Vec3 relative = targetPos.subtract(from);
+                double distance = relative.length();
+                if (distance > sonicBoomDist) return false;
+                Vec3 projected = from.add(direction.scale(distance));
+                return projected.distanceTo(targetPos) < 1.5;
+            }
         );
         level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.WARDEN_SONIC_BOOM,
-                entity.getSoundSource(),
-                3.0F,
-                1.0F
+            null,
+            entity.blockPosition(),
+            SoundEvents.WARDEN_SONIC_BOOM,
+            entity.getSoundSource(),
+            3.0F,
+            1.0F
         );
         if (level instanceof ServerLevel serverLevel) {
             for (int i = 1; i < sonicBoomDist; i++) {

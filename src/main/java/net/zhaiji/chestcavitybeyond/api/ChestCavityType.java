@@ -504,7 +504,7 @@ public class ChestCavityType {
      */
     public ChestCavityType addConversion(ResourceLocation targetTypeId, Item from, Item to) {
         conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
-            .put(ctx -> ctx.stack().is(from), ctx -> to.getDefaultInstance());
+            .put(context -> context.stack().is(from), context -> to.getDefaultInstance());
         return this;
     }
 
@@ -518,7 +518,7 @@ public class ChestCavityType {
      */
     public ChestCavityType addConversion(ResourceLocation targetTypeId, Item from, ItemStack to) {
         conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
-            .put(ctx -> ctx.stack().is(from), ctx -> to.copy());
+            .put(context -> context.stack().is(from), context -> to.copy());
         return this;
     }
 
@@ -532,7 +532,7 @@ public class ChestCavityType {
      */
     public ChestCavityType addConversion(ResourceLocation targetTypeId, Predicate<ChestCavitySlotContext> condition, Item to) {
         conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
-            .put(condition, ctx -> to.getDefaultInstance());
+            .put(condition, context -> to.getDefaultInstance());
         return this;
     }
 
@@ -546,7 +546,7 @@ public class ChestCavityType {
      */
     public ChestCavityType addConversion(ResourceLocation targetTypeId, Predicate<ChestCavitySlotContext> condition, ItemStack to) {
         conversionMap.computeIfAbsent(targetTypeId, k -> new HashMap<>())
-            .put(condition, ctx -> to.copy());
+            .put(condition, context -> to.copy());
         return this;
     }
 

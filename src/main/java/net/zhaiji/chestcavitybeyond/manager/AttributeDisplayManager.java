@@ -61,12 +61,12 @@ public class AttributeDisplayManager {
             InitAttribute.NERVES, 30, entity -> {
                 ChestCavityData data = ChestCavityUtil.getData(entity);
                 double diff = data.getDifferenceValue(InitAttribute.NERVES);
-                double atkSpeedFactor = MathUtil.getLog10Scale(diff);
-                double atkSpeedPercent = (1 + (diff >= 0 ? atkSpeedFactor : -atkSpeedFactor)) * 100;
+                double attackSpeedFactor = MathUtil.getLog10Scale(diff);
+                double attackSpeedPercent = (1 + (diff >= 0 ? attackSpeedFactor : -attackSpeedFactor)) * 100;
                 double movePercent = data.getCurrentValue(InitAttribute.NERVES) <= 0 ? 0 : (1 + diff / 10.0) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.NERVES),
-                    TooltipUtil.formatAttributeValue(atkSpeedPercent),
+                    TooltipUtil.formatAttributeValue(attackSpeedPercent),
                     TooltipUtil.formatAttributeValue(movePercent)
                 );
             }

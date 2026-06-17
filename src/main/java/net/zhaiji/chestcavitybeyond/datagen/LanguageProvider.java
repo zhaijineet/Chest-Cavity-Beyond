@@ -723,7 +723,6 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_ANIMAL, "Small Animal");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_HERBIVORE, "Small Herbivore");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_CARNIVORE, "Small Carnivore");
-        addChestCavityTypeName(ChestCavityTypeManager.AXOLOTL, "Axolotl");
         addChestCavityTypeName(ChestCavityTypeManager.TURTLE, "Turtle");
         addChestCavityTypeName(ChestCavityTypeManager.FROG, "Frog");
         addChestCavityTypeName(ChestCavityTypeManager.RABBIT, "Rabbit");
@@ -1444,7 +1443,6 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_ANIMAL, "小型动物");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_HERBIVORE, "小型食草动物");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_CARNIVORE, "小型食肉动物");
-        addChestCavityTypeName(ChestCavityTypeManager.AXOLOTL, "美西螈");
         addChestCavityTypeName(ChestCavityTypeManager.TURTLE, "海龟");
         addChestCavityTypeName(ChestCavityTypeManager.FROG, "青蛙");
         addChestCavityTypeName(ChestCavityTypeManager.RABBIT, "兔子");

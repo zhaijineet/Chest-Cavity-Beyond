@@ -75,14 +75,14 @@ public class SableCompat {
             new ClipContext(traverseFrom, plotTo, ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE, CollisionContext.empty()
             ),
-            (ctx, pos) -> {
+            (context, pos) -> {
                 if (!aimingUp) {
                     BlockPos below = TeleportUtil.traversalCheck(level, pos.below());
                     if (below != null) return below;
                 }
                 return TeleportUtil.traversalCheck(level, pos);
             },
-            ctx -> failPos
+            context -> failPos
         );
 
         if (result != failPos) {

@@ -6,7 +6,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -38,6 +37,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
+import net.zhaiji.chestcavitybeyond.compat.CompatChestCavityManager;
 import net.zhaiji.chestcavitybeyond.api.TargetResolver;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.event.ChestCavityRegisterCompletedEvent;
@@ -166,7 +166,7 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.VEX, ChestCavityTypeManager.SMALL_ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.ARMADILLO, ChestCavityTypeManager.SMALL_ANIMAL);
         // 美西螈
-        ChestCavityTypeManager.registerEntity(EntityType.AXOLOTL, ChestCavityTypeManager.AXOLOTL);
+        ChestCavityTypeManager.registerEntity(EntityType.AXOLOTL, ChestCavityTypeManager.AQUATIC);
         // 抗火生物
         ChestCavityTypeManager.registerEntity(EntityType.PIGLIN, ChestCavityTypeManager.FIREPROOF);
         ChestCavityTypeManager.registerEntity(EntityType.PIGLIN_BRUTE, ChestCavityTypeManager.FIREPROOF);
@@ -241,6 +241,9 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.SNOW_GOLEM, ChestCavityTypeManager.SNOW_GOLEM);
         // 盔甲架
         ChestCavityTypeManager.registerEntity(EntityType.ARMOR_STAND, ChestCavityTypeManager.ARMOR_STAND);
+
+        // 第三方模组胸腔类型兼容注册
+        CompatChestCavityManager.register();
 
         ModLoader.postEvent(new ChestCavityRegisterEvent());
 
@@ -418,7 +421,7 @@ public class CommonEventHandler {
             event.setCanceled(true);
         }
         // Mob 受伤时主动刷新 Goal 技能目标记忆
-        if (attacker != null && attacker.isAlive() && entity instanceof Mob mob) {
+        if (attacker != null && attacker != entity && attacker.isAlive() && entity instanceof Mob mob) {
             UseOrganSkillGoal goal = ChestCavityUtil.getData(mob).getSkillGoal();
             if (goal != null) {
                 goal.refreshTargetMemory(attacker, mob.tickCount);
