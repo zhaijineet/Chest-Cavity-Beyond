@@ -26,6 +26,8 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
                         InitEnchantment.PRUDENT_SURGERY,
                         InitEnchantment.HYDRAULIC_CLAMP
                 );
+        tag(EnchantmentTags.TREASURE)
+                .add(InitEnchantment.PRIMAL_REVERSION);
 //        tag(EnchantmentTags.TRADEABLE)
 //                .add(
 //                        InitEnchantment.TELEOPERATION,

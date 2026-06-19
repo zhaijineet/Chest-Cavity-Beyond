@@ -7,6 +7,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zhaiji.chestcavitybeyond.event.CommonEventManager;
+import net.zhaiji.chestcavitybeyond.register.InitLootModifier;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitCreativeModeTab;
@@ -33,6 +34,7 @@ public class ChestCavityBeyond {
         InitMenuType.MENU_TYPE.register(modEventBus);
         InitEffect.EFFECT.register(modEventBus);
         InitRecipe.RECIPE_SERIALIZERS.register(modEventBus);
+        InitLootModifier.LOOT_MODIFIER.register(modEventBus);
 
         // 事件注册管理
         CommonEventManager.init(modEventBus, NeoForge.EVENT_BUS);

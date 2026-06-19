@@ -409,7 +409,9 @@ public class CommonEventHandler {
         boolean isProjectile = source.is(DamageTypeTags.IS_PROJECTILE);
         boolean isWaterPotion = source.getDirectEntity() instanceof ThrownPotion potion
                                 && potion.getItem().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER);
-        if (isProjectile || isWaterPotion) {
+        // 注意：isDamageSourceBlocked 仅检测原版及使用原版格挡逻辑的盾牌格挡；
+        // 其他 mod 若自定义格挡机制（绕过 isDamageSourceBlocked），此处检测可能失效。
+        if ((isProjectile || isWaterPotion) && !entity.isDamageSourceBlocked(source)) {
             double ender = data.getCurrentValue(InitAttribute.ENDER);
             if (data.getCurrentValue(InitAttribute.PROJECTILE_DODGE) > 0 && ender > 0) {
                 OrganSkillUtil.randomTeleport(entity, ender);

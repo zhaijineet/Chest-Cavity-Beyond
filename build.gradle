@@ -182,8 +182,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    // 苹果皮
-    localRuntime "squeek.appleskin:appleskin-neoforge:mc1.21-3.0.7"
+    // 苹果皮（需要引用非 api 类 FoodHelper 用于 Mixin，改用完整 jar）
+    compileOnly "squeek.appleskin:appleskin-neoforge:mc1.21-3.0.9"
+    runtimeOnly "squeek.appleskin:appleskin-neoforge:mc1.21-3.0.9"
     // JEI
     compileOnly("mezz.jei:jei-1.21.1-neoforge-api:19.27.0.340")
     runtimeOnly("mezz.jei:jei-1.21.1-neoforge:19.27.0.340")

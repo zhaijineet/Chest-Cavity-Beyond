@@ -17,6 +17,7 @@
     "EnderManMixin",
     "EnderManMixin$EndermanLookForPlayerGoalMixin",
     "FoodDataMixin",
+    "appleskin.FoodHelperMixin",
     "GhastShootFireballGoalMixin",
     "GuardianMixin",
     "GuardianMixin$GuardianAttackGoalMixin",

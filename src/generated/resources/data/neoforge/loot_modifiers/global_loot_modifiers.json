@@ -1,0 +1,11 @@
+{
+  "entries": [
+    "chestcavitybeyond:primal_reversion_archaeology_desert_well",
+    "chestcavitybeyond:primal_reversion_archaeology_desert_pyramid",
+    "chestcavitybeyond:primal_reversion_archaeology_trail_ruins_common",
+    "chestcavitybeyond:primal_reversion_archaeology_trail_ruins_rare",
+    "chestcavitybeyond:primal_reversion_archaeology_ocean_ruin_warm",
+    "chestcavitybeyond:primal_reversion_archaeology_ocean_ruin_cold"
+  ],
+  "replace": false
+}

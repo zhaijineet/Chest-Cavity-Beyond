@@ -1,0 +1,14 @@
+{
+  "type": "chestcavitybeyond:replace_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:archaeology/desert_pyramid"
+    },
+    {
+      "chance": 0.25,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "table": "chestcavitybeyond:archaeology/primal_reversion_enchanted_book"
+}

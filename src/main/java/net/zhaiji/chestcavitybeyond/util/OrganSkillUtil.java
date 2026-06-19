@@ -17,6 +17,7 @@ import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.entity.projectile.windcharge.WindCharge;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -65,6 +66,24 @@ public class OrganSkillUtil {
     }
 
     /**
+     * 尝试为实体添加物品冷却
+     *
+     * @param entity   实体
+     * @param item     冷却物品
+     * @param cooldown 冷却时间
+     */
+    public static void addCooldown(LivingEntity entity, Item item, int cooldown) {
+        if (entity instanceof Player player) {
+            if (!player.isCreative()) {
+                player.getCooldowns().addCooldown(item, cooldown);
+            }
+        } else {
+            ChestCavityData data = ChestCavityUtil.getData(entity);
+            data.getItemCooldowns().addCooldown(item, cooldown);
+        }
+    }
+
+    /**
      * 检测实体的此物品是否正在冷却
      *
      * @param entity 实体
@@ -79,7 +98,20 @@ public class OrganSkillUtil {
         return data.getItemCooldowns().isOnCooldown(stack.getItem());
     }
 
-    // ==================== 方向 / 视线工具 ====================
+    /**
+     * 检测实体的此物品是否正在冷却
+     *
+     * @param entity 实体
+     * @param item   物品
+     * @return 是否在冷却
+     */
+    public static boolean hasCooldown(LivingEntity entity, Item item) {
+        if (entity instanceof Player player) {
+            return !player.isCreative() && player.getCooldowns().isOnCooldown(item);
+        }
+        ChestCavityData data = ChestCavityUtil.getData(entity);
+        return data.getItemCooldowns().isOnCooldown(item);
+    }
 
     /**
      * 计算从实体眼睛位置指向目标的方向向量（归一化）
@@ -108,8 +140,6 @@ public class OrganSkillUtil {
         }
         return null;
     }
-
-    // ==================== 传送类 ====================
 
     /**
      * 沿着视线方向传送

@@ -22,10 +22,13 @@ public class InitEnchantment {
 
     public static final ResourceKey<Enchantment> HYDRAULIC_CLAMP = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("hydraulic_clamp"));
 
+    public static final ResourceKey<Enchantment> PRIMAL_REVERSION = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("primal_reversion"));
+
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
 
         HolderSet<Item> chestOpeners = itemLookup.getOrThrow(ItemTagManager.CHEST_OPENERS);
+        HolderSet<Item> organs = itemLookup.getOrThrow(ItemTagManager.ORGANS);
 
         register(
                 context,
@@ -93,6 +96,21 @@ public class InitEnchantment {
                                 .setMinCost(1, 11)
                                 .setMaxCost(12, 11)
                                 .setMaxLevel(5)
+                                .build()
+                )
+        );
+
+        register(
+                context,
+                PRIMAL_REVERSION,
+                Enchantment.enchantment(
+                        EnchantmentDefinitionBuilder.builder()
+                                .setSupportedItems(organs)
+                                .setWeight(1)
+                                .setMaxLevel(1)
+                                .setMinCost(10)
+                                .setMaxCost(25)
+                                .setAnvilCost(4)
                                 .build()
                 )
         );

@@ -45,72 +45,90 @@ public class MixinUtil {
      * @param foodProperties 食物属性
      */
     public static void eat(FoodData foodData, FoodProperties foodProperties) {
-        IFoodData iFoodData = (IFoodData) foodData;
-        ChestCavityData data = iFoodData.getChestCavityData();
-        ItemStack food = iFoodData.getFood();
+        IFoodData foodDataAccessor = (IFoodData) foodData;
+        ChestCavityData chestCavityData = foodDataAccessor.getChestCavityData();
+        ItemStack food = foodDataAccessor.getFood();
 
-        int foodLevel = foodProperties.nutrition();
-        float saturation = foodProperties.saturation();
-        float saturationAdd = 0;
-        boolean isPoisoning = food.is(Tags.Items.FOODS_FOOD_POISONING);
-        boolean isMeat = food.is(ItemTags.MEAT);
+        FoodProperties actualFoodProperties = calculateActualFood(foodProperties, food, chestCavityData);
+        foodData.add(actualFoodProperties.nutrition(), actualFoodProperties.saturation());
+        foodDataAccessor.setFood(ItemStack.EMPTY);
+    }
 
-        if (data.getCurrentValue(InitAttribute.DIGESTION) <= 0
-            && data.getCurrentValue(InitAttribute.CARNIVOROUS_DIGESTION) <= 0
-            && data.getCurrentValue(InitAttribute.HERBIVOROUS_DIGESTION) <= 0
-            && (!isPoisoning || data.getCurrentValue(InitAttribute.SCAVENGER_DIGESTION) <= 0)
+    /**
+     * 根据胸腔属性计算食物实际恢复的饥饿值和饱和度。
+     */
+    public static FoodProperties calculateActualFood(
+        FoodProperties originalFoodProperties, ItemStack foodStack, ChestCavityData chestCavityData
+    ) {
+        int foodLevel = originalFoodProperties.nutrition();
+        float saturation = originalFoodProperties.saturation();
+        float additionalSaturation = 0;
+        boolean isPoisoning = foodStack.is(Tags.Items.FOODS_FOOD_POISONING);
+        boolean isMeat = foodStack.is(ItemTags.MEAT);
+
+        if (chestCavityData.getCurrentValue(InitAttribute.DIGESTION) <= 0
+            && chestCavityData.getCurrentValue(InitAttribute.CARNIVOROUS_DIGESTION) <= 0
+            && chestCavityData.getCurrentValue(InitAttribute.HERBIVOROUS_DIGESTION) <= 0
+            && (!isPoisoning || chestCavityData.getCurrentValue(InitAttribute.SCAVENGER_DIGESTION) <= 0)
         ) {
             foodLevel = 0;
         }
-        if (data.getCurrentValue(InitAttribute.NUTRITION) <= 0
-            && data.getCurrentValue(InitAttribute.CARNIVOROUS_NUTRITION) <= 0
-            && data.getCurrentValue(InitAttribute.HERBIVOROUS_NUTRITION) <= 0
-            && (!isPoisoning || data.getCurrentValue(InitAttribute.SCAVENGER_NUTRITION) <= 0)
+        if (chestCavityData.getCurrentValue(InitAttribute.NUTRITION) <= 0
+            && chestCavityData.getCurrentValue(InitAttribute.CARNIVOROUS_NUTRITION) <= 0
+            && chestCavityData.getCurrentValue(InitAttribute.HERBIVOROUS_NUTRITION) <= 0
+            && (!isPoisoning || chestCavityData.getCurrentValue(InitAttribute.SCAVENGER_NUTRITION) <= 0)
         ) {
             saturation = 0;
         }
 
-        double digestion = data.getDifferenceValue(InitAttribute.DIGESTION);
-        double carnivorousDigestion = data.getDifferenceValue(InitAttribute.CARNIVOROUS_DIGESTION);
-        double herbivorousDigestion = data.getDifferenceValue(InitAttribute.HERBIVOROUS_DIGESTION);
-        double scavengerDigestion = data.getDifferenceValue(InitAttribute.SCAVENGER_DIGESTION);
+        double digestion = chestCavityData.getDifferenceValue(InitAttribute.DIGESTION);
+        double carnivorousDigestion = chestCavityData.getDifferenceValue(InitAttribute.CARNIVOROUS_DIGESTION);
+        double herbivorousDigestion = chestCavityData.getDifferenceValue(InitAttribute.HERBIVOROUS_DIGESTION);
+        double scavengerDigestion = chestCavityData.getDifferenceValue(InitAttribute.SCAVENGER_DIGESTION);
 
-        double nutrition = data.getDifferenceValue(InitAttribute.NUTRITION);
-        double carnivorousNutrition = data.getDifferenceValue(InitAttribute.CARNIVOROUS_NUTRITION);
-        double herbivorousNutrition = data.getDifferenceValue(InitAttribute.HERBIVOROUS_NUTRITION);
-        double scavengerNutrition = data.getDifferenceValue(InitAttribute.SCAVENGER_NUTRITION);
+        double nutrition = chestCavityData.getDifferenceValue(InitAttribute.NUTRITION);
+        double carnivorousNutrition = chestCavityData.getDifferenceValue(InitAttribute.CARNIVOROUS_NUTRITION);
+        double herbivorousNutrition = chestCavityData.getDifferenceValue(InitAttribute.HERBIVOROUS_NUTRITION);
+        double scavengerNutrition = chestCavityData.getDifferenceValue(InitAttribute.SCAVENGER_NUTRITION);
 
-        double digestionDiff = isMeat
-                               ? digestion + carnivorousDigestion
-                               : digestion + herbivorousDigestion;
-        double nutritionDiff = isMeat
-                               ? nutrition + carnivorousNutrition
-                               : nutrition + herbivorousNutrition;
+        double digestionDifference = isMeat
+                                      ? digestion + carnivorousDigestion
+                                      : digestion + herbivorousDigestion;
+        double nutritionDifference = isMeat
+                                      ? nutrition + carnivorousNutrition
+                                      : nutrition + herbivorousNutrition;
 
         if (isPoisoning) {
-            digestionDiff = digestionDiff + scavengerDigestion;
-            nutritionDiff = nutritionDiff + scavengerNutrition;
+            digestionDifference = digestionDifference + scavengerDigestion;
+            nutritionDifference = nutritionDifference + scavengerNutrition;
             // 有毒食物额外加饱和
-            for (FoodProperties.PossibleEffect possibleEffect : foodProperties.effects()) {
+            for (FoodProperties.PossibleEffect possibleEffect : originalFoodProperties.effects()) {
                 if (((IMobEffectInstance) possibleEffect.effect()).isHarmful()) {
-                    saturationAdd += (float) (possibleEffect.probability() * scavengerNutrition);
+                    additionalSaturation += (float) (possibleEffect.probability() * scavengerNutrition);
                 }
             }
         }
-        foodLevel = (int) (foodLevel * MathUtil.getDirectScale(digestionDiff));
+        foodLevel = (int) (foodLevel * MathUtil.getDirectScale(digestionDifference));
         // 正数时，应该小心增加，负数时，应该大胆减少
-        nutritionDiff = nutritionDiff > 0 ? nutritionDiff / 4 : nutritionDiff;
-        saturation = (float) (saturation * MathUtil.getDirectScale(nutritionDiff) + saturationAdd);
+        nutritionDifference = nutritionDifference > 0 ? nutritionDifference / 4 : nutritionDifference;
+        saturation = (float) (saturation * MathUtil.getDirectScale(nutritionDifference) + additionalSaturation);
 
         foodLevel = Math.max(0, foodLevel);
         saturation = Math.max(0, saturation);
 
-        foodData.add(foodLevel, saturation);
-        iFoodData.setFood(ItemStack.EMPTY);
+        // FoodProperties 是 record，直接构造，避免 Builder.saturationByModifier 转换 saturation
+        return new FoodProperties(
+            foodLevel,
+            saturation,
+            originalFoodProperties.canAlwaysEat(),
+            originalFoodProperties.eatSeconds(),
+            originalFoodProperties.usingConvertsTo(),
+            originalFoodProperties.effects()
+        );
     }
 
     /**
-     * 处理新陈代谢和光合作用逻辑
+     * 处理光合作用逻辑
      * <p>
      * 通过 {@link IFoodData} 接口访问 FoodData 内部字段和缓存
      * </p>
@@ -118,28 +136,11 @@ public class MixinUtil {
      * @param foodData 食物数据
      * @param player   玩家
      */
-    public static void tickMetabolism(FoodData foodData, Player player) {
+    public static void tickPhotosynthesis(FoodData foodData, Player player) {
         IFoodData iFoodData = (IFoodData) foodData;
         ChestCavityData data = iFoodData.getChestCavityData();
         int foodLevel = foodData.getFoodLevel();
 
-        // 新陈代谢逻辑
-        double metabolism = data.getDifferenceValue(InitAttribute.METABOLISM);
-        if (metabolism != 0 && (foodLevel >= 18 || foodLevel <= 0)) {
-            double addTimer = MathUtil.getDirectScale(metabolism);
-            double remainder = iFoodData.getMetabolismRemainder();
-            if (metabolism > 0) {
-                remainder += addTimer;
-            } else {
-                remainder -= 1 - addTimer;
-            }
-            int timerAdd = (int) remainder;
-            remainder %= 1;
-            iFoodData.setMetabolismRemainder(remainder);
-            iFoodData.setTickTimer(iFoodData.getTickTimer() + timerAdd);
-        }
-
-        // 光合作用逻辑
         double photosynthesis = data.getCurrentValue(InitAttribute.PHOTOSYNTHESIS);
         Level level = player.level();
         // 白天且能看见天空时
@@ -156,6 +157,131 @@ public class MixinUtil {
             }
             iFoodData.setPhotosynthesisTimer(photosynthesisTimer);
         }
+    }
+
+    /**
+     * 获取新陈代谢倍率。
+     */
+    public static double getMetabolismScale(ChestCavityData data) {
+        if (data == null) return 1;
+        return MathUtil.getDirectScale(data.getDifferenceValue(InitAttribute.METABOLISM));
+    }
+
+    /**
+     * 根据新陈代谢倍率修改原版自然回血/饥饿伤害阈值。
+     */
+    public static int modifyMetabolismThreshold(int original, ChestCavityData data) {
+        double scale = getMetabolismScale(data);
+        return Math.max(1, (int) Math.ceil(original / scale));
+    }
+
+    /**
+     * 获取阈值降低至1tick后，超出的新陈代谢倍率。
+     */
+    public static double getMetabolismOverflowScale(ChestCavityData data, double originalThreshold) {
+        double scale = getMetabolismScale(data);
+        return scale > originalThreshold ? scale / originalThreshold : 1;
+    }
+
+    /**
+     * 将阈值降低至1tick后超出的新陈代谢倍率应用到单次效果量。
+     */
+    public static float modifyMetabolismOverflowAmount(float amount, ChestCavityData data, double originalThreshold) {
+        return (float) (amount * getMetabolismOverflowScale(data, originalThreshold));
+    }
+
+    /**
+     * 获取自然回血在当前饥饿/饱和/疲劳队列下可安全支付的新陈代谢溢出倍率。
+     */
+    public static double getAffordableMetabolismRegenerationScale(
+        int foodLevel,
+        float saturationLevel,
+        float exhaustionLevel,
+        float baseExhaustion,
+        ChestCavityData data,
+        double originalThreshold
+    ) {
+        double overflowScale = getMetabolismOverflowScale(data, originalThreshold);
+        if (baseExhaustion <= 0) return overflowScale;
+
+        float modifiedBaseExhaustion = data == null ? baseExhaustion : modifyExhaustion(baseExhaustion, data);
+        if (modifiedBaseExhaustion <= 0) return overflowScale;
+
+        int saturationDrainCount = (int) Math.ceil(Math.max(saturationLevel, 0.0F));
+        int foodLevelDrainCount = Math.max(foodLevel - 18, 0);
+        int availableDrainCount = saturationDrainCount + foodLevelDrainCount;
+        double maxSafeExhaustion = 4.0 * (availableDrainCount + 1);
+        double safeExhaustionCapacity = maxSafeExhaustion - exhaustionLevel;
+        double queueExhaustionCapacity = 40.0 - exhaustionLevel;
+        double affordableExhaustion = Math.min(safeExhaustionCapacity, queueExhaustionCapacity);
+        if (affordableExhaustion < modifiedBaseExhaustion) return 0;
+
+        double affordableScale = affordableExhaustion / modifiedBaseExhaustion;
+        return Math.min(overflowScale, affordableScale);
+    }
+
+    /**
+     * 判断自然回血是否至少能安全支付一次原版消耗。
+     */
+    public static boolean canApplyMetabolismRegeneration(
+        int foodLevel,
+        float saturationLevel,
+        float exhaustionLevel,
+        float baseExhaustion,
+        ChestCavityData data,
+        double originalThreshold
+    ) {
+        return getAffordableMetabolismRegenerationScale(
+            foodLevel,
+            saturationLevel,
+            exhaustionLevel,
+            baseExhaustion,
+            data,
+            originalThreshold
+        ) >= 1;
+    }
+
+    /**
+     * 按可安全支付的新陈代谢倍率修改自然回血量。
+     */
+    public static float modifyMetabolismRegenerationAmount(
+        float amount,
+        int foodLevel,
+        float saturationLevel,
+        float exhaustionLevel,
+        float baseExhaustion,
+        ChestCavityData data,
+        double originalThreshold
+    ) {
+        return (float) (amount * getAffordableMetabolismRegenerationScale(
+            foodLevel,
+            saturationLevel,
+            exhaustionLevel,
+            baseExhaustion,
+            data,
+            originalThreshold
+        ));
+    }
+
+    /**
+     * 按可安全支付的新陈代谢倍率同步修改自然回血产生的饥饿消耗。
+     */
+    public static float modifyMetabolismRegenerationExhaustion(
+        float exhaustion,
+        int foodLevel,
+        float saturationLevel,
+        float exhaustionLevel,
+        ChestCavityData data,
+        double originalThreshold
+    ) {
+        return (float) (exhaustion * getAffordableMetabolismRegenerationScale(
+            foodLevel,
+            saturationLevel,
+            exhaustionLevel,
+            exhaustion,
+            data,
+            originalThreshold
+        ));
     }
 
     /**

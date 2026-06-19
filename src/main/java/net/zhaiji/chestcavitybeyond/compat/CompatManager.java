@@ -7,4 +7,5 @@ import net.neoforged.fml.ModList;
  */
 public class CompatManager {
     public static final boolean SABLE_LOADED = ModList.get().isLoaded("sable");
+    public static final boolean APPLESKIN_LOADED = ModList.get().isLoaded("appleskin");
 }

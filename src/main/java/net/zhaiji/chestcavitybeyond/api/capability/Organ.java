@@ -30,6 +30,8 @@ import net.zhaiji.chestcavitybeyond.api.function.OtherOrganChangeConsumer;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.OrganManager;
+import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
+import net.zhaiji.chestcavitybeyond.util.EnchantmentUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
@@ -144,6 +146,19 @@ public class Organ implements IOrgan {
         }
         if (context.data() != null && context.entity() != null) {
             organModifierConsumer.accept(context, modifiers);
+        }
+        // 原始回归附魔效果
+        if (context.entity() != null && EnchantmentUtil.getEnchantmentLevel(
+                context.entity().level(), context.stack(), InitEnchantment.PRIMAL_REVERSION) > 0) {
+            Multimap<Holder<Attribute>, AttributeModifier> scaled = LinkedHashMultimap.create();
+            for (var entry : modifiers.entries()) {
+                AttributeModifier original = entry.getValue();
+                AttributeModifier scaledModifier = new AttributeModifier(
+                    original.id(), original.amount() * 1.5, original.operation()
+                );
+                scaled.put(entry.getKey(), scaledModifier);
+            }
+            return scaled;
         }
         return modifiers;
     }

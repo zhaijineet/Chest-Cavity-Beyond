@@ -5,13 +5,17 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.register.InitDamageType;
 import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
+import net.zhaiji.chestcavitybeyond.datagen.loot.ArchaeologyLootProvider;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,6 +35,10 @@ public class DataGenHandler {
         generator.addProvider(event.includeServer(), new RecipeProvider(packOutput, lookupProvider));
         generator.addProvider(event.includeServer(), new ItemTagProvider(packOutput, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new EnchantmentTagProvider(packOutput, lookupProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new AllLootModifierProvider(packOutput, lookupProvider));
+        generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Set.of(),
+                List.of(new LootTableProvider.SubProviderEntry(ArchaeologyLootProvider::new, LootContextParamSets.CHEST)), lookupProvider)
+        );
 
         generator.addProvider(event.includeClient(), new ItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new LanguageProvider(packOutput, LanguageProvider.EN_US));

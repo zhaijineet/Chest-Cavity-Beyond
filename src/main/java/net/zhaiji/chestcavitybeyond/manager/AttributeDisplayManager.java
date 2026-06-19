@@ -13,6 +13,7 @@ import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MathUtil;
+import net.zhaiji.chestcavitybeyond.util.MixinUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
@@ -143,12 +144,11 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.METABOLISM, 20, entity -> {
-                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.METABOLISM);
-                double scale = MathUtil.getDirectScale(diff);
-                double percent = scale * 100;
+                ChestCavityData data = ChestCavityUtil.getData(entity);
+                double healingPercent = MixinUtil.getMetabolismScale(data) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.METABOLISM),
-                    TooltipUtil.formatAttributeValue(percent)
+                    TooltipUtil.formatAttributeValue(healingPercent)
                 );
             }
         );

@@ -317,7 +317,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             InitItem.HERBIVORE_RUMEN,
             "Consume grass, short grass, or tall grass for food",
             "Grass blocks turn into dirt",
-            "Tall grass restores more hunger than short grass"
+            "Tall grass restores more food level than short grass"
         );
 
         addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "Explode");
@@ -354,7 +354,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addOrganActiveSkill(
             InitItem.SILK_GLAND,
             "Throw a cobweb that can trap entities",
-            "Costs hunger to use"
+            "Costs food level to use"
         );
 
         addOrganSimplePassiveEffect(InitItem.VENOM_GLAND, "Apply potion effects on attack");
@@ -468,6 +468,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Hydraulic Clamp",
             "Each level consumes 25 durability from target's chestplate"
         );
+        addEnchantment(
+            InitEnchantment.PRIMAL_REVERSION,
+            "Primal Reversion",
+            "Multiplies organ attributes by 1.5"
+        );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
         add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "Target is too healthy");
@@ -502,7 +507,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.DIGESTION,
-            "Affects hunger restoration from food",
+            "Affects food level restoration from food",
             "Cannot digest food when value ≤ 0"
         );
         addAttributeDescription(
@@ -512,11 +517,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.ENDURANCE,
-            "Affects hunger consumption rate, higher = slower"
+            "Affects food level consumption rate, higher = slower"
         );
         addAttributeDescription(
             InitAttribute.METABOLISM,
-            "Affects natural regeneration and hunger drain speed"
+            "Affects the speed of healing by consuming saturation and food level",
+            "When the interval is reduced to 1 tick, excess rate increases single healing amount and starvation damage amount"
         );
         addAttributeDescription(
             InitAttribute.BREATH_CAPACITY,
@@ -585,7 +591,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.CARNIVOROUS_DIGESTION,
-            "Additional hunger restoration from meat"
+            "Additional food level restoration from meat"
         );
         addAttributeDescription(
             InitAttribute.CARNIVOROUS_NUTRITION,
@@ -593,7 +599,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.HERBIVOROUS_DIGESTION,
-            "Additional hunger restoration from plants"
+            "Additional food level restoration from plants"
         );
         addAttributeDescription(
             InitAttribute.HERBIVOROUS_NUTRITION,
@@ -601,7 +607,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.SCAVENGER_DIGESTION,
-            "Additional hunger restoration from rotten food",
+            "Additional food level restoration from rotten food",
             "Prevents poison and hunger effects from toxic food"
         );
         addAttributeDescription(
@@ -616,8 +622,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.PHOTOSYNTHESIS,
-            "Restores hunger and saturation over time in daylight with sky visibility",
-            "Each trigger +1 hunger, or +1 saturation when hunger is full"
+            "Restores food level and saturation over time in daylight with sky visibility",
+            "Each trigger +1 food level, or +1 saturation when food level is full"
         );
         addAttributeDescription(
             InitAttribute.LAUNCH,
@@ -647,30 +653,30 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.CRYSTALLIZATION,
-            "Restores health and hunger when near End Crystals"
+            "Restores health and food level when near End Crystals"
         );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "Max Health %s");
         addAttributeValueEffect(InitAttribute.NERVES, "Attack Speed %s%% | Move Speed %s%%");
         addAttributeValueEffect(InitAttribute.DEFENSE, "Damage Reduction ~%s%% (vs 10 dmg)");
-        addAttributeValueEffect(InitAttribute.ENDURANCE, "Hunger Consumption %s%%");
+        addAttributeValueEffect(InitAttribute.ENDURANCE, "Food level consumption %s%%");
         addAttributeValueEffect(InitAttribute.STRENGTH, "Melee Damage %s%%");
         addAttributeValueEffect(InitAttribute.SPEED, "Move Speed %s%%");
-        addAttributeValueEffect(InitAttribute.DIGESTION, "Food Hunger %s%%");
-        addAttributeValueEffect(InitAttribute.NUTRITION, "Food Saturation %s%%");
-        addAttributeValueEffect(InitAttribute.METABOLISM, "Regen Rate %s%%");
+        addAttributeValueEffect(InitAttribute.DIGESTION, "Food level %s%%");
+        addAttributeValueEffect(InitAttribute.NUTRITION, "Food saturation %s%%");
+        addAttributeValueEffect(InitAttribute.METABOLISM, "Healing rate %s%%");
         addAttributeValueEffect(InitAttribute.BREATH_CAPACITY, "Air Consumption %s%%");
         addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "Air Recovery %s%%");
         addAttributeValueEffect(InitAttribute.WATER_BREATH, "Underwater Recovery %s%%");
         addAttributeValueEffect(InitAttribute.DETOXIFICATION, "Harmful Effect Duration %s%%");
         addAttributeValueEffect(InitAttribute.FILTRATION, "Poison Lv%s for %ss");
         add(AttributeDisplayManager.getValueEffectKey(InitAttribute.FILTRATION) + ".safe", "Blood filtration normal, no poisoning risk");
-        addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "Meat Hunger %s%%");
-        addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "Meat Saturation %s%%");
-        addAttributeValueEffect(InitAttribute.HERBIVOROUS_DIGESTION, "Plant Hunger %s%%");
-        addAttributeValueEffect(InitAttribute.HERBIVOROUS_NUTRITION, "Plant Saturation %s%%");
-        addAttributeValueEffect(InitAttribute.SCAVENGER_DIGESTION, "Rotten Hunger %s%%");
-        addAttributeValueEffect(InitAttribute.SCAVENGER_NUTRITION, "Rotten Saturation %s%%");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "Meat food level %s%%");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "Meat saturation %s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_DIGESTION, "Plant food level %s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_NUTRITION, "Plant saturation %s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_DIGESTION, "Rotten food level %s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_NUTRITION, "Rotten saturation %s%%");
         addAttributeValueEffect(InitAttribute.FIRE_RESISTANCE, "Fire Damage Reduction ~%s%% (vs 10 dmg)");
         addAttributeValueEffect(InitAttribute.FROST_RESISTANCE, "Frost Damage Reduction ~%s%% (vs 10 dmg)");
         addAttributeValueEffect(InitAttribute.ENDER, "Teleport Range %s");
@@ -1037,7 +1043,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             InitItem.HERBIVORE_RUMEN,
             "食用草方块、矮草丛或高草丛",
             "草方块会变成泥土",
-            "高草丛比矮草丛恢复更多饱食度"
+            "高草丛比矮草丛恢复更多饥饿值"
         );
 
         addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "自爆");
@@ -1074,7 +1080,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addOrganActiveSkill(
             InitItem.SILK_GLAND,
             "投掷蛛网困住实体",
-            "使用消耗饱食度"
+            "使用消耗饥饿值"
         );
 
         addOrganSimplePassiveEffect(InitItem.VENOM_GLAND, "攻击时施加药水效果");
@@ -1205,6 +1211,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "液压钳",
             "每级消耗目标胸甲25点耐久"
         );
+        addEnchantment(
+            InitEnchantment.PRIMAL_REVERSION,
+            "原始回归",
+            "器官提供的属性强化至1.5倍"
+        );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");
         add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "目标太过健康");
@@ -1249,11 +1260,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.ENDURANCE,
-            "影响饱食度消耗速率，值越高消耗越慢"
+            "影响饥饿值消耗速率，值越高消耗越慢"
         );
         addAttributeDescription(
             InitAttribute.METABOLISM,
-            "影响自然回血和饥饿消耗的速度"
+            "影响消耗饱和度与饥饿值回复血量的速度",
+            "当间隔降低至1tick后，超出的速率会提高单次回血量和饥饿伤害量"
         );
         addAttributeDescription(
             InitAttribute.BREATH_CAPACITY,
@@ -1390,7 +1402,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值 %s");
         addAttributeValueEffect(InitAttribute.NERVES, "攻击速度 %s%% | 移动速度 %s%%");
         addAttributeValueEffect(InitAttribute.DEFENSE, "减伤比例 ~%s%%（以10点伤害计）");
-        addAttributeValueEffect(InitAttribute.ENDURANCE, "饥饿消耗 %s%%");
+        addAttributeValueEffect(InitAttribute.ENDURANCE, "饥饿值消耗 %s%%");
         addAttributeValueEffect(InitAttribute.STRENGTH, "近战伤害 %s%%");
         addAttributeValueEffect(InitAttribute.SPEED, "移动速度 %s%%");
         addAttributeValueEffect(InitAttribute.DIGESTION, "食物饥饿值 %s%%");

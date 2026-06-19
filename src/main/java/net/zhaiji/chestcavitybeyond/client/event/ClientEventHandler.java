@@ -117,7 +117,12 @@ public class ClientEventHandler {
             );
         }
 
-        ChestCavityData data = ChestCavityUtil.getData(player);
+        ChestCavityData data;
+        if (minecraft.screen instanceof ChestCavityScreen screen) {
+            data = screen.getMenu().getData();
+        } else {
+            data = ChestCavityUtil.getData(player);
+        }
 
         // 通过引用匹配查找器官在胸腔中的槽位索引
         int index = -1;
@@ -141,7 +146,7 @@ public class ClientEventHandler {
     }
 
     /**
-     * 鼠标按键输入事件
+     * 设置自定义按键的功能
      *
      * @param event 鼠标按键输入事件
      */
@@ -160,7 +165,7 @@ public class ClientEventHandler {
         customKeyTrigger(InputConstants.getKey(event.getKey(), event.getScanCode()));
     }
 
-    public static void customKeyTrigger(InputConstants.Key key) {
+    private static void customKeyTrigger(InputConstants.Key key) {
         if (KeyMappings.OPEN_SKILL_GUI.isActiveAndMatches(key)) {
             Minecraft minecraft = Minecraft.getInstance();
             if (minecraft.screen instanceof OrganSkillScreen screen) {

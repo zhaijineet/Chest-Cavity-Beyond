@@ -145,7 +145,7 @@ public class ItemTagManager {
     /**
      * 从语言键获取 Tag 显示名
      */
-    private static MutableComponent getTagDisplayName(TagKey<Item> tag) {
+    public static MutableComponent getTagDisplayName(TagKey<Item> tag) {
         String translationKey = Tags.getTagTranslationKey(tag);
         if (Language.getInstance().has(translationKey)) {
             return Component.translatable(translationKey);

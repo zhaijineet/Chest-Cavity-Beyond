@@ -3,6 +3,8 @@ package net.zhaiji.chestcavitybeyond.event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
+import net.zhaiji.chestcavitybeyond.compat.CompatManager;
+import net.zhaiji.chestcavitybeyond.compat.appleskin.AppleSkinCompat;
 import net.zhaiji.chestcavitybeyond.datagen.DataGenHandler;
 import net.zhaiji.chestcavitybeyond.network.PacketManager;
 
@@ -10,6 +12,9 @@ public class CommonEventManager {
     public static void init(IEventBus modBus, IEventBus gameBus) {
         CommonEventManager.modBusListener(modBus);
         CommonEventManager.gameBusListener(gameBus);
+        if (CompatManager.APPLESKIN_LOADED) {
+            AppleSkinCompat.init(modBus, gameBus);
+        }
     }
 
     public static void modBusListener(IEventBus modBus) {

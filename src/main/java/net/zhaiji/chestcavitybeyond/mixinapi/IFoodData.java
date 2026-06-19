@@ -36,34 +36,6 @@ public interface IFoodData {
     ItemStack getFood();
 
     /**
-     * 获取 tickTimer
-     *
-     * @return tickTimer
-     */
-    int getTickTimer();
-
-    /**
-     * 设置 tickTimer
-     *
-     * @param tickTimer tickTimer
-     */
-    void setTickTimer(int tickTimer);
-
-    /**
-     * 获取 metabolismRemainder
-     *
-     * @return metabolismRemainder
-     */
-    double getMetabolismRemainder();
-
-    /**
-     * 设置 metabolismRemainder
-     *
-     * @param metabolismRemainder metabolismRemainder
-     */
-    void setMetabolismRemainder(double metabolismRemainder);
-
-    /**
      * 获取 photosynthesisTimer
      *
      * @return photosynthesisTimer
