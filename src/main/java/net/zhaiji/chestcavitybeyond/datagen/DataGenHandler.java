@@ -11,9 +11,9 @@ import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
+import net.zhaiji.chestcavitybeyond.datagen.loot.ArchaeologyLootProvider;
 import net.zhaiji.chestcavitybeyond.register.InitDamageType;
 import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
-import net.zhaiji.chestcavitybeyond.datagen.loot.ArchaeologyLootProvider;
 
 import java.util.List;
 import java.util.Set;

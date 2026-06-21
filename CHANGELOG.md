@@ -2,6 +2,16 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
+## 1.8.1 Tooltip 动态公式展示与管线签名重构
+
+- 新增 DynamicValues / FormulaValue，支持按 Ctrl 展开效果计算公式
+- Tooltip 管线统一使用 ChestCavitySlotContext 替代 (data, index, stack) 三元组
+- TooltipsKeyContext 由 Shift/Sprint 改为 Shift/Ctrl，改用 Screen.hasShiftDown/hasControlDown
+- OrganTooltip.Builder 新增 dynamicPassiveEffect / dynamicActiveSkill / hint，按需自动挂载 Ctrl 提示
+- TooltipUtil 新增 dynamicEffectLines 及 formulaOperator/attributeName/tagName/tagOrganCountName 辅助方法
+- ChestCavityUtil 新增 getAdjacentSlots / getOrganCountWithSelf / getMirrorSlotIndex（WAIC 迁移预备）
+- 语言文件：使用 %s 占位符合并 hint 三段拆分，新增 formula.tag_organ_count
+
 ## 1.8.0
 
 - 新增宝藏附魔原始回归：器官属性 × 1.5，通过考古可疑方块 25% 概率获取附魔书

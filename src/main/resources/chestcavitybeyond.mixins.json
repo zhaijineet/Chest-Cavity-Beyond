@@ -17,7 +17,6 @@
     "EnderManMixin",
     "EnderManMixin$EndermanLookForPlayerGoalMixin",
     "FoodDataMixin",
-    "appleskin.FoodHelperMixin",
     "GhastShootFireballGoalMixin",
     "GuardianMixin",
     "GuardianMixin$GuardianAttackGoalMixin",
@@ -39,7 +38,8 @@
     "WaterAnimalMixin",
     "WitherBossMixin",
     "WitherSkeletonMixin",
-    "WitherSkullMixin"
+    "WitherSkullMixin",
+    "appleskin.FoodHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1

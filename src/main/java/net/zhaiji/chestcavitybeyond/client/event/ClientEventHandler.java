@@ -6,6 +6,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -102,7 +103,6 @@ public class ClientEventHandler {
         IOrgan organ = ChestCavityUtil.getOrganCap(event.getItemStack());
         if (organ == OrganManager.EMPTY_ORGAN) return;
         Minecraft minecraft = Minecraft.getInstance();
-        Options options = minecraft.options;
         Player player = event.getEntity();
         TooltipsKeyContext keyContext;
         // player为null的情况，可能是正在检索物品
@@ -112,8 +112,8 @@ public class ClientEventHandler {
             keyContext = new TooltipsKeyContext(true, true);
         } else {
             keyContext = new TooltipsKeyContext(
-                ChestCavityClientUtil.isKeyDown(options.keyShift),
-                ChestCavityClientUtil.isKeyDown(options.keySprint)
+                Screen.hasShiftDown(),
+                Screen.hasControlDown()
             );
         }
 
@@ -135,9 +135,7 @@ public class ClientEventHandler {
         }
 
         organ.organTooltip(
-            data,
-            index,
-            event.getItemStack(),
+            ChestCavityUtil.createContext(data, index, event.getItemStack()),
             keyContext,
             event.getContext(),
             event.getToolTip(),

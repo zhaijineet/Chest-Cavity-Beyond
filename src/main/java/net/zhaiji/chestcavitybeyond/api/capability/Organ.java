@@ -28,7 +28,6 @@ import net.zhaiji.chestcavitybeyond.api.function.OrganSkillFunction;
 import net.zhaiji.chestcavitybeyond.api.function.OrganTooltipConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.OtherOrganChangeConsumer;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
-import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
 import net.zhaiji.chestcavitybeyond.util.EnchantmentUtil;
@@ -165,9 +164,7 @@ public class Organ implements IOrgan {
 
     @Override
     public void organTooltip(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
+        ChestCavitySlotContext slotContext,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,
@@ -177,7 +174,7 @@ public class Organ implements IOrgan {
         if (consumer == null) {
             consumer = TooltipUtil.DEFAULT_TOOLTIP;
         }
-        consumer.accept(data, index, stack, keyContext, context, tooltipComponents, tooltipFlag);
+        consumer.accept(slotContext, keyContext, context, tooltipComponents, tooltipFlag);
     }
 
     @Override

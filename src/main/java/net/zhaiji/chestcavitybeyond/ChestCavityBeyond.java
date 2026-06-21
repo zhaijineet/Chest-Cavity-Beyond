@@ -7,13 +7,13 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.zhaiji.chestcavitybeyond.event.CommonEventManager;
-import net.zhaiji.chestcavitybeyond.register.InitLootModifier;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitCreativeModeTab;
 import net.zhaiji.chestcavitybeyond.register.InitEffect;
 import net.zhaiji.chestcavitybeyond.register.InitEntityType;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
+import net.zhaiji.chestcavitybeyond.register.InitLootModifier;
 import net.zhaiji.chestcavitybeyond.register.InitMenuType;
 import net.zhaiji.chestcavitybeyond.register.InitRecipe;
 

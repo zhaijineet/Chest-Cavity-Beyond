@@ -11,11 +11,11 @@ import java.util.function.Function;
  * 器官工具提示构建管线
  * <p>
  * 构建顺序：Tags → afterTags → Description → afterDescription → Attributes → afterAttributes
- * → ShiftHint → afterShiftHint → PassiveEffect → afterPassiveEffect → ActiveSkill → afterActiveSkill
+ * → Hint → afterHint → PassiveEffect → afterPassiveEffect → ActiveSkill → afterActiveSkill
  * </p>
  */
 public class OrganTooltip {
-    private static final TooltipSectionFunction EMPTY_SECTION = (data, index, stack, keyContext, context, tooltipComponents, tooltipFlag) -> List.of();
+    private static final TooltipSectionFunction EMPTY_SECTION = (slotContext, keyContext, context, tooltipComponents, tooltipFlag) -> List.of();
 
     public final TooltipSectionFunction tagsSection;
     public final TooltipSectionFunction afterTags;
@@ -23,8 +23,8 @@ public class OrganTooltip {
     public final TooltipSectionFunction afterDescription;
     public final TooltipSectionFunction attributesSection;
     public final TooltipSectionFunction afterAttributes;
-    public final TooltipSectionFunction shiftHintSection;
-    public final TooltipSectionFunction afterShiftHint;
+    public final TooltipSectionFunction hintSection;
+    public final TooltipSectionFunction afterHint;
     public final TooltipSectionFunction passiveEffectSection;
     public final TooltipSectionFunction afterPassiveEffect;
     public final TooltipSectionFunction activeSkillSection;
@@ -39,8 +39,8 @@ public class OrganTooltip {
         this.afterDescription = builder.afterDescription;
         this.attributesSection = builder.attributesSection;
         this.afterAttributes = builder.afterAttributes;
-        this.shiftHintSection = builder.shiftHintSection;
-        this.afterShiftHint = builder.afterShiftHint;
+        this.hintSection = builder.hintSection;
+        this.afterHint = builder.afterHint;
         this.passiveEffectSection = builder.passiveEffectSection;
         this.afterPassiveEffect = builder.afterPassiveEffect;
         this.activeSkillSection = builder.activeSkillSection;
@@ -66,16 +66,20 @@ public class OrganTooltip {
         private TooltipSectionFunction tagsSection = TooltipUtil::tagsSection;
         private TooltipSectionFunction descriptionSection = TooltipUtil::descriptionSection;
         private TooltipSectionFunction attributesSection = TooltipUtil::organAttributeTooltip;
-        private TooltipSectionFunction shiftHintSection = TooltipUtil::shiftHintSection;
+        private TooltipSectionFunction hintSection;
         private TooltipSectionFunction passiveEffectSection = TooltipUtil::passiveEffectSection;
         private TooltipSectionFunction activeSkillSection = TooltipUtil::activeSkillSection;
 
         private TooltipSectionFunction afterTags = EMPTY_SECTION;
         private TooltipSectionFunction afterDescription = EMPTY_SECTION;
         private TooltipSectionFunction afterAttributes = EMPTY_SECTION;
-        private TooltipSectionFunction afterShiftHint = EMPTY_SECTION;
+        private TooltipSectionFunction afterHint = EMPTY_SECTION;
         private TooltipSectionFunction afterPassiveEffect = EMPTY_SECTION;
         private TooltipSectionFunction afterActiveSkill = EMPTY_SECTION;
+
+        private boolean hasDynamicPassiveEffect = false;
+        private boolean hasDynamicActiveSkill = false;
+        private boolean hasCustomHint = false;
 
         private Function<OrganTooltip, OrganTooltipConsumer> consumer = TooltipUtil::buildConsumer;
 
@@ -112,18 +116,20 @@ public class OrganTooltip {
             return this;
         }
 
-        public Builder shiftHint(TooltipSectionFunction section) {
-            this.shiftHintSection = section;
+        public Builder hint(TooltipSectionFunction section) {
+            this.hintSection = section;
+            this.hasCustomHint = true;
             return this;
         }
 
-        public Builder afterShiftHint(TooltipSectionFunction section) {
-            this.afterShiftHint = section;
+        public Builder afterHint(TooltipSectionFunction section) {
+            this.afterHint = section;
             return this;
         }
 
         public Builder passiveEffect(TooltipSectionFunction section) {
             this.passiveEffectSection = section;
+            this.hasDynamicPassiveEffect = false;
             return this;
         }
 
@@ -134,6 +140,7 @@ public class OrganTooltip {
 
         public Builder activeSkill(TooltipSectionFunction section) {
             this.activeSkillSection = section;
+            this.hasDynamicActiveSkill = false;
             return this;
         }
 
@@ -148,9 +155,31 @@ public class OrganTooltip {
         }
 
         /**
+         * 使用动态数值渲染被动效果段落，并自动开启 Ctrl 公式提示
+         */
+        public Builder dynamicPassiveEffect(Function<ChestCavitySlotContext, DynamicValues> valuesFunction) {
+            this.passiveEffectSection = TooltipUtil.dynamicPassiveEffect(valuesFunction);
+            this.hasDynamicPassiveEffect = true;
+            return this;
+        }
+
+        /**
+         * 使用动态数值渲染主动技能段落，并自动开启 Ctrl 公式提示
+         */
+        public Builder dynamicActiveSkill(Function<ChestCavitySlotContext, DynamicValues> valuesFunction) {
+            this.activeSkillSection = TooltipUtil.dynamicActiveSkill(valuesFunction);
+            this.hasDynamicActiveSkill = true;
+            return this;
+        }
+
+        /**
          * 构建管线并返回 OrganTooltipConsumer
          */
         public OrganTooltipConsumer build() {
+            if (!this.hasCustomHint) {
+                boolean hasDynamicTooltipValues = this.hasDynamicPassiveEffect || this.hasDynamicActiveSkill;
+                this.hintSection = TooltipUtil.hintSection(hasDynamicTooltipValues);
+            }
             return new OrganTooltip(this).consumer();
         }
     }

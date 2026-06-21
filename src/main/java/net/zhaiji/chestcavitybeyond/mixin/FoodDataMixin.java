@@ -55,7 +55,9 @@ public abstract class FoodDataMixin implements IFoodData {
     public void chestCavityBeyond$eat(FoodProperties foodProperties, CallbackInfo ci) {
         MixinUtil.eat((FoodData) (Object) this, foodProperties);
         ci.cancel();
-    }    @Unique
+    }
+
+    @Unique
     @Override
     public void setChestCavityData(ChestCavityData data) {
         if (this.data == null) {
@@ -72,7 +74,9 @@ public abstract class FoodDataMixin implements IFoodData {
     )
     public void chestCavityBeyond$tick(Player player, CallbackInfo ci) {
         MixinUtil.tickPhotosynthesis((FoodData) (Object) this, player);
-    }    @Unique
+    }
+
+    @Unique
     @Override
     public ChestCavityData getChestCavityData() {
         return data;
@@ -87,7 +91,9 @@ public abstract class FoodDataMixin implements IFoodData {
     )
     public int chestCavityBeyond$modifySaturationRegenerationThreshold(int original) {
         return MixinUtil.modifyMetabolismThreshold(original, data);
-    }    @Unique
+    }
+
+    @Unique
     @Override
     public void setFood(ItemStack food) {
         this.food = food;
@@ -102,7 +108,9 @@ public abstract class FoodDataMixin implements IFoodData {
     )
     public int chestCavityBeyond$modifyFoodRegenerationThreshold(int original) {
         return MixinUtil.modifyMetabolismThreshold(original, data);
-    }    @Unique
+    }
+
+    @Unique
     @Override
     public ItemStack getFood() {
         return food;
@@ -117,7 +125,9 @@ public abstract class FoodDataMixin implements IFoodData {
     )
     public int chestCavityBeyond$modifyStarvationThreshold(int original) {
         return MixinUtil.modifyMetabolismThreshold(original, data);
-    }    @Unique
+    }
+
+    @Unique
     @Override
     public double getPhotosynthesisTimer() {
         return photosynthesisTimer;
@@ -145,7 +155,9 @@ public abstract class FoodDataMixin implements IFoodData {
             data,
             10
         );
-    }    @Unique
+    }
+
+    @Unique
     @Override
     public void setPhotosynthesisTimer(double photosynthesisTimer) {
         this.photosynthesisTimer = photosynthesisTimer;
@@ -335,16 +347,4 @@ public abstract class FoodDataMixin implements IFoodData {
     public float chestCavityBeyond$modifyExhaustion(float value) {
         return MixinUtil.modifyExhaustion(value, data);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

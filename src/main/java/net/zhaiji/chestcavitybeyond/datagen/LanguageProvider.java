@@ -63,9 +63,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.passive_effect", "【Passive Effect】");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.active_skill", "【Active Skill】");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.0", "Hold [");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.1", "Shift");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.2", "] for details");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.shift_hint", "Hold [%s] for details");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.shift", "Shift");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.ctrl_hint", "Hold [%s] to reveal formula");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.ctrl", "Ctrl");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".formula.tag_organ_count", "%s organ count");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.cooldown", "Cooldown: %ss");
 
         addItem(InitItem.CHEST_OPENER, "Chest Opener");
@@ -790,9 +792,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.passive_effect", "【被动效果】");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.header.active_skill", "【主动技能】");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.0", "按住[");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.1", "Shift");
-        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.2", "]查看详细说明");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.shift_hint", "按住[%s]查看详细说明");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.shift", "Shift");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.ctrl_hint", "按住[%s]查看计算公式");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.ctrl", "Ctrl");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".formula.tag_organ_count", "%s器官数量");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.cooldown", "冷却时间：%s秒");
 
         addItem(InitItem.CHEST_OPENER, "开胸器");

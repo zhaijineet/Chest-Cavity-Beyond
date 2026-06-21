@@ -18,7 +18,6 @@ import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.OrganInteractContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
-import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
 import java.util.List;
 
@@ -38,22 +37,15 @@ public interface IOrgan {
 
     /**
      * 器官工具提示
-     * <p>
-     * 默认使用 OrganTooltip 管线渲染。
-     * </p>
      *
-     * @param data              胸腔数据
-     * @param index             器官在胸腔中的槽位索引，若未在胸腔中则为 -1
-     * @param stack             器官物品
+     * @param slotContext       胸腔槽位上下文
      * @param keyContext        工具提示按键上下文
      * @param context           工具提示上下文
      * @param tooltipComponents 工具提示组件列表
      * @param tooltipFlag       工具提示标识符
      */
     default void organTooltip(
-        ChestCavityData data,
-        int index,
-        ItemStack stack,
+        ChestCavitySlotContext slotContext,
         TooltipsKeyContext keyContext,
         Item.TooltipContext context,
         List<Component> tooltipComponents,

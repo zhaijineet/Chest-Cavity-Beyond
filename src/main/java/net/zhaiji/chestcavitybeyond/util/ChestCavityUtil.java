@@ -4,6 +4,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -361,5 +362,59 @@ public class ChestCavityUtil {
             instances.add(temp);
         }
         return new PotionContents(Optional.empty(), Optional.empty(), instances);
+    }
+
+    /**
+     * 计算九宫格相邻的 8 个槽位索引，越界自动排除
+     *
+     * @param slotIndex 当前槽位索引
+     * @param maxSlots  胸腔总槽位数（27/36/45/54）
+     * // TODO 当 WAIC 迁移使用本方法后移除此标记
+     */
+    public static List<Integer> getAdjacentSlots(int slotIndex, int maxSlots) {
+        List<Integer> result = new ArrayList<>();
+        int column = slotIndex % 9;
+        int row = slotIndex / 9;
+        int maxRow = maxSlots / 9 - 1;
+        for (int rowDelta = -1; rowDelta <= 1; rowDelta++) {
+            for (int columnDelta = -1; columnDelta <= 1; columnDelta++) {
+                if (rowDelta == 0 && columnDelta == 0) continue;
+                int neighborRow = row + rowDelta;
+                int neighborColumn = column + columnDelta;
+                if (neighborRow < 0 || neighborRow > maxRow || neighborColumn < 0 || neighborColumn > 8) continue;
+                result.add(neighborRow * 9 + neighborColumn);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取标签下的器官数量，当前器官不在胸时按标签匹配结果计入自身
+     * // TODO 当 WAIC 迁移使用本方法后移除此标记
+     */
+    public static int getOrganCountWithSelf(ChestCavitySlotContext slotContext, TagKey<Item> tag) {
+        ChestCavityData data = slotContext.data();
+        boolean selfMatches = slotContext.stack().is(tag);
+        if (data == null) {
+            return selfMatches ? 1 : 0;
+        }
+        int count = data.getOrganCount(tag);
+        if (slotContext.index() < 0 && selfMatches) {
+            count++;
+        }
+        return count;
+    }
+
+    /**
+     * 获取水平镜像槽位索引（沿中心列翻转：0↔8, 1↔7, 2↔6, 3↔5, 4 不变）
+     * <p>
+     * 由 WAIC 的 getSymmetricRibIndex 下沉重命名而来。
+     * </p>
+     * // TODO 当 WAIC 迁移使用本方法后移除此标记
+     */
+    public static int getMirrorSlotIndex(int slotIndex) {
+        int row = slotIndex / 9;
+        int column = slotIndex % 9;
+        return row * 9 + (8 - column);
     }
 }
