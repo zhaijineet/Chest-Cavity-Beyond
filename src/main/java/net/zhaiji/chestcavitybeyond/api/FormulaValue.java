@@ -25,11 +25,15 @@ public record FormulaValue(
             return Component.literal("?").withStyle(ChatFormatting.YELLOW);
         }
         MutableComponent value = valueProvider.apply(slotContext);
+        // 仅当未显式设置颜色时使用默认黄色，保留 valueProvider 自定义颜色
+        if (value.getStyle().getColor() == null) {
+            value = value.withStyle(ChatFormatting.YELLOW);
+        }
         if (!showFormula) {
-            return value.withStyle(ChatFormatting.YELLOW);
+            return value;
         }
         return Component.empty()
-            .append(value.withStyle(ChatFormatting.YELLOW))
+            .append(value)
             .append(Component.literal("\u00A0=\u00A0").withStyle(ChatFormatting.GRAY))
             .append(formulaProvider.apply(slotContext).withStyle(ChatFormatting.GRAY));
     }

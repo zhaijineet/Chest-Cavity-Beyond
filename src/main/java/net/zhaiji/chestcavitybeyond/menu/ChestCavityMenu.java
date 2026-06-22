@@ -36,7 +36,13 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         );
     }
 
-    public ChestCavityMenu(int containerId, Inventory playerInventory, ChestCavitySize size, LivingEntity entity, int postoperativeSutureLevel) {
+    public ChestCavityMenu(
+        int containerId,
+        Inventory playerInventory,
+        ChestCavitySize size,
+        LivingEntity entity,
+        int postoperativeSutureLevel
+    ) {
         super(InitMenuType.CHEST_CAVITY.get(), containerId);
         this.size = size;
         this.postoperativeSutureLevel = postoperativeSutureLevel;
@@ -131,6 +137,8 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         return player.level().isClientSide()
                || entity.isAlive()
                   // 最大距离为实体交互距离的2倍
-                  && player.canInteractWithEntity(entity, player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE) * 2);
+                  && player.canInteractWithEntity(entity, player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE) * 2)
+                  // 且当前还能开胸，但创造模式跳过检测
+                  && (player.isCreative() || data.getType().canOpen(player, entity));
     }
 }

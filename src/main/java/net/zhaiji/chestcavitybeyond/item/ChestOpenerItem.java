@@ -20,7 +20,7 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.TargetResolver;
-import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.network.client.packet.ChestOpenerMessagePacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.UnopenableChestCavityMessagePacket;
@@ -61,8 +61,9 @@ public class ChestOpenerItem extends Item {
         float damage = EnchantmentUtil.calculateOpenDamage(level, stack, baseDamage);
         boolean hasDoor;
         if (hitResult instanceof EntityHitResult entityHitResult && TargetResolver.resolve(entityHitResult.getEntity()) instanceof LivingEntity target) {
+            ChestCavityData data = ChestCavityUtil.getData(target);
             // 检查胸腔类型是否可开胸
-            if (!player.isCreative() && !ChestCavityTypeManager.getType(target).canOpen(player, target)) {
+            if (!player.isCreative() && !data.getType().canOpen(player, target)) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     PacketDistributor.sendToPlayer(serverPlayer, new UnopenableChestCavityMessagePacket(target.getId()));
                 }
@@ -79,8 +80,9 @@ public class ChestOpenerItem extends Item {
                 target.getMaxHealth(),
                 target.getHealth()
             );
-            hasDoor = ChestCavityUtil.getData(target).hasOrgan(ItemTags.DOORS);
-            boolean hasChestPlate = ChestCavityBeyondConfig.chestplateBlocksChestOpener && !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+            hasDoor = data.hasOrgan(ItemTags.DOORS);
+            boolean hasChestPlate = ChestCavityBeyondConfig.chestplateBlocksChestOpener
+                                    && !target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
             // 液压钳：消耗胸甲耐久，如果胸甲被破坏则视为无胸甲
             if (hasChestPlate && !player.isCreative()) {
                 if (EnchantmentUtil.getEnchantmentLevel(level, stack, InitEnchantment.HYDRAULIC_CLAMP) > 0) {
@@ -101,7 +103,7 @@ public class ChestOpenerItem extends Item {
                 }
                 return InteractionResultHolder.fail(stack);
             } else {
-                if (!hasDoor) target.hurt(source, damage);
+                if (!hasDoor && !player.isCreative()) target.hurt(source, damage);
                 if (target.isAlive()) {
                     ChestCavityUtil.openChestCavity(player, target, stack);
                     EnchantmentUtil.applyAnesthesiaSurgery(level, stack, target);
@@ -111,7 +113,7 @@ public class ChestOpenerItem extends Item {
             int safeSurgeryLevel = EnchantmentUtil.getEnchantmentLevel(level, stack, InitEnchantment.SAFE_SURGERY);
             if (safeSurgeryLevel == 0 || (safeSurgeryLevel == 1 && player.isShiftKeyDown())) {
                 hasDoor = ChestCavityUtil.getData(player).hasOrgan(ItemTags.DOORS);
-                if (!hasDoor) player.hurt(source, damage);
+                if (!hasDoor && !player.isCreative()) player.hurt(source, damage);
                 if (player.isAlive()) {
                     ChestCavityUtil.openChestCavity(player, player, stack);
                     EnchantmentUtil.applyAnesthesiaSurgery(level, stack, player);
