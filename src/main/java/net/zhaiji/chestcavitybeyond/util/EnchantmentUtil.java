@@ -1,6 +1,8 @@
 package net.zhaiji.chestcavitybeyond.util;
 
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -57,6 +59,21 @@ public class EnchantmentUtil {
         if (chestplate.isEmpty()) return true;
         chestplate.hurtAndBreak(durability, target, EquipmentSlot.CHEST);
         return target.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+    }
+
+    /**
+     * 麻醉手术：成功开胸时对目标施加3秒缓慢效果
+     * 缓慢等级等于附魔等级
+     *
+     * @param level  世界
+     * @param stack  开胸器物品栈
+     * @param target 被开胸的目标
+     */
+    public static void applyAnesthesiaSurgery(Level level, ItemStack stack, LivingEntity target) {
+        int enchantmentLevel = getEnchantmentLevel(level, stack, InitEnchantment.ANESTHESIA_SURGERY);
+        if (enchantmentLevel > 0) {
+            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, enchantmentLevel - 1));
+        }
     }
 
     public static int getEnchantmentLevel(Level level, ItemStack stack, ResourceKey<Enchantment> resourceKey) {

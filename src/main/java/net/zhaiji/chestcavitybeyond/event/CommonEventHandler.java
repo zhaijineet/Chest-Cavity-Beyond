@@ -378,7 +378,8 @@ public class CommonEventHandler {
                                 : source.getDirectEntity() instanceof LivingEntity directEntity
                                   ? directEntity
                                   : null;
-        if (attacker != null) {
+        // 开胸手术伤害跳过攻击者器官的 attack 回调，避免固定伤害被增伤器官异常放大导致杀死目标生物
+        if (attacker != null && !source.is(InitDamageType.OPEN_CHEST)) {
             ChestCavityData attackerData = ChestCavityUtil.getData(attacker);
             ChestCavityUtil.attack(attackerData, attacker, entity, source, event.getContainer());
         }
@@ -419,7 +420,7 @@ public class CommonEventHandler {
                 return;
             }
         }
-        if (source.is(DamageTypeTags.IS_FALL) && entity.getAttribute(Attributes.GRAVITY).getValue() <= 0) {
+        if (source.is(DamageTypeTags.IS_FALL) && entity.getAttributeValue(Attributes.GRAVITY) <= 0) {
             event.setCanceled(true);
         }
         // Mob 受伤时主动刷新 Goal 技能目标记忆

@@ -48,6 +48,14 @@ public class InitCreativeModeTab {
                                                                   new EnchantmentInstance(parameters.holders().lookupOrThrow(Registries.ENCHANTMENT)
                                                                                                     .getOrThrow(InitEnchantment.HYDRAULIC_CLAMP), 5)
                                                           ));
+                                                          output.accept(EnchantedBookItem.createForEnchantment(
+                                                                  new EnchantmentInstance(parameters.holders().lookupOrThrow(Registries.ENCHANTMENT)
+                                                                                                    .getOrThrow(InitEnchantment.ANESTHESIA_SURGERY), 3)
+                                                          ));
+                                                          output.accept(EnchantedBookItem.createForEnchantment(
+                                                                  new EnchantmentInstance(parameters.holders().lookupOrThrow(Registries.ENCHANTMENT)
+                                                                                                    .getOrThrow(InitEnchantment.POSTOPERATIVE_SUTURE), 4)
+                                                          ));
                                                       }
                                                       if (item == InitItem.BIOLOGICAL_ANALYZER.get()) {
                                                           output.accept(EnchantedBookItem.createForEnchantment(

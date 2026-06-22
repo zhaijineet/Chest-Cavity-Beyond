@@ -475,6 +475,16 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Primal Reversion",
             "Multiplies organ attributes by 1.5"
         );
+        addEnchantment(
+            InitEnchantment.ANESTHESIA_SURGERY,
+            "Anesthesia Surgery",
+            "On successful chest opening, inflicts Slowness on the target for 3 seconds (amplifier = level)"
+        );
+        addEnchantment(
+            InitEnchantment.POSTOPERATIVE_SUTURE,
+            "Postoperative Suture",
+            "Each level heals the target by 1 HP when the chest cavity UI is closed"
+        );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
         add("message." + ChestCavityBeyond.MOD_ID + ".healthy", "Target is too healthy");
@@ -1219,6 +1229,16 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             InitEnchantment.PRIMAL_REVERSION,
             "原始回归",
             "器官提供的属性强化至1.5倍"
+        );
+        addEnchantment(
+            InitEnchantment.ANESTHESIA_SURGERY,
+            "麻醉手术",
+            "成功开胸时对目标施加3秒缓慢，缓慢等级等于附魔等级"
+        );
+        addEnchantment(
+            InitEnchantment.POSTOPERATIVE_SUTURE,
+            "术后缝合",
+            "关闭胸腔界面时，每级为被开胸目标恢复1点生命值"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");

@@ -1,0 +1,21 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.chestcavitybeyond.postoperative_suture"
+  },
+  "max_cost": {
+    "base": 12,
+    "per_level_above_first": 11
+  },
+  "max_level": 4,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 11
+  },
+  "primary_items": "#chestcavitybeyond:chest_openers",
+  "slots": [
+    "any"
+  ],
+  "supported_items": "#chestcavitybeyond:chest_openers",
+  "weight": 10
+}

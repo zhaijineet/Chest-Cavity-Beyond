@@ -24,7 +24,9 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
                         InitEnchantment.ADVANCED_SURGERY,
                         InitEnchantment.SAFE_SURGERY,
                         InitEnchantment.PRUDENT_SURGERY,
-                        InitEnchantment.HYDRAULIC_CLAMP
+                        InitEnchantment.HYDRAULIC_CLAMP,
+                        InitEnchantment.ANESTHESIA_SURGERY,
+                        InitEnchantment.POSTOPERATIVE_SUTURE
                 );
         tag(EnchantmentTags.TREASURE)
                 .add(InitEnchantment.PRIMAL_REVERSION);

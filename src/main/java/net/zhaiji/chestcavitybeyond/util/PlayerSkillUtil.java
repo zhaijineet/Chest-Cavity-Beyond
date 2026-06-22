@@ -230,7 +230,7 @@ public class PlayerSkillUtil {
      */
     private static boolean graze(Player player) {
         Vec3 from = player.getEyePosition();
-        Vec3 to = from.add(player.getLookAngle().normalize().scale(player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE).getValue()));
+        Vec3 to = from.add(player.getLookAngle().normalize().scale(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)));
         ClipContext clipContext = new ClipContext(
                 from,
                 to,

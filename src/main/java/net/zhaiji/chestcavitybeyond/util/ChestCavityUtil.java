@@ -37,6 +37,7 @@ import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
+import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -290,7 +291,13 @@ public class ChestCavityUtil {
     /**
      * 遍历所有器官触发被动交互回调
      */
-    public static void interact(ChestCavityData data, LivingEntity entity, Player player, InteractionHand hand, PlayerInteractEvent.EntityInteractSpecific event) {
+    public static void interact(
+        ChestCavityData data,
+        LivingEntity entity,
+        Player player,
+        InteractionHand hand,
+        PlayerInteractEvent.EntityInteractSpecific event
+    ) {
         OrganInteractContext interactContext = new OrganInteractContext(player, hand, event.getPos(), event.getLocalPos());
         Set<Item> skippedTypes = new HashSet<>();
         for (int i = 0; i < data.getSlots(); i++) {
@@ -318,16 +325,31 @@ public class ChestCavityUtil {
      * @param entity 被打开的目标
      */
     public static void openChestCavity(Player player, LivingEntity entity) {
+        openChestCavity(player, entity, ItemStack.EMPTY);
+    }
+
+    /**
+     * 打开目标的胸腔
+     *
+     * @param player 打开胸腔的玩家
+     * @param entity 被打开的目标
+     * @param opener 开胸器物品栈，用于计算术后缝合等级，空栈表示不应用
+     */
+    public static void openChestCavity(Player player, LivingEntity entity, ItemStack opener) {
         ChestCavitySize size = ChestCavityUtil.getData(entity).getSize();
+        int postoperativeSutureLevel = EnchantmentUtil.getEnchantmentLevel(
+            player.level(), opener, InitEnchantment.POSTOPERATIVE_SUTURE
+        );
         player.openMenu(
             new SimpleMenuProvider(
                 (containerId, playerInventory, player1) ->
-                    new ChestCavityMenu(containerId, playerInventory, size, entity),
+                    new ChestCavityMenu(containerId, playerInventory, size, entity, postoperativeSutureLevel),
                 entity.getName()
             ),
             extraData -> {
                 extraData.writeEnum(size);
                 extraData.writeInt(entity.getId());
+                extraData.writeInt(postoperativeSutureLevel);
             }
         );
     }
@@ -369,7 +391,6 @@ public class ChestCavityUtil {
      *
      * @param slotIndex 当前槽位索引
      * @param maxSlots  胸腔总槽位数（27/36/45/54）
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static List<Integer> getAdjacentSlots(int slotIndex, int maxSlots) {
         List<Integer> result = new ArrayList<>();
@@ -390,7 +411,6 @@ public class ChestCavityUtil {
 
     /**
      * 获取标签下的器官数量，当前器官不在胸时按标签匹配结果计入自身
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static int getOrganCountWithSelf(ChestCavitySlotContext slotContext, TagKey<Item> tag) {
         ChestCavityData data = slotContext.data();
@@ -407,10 +427,6 @@ public class ChestCavityUtil {
 
     /**
      * 获取水平镜像槽位索引（沿中心列翻转：0↔8, 1↔7, 2↔6, 3↔5, 4 不变）
-     * <p>
-     * 由 WAIC 的 getSymmetricRibIndex 下沉重命名而来。
-     * </p>
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static int getMirrorSlotIndex(int slotIndex) {
         int row = slotIndex / 9;

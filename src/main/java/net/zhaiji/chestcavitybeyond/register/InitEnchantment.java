@@ -24,6 +24,10 @@ public class InitEnchantment {
 
     public static final ResourceKey<Enchantment> PRIMAL_REVERSION = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("primal_reversion"));
 
+    public static final ResourceKey<Enchantment> ANESTHESIA_SURGERY = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("anesthesia_surgery"));
+
+    public static final ResourceKey<Enchantment> POSTOPERATIVE_SUTURE = ResourceKey.create(Registries.ENCHANTMENT, ChestCavityBeyond.of("postoperative_suture"));
+
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
 
@@ -111,6 +115,34 @@ public class InitEnchantment {
                                 .setMinCost(10)
                                 .setMaxCost(25)
                                 .setAnvilCost(4)
+                                .build()
+                )
+        );
+
+        register(
+                context,
+                ANESTHESIA_SURGERY,
+                Enchantment.enchantment(
+                        EnchantmentDefinitionBuilder.builder()
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
+                                .setMinCost(1, 11)
+                                .setMaxCost(12, 11)
+                                .setMaxLevel(3)
+                                .build()
+                )
+        );
+
+        register(
+                context,
+                POSTOPERATIVE_SUTURE,
+                Enchantment.enchantment(
+                        EnchantmentDefinitionBuilder.builder()
+                                .setSupportedItems(chestOpeners)
+                                .setPrimaryItems(chestOpeners)
+                                .setMinCost(1, 11)
+                                .setMaxCost(12, 11)
+                                .setMaxLevel(4)
                                 .build()
                 )
         );

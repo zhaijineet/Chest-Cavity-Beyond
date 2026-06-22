@@ -20,6 +20,10 @@ import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 public class ChestCavityMenu extends AbstractContainerMenu {
     private final ChestCavityData data;
     private final ChestCavitySize size;
+    /**
+     * 术后缝合等级，关闭界面时按此值为目标恢复生命
+     */
+    private final int postoperativeSutureLevel;
 
     // 客户端使用的构造函数
     public ChestCavityMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
@@ -27,13 +31,15 @@ public class ChestCavityMenu extends AbstractContainerMenu {
             containerId,
             playerInventory,
             extraData.readEnum(ChestCavitySize.class),
-            (LivingEntity) playerInventory.player.level().getEntity(extraData.readInt())
+            (LivingEntity) playerInventory.player.level().getEntity(extraData.readInt()),
+            extraData.readInt()
         );
     }
 
-    public ChestCavityMenu(int containerId, Inventory playerInventory, ChestCavitySize size, LivingEntity entity) {
+    public ChestCavityMenu(int containerId, Inventory playerInventory, ChestCavitySize size, LivingEntity entity, int postoperativeSutureLevel) {
         super(InitMenuType.CHEST_CAVITY.get(), containerId);
         this.size = size;
+        this.postoperativeSutureLevel = postoperativeSutureLevel;
         data = ChestCavityUtil.getData(entity);
         // 确保数据大小与菜单一致
         data.updateSize(size);
@@ -113,6 +119,10 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         }
         // 触发胸腔关闭回调
         ChestCavityUtil.chestCavityClose(data, entity);
+        // 术后缝合：服务端为目标恢复生命值
+        if (!level.isClientSide() && postoperativeSutureLevel > 0 && entity.isAlive()) {
+            entity.heal(postoperativeSutureLevel);
+        }
     }
 
     @Override
@@ -121,6 +131,6 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         return player.level().isClientSide()
                || entity.isAlive()
                   // 最大距离为实体交互距离的2倍
-                  && player.canInteractWithEntity(entity, player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).getValue() * 2);
+                  && player.canInteractWithEntity(entity, player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE) * 2);
     }
 }

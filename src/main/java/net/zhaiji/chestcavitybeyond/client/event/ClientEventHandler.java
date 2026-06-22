@@ -232,7 +232,7 @@ public class ClientEventHandler {
             entity = player;
             isPlayer = true;
         }
-        if (entity == null || entity.getAttribute(Attributes.GRAVITY).getValue() > 0) return;
+        if (entity == null || entity.getAttributeValue(Attributes.GRAVITY) > 0) return;
         double speed = 0.05;
         if (input.jumping) {
             entity.setDeltaMovement(entity.getDeltaMovement().add(0, speed, 0));

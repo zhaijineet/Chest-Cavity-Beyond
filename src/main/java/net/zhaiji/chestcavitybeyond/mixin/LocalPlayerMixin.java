@@ -1,7 +1,6 @@
 package net.zhaiji.chestcavitybeyond.mixin;
 
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,10 +18,7 @@ public class LocalPlayerMixin {
     public void chestCavityBeyond$isCrouching(CallbackInfoReturnable<Boolean> cir) {
         LocalPlayer player = (LocalPlayer) (Object) this;
 
-        AttributeInstance gravity = player.getAttribute(Attributes.GRAVITY);
-        if (gravity == null) return;
-
-        if (!player.onGround() && gravity.getValue() <= 0) {
+        if (!player.onGround() && player.getAttributeValue(Attributes.GRAVITY) <= 0) {
             cir.setReturnValue(false);
         }
     }

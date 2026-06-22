@@ -229,6 +229,7 @@ public class ChestCavityData extends ItemStackHandler {
     @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compoundTag = new CompoundTag();
+        compoundTag.putBoolean("init", init);
         ListTag itemsTag = new ListTag();
         for (int i = 0; i < getSlots(); i++) {
             if (!stacks.get(i).isEmpty()) {
@@ -267,6 +268,14 @@ public class ChestCavityData extends ItemStackHandler {
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         stacks.clear();
 
+        if (nbt.contains("init")) {
+            init = nbt.getBoolean("init");
+        } else {
+            // 老存档（≤1.8.1）未序列化 init 字段，存在 attachment 数据即说明之前已初始化过，
+            // 强制修正为 true，避免错误状态被 serializeNBT 再次保存而延续
+            // TODO 2.0.0之后删除
+            init = true;
+        }
         // 读取胸腔容量：优先读新字段 chestCavitySize，兜底读旧字段 Size
         if (nbt.contains("chestCavitySize", Tag.TAG_INT)) {
             size = ChestCavitySize.byId(nbt.getInt("chestCavitySize"));
@@ -316,12 +325,6 @@ public class ChestCavityData extends ItemStackHandler {
         if (slot < 0 || slot >= getSlots()) {
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + getSlots() + ")");
         }
-    }
-
-    @Override
-    protected void onLoad() {
-        super.onLoad();
-        init = true;
     }
 
     /**

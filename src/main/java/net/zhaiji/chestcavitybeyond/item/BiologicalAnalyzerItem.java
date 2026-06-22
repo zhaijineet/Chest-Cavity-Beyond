@@ -29,7 +29,7 @@ public class BiologicalAnalyzerItem extends Item {
             HitResult hitResult = ProjectileUtil.getHitResultOnViewVector(
                 player,
                 entity -> entity != player && TargetResolver.resolve(entity) instanceof LivingEntity,
-                player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE).getValue()
+                player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE)
             );
 
             if (hitResult instanceof EntityHitResult entityHitResult

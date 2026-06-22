@@ -55,6 +55,6 @@ public abstract class PlayerMixin extends LivingEntity {
     )
     public boolean chestCavityBeyond$updatePlayerPose(boolean original) {
         // 如果重力小于等于0，且不在地面，不会蹲下
-        return original && !(getBlockStateOn().isAir() && getAttribute(Attributes.GRAVITY).getValue() <= 0);
+        return original && !(getBlockStateOn().isAir() && getAttributeValue(Attributes.GRAVITY) <= 0);
     }
 }

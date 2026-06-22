@@ -567,7 +567,6 @@ public class TooltipUtil {
 
     /**
      * 公式操作符（不换行空格包裹）
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static MutableComponent formulaOperator(String operator) {
         return Component.literal("\u00A0" + operator + "\u00A0");
@@ -575,7 +574,6 @@ public class TooltipUtil {
 
     /**
      * 属性名翻译组件
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static MutableComponent attributeName(Holder<Attribute> attribute) {
         return Component.translatable(attribute.value().getDescriptionId());
@@ -583,7 +581,6 @@ public class TooltipUtil {
 
     /**
      * 物品标签名翻译组件
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static MutableComponent tagName(TagKey<Item> tag) {
         return ItemTagManager.getTagDisplayName(tag);
@@ -591,7 +588,6 @@ public class TooltipUtil {
 
     /**
      * 标签器官数量名（形如「机械器官数量」）
-     * // TODO 当 WAIC 迁移使用本方法后移除此标记
      */
     public static MutableComponent tagOrganCountName(TagKey<Item> tag) {
         return Component.translatable(PREFIX + "formula.tag_organ_count", tagName(tag));

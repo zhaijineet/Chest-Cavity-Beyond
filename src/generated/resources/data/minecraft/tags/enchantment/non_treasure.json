@@ -4,6 +4,8 @@
     "chestcavitybeyond:advanced_surgery",
     "chestcavitybeyond:safe_surgery",
     "chestcavitybeyond:prudent_surgery",
-    "chestcavitybeyond:hydraulic_clamp"
+    "chestcavitybeyond:hydraulic_clamp",
+    "chestcavitybeyond:anesthesia_surgery",
+    "chestcavitybeyond:postoperative_suture"
   ]
 }
