@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.menu;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -24,6 +26,10 @@ public class ChestCavityMenu extends AbstractContainerMenu {
      * 术后缝合等级，关闭界面时按此值为目标恢复生命
      */
     private final int postoperativeSutureLevel;
+    /**
+     * 开胸器物品，关闭界面触发回血时对玩家施加冷却
+     */
+    private final Item opener;
 
     // 客户端使用的构造函数
     public ChestCavityMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
@@ -32,6 +38,7 @@ public class ChestCavityMenu extends AbstractContainerMenu {
             playerInventory,
             extraData.readEnum(ChestCavitySize.class),
             (LivingEntity) playerInventory.player.level().getEntity(extraData.readInt()),
+            BuiltInRegistries.ITEM.byId(extraData.readInt()),
             extraData.readInt()
         );
     }
@@ -41,10 +48,12 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         Inventory playerInventory,
         ChestCavitySize size,
         LivingEntity entity,
+        Item opener,
         int postoperativeSutureLevel
     ) {
         super(InitMenuType.CHEST_CAVITY.get(), containerId);
         this.size = size;
+        this.opener = opener;
         this.postoperativeSutureLevel = postoperativeSutureLevel;
         data = ChestCavityUtil.getData(entity);
         // 确保数据大小与菜单一致
@@ -125,9 +134,10 @@ public class ChestCavityMenu extends AbstractContainerMenu {
         }
         // 触发胸腔关闭回调
         ChestCavityUtil.chestCavityClose(data, entity);
-        // 术后缝合：服务端为目标恢复生命值
+        // 术后缝合：为目标恢复生命值，并对开胸器施加1秒冷却
         if (!level.isClientSide() && postoperativeSutureLevel > 0 && entity.isAlive()) {
             entity.heal(postoperativeSutureLevel);
+            player.getCooldowns().addCooldown(opener, 20);
         }
     }
 

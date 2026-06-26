@@ -3,6 +3,7 @@ package net.zhaiji.chestcavitybeyond.util;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -343,12 +344,13 @@ public class ChestCavityUtil {
         player.openMenu(
             new SimpleMenuProvider(
                 (containerId, playerInventory, player1) ->
-                    new ChestCavityMenu(containerId, playerInventory, size, entity, postoperativeSutureLevel),
+                    new ChestCavityMenu(containerId, playerInventory, size, entity, opener.getItem(), postoperativeSutureLevel),
                 entity.getName()
             ),
             extraData -> {
                 extraData.writeEnum(size);
                 extraData.writeInt(entity.getId());
+                extraData.writeInt(BuiltInRegistries.ITEM.getId(opener.getItem()));
                 extraData.writeInt(postoperativeSutureLevel);
             }
         );

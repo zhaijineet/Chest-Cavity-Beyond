@@ -21,7 +21,6 @@ import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
 import net.zhaiji.chestcavitybeyond.api.client.task.IRenderTask;
@@ -33,7 +32,6 @@ import net.zhaiji.chestcavitybeyond.client.screen.ChestCavityScreen;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.client.util.ChestCavityClientUtil;
 import net.zhaiji.chestcavitybeyond.manager.OrganManager;
-import net.zhaiji.chestcavitybeyond.network.server.packet.UseSkillPacket;
 import net.zhaiji.chestcavitybeyond.register.InitEntityType;
 import net.zhaiji.chestcavitybeyond.register.InitMenuType;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
@@ -150,7 +148,7 @@ public class ClientEventHandler {
      */
     public static void handlerInputEvent$MouseButton$Pre(InputEvent.MouseButton.Pre event) {
         if (event.getAction() != InputConstants.PRESS) return;
-        customKeyTrigger(InputConstants.Type.MOUSE.getOrCreate(event.getButton()));
+        KeyMappings.customKeyTrigger(InputConstants.Type.MOUSE.getOrCreate(event.getButton()));
     }
 
     /**
@@ -160,28 +158,7 @@ public class ClientEventHandler {
      */
     public static void handlerInputEvent$Key(InputEvent.Key event) {
         if (event.getAction() != InputConstants.PRESS) return;
-        customKeyTrigger(InputConstants.getKey(event.getKey(), event.getScanCode()));
-    }
-
-    private static void customKeyTrigger(InputConstants.Key key) {
-        if (KeyMappings.OPEN_SKILL_GUI.isActiveAndMatches(key)) {
-            Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.screen instanceof OrganSkillScreen screen) {
-                screen.onClose();
-            } else if (minecraft.screen == null) {
-                minecraft.setScreen(new OrganSkillScreen());
-            }
-        }
-        if (KeyMappings.USE_ORGAN_SKILL.isActiveAndMatches(key)) {
-            if (OrganSkillScreen.selectedSlot != -1) {
-                PacketDistributor.sendToServer(new UseSkillPacket(OrganSkillScreen.selectedSlot));
-            }
-        }
-        for (int i = 0; i < KeyMappings.USE_SKILLS_MAPPINGS.size(); i++) {
-            if (KeyMappings.USE_SKILLS_MAPPINGS.get(i).isActiveAndMatches(key)) {
-                PacketDistributor.sendToServer(new UseSkillPacket(i));
-            }
-        }
+        KeyMappings.customKeyTrigger(InputConstants.getKey(event.getKey(), event.getScanCode()));
     }
 
     /**

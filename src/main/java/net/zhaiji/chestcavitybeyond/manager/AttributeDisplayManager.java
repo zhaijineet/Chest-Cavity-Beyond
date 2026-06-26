@@ -211,7 +211,7 @@ public class AttributeDisplayManager {
                 int duration = (int) (30 * scale);
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.FILTRATION),
-                    amplifier,
+                    amplifier + 1,
                     TooltipUtil.formatAttributeValue(duration / 20.0)
                 );
             }
@@ -411,9 +411,11 @@ public class AttributeDisplayManager {
                 double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FURNACE_POWER);
                 int amplifier = Math.max(0, (int) (curr - 1));
                 double maxDuration = ChestCavityBeyondConfig.furnacePowerMaxDuration / 20.0;
+                double interval = 200.0 / (amplifier + 1) / 20.0;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.FURNACE_POWER),
-                    amplifier,
+                    TooltipUtil.formatAttributeValue(interval),
+                    amplifier + 1,
                     TooltipUtil.formatAttributeValue(maxDuration)
                 );
             }
@@ -431,7 +433,7 @@ public class AttributeDisplayManager {
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.WITHERED),
                     TooltipUtil.formatAttributeValue(duration / 20.0),
-                    amplifier
+                    amplifier + 1
                 );
             }
         );

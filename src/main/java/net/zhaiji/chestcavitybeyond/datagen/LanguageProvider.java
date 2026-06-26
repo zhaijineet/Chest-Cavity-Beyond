@@ -330,10 +330,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Does not destroy blocks"
         );
 
-        addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "Burn fuel for power");
+        addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "Burn fuel, restore 1 food and 1 saturation every %ss");
         addOrganActiveSkill(
             InitItem.INNER_FURNACE,
             "Consume burnable items in hand to gain Furnace Power",
+            "While active, restore 1 food and 1 saturation every %ss",
             "Sneak to consume multiple items at once",
             "Effect level equals Furnace Power attribute",
             "Duration accumulates from consumed fuel burn time"
@@ -483,7 +484,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addEnchantment(
             InitEnchantment.POSTOPERATIVE_SUTURE,
             "Postoperative Suture",
-            "Each level heals the target by 1 HP when the chest cavity UI is closed"
+            "Each level heals the target by 1 HP when the chest cavity UI is closed. After healing, 1-second cooldown"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "Target's chest is obstructed by equipment");
@@ -491,6 +492,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("message." + ChestCavityBeyond.MOD_ID + ".unopenable", "This entity cannot be opened");
 
         add("commands.chestcavitybeyond.resize.failed", "No valid targets found");
+        add("commands.chestcavitybeyond.resize.failed.invalid_size", "Invalid chest cavity size");
         add("commands.chestcavitybeyond.resize.success.single", "Resized %s's chest cavity to %s(%s slots)");
         add("commands.chestcavitybeyond.resize.success.multiple", "Resized chest cavity of %s entities to %s(%s slots)");
 
@@ -648,7 +650,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.FURNACE_POWER,
-            "Affects Furnace Power effect level from Inner Furnace skill"
+            "Activated by consuming fuel, periodically restores food level and saturation",
+            "Higher effect level = shorter recovery interval"
         );
         addAttributeDescription(
             InitAttribute.WITHERED,
@@ -665,7 +668,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.CRYSTALLIZATION,
-            "Restores health and food level when near End Crystals"
+            "Restores health when near End Crystals",
+            "Players additionally restore 1 food and 1 saturation per second"
         );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "Max Health %s");
@@ -681,7 +685,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "Air Recovery %s%%");
         addAttributeValueEffect(InitAttribute.WATER_BREATH, "Underwater Recovery %s%%");
         addAttributeValueEffect(InitAttribute.DETOXIFICATION, "Harmful Effect Duration %s%%");
-        addAttributeValueEffect(InitAttribute.FILTRATION, "Poison Lv%s for %ss");
+        addAttributeValueEffect(InitAttribute.FILTRATION, "Poison Lv%s, lasts %ss");
         add(AttributeDisplayManager.getValueEffectKey(InitAttribute.FILTRATION) + ".safe", "Blood filtration normal, no poisoning risk");
         addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "Meat food level %s%%");
         addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "Meat saturation %s%%");
@@ -696,12 +700,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.EXPLOSIVE, "Explosion Power %s");
         addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "Interval %ss");
         addAttributeValueEffect(InitAttribute.IRON_REPAIR, "Iron Heal %s");
-        addAttributeValueEffect(InitAttribute.WITHERED, "Wither Duration %ss, Lv%s");
+        addAttributeValueEffect(InitAttribute.WITHERED, "Wither for %ss, Effect Lv%s");
         addAttributeValueEffect(InitAttribute.GHASTLY, "Fireball Power %s");
-        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "Heal %s/s");
+        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "Restores %s health per second");
         addAttributeValueEffect(InitAttribute.LAUNCH, "Knockup Force %s");
         addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "Fireball Count %s");
-        addAttributeValueEffect(InitAttribute.FURNACE_POWER, "Effect Lv%s, Max Duration %ss, e.g. 1 coal = 80s");
+        addAttributeValueEffect(InitAttribute.FURNACE_POWER, "Restores 1 food + 1 saturation every %ss, Effect Lv%s, Max %ss");
 
         add(ItemTagManager.ORGANS, "Organs");
         add(ItemTagManager.HEART, "Hearts");
@@ -1068,10 +1072,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "不会破坏方块"
         );
 
-        addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "燃烧燃料获得动力");
+        addOrganSimpleActiveSkill(InitItem.INNER_FURNACE, "消耗燃料，每%s秒恢复1点饥饿值与1点饱和度");
         addOrganActiveSkill(
             InitItem.INNER_FURNACE,
             "消耗手持可燃物品获得熔炉之力效果",
+            "效果持续期间每%s秒恢复1点饥饿值与1点饱和度",
             "潜行时一次性消耗多个物品",
             "效果等级等于熔炉之力属性值",
             "持续时间从消耗的燃料燃烧时间累计"
@@ -1238,7 +1243,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addEnchantment(
             InitEnchantment.POSTOPERATIVE_SUTURE,
             "术后缝合",
-            "关闭胸腔界面时，每级为被开胸目标恢复1点生命值"
+            "关闭胸腔界面时，每级为被开胸目标恢复1点生命值。触发回血后，冷却1秒"
         );
 
         add("message." + ChestCavityBeyond.MOD_ID + ".obstructed", "目标的胸腔被装备阻挡");
@@ -1246,6 +1251,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("message." + ChestCavityBeyond.MOD_ID + ".unopenable", "此生物无法被开胸");
 
         add("commands.chestcavitybeyond.resize.failed", "没有找到有效目标");
+        add("commands.chestcavitybeyond.resize.failed.invalid_size", "无效的胸腔容量大小");
         add("commands.chestcavitybeyond.resize.success.single", "已将%s的胸腔容量调整为%s（%s个槽位）");
         add("commands.chestcavitybeyond.resize.success.multiple", "已将%s个实体的胸腔容量调整为%s（%s个槽位）");
 
@@ -1403,7 +1409,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.FURNACE_POWER,
-            "影响熔炉内核技能的熔炉之力效果等级"
+            "消耗燃料激活，效果持续期间定期恢复饥饿值和饱和度",
+            "效果等级越高，恢复间隔越短"
         );
         addAttributeDescription(
             InitAttribute.WITHERED,
@@ -1420,7 +1427,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.CRYSTALLIZATION,
-            "靠近末影水晶时持续恢复生命值和饥饿值"
+            "靠近末影水晶时持续恢复生命值",
+            "玩家每秒额外恢复1点饥饿值与1点饱和度"
         );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值 %s");
@@ -1436,7 +1444,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "空气回复 %s%%");
         addAttributeValueEffect(InitAttribute.WATER_BREATH, "水中回复 %s%%");
         addAttributeValueEffect(InitAttribute.DETOXIFICATION, "有害效果持续时间 %s%%");
-        addAttributeValueEffect(InitAttribute.FILTRATION, "中毒效果 Lv%s 持续 %s秒");
+        addAttributeValueEffect(InitAttribute.FILTRATION, "中毒效果Lv%s，持续%s秒");
         add(AttributeDisplayManager.getValueEffectKey(InitAttribute.FILTRATION) + ".safe", "血液过滤正常，无中毒风险");
         addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "肉类饥饿值 %s%%");
         addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "肉类饱和度 %s%%");
@@ -1451,12 +1459,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.EXPLOSIVE, "爆炸威力 %s");
         addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "触发间隔 %s秒");
         addAttributeValueEffect(InitAttribute.IRON_REPAIR, "铁锭回复 %s");
-        addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续 %s秒，Lv%s");
+        addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续%s秒，效果等级Lv%s");
         addAttributeValueEffect(InitAttribute.GHASTLY, "火球威力 %s");
-        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "回复 %s/秒");
+        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "每秒回复%s点生命值");
         addAttributeValueEffect(InitAttribute.LAUNCH, "击飞力度 %s");
         addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "火球数量 %s");
-        addAttributeValueEffect(InitAttribute.FURNACE_POWER, "效果等级 Lv%s，最大持续 %s秒，例：1煤炭 = 80秒");
+        addAttributeValueEffect(InitAttribute.FURNACE_POWER, "每%s秒恢复1饥饿值+1饱和度，效果等级Lv%s，最大持续%s秒");
 
         add("jei." + ChestCavityBeyond.MOD_ID + ".chest_cavity_type", "胸腔类型");
         add("jei." + ChestCavityBeyond.MOD_ID + ".need_breath", "需要呼吸");

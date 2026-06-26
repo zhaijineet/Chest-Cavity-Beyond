@@ -16,6 +16,7 @@ import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.item.BiologicalAnalyzerItem;
 import net.zhaiji.chestcavitybeyond.item.ChestOpenerItem;
+import net.zhaiji.chestcavitybeyond.manager.OrganDynamicTooltips;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.GoalSkillUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganInteractUtil;
@@ -962,6 +963,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.FURNACE_POWER, 1)
             .cooldown(20)
             .skill(PlayerSkillUtil::furnacePower)
+            .tooltip(OrganDynamicTooltips.INNER_FURNACE_TOOLTIP)
             .build()
     );
 

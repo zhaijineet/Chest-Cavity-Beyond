@@ -65,6 +65,7 @@ import net.zhaiji.chestcavitybeyond.util.MathUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
 import net.zhaiji.chestcavitybeyond.util.PlayerSkillUtil;
+import net.zhaiji.chestcavitybeyond.util.RespawnSafetyUtil;
 
 public class CommonEventHandler {
     /**
@@ -297,12 +298,16 @@ public class CommonEventHandler {
     }
 
     /**
-     * 重置玩家器官属性
+     * 重置玩家器官属性，并为缺失关键器官的玩家补充最低限度的器官以避免反复死亡
      *
      * @param event 玩家重生事件
      */
     public static void handlerPlayerEvent$PlayerRespawnEvent(PlayerEvent.PlayerRespawnEvent event) {
-        ChestCavityUtil.getData(event.getEntity()).initAttributeModifier();
+        ChestCavityData data = ChestCavityUtil.getData(event.getEntity());
+        data.initAttributeModifier();
+        if (event.getEntity() instanceof ServerPlayer player) {
+            RespawnSafetyUtil.ensureVitalOrgans(player, data);
+        }
     }
 
     /**

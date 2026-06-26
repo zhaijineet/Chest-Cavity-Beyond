@@ -25,6 +25,9 @@ public class ChestCavityCommand {
     private static final SimpleCommandExceptionType ERROR_FAILED = new SimpleCommandExceptionType(
         Component.translatable("commands.chestcavitybeyond.resize.failed")
     );
+    private static final SimpleCommandExceptionType ERROR_INVALID_SIZE = new SimpleCommandExceptionType(
+        Component.translatable("commands.chestcavitybeyond.resize.failed.invalid_size")
+    );
     private static final SimpleCommandExceptionType ERROR_RESET_ORGANS_FAILED = new SimpleCommandExceptionType(
         Component.translatable("commands.chestcavitybeyond.resetorgans.failed")
     );
@@ -58,7 +61,10 @@ public class ChestCavityCommand {
 
     private static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Collection<? extends Entity> targets = EntityArgument.getEntities(context, "targets");
-        ChestCavitySize newSize = ChestCavitySize.byName(StringArgumentType.getString(context, "size"));
+        ChestCavitySize newSize = ChestCavitySize.CODEC.byName(StringArgumentType.getString(context, "size"), null);
+        if (newSize == null) {
+            throw ERROR_INVALID_SIZE.create();
+        }
 
         int successCount = 0;
         for (Entity entity : targets) {

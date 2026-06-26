@@ -423,7 +423,7 @@ public class MixinUtil {
             if (tickCount % 10 == 0) {
                 entity.heal((float) crystallization / 5);
                 if (tickCount % 20 == 0 && entity instanceof Player player) {
-                    player.getFoodData().eat((int) Math.min(crystallization / 5, 1), 0.5F);
+                    player.getFoodData().eat((int) Math.max(crystallization / 5, 1), 0.5F);
                 }
             }
         }

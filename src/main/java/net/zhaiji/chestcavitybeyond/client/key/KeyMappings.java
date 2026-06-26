@@ -2,9 +2,13 @@ package net.zhaiji.chestcavitybeyond.client.key;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
+import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
+import net.zhaiji.chestcavitybeyond.network.server.packet.UseSkillPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,5 +96,29 @@ public class KeyMappings {
         KeyMapping keyMapping = new KeyMapping(description, keyConflictContext, inputType, keyCode, category);
         USE_SKILLS_MAPPINGS.add(keyMapping);
         return keyMapping;
+    }
+
+    /**
+     * 根据按键触发对应功能
+     */
+    public static void customKeyTrigger(InputConstants.Key key) {
+        if (OPEN_SKILL_GUI.isActiveAndMatches(key)) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.screen instanceof OrganSkillScreen screen) {
+                screen.onClose();
+            } else if (minecraft.screen == null) {
+                minecraft.setScreen(new OrganSkillScreen());
+            }
+        }
+        if (USE_ORGAN_SKILL.isActiveAndMatches(key)) {
+            if (OrganSkillScreen.selectedSlot != -1) {
+                PacketDistributor.sendToServer(new UseSkillPacket(OrganSkillScreen.selectedSlot));
+            }
+        }
+        for (int i = 0; i < USE_SKILLS_MAPPINGS.size(); i++) {
+            if (USE_SKILLS_MAPPINGS.get(i).isActiveAndMatches(key)) {
+                PacketDistributor.sendToServer(new UseSkillPacket(i));
+            }
+        }
     }
 }
