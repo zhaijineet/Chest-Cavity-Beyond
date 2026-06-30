@@ -89,6 +89,13 @@ public interface IOrgan {
     }
 
     /**
+     * 标记器官的动态 modifier 是否依赖其他器官属性，true 时会在其他器官变化时重新应用属性并参与初始化迭代至属性结果一致
+     */
+    default boolean shouldRefreshOnOrganChange() {
+        return false;
+    }
+
+    /**
      * 器官是否有技能
      *
      * @return 是否有技能

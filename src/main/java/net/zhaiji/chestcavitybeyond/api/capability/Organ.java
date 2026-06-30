@@ -50,6 +50,7 @@ public class Organ implements IOrgan {
     private final Consumer<ChestCavitySlotContext> organAddedConsumer;
     private final Consumer<ChestCavitySlotContext> organRemovedConsumer;
     private final OtherOrganChangeConsumer otherOrganChangeConsumer;
+    private final boolean refreshOnOrganChange;
     private final boolean hasSkill;
     private final OrganSkillFunction organSkillFunction;
     private final ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction;
@@ -71,6 +72,7 @@ public class Organ implements IOrgan {
         this.organAddedConsumer = builder.organAddedConsumer;
         this.organRemovedConsumer = builder.organRemovedConsumer;
         this.otherOrganChangeConsumer = builder.otherOrganChangeConsumer;
+        this.refreshOnOrganChange = builder.refreshOnOrganChange;
         this.hasSkill = builder.hasSkill;
         this.organSkillFunction = builder.organSkillFunction;
         this.cooldownTicksFunction = builder.cooldownTicksFunction;
@@ -194,7 +196,15 @@ public class Organ implements IOrgan {
 
     @Override
     public void otherOrganChange(ChestCavitySlotContext context, int changedIndex, ItemStack oldStack, ItemStack newStack) {
+        if (refreshOnOrganChange) {
+            OrganAttributeUtil.updateSlotOrganAttribute(context);
+        }
         otherOrganChangeConsumer.accept(context, changedIndex, oldStack, newStack);
+    }
+
+    @Override
+    public boolean shouldRefreshOnOrganChange() {
+        return refreshOnOrganChange;
     }
 
     @Override
@@ -294,6 +304,7 @@ public class Organ implements IOrgan {
 
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
         private OrganModifierConsumer organModifierConsumer = EMPTY_MODIFIER;
+        private boolean refreshOnOrganChange = false;
         private OrganTooltipConsumer tooltipConsumer = null;
         private Consumer<ChestCavitySlotContext> organTickConsumer = EMPTY_CONSUMER;
         private Consumer<ChestCavitySlotContext> organAddedConsumer = EMPTY_CONSUMER;
@@ -322,6 +333,7 @@ public class Organ implements IOrgan {
             attributeEntries.clear();
             attributeEntries.addAll(organ.attributeEntries);
             organModifierConsumer = organ.organModifierConsumer;
+            refreshOnOrganChange = organ.refreshOnOrganChange;
             tooltipConsumer = organ.tooltipConsumer;
             organTickConsumer = organ.organTickConsumer;
             organAddedConsumer = organ.organAddedConsumer;
@@ -361,6 +373,16 @@ public class Organ implements IOrgan {
 
         public T modifier(OrganModifierConsumer organModifierConsumer) {
             this.organModifierConsumer = Objects.requireNonNull(organModifierConsumer, "organModifierConsumer");
+            return self();
+        }
+
+        public T refreshOnOrganChange() {
+            this.refreshOnOrganChange = true;
+            return self();
+        }
+
+        public T clearRefreshOnOrganChange() {
+            this.refreshOnOrganChange = false;
             return self();
         }
 

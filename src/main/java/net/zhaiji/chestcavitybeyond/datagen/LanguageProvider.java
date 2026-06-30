@@ -668,8 +668,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.CRYSTALLIZATION,
-            "Restores health when near End Crystals",
-            "Players additionally restore 1 food and 1 saturation per second"
+            "Only takes effect near End Crystals",
+            "Continuously restores health; players additionally restore food and saturation, scaling with Crystallization value"
         );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "Max Health %s");
@@ -702,7 +702,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.IRON_REPAIR, "Iron Heal %s");
         addAttributeValueEffect(InitAttribute.WITHERED, "Wither for %ss, Effect Lv%s");
         addAttributeValueEffect(InitAttribute.GHASTLY, "Fireball Power %s");
-        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "Restores %s health per second");
+        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "Near End Crystals: restores %s health per second");
         addAttributeValueEffect(InitAttribute.LAUNCH, "Knockup Force %s");
         addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "Fireball Count %s");
         addAttributeValueEffect(InitAttribute.FURNACE_POWER, "Restores 1 food + 1 saturation every %ss, Effect Lv%s, Max %ss");
@@ -1427,8 +1427,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.CRYSTALLIZATION,
-            "靠近末影水晶时持续恢复生命值",
-            "玩家每秒额外恢复1点饥饿值与1点饱和度"
+            "需要靠近末影水晶才能生效",
+            "持续恢复生命值，玩家额外恢复饥饿值与饱和度，恢复量随结晶化属性值提升"
         );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值 %s");
@@ -1461,7 +1461,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.IRON_REPAIR, "铁锭回复 %s");
         addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续%s秒，效果等级Lv%s");
         addAttributeValueEffect(InitAttribute.GHASTLY, "火球威力 %s");
-        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "每秒回复%s点生命值");
+        addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "靠近末影水晶时每秒回复%s点生命值");
         addAttributeValueEffect(InitAttribute.LAUNCH, "击飞力度 %s");
         addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "火球数量 %s");
         addAttributeValueEffect(InitAttribute.FURNACE_POWER, "每%s秒恢复1饥饿值+1饱和度，效果等级Lv%s，最大持续%s秒");
