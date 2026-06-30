@@ -1,7 +1,8 @@
 package net.zhaiji.chestcavitybeyond.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.Holder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,7 +32,7 @@ import java.util.Set;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements ILivingEntity {
     @Unique
-    private final Set<Holder<Attribute>> chestCavityBeyond$dirtyDerivedAttributes = new HashSet<>();
+    private final Set<Holder<Attribute>> dirtyDerivedAttributes = new HashSet<>();
 
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -73,15 +74,19 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
     /**
      * 如果有腐食消化，则不会附加食物的中毒和饥饿
      */
-    @WrapWithCondition(
+    @WrapOperation(
         method = "addEatEffect",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z"
         )
     )
-    public boolean chestCavityBeyond$addEatEffect(LivingEntity instance, MobEffectInstance effectInstance) {
-        return MixinUtil.shouldAddEatEffect(instance, effectInstance);
+    public boolean chestCavityBeyond$addEatEffect(LivingEntity instance, MobEffectInstance effectInstance, Operation<Boolean> original) {
+        if (MixinUtil.shouldAddEatEffect(instance, effectInstance)) {
+            return original.call(instance, effectInstance);
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -102,7 +107,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
             || attribute.equals(InitAttribute.STRENGTH)
             || attribute.equals(InitAttribute.SPEED)
             || attribute.equals(InitAttribute.LEAPING)) {
-            chestCavityBeyond$dirtyDerivedAttributes.add(attribute);
+            dirtyDerivedAttributes.add(attribute);
         }
     }
 
@@ -114,12 +119,11 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         at = @At("RETURN")
     )
     public void chestCavityBeyond$refreshDirtyAttributes(CallbackInfo ci) {
-        if (chestCavityBeyond$dirtyDerivedAttributes.isEmpty()) return;
-        LivingEntity entity = (LivingEntity) (Object) this;
-        ChestCavityData data = ChestCavityUtil.getData(entity);
-        for (Holder<Attribute> attr : chestCavityBeyond$dirtyDerivedAttributes) {
-            OrganAttributeUtil.updateDerivedAttribute(data, entity, attr);
+        if (dirtyDerivedAttributes.isEmpty()) return;
+        ChestCavityData data = ChestCavityUtil.getData((LivingEntity) (Object) this);
+        for (Holder<Attribute> attr : dirtyDerivedAttributes) {
+            OrganAttributeUtil.updateDerivedAttribute(data, attr);
         }
-        chestCavityBeyond$dirtyDerivedAttributes.clear();
+        dirtyDerivedAttributes.clear();
     }
 }

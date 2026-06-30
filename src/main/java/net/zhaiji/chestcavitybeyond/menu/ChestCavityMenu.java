@@ -77,7 +77,7 @@ public class ChestCavityMenu extends AbstractContainerMenu {
             addSlot(new Slot(playerInventory, i, 8 + i * 18, hotbarY));
         }
         // 触发胸腔打开回调
-        ChestCavityUtil.chestCavityOpen(data, entity);
+        ChestCavityUtil.chestCavityOpen(data);
     }
 
     public ChestCavityData getData() {
@@ -111,7 +111,7 @@ public class ChestCavityMenu extends AbstractContainerMenu {
             }
             // 因为moveItemStackTo使用shrink减少物品数量，所以当选择的是胸腔槽位时，需要额外更新器官
             if (index < chestCavitySlots) {
-                ChestCavityUtil.changeOrgan(data, data.getOwner(), index, itemstack, itemstack1);
+                ChestCavityUtil.changeOrgan(data, index, itemstack, itemstack1);
             }
         }
         return itemstack;
@@ -133,7 +133,7 @@ public class ChestCavityMenu extends AbstractContainerMenu {
             );
         }
         // 触发胸腔关闭回调
-        ChestCavityUtil.chestCavityClose(data, entity);
+        ChestCavityUtil.chestCavityClose(data);
         // 术后缝合：为目标恢复生命值，并对开胸器施加1秒冷却
         if (!level.isClientSide() && postoperativeSutureLevel > 0 && entity.isAlive()) {
             entity.heal(postoperativeSutureLevel);

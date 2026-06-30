@@ -1,15 +1,12 @@
 package net.zhaiji.chestcavitybeyond.manager;
 
 import net.minecraft.world.item.Item;
-import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class OrganManager {
-    public static final IOrgan EMPTY_ORGAN = new IOrgan() {
-    };
     public static final Map<Item, Organ> ORGAN_REGISTRY = new HashMap<>();
 
     /**

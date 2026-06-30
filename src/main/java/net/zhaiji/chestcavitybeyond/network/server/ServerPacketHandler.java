@@ -13,7 +13,7 @@ public class ServerPacketHandler {
         int slot = packet.slot();
         if (slot < 0 || slot >= data.getSlots()) return;
         ItemStack stack = data.getStackInSlot(slot);
-        ChestCavityUtil.organSkill(data, player, slot, stack);
+        ChestCavityUtil.organSkill(data, slot, stack);
     }
 
     public static void handlerSyncSelectedSlotPacket(Player player, SyncSelectedSlotPacket packet) {

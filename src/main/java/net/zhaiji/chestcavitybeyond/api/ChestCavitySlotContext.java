@@ -9,17 +9,21 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 胸腔槽位上下文
  *
- * @param data   胸腔数据 (可能为null)
- * @param entity 胸腔主人 (可能为null)
- * @param id     槽位id
- * @param index  位置索引
- * @param stack  对应物品
+ * @param data  胸腔数据 (可能为null)
+ * @param id    槽位id
+ * @param index 位置索引
+ * @param stack 对应物品
  */
 public record ChestCavitySlotContext(
-        @Nullable ChestCavityData data,
-        @Nullable LivingEntity entity,
-        ResourceLocation id,
-        int index,
-        ItemStack stack
+    @Nullable ChestCavityData data,
+    ResourceLocation id,
+    int index,
+    ItemStack stack
 ) {
+    /**
+     * 获取胸腔拥有者
+     */
+    public @Nullable LivingEntity entity() {
+        return data != null ? data.getOwner() : null;
+    }
 }

@@ -30,13 +30,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ChestCavityType {
-    private ResourceLocation id;
     private final NonNullList<Item> organs = NonNullList.withSize(54, Items.AIR);
     private final Map<EntityType<?>, Map<Holder<Attribute>, Double>> defaultAttributes = new HashMap<>();
     private final Map<EntityType<?>, Map<Holder<Attribute>, List<AttributeModifier>>> defaultModifiers = new HashMap<>();
     private final Map<Item, List<AttributeBonus>> attributeBonuses = new HashMap<>();
     private final List<AttributeBonus> typeDefaultBonuses = new ArrayList<>();
     private final Map<ResourceLocation, Map<Predicate<ChestCavitySlotContext>, Function<ChestCavitySlotContext, ItemStack>>> conversionMap = new HashMap<>();
+    private ResourceLocation id;
     private ChestCavitySize size = ChestCavitySize.ROW_3;
     private boolean needBreath = true;
     private boolean needHealth = true;
@@ -410,7 +410,7 @@ public class ChestCavityType {
             // 器官默认属性
             modifierMultimap.putAll(
                 ChestCavityUtil.getOrganCap(organ)
-                    .getAttributeModifiers(new ChestCavitySlotContext(null, null, slotId, i, organ))
+                    .getAttributeModifiers(new ChestCavitySlotContext(null, slotId, i, organ))
             );
             // 器官补偿属性
             if (attributeBonuses.containsKey(organItem)) {
@@ -577,7 +577,7 @@ public class ChestCavityType {
     /**
      * 获取器官转换结果（匹配顺序不保证，首个命中即用）
      *
-     * @param context     当前槽位的上下文
+     * @param context      当前槽位的上下文
      * @param targetTypeId 目标胸腔类型的注册名
      * @return 转换后的 ItemStack，无匹配则返回 {@code context.stack()}（保持不变）
      */

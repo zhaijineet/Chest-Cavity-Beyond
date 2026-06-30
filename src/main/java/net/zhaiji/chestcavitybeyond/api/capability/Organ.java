@@ -37,12 +37,43 @@ import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-public class Organ implements IOrgan {
+public class Organ {
+    /**
+     * 无行为的空器官单例，用于表示物品不具备器官能力
+     */
+    public static final Organ EMPTY = new Organ();
+
+    private static final OrganModifierConsumer EMPTY_MODIFIER = (context, modifiers) -> {
+    };
+    private static final OrganTooltipConsumer EMPTY_TOOLTIP = (slotContext, keyContext, context, tooltipComponents, tooltipFlag) -> {
+    };
+    private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
+    };
+    private static final ToIntFunction<ChestCavitySlotContext> EMPTY_COOLDOWN = context -> 0;
+    private static final AttackConsumer EMPTY_ATTACK = (context, target, source, damageContainer) -> {
+    };
+    private static final HurtConsumer EMPTY_HURT = (context, source, damageContainer) -> {
+    };
+    private static final HealConsumer EMPTY_HEAL = (context, event) -> {
+    };
+    private static final IncomingDamageConsumer EMPTY_INCOMING_DAMAGE = (context, event) -> {
+    };
+    private static final Consumer<ChestCavitySlotContext> EMPTY_CHEST_CAVITY_OPEN = context -> {
+    };
+    private static final Consumer<ChestCavitySlotContext> EMPTY_CHEST_CAVITY_CLOSE = context -> {
+    };
+    private static final OtherOrganChangeConsumer EMPTY_OTHER_ORGAN_CHANGE = (context, changedIndex, oldStack, newStack) -> {
+    };
+    private static final OrganSkillFunction EMPTY_SKILL = context -> false;
+    private static final OrganInteractConsumer EMPTY_INTERACT = (context, interactContext) -> {
+    };
+
     private final List<AttributeEntry> attributeEntries;
     private final OrganModifierConsumer organModifierConsumer;
     private final OrganTooltipConsumer tooltipConsumer;
@@ -85,6 +116,29 @@ public class Organ implements IOrgan {
         this.chestCavityCloseConsumer = builder.chestCavityCloseConsumer;
         this.interactConsumer = builder.interactConsumer;
         this.goalSkillMetadata = builder.goalSkillMetadata;
+    }
+
+    private Organ() {
+        this.attributeEntries = List.of();
+        this.organModifierConsumer = EMPTY_MODIFIER;
+        this.tooltipConsumer = EMPTY_TOOLTIP;
+        this.organTickConsumer = EMPTY_CONSUMER;
+        this.organAddedConsumer = EMPTY_CONSUMER;
+        this.organRemovedConsumer = EMPTY_CONSUMER;
+        this.otherOrganChangeConsumer = EMPTY_OTHER_ORGAN_CHANGE;
+        this.refreshOnOrganChange = false;
+        this.hasSkill = false;
+        this.organSkillFunction = EMPTY_SKILL;
+        this.cooldownTicksFunction = EMPTY_COOLDOWN;
+        this.organSkillOnCooldownConsumer = EMPTY_CONSUMER;
+        this.attackConsumer = EMPTY_ATTACK;
+        this.hurtConsumer = EMPTY_HURT;
+        this.healConsumer = EMPTY_HEAL;
+        this.incomingDamageConsumer = EMPTY_INCOMING_DAMAGE;
+        this.chestCavityOpenConsumer = EMPTY_CHEST_CAVITY_OPEN;
+        this.chestCavityCloseConsumer = EMPTY_CHEST_CAVITY_CLOSE;
+        this.interactConsumer = EMPTY_INTERACT;
+        this.goalSkillMetadata = GoalSkillMetadata.EMPTY;
     }
 
     /**
@@ -138,7 +192,6 @@ public class Organ implements IOrgan {
         return new WrapperBuilder(item, organ);
     }
 
-    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ChestCavitySlotContext context) {
         Multimap<Holder<Attribute>, AttributeModifier> modifiers = LinkedHashMultimap.create();
         for (AttributeEntry entry : attributeEntries) {
@@ -149,10 +202,12 @@ public class Organ implements IOrgan {
             organModifierConsumer.accept(context, modifiers);
         }
         // 原始回归附魔效果
-        if (context.entity() != null && EnchantmentUtil.getEnchantmentLevel(
-                context.entity().level(), context.stack(), InitEnchantment.PRIMAL_REVERSION) > 0) {
+        if (
+            context.entity() != null
+            && EnchantmentUtil.getEnchantmentLevel(context.entity().level(), context.stack(), InitEnchantment.PRIMAL_REVERSION) > 0
+        ) {
             Multimap<Holder<Attribute>, AttributeModifier> scaled = LinkedHashMultimap.create();
-            for (var entry : modifiers.entries()) {
+            for (Map.Entry<Holder<Attribute>, AttributeModifier> entry : modifiers.entries()) {
                 AttributeModifier original = entry.getValue();
                 AttributeModifier scaledModifier = new AttributeModifier(
                     original.id(), original.amount() * 1.5, original.operation()
@@ -164,7 +219,6 @@ public class Organ implements IOrgan {
         return modifiers;
     }
 
-    @Override
     public void organTooltip(
         ChestCavitySlotContext slotContext,
         TooltipsKeyContext keyContext,
@@ -179,22 +233,18 @@ public class Organ implements IOrgan {
         consumer.accept(slotContext, keyContext, context, tooltipComponents, tooltipFlag);
     }
 
-    @Override
     public void tick(ChestCavitySlotContext context) {
         organTickConsumer.accept(context);
     }
 
-    @Override
     public void organAdded(ChestCavitySlotContext context) {
         organAddedConsumer.accept(context);
     }
 
-    @Override
     public void organRemoved(ChestCavitySlotContext context) {
         organRemovedConsumer.accept(context);
     }
 
-    @Override
     public void otherOrganChange(ChestCavitySlotContext context, int changedIndex, ItemStack oldStack, ItemStack newStack) {
         if (refreshOnOrganChange) {
             OrganAttributeUtil.updateSlotOrganAttribute(context);
@@ -202,17 +252,14 @@ public class Organ implements IOrgan {
         otherOrganChangeConsumer.accept(context, changedIndex, oldStack, newStack);
     }
 
-    @Override
     public boolean shouldRefreshOnOrganChange() {
         return refreshOnOrganChange;
     }
 
-    @Override
     public boolean hasSkill() {
         return hasSkill;
     }
 
-    @Override
     public void organSkill(ChestCavitySlotContext context) {
         if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) {
             organSkillOnCooldownConsumer.accept(context);
@@ -226,47 +273,38 @@ public class Organ implements IOrgan {
         }
     }
 
-    @Override
     public void incomingDamage(ChestCavitySlotContext context, LivingIncomingDamageEvent event) {
         incomingDamageConsumer.accept(context, event);
     }
 
-    @Override
     public void attack(ChestCavitySlotContext context, LivingEntity target, DamageSource source, DamageContainer damageContainer) {
         attackConsumer.accept(context, target, source, damageContainer);
     }
 
-    @Override
     public void hurt(ChestCavitySlotContext context, DamageSource source, DamageContainer damageContainer) {
         hurtConsumer.accept(context, source, damageContainer);
     }
 
-    @Override
     public void heal(ChestCavitySlotContext context, LivingHealEvent event) {
         healConsumer.accept(context, event);
     }
 
-    @Override
     public int getCooldownTicks(ChestCavitySlotContext context) {
         return cooldownTicksFunction.applyAsInt(context);
     }
 
-    @Override
     public void chestCavityOpen(ChestCavitySlotContext context) {
         chestCavityOpenConsumer.accept(context);
     }
 
-    @Override
     public void chestCavityClose(ChestCavitySlotContext context) {
         chestCavityCloseConsumer.accept(context);
     }
 
-    @Override
     public void interact(ChestCavitySlotContext context, OrganInteractContext interactContext) {
         interactConsumer.accept(context, interactContext);
     }
 
-    @Override
     public GoalSkillMetadata getGoalSkillMetadata() {
         return goalSkillMetadata;
     }
@@ -279,29 +317,6 @@ public class Organ implements IOrgan {
      * </p>
      */
     public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
-        private static final OrganModifierConsumer EMPTY_MODIFIER = (context, modifiers) -> {
-        };
-        private static final Consumer<ChestCavitySlotContext> EMPTY_CONSUMER = context -> {
-        };
-        private static final ToIntFunction<ChestCavitySlotContext> EMPTY_COOLDOWN = context -> 0;
-        private static final AttackConsumer EMPTY_ATTACK = (context, target, source, damageContainer) -> {
-        };
-        private static final HurtConsumer EMPTY_HURT = (context, source, damageContainer) -> {
-        };
-        private static final HealConsumer EMPTY_HEAL = (context, event) -> {
-        };
-        private static final IncomingDamageConsumer EMPTY_INCOMING_DAMAGE = (context, event) -> {
-        };
-        private static final Consumer<ChestCavitySlotContext> EMPTY_CHEST_CAVITY_OPEN = context -> {
-        };
-        private static final Consumer<ChestCavitySlotContext> EMPTY_CHEST_CAVITY_CLOSE = context -> {
-        };
-        private static final OtherOrganChangeConsumer EMPTY_OTHER_ORGAN_CHANGE = (context, changedIndex, oldStack, newStack) -> {
-        };
-        private static final OrganSkillFunction EMPTY_SKILL = context -> false;
-        private static final OrganInteractConsumer EMPTY_INTERACT = (context, interactContext) -> {
-        };
-
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
         private OrganModifierConsumer organModifierConsumer = EMPTY_MODIFIER;
         private boolean refreshOnOrganChange = false;

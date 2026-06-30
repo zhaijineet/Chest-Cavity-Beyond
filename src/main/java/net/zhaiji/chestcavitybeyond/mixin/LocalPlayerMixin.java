@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LocalPlayer.class)
 public class LocalPlayerMixin {
-
     @Inject(
         method = "isCrouching",
         at = @At("HEAD"),

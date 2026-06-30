@@ -11,14 +11,12 @@ import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
  */
 public class OrganChangeEvent extends Event {
     private final ChestCavityData data;
-    private final LivingEntity entity;
     private final int index;
     private final ItemStack oldStack;
     private final ItemStack newStack;
 
-    public OrganChangeEvent(ChestCavityData data, LivingEntity entity, int index, ItemStack oldStack, ItemStack newStack) {
+    public OrganChangeEvent(ChestCavityData data, int index, ItemStack oldStack, ItemStack newStack) {
         this.data = data;
-        this.entity = entity;
         this.index = index;
         this.oldStack = oldStack;
         this.newStack = newStack;
@@ -35,7 +33,7 @@ public class OrganChangeEvent extends Event {
      * 获取拥有胸腔的实体
      */
     public LivingEntity getEntity() {
-        return entity;
+        return data.getOwner();
     }
 
     /**

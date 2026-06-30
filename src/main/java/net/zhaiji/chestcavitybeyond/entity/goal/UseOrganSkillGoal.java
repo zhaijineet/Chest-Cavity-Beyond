@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
-import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
+import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.function.GoalSkillWeightFunction;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalCombatContext;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillIntent;
@@ -375,7 +375,7 @@ public class UseOrganSkillGoal extends Goal {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (stack.isEmpty()) continue;
-            IOrgan organ = ChestCavityUtil.getOrganCap(stack);
+            Organ organ = ChestCavityUtil.getOrganCap(stack);
             GoalSkillMetadata metadata = organ.getGoalSkillMetadata();
             if (metadata.isEmpty()) continue;
             // entityFilter 在构建缓存时就过滤（只依赖 mob 类型，不依赖运行时状态）

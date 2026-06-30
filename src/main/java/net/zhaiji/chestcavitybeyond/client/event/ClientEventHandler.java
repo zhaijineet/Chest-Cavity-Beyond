@@ -22,7 +22,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
-import net.zhaiji.chestcavitybeyond.api.capability.IOrgan;
+import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.api.client.task.IRenderTask;
 import net.zhaiji.chestcavitybeyond.api.task.IChestCavityTask;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -31,7 +31,6 @@ import net.zhaiji.chestcavitybeyond.client.overlay.OrganSelectedOverlay;
 import net.zhaiji.chestcavitybeyond.client.screen.ChestCavityScreen;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.client.util.ChestCavityClientUtil;
-import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.register.InitEntityType;
 import net.zhaiji.chestcavitybeyond.register.InitMenuType;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
@@ -98,8 +97,8 @@ public class ClientEventHandler {
      * @param event 物品工具提示事件
      */
     public static void handlerItemTooltipEvent(ItemTooltipEvent event) {
-        IOrgan organ = ChestCavityUtil.getOrganCap(event.getItemStack());
-        if (organ == OrganManager.EMPTY_ORGAN) return;
+        Organ organ = ChestCavityUtil.getOrganCap(event.getItemStack());
+        if (organ == Organ.EMPTY) return;
         Minecraft minecraft = Minecraft.getInstance();
         Player player = event.getEntity();
         TooltipsKeyContext keyContext;

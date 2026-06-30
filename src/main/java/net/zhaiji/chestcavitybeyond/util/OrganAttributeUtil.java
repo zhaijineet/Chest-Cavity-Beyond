@@ -125,25 +125,24 @@ public class OrganAttributeUtil {
      */
     public static void updateSlotOrganAttribute(ChestCavitySlotContext context) {
         ItemStack organ = context.stack();
-        updateOrganAttributeModifier(context.data(), context.entity(), context.index(), organ, organ);
+        updateOrganAttributeModifier(context.data(), context.index(), organ, organ);
     }
 
     /**
      * 更新器官属性修饰符
      *
      * @param data     胸腔数据
-     * @param entity   目标实体
      * @param index    器官槽位索引
      * @param oldStack 旧器官
      * @param newStack 新器官
      */
     public static void updateOrganAttributeModifier(
         ChestCavityData data,
-        LivingEntity entity,
         int index,
         ItemStack oldStack,
         ItemStack newStack
     ) {
+        LivingEntity entity = data.getOwner();
         Multimap<Holder<Attribute>, AttributeModifier> removeModifiers = ChestCavityUtil.getAttributeModifiers(
             ChestCavityUtil.createContext(
                 data,
@@ -225,15 +224,14 @@ public class OrganAttributeUtil {
      * 根据模组属性分发调用对应的原版属性更新方法
      *
      * @param data      胸腔数据
-     * @param entity    目标实体
      * @param attribute 发生变化的模组属性
      */
-    public static void updateDerivedAttribute(ChestCavityData data, LivingEntity entity, Holder<Attribute> attribute) {
-        if (attribute.equals(InitAttribute.HEALTH)) updateHealth(data, entity);
-        else if (attribute.equals(InitAttribute.NERVES)) updateNerves(data, entity);
-        else if (attribute.equals(InitAttribute.STRENGTH)) updateStrength(data, entity);
-        else if (attribute.equals(InitAttribute.SPEED)) updateSpeed(data, entity);
-        else if (attribute.equals(InitAttribute.LEAPING)) updateLeaping(data, entity);
+    public static void updateDerivedAttribute(ChestCavityData data, Holder<Attribute> attribute) {
+        if (attribute.equals(InitAttribute.HEALTH)) updateHealth(data);
+        else if (attribute.equals(InitAttribute.NERVES)) updateNerves(data);
+        else if (attribute.equals(InitAttribute.STRENGTH)) updateStrength(data);
+        else if (attribute.equals(InitAttribute.SPEED)) updateSpeed(data);
+        else if (attribute.equals(InitAttribute.LEAPING)) updateLeaping(data);
     }
 
     /**
@@ -249,7 +247,8 @@ public class OrganAttributeUtil {
     /**
      * 更新胸腔类型的默认属性调整修饰符
      */
-    public static void updateDefaultModifier(ChestCavityData data, LivingEntity entity) {
+    public static void updateDefaultModifier(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         for (Map.Entry<Holder<Attribute>, List<AttributeModifier>> entry : data.getType().getDefaultModifier(entity.getType()).entrySet()) {
             for (AttributeModifier modifier : entry.getValue()) {
                 updateAttributeModifier(entity, entry.getKey(), modifier);
@@ -260,7 +259,8 @@ public class OrganAttributeUtil {
     /**
      * 更新健康附带的属性（最大生命值）
      */
-    public static void updateHealth(ChestCavityData data, LivingEntity entity) {
+    public static void updateHealth(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         double health = data.getDifferenceValue(InitAttribute.HEALTH);
         updateAttributeModifier(entity, Attributes.MAX_HEALTH, createAddValueModifier("health", health * 2));
     }
@@ -268,7 +268,8 @@ public class OrganAttributeUtil {
     /**
      * 更新神经效率附带的属性（移动速度，攻击速度）
      */
-    public static void updateNerves(ChestCavityData data, LivingEntity entity) {
+    public static void updateNerves(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         double nerves = data.getDifferenceValue(InitAttribute.NERVES);
         double factor = MathUtil.getLog10Scale(nerves);
         // 通过nerves属性的差值计算最终应用的数值
@@ -284,7 +285,8 @@ public class OrganAttributeUtil {
     /**
      * 更新力量附带的属性（攻击力）
      */
-    public static void updateStrength(ChestCavityData data, LivingEntity entity) {
+    public static void updateStrength(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         double strength = data.getDifferenceValue(InitAttribute.STRENGTH);
         double factor = MathUtil.getLog10Scale(strength);
         updateAttributeModifier(
@@ -297,7 +299,8 @@ public class OrganAttributeUtil {
     /**
      * 更新速度附带的属性（移动速度）
      */
-    public static void updateSpeed(ChestCavityData data, LivingEntity entity) {
+    public static void updateSpeed(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         double speed = data.getDifferenceValue(InitAttribute.SPEED);
         double factor = MathUtil.getLog10Scale(speed) / 2;
         if (speed == 0) {
@@ -313,7 +316,8 @@ public class OrganAttributeUtil {
     /**
      * 更新跳跃附带的属性（跳跃力度，安全掉落距离）
      */
-    public static void updateLeaping(ChestCavityData data, LivingEntity entity) {
+    public static void updateLeaping(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         double leaping = data.getDifferenceValue(InitAttribute.LEAPING);
         double jumpStrengthFactor = MathUtil.getLog10Scale(leaping);
         updateAttributeModifier(
@@ -339,7 +343,8 @@ public class OrganAttributeUtil {
      * 更新胸腔容量附带的实体尺寸副作用
      * 3排无副作用，每增加一排 scale 增加 0.25
      */
-    public static void updateScale(ChestCavityData data, LivingEntity entity) {
+    public static void updateScale(ChestCavityData data) {
+        LivingEntity entity = data.getOwner();
         double bonus = 0;
         if (ChestCavityBeyondConfig.enableChestCavityScaleSideEffect) {
             int currentRows = data.getSize().getRows();

@@ -137,7 +137,7 @@ public class ChestCavityData extends ItemStackHandler {
         NonNullList<Item> organs = type.getOrgans();
         for (int i = 0; i < getSlots(); i++) {
             stacks.set(i, organs.get(i).getDefaultInstance());
-            ChestCavityUtil.organAdded(this, owner, i, stacks.get(i));
+            ChestCavityUtil.organAdded(this, i, stacks.get(i));
         }
         initAttributeModifier();
         init = true;
@@ -170,41 +170,6 @@ public class ChestCavityData extends ItemStackHandler {
         return size;
     }
 
-    /**
-     * 获取器官变更计数
-     *
-     * @return 器官变更计数
-     */
-    public int getOrganChangeCount() {
-        return organChangeCount;
-    }
-
-    /**
-     * 递增器官变更计数，通知使用方器官已变化、需要重建缓存
-     */
-    public void bumpOrganChangeCount() {
-        organChangeCount++;
-    }
-
-    /**
-     * 获取缓存的 UseOrganSkillGoal 引用
-     *
-     * @return 缓存的 Goal 引用，未设置时为 null
-     */
-    @Nullable
-    public UseOrganSkillGoal getSkillGoal() {
-        return skillGoal;
-    }
-
-    /**
-     * 设置缓存的 UseOrganSkillGoal 引用
-     *
-     * @param skillGoal Goal 引用
-     */
-    public void setSkillGoal(@Nullable UseOrganSkillGoal skillGoal) {
-        this.skillGoal = skillGoal;
-    }
-
     @Override
     public void setSize(int size) {
         resize(ChestCavitySize.bySlots(size));
@@ -214,7 +179,7 @@ public class ChestCavityData extends ItemStackHandler {
     public void setStackInSlot(int slot, ItemStack stack) {
         ItemStack oldStack = getStackInSlot(slot);
         super.setStackInSlot(slot, stack);
-        ChestCavityUtil.changeOrgan(this, owner, slot, oldStack, stack);
+        ChestCavityUtil.changeOrgan(this, slot, oldStack, stack);
     }
 
     @Override
@@ -225,7 +190,7 @@ public class ChestCavityData extends ItemStackHandler {
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         ItemStack removeStack = super.extractItem(slot, amount, simulate);
-        if (!simulate) ChestCavityUtil.changeOrgan(this, owner, slot, removeStack, getStackInSlot(slot));
+        if (!simulate) ChestCavityUtil.changeOrgan(this, slot, removeStack, getStackInSlot(slot));
         return removeStack;
     }
 
@@ -331,6 +296,41 @@ public class ChestCavityData extends ItemStackHandler {
     }
 
     /**
+     * 获取器官变更计数
+     *
+     * @return 器官变更计数
+     */
+    public int getOrganChangeCount() {
+        return organChangeCount;
+    }
+
+    /**
+     * 递增器官变更计数，通知使用方器官已变化、需要重建缓存
+     */
+    public void bumpOrganChangeCount() {
+        organChangeCount++;
+    }
+
+    /**
+     * 获取缓存的 UseOrganSkillGoal 引用
+     *
+     * @return 缓存的 Goal 引用，未设置时为 null
+     */
+    @Nullable
+    public UseOrganSkillGoal getSkillGoal() {
+        return skillGoal;
+    }
+
+    /**
+     * 设置缓存的 UseOrganSkillGoal 引用
+     *
+     * @param skillGoal Goal 引用
+     */
+    public void setSkillGoal(@Nullable UseOrganSkillGoal skillGoal) {
+        this.skillGoal = skillGoal;
+    }
+
+    /**
      * 仅更新胸腔大小，不做副作用处理（缩小不掉落物品、不关闭菜单等）
      * <p>
      * 因为服务端不往客户端发size，所以需要在打开menu时，使用此方法来让客户端同步size
@@ -359,7 +359,7 @@ public class ChestCavityData extends ItemStackHandler {
                 ItemStack stack = getStackInSlot(i);
                 if (!stack.isEmpty()) {
                     excess.add(stack.copy());
-                    ChestCavityUtil.changeOrgan(this, owner, i, stack, ItemStack.EMPTY);
+                    ChestCavityUtil.changeOrgan(this, i, stack, ItemStack.EMPTY);
                 }
                 stacks.set(i, ItemStack.EMPTY);
             }
@@ -379,7 +379,7 @@ public class ChestCavityData extends ItemStackHandler {
         }
 
         updateSize(newSize);
-        OrganAttributeUtil.updateScale(this, owner);
+        OrganAttributeUtil.updateScale(this);
 
         // 关闭后重新打开本实体胸腔的 GUI，更新布局
         if (owner.level() instanceof ServerLevel serverLevel) {
@@ -601,7 +601,7 @@ public class ChestCavityData extends ItemStackHandler {
             ItemStack stack = getStackInSlot(i);
             if (stack.isEmpty()) continue;
             // 器官基础属性
-            OrganAttributeUtil.updateOrganAttributeModifier(this, owner, i, ItemStack.EMPTY, stack);
+            OrganAttributeUtil.updateOrganAttributeModifier(this, i, ItemStack.EMPTY, stack);
             // 器官补偿属性
             for (AttributeBonus bonus : type.getAttributeBonuses(stack.getItem())) {
                 OrganAttributeUtil.updateAttributeModifier(owner, bonus.attribute(), bonus.create(ChestCavityUtil.getSlotId(i)));
@@ -642,8 +642,8 @@ public class ChestCavityData extends ItemStackHandler {
             if (!changed) break;
         }
 
-        OrganAttributeUtil.updateDefaultModifier(this, owner);
-        OrganAttributeUtil.updateScale(this, owner);
+        OrganAttributeUtil.updateDefaultModifier(this);
+        OrganAttributeUtil.updateScale(this);
     }
 
     /**
@@ -655,7 +655,7 @@ public class ChestCavityData extends ItemStackHandler {
             applyFiltration();
             for (int i = 0; i < getSlots(); i++) {
                 ItemStack stack = stacks.get(i);
-                ChestCavityUtil.organTick(this, owner, i, stack);
+                ChestCavityUtil.organTick(this, i, stack);
             }
         }
         if (!(owner instanceof Player) && !owner.level().isClientSide()) {
@@ -926,7 +926,7 @@ public class ChestCavityData extends ItemStackHandler {
             for (int i = 0; i < getSlots(); i++) {
                 ItemStack stack = stacks.get(i);
                 if (!stack.isEmpty()) {
-                    ChestCavityUtil.organAdded(this, owner, i, stack);
+                    ChestCavityUtil.organAdded(this, i, stack);
                 }
             }
         }

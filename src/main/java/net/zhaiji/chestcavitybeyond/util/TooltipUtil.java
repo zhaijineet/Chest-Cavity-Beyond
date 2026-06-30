@@ -44,6 +44,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class TooltipUtil {
     public static final String PREFIX = "organ." + ChestCavityBeyond.MOD_ID + ".";
@@ -280,7 +281,7 @@ public class TooltipUtil {
      */
     public static Component buildAttributeDescription(AttributeDisplay attributeDisplay) {
         // 动态描述优先
-        java.util.function.Supplier<Component> override = attributeDisplay.descriptionOverride();
+        Supplier<Component> override = attributeDisplay.descriptionOverride();
         if (override != null) {
             return override.get();
         }

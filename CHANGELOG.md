@@ -4,7 +4,9 @@
 
 ## 1.8.4 动态modifier器官变化刷新与初始化迭代至属性稳定
 
-- 新增 API：`IOrgan.shouldRefreshOnOrganChange()` 与 Builder 的 `refreshOnOrganChange()` 配置，标记动态 modifier 依赖其他器官属性的器官
+- 移除 `IOrgan` 接口，统一使用 `Organ` 类
+- `ChestCavitySlotContext` record 移除冗余的 `entity` 字段
+- 新增 API：`Organ.shouldRefreshOnOrganChange()` 与 Builder 的 `refreshOnOrganChange()` 配置，标记动态 modifier 依赖其他器官属性的器官
 - 标记的器官在其他器官变化时自动重新应用属性 modifier
 - 初始化时对标记器官进行多轮刷新，直到属性结果一致，解决链式依赖导致属性计算不准确的问题
 - 修正结晶化属性描述文案，明确恢复量随属性值提升

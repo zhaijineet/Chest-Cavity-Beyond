@@ -341,7 +341,7 @@ public class CommonEventHandler {
         // 遍历器官被动交互回调（使用 TargetResolver 解析多碰撞箱部件）
         if (!(TargetResolver.resolve(event.getTarget()) instanceof LivingEntity target)) return;
         ChestCavityData data = ChestCavityUtil.getData(target);
-        ChestCavityUtil.interact(data, target, event.getEntity(), event.getHand(), event);
+        ChestCavityUtil.interact(data, event.getEntity(), event.getHand(), event);
     }
 
     /**
@@ -386,10 +386,10 @@ public class CommonEventHandler {
         // 开胸手术伤害跳过攻击者器官的 attack 回调，避免固定伤害被增伤器官异常放大导致杀死目标生物
         if (attacker != null && !source.is(InitDamageType.OPEN_CHEST)) {
             ChestCavityData attackerData = ChestCavityUtil.getData(attacker);
-            ChestCavityUtil.attack(attackerData, attacker, entity, source, event.getContainer());
+            ChestCavityUtil.attack(attackerData, entity, source, event.getContainer());
         }
         // 触发所有器官的incomingDamage效果
-        ChestCavityUtil.incomingDamage(data, entity, event);
+        ChestCavityUtil.incomingDamage(data, event);
         // 检查事件是否已被取消
         if (event.isCanceled()) return;
         // 阶梯式火焰免疫
@@ -445,7 +445,7 @@ public class CommonEventHandler {
     public static void handlerLivingHealEvent(LivingHealEvent event) {
         LivingEntity entity = event.getEntity();
         ChestCavityData data = ChestCavityUtil.getData(entity);
-        ChestCavityUtil.heal(data, entity, event);
+        ChestCavityUtil.heal(data, event);
     }
 
     /**
@@ -511,7 +511,7 @@ public class CommonEventHandler {
         event.setNewDamage((float) damage);
 
         // 触发所有器官的hurt效果
-        ChestCavityUtil.hurt(data, entity, source, event.getContainer());
+        ChestCavityUtil.hurt(data, source, event.getContainer());
     }
 
     /**
@@ -542,7 +542,7 @@ public class CommonEventHandler {
         for (int i = 0; i < data.getSlots(); i++) {
             ItemStack stack = data.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                ChestCavityUtil.organRemoved(data, original, i, stack);
+                ChestCavityUtil.organRemoved(data, i, stack);
             }
         }
     }
