@@ -19,6 +19,7 @@ import net.zhaiji.chestcavitybeyond.api.goal.SkillCacheEntry;
 import net.zhaiji.chestcavitybeyond.api.goal.WeightedCandidate;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
+import net.zhaiji.chestcavitybeyond.util.EntityRelationUtil;
 import net.zhaiji.chestcavitybeyond.util.OrganSkillUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -301,10 +302,11 @@ public class UseOrganSkillGoal extends Goal {
      * @param tickCount 当前 tick
      */
     public void refreshTargetMemory(LivingEntity target, int tickCount) {
-        if (target != null && target != mob && target.isAlive() && !target.isRemoved() && !GoalSkillTargetResolver.isOwnerTarget(mob, target)) {
-            this.rememberedTarget = target;
-            this.rememberedTargetTick = tickCount;
-        }
+        if (target == null || !target.isAlive() || target.isRemoved()) return;
+        // 统一经 AoE 过滤（永远友善 + 宠物型 Mob 反击配置），自身由 shouldAoeDamage 内部排除
+        if (!EntityRelationUtil.shouldAoeDamage(mob, target)) return;
+        this.rememberedTarget = target;
+        this.rememberedTargetTick = tickCount;
     }
 
     /**

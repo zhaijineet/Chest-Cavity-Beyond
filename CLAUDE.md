@@ -6,6 +6,8 @@
 若要加javadoc需要一句话写出核心内容，不能有javadoc的注释头尾和注释内容加起来只占一行的情况，必须展开
 若是为Minecraft或NeoForge的方法添加javadoc时，除非是渲染相关，否则不允许添加@param
 
+注释应当写在需要被注释的代码行的上方，不允许写在同行
+
 NeoForge源码： E:Mod Project\neoforge-21.1.219-merged
 JEI源码：E:\Mod Project\JustEnoughItems
 苹果皮源码：E:\Mod Project\AppleSkin

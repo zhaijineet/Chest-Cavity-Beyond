@@ -23,6 +23,8 @@ public class ChestCavityBeyondConfig {
     public static double goalSkillEnemyDetectRange;
     public static int goalSkillTargetMemoryTicks;
     public static boolean enableMobGoalSkill;
+    public static boolean mobSkillRetaliatePlayer;
+    public static boolean mobSkillRetaliateOtherPet;
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment(
@@ -255,6 +257,30 @@ public class ChestCavityBeyondConfig {
                     1200
             );
 
+    private static final ModConfigSpec.BooleanValue MOB_SKILL_RETALIATE_PLAYER = BUILDER
+            .comment(
+                    "宠物型 Mob（狼/猫/女仆等有主生物）的器官技能是否反击造成伤害的玩家",
+                    "false = 不反击，默认保护玩家误伤场景（仅影响 OwnableEntity，不影响怪物）",
+                    "Whether pet-type mobs' (wolves/cats/maids, i.e. ownable entities) organ skills retaliate against players who dealt damage",
+                    "false = no, default protects against accidental player damage (only affects OwnableEntity, not monsters)"
+            )
+            .define(
+                    "mobSkillRetaliatePlayer",
+                    false
+            );
+
+    private static final ModConfigSpec.BooleanValue MOB_SKILL_RETALIATE_OTHER_PET = BUILDER
+            .comment(
+                    "宠物型 Mob（狼/猫/女仆等有主生物）的器官技能是否反击造成伤害的其他宠物（不同主人）",
+                    "false = 不反击，默认防止宠物互伤（仅影响 OwnableEntity，不影响怪物）",
+                    "Whether pet-type mobs' (wolves/cats/maids, i.e. ownable entities) organ skills retaliate against other pets with different owners",
+                    "false = no, default prevents pet mutual damage (only affects OwnableEntity, not monsters)"
+            )
+            .define(
+                    "mobSkillRetaliateOtherPet",
+                    false
+            );
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     public static void handlerModConfigEvent(ModConfigEvent event) {
@@ -278,6 +304,8 @@ public class ChestCavityBeyondConfig {
             goalSkillEvalInterval = GOAL_SKILL_EVAL_INTERVAL.get();
             goalSkillEnemyDetectRange = GOAL_SKILL_ENEMY_DETECT_RANGE.get();
             goalSkillTargetMemoryTicks = GOAL_SKILL_TARGET_MEMORY_TICKS.get();
+            mobSkillRetaliatePlayer = MOB_SKILL_RETALIATE_PLAYER.get();
+            mobSkillRetaliateOtherPet = MOB_SKILL_RETALIATE_OTHER_PET.get();
         }
     }
 }

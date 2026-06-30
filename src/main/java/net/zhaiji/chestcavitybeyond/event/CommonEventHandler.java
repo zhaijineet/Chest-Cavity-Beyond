@@ -9,7 +9,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
@@ -523,7 +523,7 @@ public class CommonEventHandler {
         DamageSource source = event.getSource();
         if (!source.is(InitDamageType.OPEN_CHEST)) return;
         LivingEntity entity = event.getEntity();
-        if (source.getDirectEntity() instanceof ServerPlayer player && !(entity instanceof TamableAnimal tamable && tamable.getOwner() != null)) {
+        if (source.getDirectEntity() instanceof ServerPlayer player && !(entity instanceof OwnableEntity ownable && ownable.getOwnerUUID() != null)) {
             player.sendSystemMessage(source.getLocalizedDeathMessage(entity));
         }
     }
