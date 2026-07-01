@@ -31,6 +31,8 @@ import net.zhaiji.chestcavitybeyond.client.overlay.OrganSelectedOverlay;
 import net.zhaiji.chestcavitybeyond.client.screen.ChestCavityScreen;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.client.util.ChestCavityClientUtil;
+import net.zhaiji.chestcavitybeyond.compat.CompatManager;
+import net.zhaiji.chestcavitybeyond.compat.jei.JeiCompat;
 import net.zhaiji.chestcavitybeyond.register.InitEntityType;
 import net.zhaiji.chestcavitybeyond.register.InitMenuType;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
@@ -99,6 +101,18 @@ public class ClientEventHandler {
     public static void handlerItemTooltipEvent(ItemTooltipEvent event) {
         Organ organ = ChestCavityUtil.getOrganCap(event.getItemStack());
         if (organ == Organ.EMPTY) return;
+
+        // JEI 胸腔类型页面专用逻辑
+        if (CompatManager.JEI_LOADED && JeiCompat.handleTooltip(
+            organ,
+            event.getItemStack(),
+            event.getContext(),
+            event.getToolTip(),
+            event.getFlags()
+        )) {
+            return;
+        }
+
         Minecraft minecraft = Minecraft.getInstance();
         Player player = event.getEntity();
         TooltipsKeyContext keyContext;

@@ -15,27 +15,33 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
+import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
+import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
+import net.zhaiji.chestcavitybeyond.api.capability.Organ;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * 自定义全页面滚动Widget，管理整个胸腔类型页面的绘制和交互。
- * <p>
- * 器官网格 + 实体网格统一在一个可滚动区域内，
- * 背景图、标题、图标随滚动一起移动。
- * <p>
- * 默认可见区域 = 3排器官 + 2排实体 = 127px 高。
- * 超出部分通过右侧滚动条控制。
- */
 public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiInputHandler {
     // 布局常量
     static final int SLOT_SIZE = 18;
@@ -80,6 +86,15 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
     // 滚动翻页追踪
     private static final int CONTINUOUS_SCROLL_PAGE_TICKS = 8;
     private static final int SCROLL_INTERRUPT_TICKS = 2;
+
+    private static @Nullable ChestCavityTypeDisplay currentHoveredDisplay;
+    private static int currentHoveredOrganIndex = -1;
+    private static @Nullable ChestCavityType cachedType;
+    private static @Nullable ChestCavityData cachedData;
+    /**
+     * widget 最近一次渲染的游戏刻，用于校验悬停状态是否仍然有效
+     */
+    private static long lastActiveTick = Long.MIN_VALUE;
     private final ChestCavityTypeDisplay display;
     private final IDrawable[] backgrounds;
     private final IDrawableStatic slotBackground;
@@ -139,6 +154,83 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         }
     }
 
+    /**
+     * 尝试为 JEI 胸腔类型页面处理 tooltip，如果当前不在 JEI 胸腔页面则返回 false。
+     */
+    public static boolean handleJeiTooltip(
+        Organ organ,
+        ItemStack stack,
+        Item.TooltipContext context,
+        List<Component> tooltip,
+        TooltipFlag flags
+    ) {
+        if (currentHoveredDisplay == null) return false;
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return false;
+        // JEI 页面关闭后悬停状态不再被刷新，超过阈值视为失效
+        if (level.getGameTime() - lastActiveTick > 3) {
+            currentHoveredDisplay = null;
+            currentHoveredOrganIndex = -1;
+            return false;
+        }
+        NonNullList<Item> organs = currentHoveredDisplay.getOrgans();
+        if (currentHoveredOrganIndex < 0 || currentHoveredOrganIndex >= organs.size()) return false;
+        if (organs.get(currentHoveredOrganIndex) != stack.getItem()) return false;
+        ChestCavityData data = getOrCreateCachedData(currentHoveredDisplay);
+        if (data == null) return true;
+        TooltipsKeyContext keyContext = new TooltipsKeyContext(Screen.hasShiftDown(), Screen.hasControlDown());
+        organ.organTooltip(
+            ChestCavityUtil.createContext(data, currentHoveredOrganIndex, stack),
+            keyContext,
+            context,
+            tooltip,
+            flags
+        );
+        return true;
+    }
+
+    /**
+     * 获取或创建指定胸腔类型页面的虚拟胸腔数据，用于 JEI tooltip 计算。
+     * <p>
+     * 遍历 display 的实体列表，取第一个能 create 成功的 LivingEntity；
+     * 虚拟实体不加入 Level，缓存失效后由 GC 回收。
+     * </p>
+     */
+    private static @Nullable ChestCavityData getOrCreateCachedData(ChestCavityTypeDisplay display) {
+        ChestCavityType type = display.getType();
+        if (cachedType == type && cachedData != null) return cachedData;
+        cachedType = null;
+        cachedData = null;
+
+        Level level = Minecraft.getInstance().level;
+        LivingEntity livingEntity = null;
+        for (EntityType<?> entityType : display.getEntities()) {
+            Entity candidate = entityType.create(level);
+            if (candidate instanceof LivingEntity living) {
+                livingEntity = living;
+                break;
+            }
+        }
+        if (livingEntity == null) return null;
+
+        ChestCavityData data = ChestCavityUtil.getData(livingEntity);
+        data.init();
+        cachedType = type;
+        cachedData = data;
+        return data;
+    }
+
+    /**
+     * 清空虚拟实体缓存，供玩家登出等场景调用。
+     * <p>
+     * 虚拟实体不加入 Level，无需 discard，置空引用后由 GC 回收。
+     * </p>
+     */
+    public static void invalidate() {
+        cachedType = null;
+        cachedData = null;
+    }
+
     static int getBgHeight(int rows) {
         int index = rows - 3;
         if (index >= 0 && index < BG_HEIGHTS.length) {
@@ -154,6 +246,10 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        Level level = Minecraft.getInstance().level;
+        if (level != null) {
+            lastActiveTick = level.getGameTime();
+        }
         int scrollPixels = Math.round(hiddenAmount * scrollOffsetY);
 
         // 绘制滚动条
@@ -179,8 +275,8 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
         // 绘制标题
         Component title = ChestCavityTypeDisplay.getTranslatedName(display.getTypeId());
-        Minecraft mc = Minecraft.getInstance();
-        guiGraphics.drawString(mc.font, title, BG_OFFSET_X + FIRST_SLOT_INNER_X + 1, 5 - scrollPixels, 0x404040, false);
+        Minecraft minecraft = Minecraft.getInstance();
+        guiGraphics.drawString(minecraft.font, title, BG_OFFSET_X + FIRST_SLOT_INNER_X + 1, 5 - scrollPixels, 0x404040, false);
 
         // 绘制属性图标
         int iconY = ICON_Y - scrollPixels;
@@ -337,6 +433,8 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
             if (visibleY + SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
                 IRecipeSlotDrawable slot = organSlots.get(i);
                 if (slot.isMouseOver(mouseX, mouseY)) {
+                    currentHoveredOrganIndex = i;
+                    currentHoveredDisplay = this.display;
                     return Optional.of(new RecipeSlotUnderMouse(slot, getPosition()));
                 }
             }
@@ -349,11 +447,15 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
             if (visibleY + SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
                 IRecipeSlotDrawable slot = entitySlots.get(i);
                 if (slot.isMouseOver(mouseX, mouseY)) {
+                    currentHoveredOrganIndex = -1;
+                    currentHoveredDisplay = this.display;
                     return Optional.of(new RecipeSlotUnderMouse(slot, getPosition()));
                 }
             }
         }
 
+        currentHoveredOrganIndex = -1;
+        currentHoveredDisplay = null;
         return Optional.empty();
     }
 
