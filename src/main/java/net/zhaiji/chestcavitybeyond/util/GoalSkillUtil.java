@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Blaze;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -42,7 +44,9 @@ public class GoalSkillUtil {
                 return OrganSkillUtil.teleportBehind(entity, combatContext.target(), ender);
             }
             return OrganSkillUtil.randomTeleport(entity, ender);
-        }).entityFilter(mob -> !(mob instanceof EnderMan)).build();
+        })
+        .entityFilter(mob -> !(mob instanceof EnderMan))
+        .build();
     }
 
     /**
@@ -94,7 +98,8 @@ public class GoalSkillUtil {
             .weightOverride((mob, combatContext, skillEntry) -> {
                 boolean hasThreat = combatContext.target() != null || combatContext.nearbyEnemyCount() > 0;
                 return hasThreat && combatContext.selfHealthPercent() < 0.3 ? 150 : 0;
-            }).build();
+            })
+            .build();
     }
 
     /**
@@ -110,7 +115,9 @@ public class GoalSkillUtil {
                     OrganSkillUtil.directionTo(entity, combatContext.target())
                 );
             }
-        ).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Spider))
+        .build();
     }
 
     /**
@@ -126,7 +133,9 @@ public class GoalSkillUtil {
                     OrganSkillUtil.directionTo(entity, combatContext.target())
                 );
             }
-        ).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Llama))
+        .build();
     }
 
     /**
@@ -141,7 +150,9 @@ public class GoalSkillUtil {
                     (int) slotContext.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL),
                     combatContext.target()
                 )
-        ).entityFilter(mob -> !(mob instanceof Blaze)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Blaze))
+        .build();
     }
 
     /**
@@ -157,7 +168,9 @@ public class GoalSkillUtil {
                     OrganSkillUtil.directionTo(entity, combatContext.target())
                 );
             }
-        ).entityFilter(mob -> !(mob instanceof SnowGolem)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof SnowGolem))
+        .build();
     }
 
     /**
@@ -174,7 +187,9 @@ public class GoalSkillUtil {
                     slotContext.data().getCurrentValue(InitAttribute.GHASTLY)
                 );
             }
-        ).entityFilter(mob -> !(mob instanceof Ghast)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Ghast))
+        .build();
     }
 
     /**
@@ -187,7 +202,9 @@ public class GoalSkillUtil {
                 OrganSkillUtil.shulkerBullet(slotContext.entity(), combatContext.target());
                 return true;
             }
-        ).entityFilter(mob -> !(mob instanceof Shulker)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Shulker))
+        .build();
     }
 
     /**
@@ -203,7 +220,9 @@ public class GoalSkillUtil {
                     OrganSkillUtil.directionTo(entity, combatContext.target())
                 );
             }
-        ).entityFilter(mob -> !(mob instanceof EnderDragon)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof EnderDragon))
+        .build();
     }
 
     /**
@@ -219,7 +238,8 @@ public class GoalSkillUtil {
                         OrganSkillUtil.directionTo(entity, combatContext.target())
                     );
                 }
-            ).entityFilter(mob -> !(mob instanceof Warden))
+            )
+            .entityFilter(mob -> !(mob instanceof Warden))
             // 原版监守者音爆可穿墙攻击，不要求视线无遮挡
             .requireLineOfSight(false)
             .weightOverride((mob, combatContext, skillEntry) -> {
@@ -241,7 +261,9 @@ public class GoalSkillUtil {
             (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
                 OrganSkillUtil.guardianLaser(
                     slotContext.entity(), combatContext.target(), false)
-        ).entityFilter(mob -> !(mob instanceof Guardian)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Guardian))
+        .build();
     }
 
     /**
@@ -253,7 +275,9 @@ public class GoalSkillUtil {
             (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
                 OrganSkillUtil.guardianLaser(
                     slotContext.entity(), combatContext.target(), true)
-        ).entityFilter(mob -> !(mob instanceof ElderGuardian)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof ElderGuardian))
+        .build();
     }
 
     /**
@@ -265,7 +289,8 @@ public class GoalSkillUtil {
                 .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
                 .forEachEffect(slotContext.entity()::addEffect);
             return true;
-        }).build();
+        })
+        .build();
     }
 
     /**
@@ -281,7 +306,9 @@ public class GoalSkillUtil {
                     OrganSkillUtil.directionTo(entity, combatContext.target())
                 );
             }
-        ).entityFilter(mob -> !(mob instanceof Breeze)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof Breeze))
+        .build();
     }
 
     /**
@@ -297,6 +324,8 @@ public class GoalSkillUtil {
                     OrganSkillUtil.directionTo(entity, combatContext.target())
                 );
             }
-        ).entityFilter(mob -> !(mob instanceof WitherBoss)).build();
+        )
+        .entityFilter(mob -> !(mob instanceof WitherBoss))
+        .build();
     }
 }

@@ -477,6 +477,7 @@
   "organ.chestcavitybeyond.ender_appendix.active_skill.2": "Can pass through thin walls when close",
   "organ.chestcavitybeyond.ender_appendix.active_skill.simple.0": "Teleport in viewing direction",
   "organ.chestcavitybeyond.formula.tag_organ_count": "%s organ count",
+  "organ.chestcavitybeyond.formula.tag_organ_type_count": "%s organ type count",
   "organ.chestcavitybeyond.ghast_stomach.active_skill.0": "Launch a ghast-style large fireball",
   "organ.chestcavitybeyond.ghast_stomach.active_skill.1": "Explosion power equals Ghastly attribute value",
   "organ.chestcavitybeyond.ghast_stomach.active_skill.simple.0": "Shoot large fireballs",

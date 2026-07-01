@@ -61,7 +61,7 @@ public class ChestCavityCommand {
 
     private static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         Collection<? extends Entity> targets = EntityArgument.getEntities(context, "targets");
-        ChestCavitySize newSize = ChestCavitySize.CODEC.byName(StringArgumentType.getString(context, "size"), null);
+        ChestCavitySize newSize = ChestCavitySize.CODEC.byName(StringArgumentType.getString(context, "size"));
         if (newSize == null) {
             throw ERROR_INVALID_SIZE.create();
         }

@@ -422,6 +422,28 @@ public class ChestCavityUtil {
     }
 
     /**
+     * 获取标签下不同种类的器官数量，当前器官不在胸腔时按标签匹配结果计入自身
+     */
+    public static int getDistinctOrganTypeCountWithSelf(ChestCavitySlotContext slotContext, TagKey<Item> tag) {
+        ChestCavityData data = slotContext.data();
+        boolean selfMatches = slotContext.stack().is(tag);
+        if (data == null) {
+            return selfMatches ? 1 : 0;
+        }
+        Set<Item> distinctItems = new HashSet<>();
+        for (int i = 0; i < data.getSlots(); i++) {
+            ItemStack stack = data.getStackInSlot(i);
+            if (stack.is(tag)) {
+                distinctItems.add(stack.getItem());
+            }
+        }
+        if (slotContext.index() < 0 && selfMatches) {
+            distinctItems.add(slotContext.stack().getItem());
+        }
+        return distinctItems.size();
+    }
+
+    /**
      * 获取水平镜像槽位索引（沿中心列翻转：0↔8, 1↔7, 2↔6, 3↔5, 4 不变）
      */
     public static int getMirrorSlotIndex(int slotIndex) {

@@ -44,11 +44,6 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 public class Organ {
-    /**
-     * 无行为的空器官单例，用于表示物品不具备器官能力
-     */
-    public static final Organ EMPTY = new Organ();
-
     private static final OrganModifierConsumer EMPTY_MODIFIER = (context, modifiers) -> {
     };
     private static final OrganTooltipConsumer EMPTY_TOOLTIP = (slotContext, keyContext, context, tooltipComponents, tooltipFlag) -> {
@@ -73,6 +68,10 @@ public class Organ {
     private static final OrganSkillFunction EMPTY_SKILL = context -> false;
     private static final OrganInteractConsumer EMPTY_INTERACT = (context, interactContext) -> {
     };
+    /**
+     * 无行为的空器官单例，用于表示物品不具备器官能力
+     */
+    public static final Organ EMPTY = new Organ();
 
     private final List<AttributeEntry> attributeEntries;
     private final OrganModifierConsumer organModifierConsumer;

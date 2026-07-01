@@ -44,10 +44,12 @@ import net.zhaiji.chestcavitybeyond.util.OrganAttributeUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class ChestCavityData extends ItemStackHandler {
@@ -518,6 +520,19 @@ public class ChestCavityData extends ItemStackHandler {
             }
         }
         return count;
+    }
+
+    /**
+     * 获得同类标签下不同种类的器官数量
+     */
+    public int getDistinctOrganTypeCount(TagKey<Item> tag) {
+        Set<Item> distinctItems = new HashSet<>();
+        for (int i = 0; i < getSlots(); i++) {
+            if (stacks.get(i).is(tag)) {
+                distinctItems.add(stacks.get(i).getItem());
+            }
+        }
+        return distinctItems.size();
     }
 
     /**

@@ -593,4 +593,11 @@ public class TooltipUtil {
     public static MutableComponent tagOrganCountName(TagKey<Item> tag) {
         return Component.translatable(PREFIX + "formula.tag_organ_count", tagName(tag));
     }
+
+    /**
+     * 标签器官种类数量名（形如「机械器官种类数量」）
+     */
+    public static MutableComponent tagOrganTypeCountName(TagKey<Item> tag) {
+        return Component.translatable(PREFIX + "formula.tag_organ_type_count", tagName(tag));
+    }
 }

@@ -477,6 +477,7 @@
   "organ.chestcavitybeyond.ender_appendix.active_skill.2": "近距离时可穿墙传送",
   "organ.chestcavitybeyond.ender_appendix.active_skill.simple.0": "向视线方向传送",
   "organ.chestcavitybeyond.formula.tag_organ_count": "%s器官数量",
+  "organ.chestcavitybeyond.formula.tag_organ_type_count": "%s器官种类数量",
   "organ.chestcavitybeyond.ghast_stomach.active_skill.0": "发射恶魂式大型火球",
   "organ.chestcavitybeyond.ghast_stomach.active_skill.1": "爆炸威力等于可怖属性值",
   "organ.chestcavitybeyond.ghast_stomach.active_skill.simple.0": "发射大型火球",

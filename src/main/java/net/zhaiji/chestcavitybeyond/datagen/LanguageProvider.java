@@ -68,6 +68,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.ctrl_hint", "Hold [%s] to reveal formula");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.ctrl", "Ctrl");
         add("organ." + ChestCavityBeyond.MOD_ID + ".formula.tag_organ_count", "%s organ count");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".formula.tag_organ_type_count", "%s organ type count");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.cooldown", "Cooldown: %ss");
 
         addItem(InitItem.CHEST_OPENER, "Chest Opener");
@@ -811,6 +812,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.ctrl_hint", "按住[%s]查看计算公式");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.hint.ctrl", "Ctrl");
         add("organ." + ChestCavityBeyond.MOD_ID + ".formula.tag_organ_count", "%s器官数量");
+        add("organ." + ChestCavityBeyond.MOD_ID + ".formula.tag_organ_type_count", "%s器官种类数量");
         add("organ." + ChestCavityBeyond.MOD_ID + ".tooltip.cooldown", "冷却时间：%s秒");
 
         addItem(InitItem.CHEST_OPENER, "开胸器");
