@@ -1,25 +1,25 @@
 package net.zhaiji.chestcavitybeyond.mixinapi;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
 public interface IFoodData {
     /**
-     * 设置玩家胸腔
+     * 设置 FoodData 所属的玩家
      * <p>
-     * 只允许设置一次，因为FoodData所属不能变更
+     * FoodData 所属玩家不能变更，只在玩家初始化时设置一次
      * </P>
      *
-     * @param data 胸腔数据
+     * @param player 所属玩家
      */
-    void setChestCavityData(ChestCavityData data);
+    void setPlayer(Player player);
 
     /**
-     * 获取胸腔数据
+     * 获取 FoodData 所属的玩家
      *
-     * @return 胸腔数据
+     * @return 所属玩家
      */
-    ChestCavityData getChestCavityData();
+    Player getPlayer();
 
     /**
      * 设置当前食用食物

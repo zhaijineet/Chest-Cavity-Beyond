@@ -12,10 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
-import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
@@ -71,7 +69,6 @@ public class ChestCavityCommand {
             if (entity instanceof LivingEntity livingEntity) {
                 ChestCavityData data = ChestCavityUtil.getData(livingEntity);
                 data.resize(newSize);
-                syncChestCavityData(livingEntity, data);
                 successCount++;
             }
         }
@@ -113,7 +110,6 @@ public class ChestCavityCommand {
                 // 重置为默认器官
                 ChestCavityData data = ChestCavityUtil.getData(livingEntity);
                 data.reset();
-                syncChestCavityData(livingEntity, data);
                 successCount++;
             }
         }
@@ -153,11 +149,5 @@ public class ChestCavityCommand {
             }
         }
         return count;
-    }
-
-    private static void syncChestCavityData(LivingEntity entity, ChestCavityData data) {
-        if (entity instanceof ServerPlayer serverPlayer) {
-            PacketDistributor.sendToPlayer(serverPlayer, new SyncChestCavityDataPacket(data.getOrgans(), data.selectedSlot, data.getSize()));
-        }
     }
 }

@@ -35,7 +35,6 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.TargetResolver;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
@@ -54,7 +53,6 @@ import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 import net.zhaiji.chestcavitybeyond.manager.OrganManager;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
-import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitDamageType;
@@ -265,9 +263,6 @@ public class CommonEventHandler {
         if (!event.loadedFromDisk()) {
             ChestCavityData data = entity.getData(InitAttachmentType.CHEST_CAVITY);
             data.init();
-            if (entity instanceof ServerPlayer player) {
-                PacketDistributor.sendToPlayer(player, new SyncChestCavityDataPacket(data.getOrgans(), data.selectedSlot, data.getSize()));
-            }
         }
         // Goal 注入对所有 Mob 执行（含从存档加载的，因 goalSelector 不序列化）
         if (entity instanceof Mob mob) {

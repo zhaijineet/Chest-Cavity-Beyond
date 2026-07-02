@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.mixinapi.IFoodData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MixinUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,8 +29,11 @@ public abstract class FoodDataMixin implements IFoodData {
     private float saturationLevel;
     @Shadow
     private float exhaustionLevel;
+    /**
+     * FoodData 所属玩家，用于获取胸腔数据
+     */
     @Unique
-    private ChestCavityData data;
+    private Player player;
     /**
      * 缓存当前食用食物
      */
@@ -43,6 +47,14 @@ public abstract class FoodDataMixin implements IFoodData {
 
     @Shadow
     public abstract void add(int foodLevel, float saturationLevel);
+
+    /**
+     * 按需获取所属玩家的胸腔数据，避免在 Player 构造未完成阶段触发 attachment 创建
+     */
+    @Unique
+    private ChestCavityData getChestCavityData() {
+        return ChestCavityUtil.getData(player);
+    }
 
     /**
      * 修改食物获取到的饥饿值和饱食度
@@ -59,10 +71,8 @@ public abstract class FoodDataMixin implements IFoodData {
 
     @Unique
     @Override
-    public void setChestCavityData(ChestCavityData data) {
-        if (this.data == null) {
-            this.data = data;
-        }
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
@@ -78,8 +88,8 @@ public abstract class FoodDataMixin implements IFoodData {
 
     @Unique
     @Override
-    public ChestCavityData getChestCavityData() {
-        return data;
+    public Player getPlayer() {
+        return player;
     }
 
     /**
@@ -90,7 +100,7 @@ public abstract class FoodDataMixin implements IFoodData {
         constant = @Constant(intValue = 10)
     )
     public int chestCavityBeyond$modifySaturationRegenerationThreshold(int original) {
-        return MixinUtil.modifyMetabolismThreshold(original, data);
+        return MixinUtil.modifyMetabolismThreshold(original, getChestCavityData());
     }
 
     @Unique
@@ -107,7 +117,7 @@ public abstract class FoodDataMixin implements IFoodData {
         constant = @Constant(intValue = 80, ordinal = 0)
     )
     public int chestCavityBeyond$modifyFoodRegenerationThreshold(int original) {
-        return MixinUtil.modifyMetabolismThreshold(original, data);
+        return MixinUtil.modifyMetabolismThreshold(original, getChestCavityData());
     }
 
     @Unique
@@ -124,7 +134,7 @@ public abstract class FoodDataMixin implements IFoodData {
         constant = @Constant(intValue = 80, ordinal = 1)
     )
     public int chestCavityBeyond$modifyStarvationThreshold(int original) {
-        return MixinUtil.modifyMetabolismThreshold(original, data);
+        return MixinUtil.modifyMetabolismThreshold(original, getChestCavityData());
     }
 
     @Unique
@@ -152,7 +162,7 @@ public abstract class FoodDataMixin implements IFoodData {
             saturationLevel,
             exhaustionLevel,
             Math.min(saturationLevel, 6.0F),
-            data,
+            getChestCavityData(),
             10
         );
     }
@@ -181,7 +191,7 @@ public abstract class FoodDataMixin implements IFoodData {
             foodLevel,
             saturationLevel,
             exhaustionLevel,
-            data,
+            getChestCavityData(),
             10
         );
     }
@@ -205,7 +215,7 @@ public abstract class FoodDataMixin implements IFoodData {
             saturationLevel,
             exhaustionLevel,
             6.0F,
-            data,
+            getChestCavityData(),
             80
         );
     }
@@ -228,7 +238,7 @@ public abstract class FoodDataMixin implements IFoodData {
             foodLevel,
             saturationLevel,
             exhaustionLevel,
-            data,
+            getChestCavityData(),
             80
         );
     }
@@ -245,7 +255,7 @@ public abstract class FoodDataMixin implements IFoodData {
         index = 1
     )
     public float chestCavityBeyond$modifyStarvationDamageAmount(float amount) {
-        return MixinUtil.modifyMetabolismOverflowAmount(amount, data, 80);
+        return MixinUtil.modifyMetabolismOverflowAmount(amount, getChestCavityData(), 80);
     }
 
     /**
@@ -265,7 +275,7 @@ public abstract class FoodDataMixin implements IFoodData {
             saturationLevel,
             exhaustionLevel,
             Math.min(saturationLevel, 6.0F),
-            data,
+            getChestCavityData(),
             10
         );
     }
@@ -287,7 +297,7 @@ public abstract class FoodDataMixin implements IFoodData {
             saturationLevel,
             exhaustionLevel,
             Math.min(saturationLevel, 6.0F),
-            data,
+            getChestCavityData(),
             10
         );
     }
@@ -309,7 +319,7 @@ public abstract class FoodDataMixin implements IFoodData {
             saturationLevel,
             exhaustionLevel,
             6.0F,
-            data,
+            getChestCavityData(),
             80
         );
     }
@@ -331,7 +341,7 @@ public abstract class FoodDataMixin implements IFoodData {
             saturationLevel,
             exhaustionLevel,
             6.0F,
-            data,
+            getChestCavityData(),
             80
         );
     }
@@ -345,6 +355,6 @@ public abstract class FoodDataMixin implements IFoodData {
         argsOnly = true
     )
     public float chestCavityBeyond$modifyExhaustion(float value) {
-        return MixinUtil.modifyExhaustion(value, data);
+        return MixinUtil.modifyExhaustion(value, getChestCavityData());
     }
 }

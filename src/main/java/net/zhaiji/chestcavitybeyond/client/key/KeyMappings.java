@@ -9,6 +9,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.network.server.packet.UseSkillPacket;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,8 +112,9 @@ public class KeyMappings {
             }
         }
         if (USE_ORGAN_SKILL.isActiveAndMatches(key)) {
-            if (OrganSkillScreen.selectedSlot != -1) {
-                PacketDistributor.sendToServer(new UseSkillPacket(OrganSkillScreen.selectedSlot));
+            int selectedSlot = ChestCavityUtil.getData(Minecraft.getInstance().player).selectedSlot;
+            if (selectedSlot != -1) {
+                PacketDistributor.sendToServer(new UseSkillPacket(selectedSlot));
             }
         }
         for (int i = 0; i < USE_SKILLS_MAPPINGS.size(); i++) {

@@ -12,7 +12,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.mixinapi.IFoodData;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +33,7 @@ public abstract class PlayerMixin extends LivingEntity {
             at = @At("RETURN")
     )
     public void chestCavityBeyond$init(Level level, BlockPos pos, float yRot, GameProfile gameProfile, CallbackInfo ci) {
-        ((IFoodData) foodData).setChestCavityData(ChestCavityUtil.getData(this));
+        ((IFoodData) foodData).setPlayer((Player) (Object) this);
     }
 
     @Inject(

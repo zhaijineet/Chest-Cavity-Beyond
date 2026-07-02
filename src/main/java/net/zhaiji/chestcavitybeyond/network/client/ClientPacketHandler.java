@@ -8,20 +8,13 @@ import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.api.client.task.GuardianLaserRenderTask;
-import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.network.client.packet.AddGuardianLaserRenderTaskPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.ChestOpenerMessagePacket;
-import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.UnopenableChestCavityMessagePacket;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
 public class ClientPacketHandler {
-    public static void handlerSyncChestCavityDataPacket(Player player, SyncChestCavityDataPacket packet) {
-        ChestCavityUtil.getData(player).sync(packet);
-        OrganSkillScreen.selectedSlot = packet.slot();
-    }
-
     public static void handlerAddGuardianLaserRenderTaskPacket(Player player, AddGuardianLaserRenderTaskPacket packet) {
         Level level = player.level();
         if (

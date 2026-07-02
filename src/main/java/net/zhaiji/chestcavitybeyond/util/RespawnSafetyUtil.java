@@ -49,6 +49,7 @@ public class RespawnSafetyUtil {
         }
 
         data.initAttributeModifier();
+        data.sync();
     }
 
     private static List<Item> collectNeededOrgans(ChestCavityData data) {

@@ -36,7 +36,7 @@ import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.manager.TaskManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
-import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityDataPacket;
+import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.MathUtil;
@@ -143,6 +143,8 @@ public class ChestCavityData extends ItemStackHandler {
         }
         initAttributeModifier();
         init = true;
+        // 首次填充器官后需同步，覆盖 getData 创建默认 attachment 时的空状态
+        sync();
     }
 
     /**
@@ -154,6 +156,7 @@ public class ChestCavityData extends ItemStackHandler {
             setStackInSlot(i, organs.get(i).getDefaultInstance());
         }
         initAttributeModifier();
+        sync();
     }
 
     /**
@@ -333,9 +336,10 @@ public class ChestCavityData extends ItemStackHandler {
     }
 
     /**
-     * 仅更新胸腔大小，不做副作用处理（缩小不掉落物品、不关闭菜单等）
+     * 仅更新胸腔大小字段，不触发 resize 的副作用（缩小不掉落物品、不关闭菜单等）
      * <p>
-     * 因为服务端不往客户端发size，所以需要在打开menu时，使用此方法来让客户端同步size
+     * 供网络反序列化（{@link ChestCavityDataSyncHandler#read}）和 menu 初始化直接设置 size 使用，
+     * 避免触发 resize 的掉落/关菜单副作用。
      * </p>
      */
     public void updateSize(ChestCavitySize newSize) {
@@ -349,48 +353,54 @@ public class ChestCavityData extends ItemStackHandler {
      * 缩小时多余器官先尝试放入玩家背包，放不下再掉落到脚下
      */
     public void resize(ChestCavitySize newSize) {
-        if (newSize == size || !owner.isAlive()) return;
+        if (!owner.isAlive() || !(owner.level() instanceof ServerLevel serverLevel)) return;
 
-        int oldSlots = size.getSlots();
-        int newSlots = newSize.getSlots();
+        if (newSize != size) {
+            int oldSlots = size.getSlots();
+            int newSlots = newSize.getSlots();
 
-        if (newSlots < oldSlots) {
-            // 缩小：处理多余器官
-            List<ItemStack> excess = new ArrayList<>();
-            for (int i = newSlots; i < oldSlots; i++) {
-                ItemStack stack = getStackInSlot(i);
-                if (!stack.isEmpty()) {
-                    excess.add(stack.copy());
-                    ChestCavityUtil.changeOrgan(this, i, stack, ItemStack.EMPTY);
+            if (newSlots < oldSlots) {
+                // 缩小：处理多余器官
+                List<ItemStack> excess = new ArrayList<>();
+                for (int i = newSlots; i < oldSlots; i++) {
+                    ItemStack stack = getStackInSlot(i);
+                    if (!stack.isEmpty()) {
+                        excess.add(stack.copy());
+                        ChestCavityUtil.changeOrgan(this, i, stack, ItemStack.EMPTY);
+                    }
+                    stacks.set(i, ItemStack.EMPTY);
                 }
-                stacks.set(i, ItemStack.EMPTY);
-            }
-            // 尝试放入玩家背包
-            if (owner instanceof Player player) {
-                for (ItemStack stack : excess) {
-                    if (!player.getInventory().add(stack)) {
-                        player.drop(stack, false);
+                // 尝试放入玩家背包
+                if (owner instanceof Player player) {
+                    for (ItemStack stack : excess) {
+                        if (!player.getInventory().add(stack)) {
+                            player.drop(stack, false);
+                        }
+                    }
+                } else {
+                    // 非玩家实体，直接掉落
+                    for (ItemStack stack : excess) {
+                        owner.spawnAtLocation(stack);
                     }
                 }
-            } else {
-                // 非玩家实体，直接掉落
-                for (ItemStack stack : excess) {
-                    owner.spawnAtLocation(stack);
-                }
             }
-        }
 
-        updateSize(newSize);
-        OrganAttributeUtil.updateScale(this);
+            updateSize(newSize);
+            // 缩小后 selectedSlot 可能指向已移除的槽位，重置为未选择
+            if (selectedSlot >= newSlots) {
+                selectedSlot = -1;
+            }
+            OrganAttributeUtil.updateScale(this);
 
-        // 关闭后重新打开本实体胸腔的 GUI，更新布局
-        if (owner.level() instanceof ServerLevel serverLevel) {
+            // 关闭后重新打开本实体胸腔的 GUI，更新布局
             for (ServerPlayer player : serverLevel.players()) {
                 if (player.containerMenu instanceof ChestCavityMenu menu && menu.getData() == this) {
                     player.closeContainer();
                     ChestCavityUtil.openChestCavity(player, owner);
                 }
             }
+            // size 变化时同步新状态，其他同步字段（如扩容标记）由各自修改方法负责 sync
+            sync();
         }
     }
 
@@ -591,15 +601,10 @@ public class ChestCavityData extends ItemStackHandler {
     }
 
     /**
-     * 客户端同步用
+     * 触发 attachment 同步到所有 tracking 玩家
      */
-    public void sync(SyncChestCavityDataPacket packet) {
-        size = packet.size();
-        NonNullList<ItemStack> organs = packet.organs();
-        stacks.clear();
-        for (int i = 0; i < organs.size(); i++) {
-            stacks.set(i, organs.get(i));
-        }
+    public void sync() {
+        owner.syncData(InitAttachmentType.CHEST_CAVITY);
     }
 
     /**
@@ -951,5 +956,10 @@ public class ChestCavityData extends ItemStackHandler {
         // Mob.convertTo() 的执行顺序为 addFreshEntity(outcome)（触发 EntityJoinLevelEvent
         // → 注入 Goal + setSkillGoal）→ onLivingConvert（触发 convertOrgans）。
         // 若在此清空，EntityJoinLevelEvent 已设置的 skillGoal 会被抹掉，且不会再次触发。
+        // onLivingConvert 的 copyAttachmentsFrom 直接操作 map 不触发 syncData，需主动同步
+        // unchanged 分支已由 init() 末尾同步，无需重复
+        if (!unchanged) {
+            sync();
+        }
     }
 }

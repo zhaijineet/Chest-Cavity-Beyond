@@ -51,7 +51,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 public class OrganSkillScreen extends Screen {
-    public static int selectedSlot = -1;
     public static int selected = -1;
     private final List<Integer> indices = new ArrayList<>();
     private final List<ItemStack> organs = new ArrayList<>();
@@ -84,6 +83,7 @@ public class OrganSkillScreen extends Screen {
         }
 
         // 默认选中当前已选的技能
+        int selectedSlot = data.selectedSlot;
         if (selectedSlot >= 0 && selectedSlot < data.getSlots()) {
             ItemStack currentStack = data.getStackInSlot(selectedSlot);
             if (!currentStack.isEmpty() && ChestCavityUtil.getOrganCap(currentStack).hasSkill()) {
@@ -283,8 +283,9 @@ public class OrganSkillScreen extends Screen {
      */
     public void changeSelectedSlot() {
         if (selected != -1) {
-            selectedSlot = indices.get(selected);
-            PacketDistributor.sendToServer(new SyncSelectedSlotPacket(selectedSlot));
+            int slot = indices.get(selected);
+            ChestCavityUtil.getData(minecraft.player).selectedSlot = slot;
+            PacketDistributor.sendToServer(new SyncSelectedSlotPacket(slot));
         }
     }
 

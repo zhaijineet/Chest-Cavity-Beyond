@@ -8,7 +8,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
-import net.zhaiji.chestcavitybeyond.client.screen.OrganSkillScreen;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
 public class OrganSelectedOverlay {
@@ -19,9 +19,12 @@ public class OrganSelectedOverlay {
      */
     public static void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui || OrganSkillScreen.selectedSlot < 0) return;
+        if (minecraft.options.hideGui) return;
         Player player = minecraft.player;
-        ItemStack organ = ChestCavityUtil.getData(player).getOrgans().get(OrganSkillScreen.selectedSlot);
+        ChestCavityData data = ChestCavityUtil.getData(player);
+        int selectedSlot = data.selectedSlot;
+        if (selectedSlot < 0) return;
+        ItemStack organ = data.getOrgans().get(selectedSlot);
         if (!ChestCavityUtil.getOrganCap(organ).hasSkill()) return;
         boolean isRightHand = player.getMainArm().getOpposite() == HumanoidArm.RIGHT;
         int x = guiGraphics.guiWidth() / 2 + (isRightHand ? -120 : 98);

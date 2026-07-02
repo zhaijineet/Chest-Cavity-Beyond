@@ -46,7 +46,7 @@ public class MixinUtil {
      */
     public static void eat(FoodData foodData, FoodProperties foodProperties) {
         IFoodData foodDataAccessor = (IFoodData) foodData;
-        ChestCavityData chestCavityData = foodDataAccessor.getChestCavityData();
+        ChestCavityData chestCavityData = ChestCavityUtil.getData(foodDataAccessor.getPlayer());
         ItemStack food = foodDataAccessor.getFood();
 
         FoodProperties actualFoodProperties = calculateActualFood(foodProperties, food, chestCavityData);
@@ -92,11 +92,11 @@ public class MixinUtil {
         double scavengerNutrition = chestCavityData.getDifferenceValue(InitAttribute.SCAVENGER_NUTRITION);
 
         double digestionDifference = isMeat
-                                      ? digestion + carnivorousDigestion
-                                      : digestion + herbivorousDigestion;
+                                     ? digestion + carnivorousDigestion
+                                     : digestion + herbivorousDigestion;
         double nutritionDifference = isMeat
-                                      ? nutrition + carnivorousNutrition
-                                      : nutrition + herbivorousNutrition;
+                                     ? nutrition + carnivorousNutrition
+                                     : nutrition + herbivorousNutrition;
 
         if (isPoisoning) {
             digestionDifference = digestionDifference + scavengerDigestion;
@@ -138,7 +138,7 @@ public class MixinUtil {
      */
     public static void tickPhotosynthesis(FoodData foodData, Player player) {
         IFoodData iFoodData = (IFoodData) foodData;
-        ChestCavityData data = iFoodData.getChestCavityData();
+        ChestCavityData data = ChestCavityUtil.getData(iFoodData.getPlayer());
         int foodLevel = foodData.getFoodLevel();
 
         double photosynthesis = data.getCurrentValue(InitAttribute.PHOTOSYNTHESIS);
@@ -163,7 +163,6 @@ public class MixinUtil {
      * 获取新陈代谢倍率。
      */
     public static double getMetabolismScale(ChestCavityData data) {
-        if (data == null) return 1;
         return MathUtil.getDirectScale(data.getDifferenceValue(InitAttribute.METABOLISM));
     }
 
@@ -204,7 +203,7 @@ public class MixinUtil {
         double overflowScale = getMetabolismOverflowScale(data, originalThreshold);
         if (baseExhaustion <= 0) return overflowScale;
 
-        float modifiedBaseExhaustion = data == null ? baseExhaustion : modifyExhaustion(baseExhaustion, data);
+        float modifiedBaseExhaustion = modifyExhaustion(baseExhaustion, data);
         if (modifiedBaseExhaustion <= 0) return overflowScale;
 
         int saturationDrainCount = (int) Math.ceil(Math.max(saturationLevel, 0.0F));
@@ -253,14 +252,16 @@ public class MixinUtil {
         ChestCavityData data,
         double originalThreshold
     ) {
-        return (float) (amount * getAffordableMetabolismRegenerationScale(
-            foodLevel,
-            saturationLevel,
-            exhaustionLevel,
-            baseExhaustion,
-            data,
-            originalThreshold
-        ));
+        return (float) (
+            amount * getAffordableMetabolismRegenerationScale(
+                foodLevel,
+                saturationLevel,
+                exhaustionLevel,
+                baseExhaustion,
+                data,
+                originalThreshold
+            )
+        );
     }
 
     /**
@@ -274,14 +275,16 @@ public class MixinUtil {
         ChestCavityData data,
         double originalThreshold
     ) {
-        return (float) (exhaustion * getAffordableMetabolismRegenerationScale(
-            foodLevel,
-            saturationLevel,
-            exhaustionLevel,
-            exhaustion,
-            data,
-            originalThreshold
-        ));
+        return (float) (
+            exhaustion * getAffordableMetabolismRegenerationScale(
+                foodLevel,
+                saturationLevel,
+                exhaustionLevel,
+                exhaustion,
+                data,
+                originalThreshold
+            )
+        );
     }
 
     /**

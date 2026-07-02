@@ -5,6 +5,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityDataSyncHandler;
 
 import java.util.function.Supplier;
 
@@ -15,6 +16,7 @@ public class InitAttachmentType {
             "chest_cavity",
             () -> AttachmentType.serializable(ChestCavityData::new)
                     .copyOnDeath()
+                    .sync(ChestCavityDataSyncHandler.INSTANCE)
                     .build()
     );
 }
