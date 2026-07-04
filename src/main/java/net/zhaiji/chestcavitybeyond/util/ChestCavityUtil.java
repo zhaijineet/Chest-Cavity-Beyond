@@ -24,6 +24,7 @@ import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
@@ -36,6 +37,7 @@ import net.zhaiji.chestcavitybeyond.manager.CapabilityManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
 import net.zhaiji.chestcavitybeyond.mixinapi.IMobEffectInstance;
+import net.zhaiji.chestcavitybeyond.network.client.packet.SyncOrganSlotPacket;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
@@ -134,9 +136,18 @@ public class ChestCavityUtil {
     }
 
     /**
-     * 器官更换
+     * 器官更换，默认向追踪者发送增量同步包
      */
     public static void changeOrgan(ChestCavityData data, int index, ItemStack oldStack, ItemStack newStack) {
+        changeOrgan(data, index, oldStack, newStack, true);
+    }
+
+    /**
+     * 器官更换
+     *
+     * @param syncToClient 是否向追踪者发送增量同步包，批量场景传 false 由调用方末尾全量 sync
+     */
+    public static void changeOrgan(ChestCavityData data, int index, ItemStack oldStack, ItemStack newStack, boolean syncToClient) {
         LivingEntity owner = data.getOwner();
         // 有时候会出来新旧都为空的情况
         if (owner.level().isClientSide() || oldStack.isEmpty() && newStack.isEmpty()) return;
@@ -149,6 +160,13 @@ public class ChestCavityUtil {
         NeoForge.EVENT_BUS.post(new OrganChangeEvent(data, index, oldStack, newStack));
         // 递增变更计数，通知使用方重建缓存
         data.bumpOrganChangeCount();
+        if (syncToClient) {
+            // 向所有追踪者同步该槽位的增量变化
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(
+                owner,
+                new SyncOrganSlotPacket(owner.getId(), index, newStack)
+            );
+        }
     }
 
     /**
@@ -175,6 +193,8 @@ public class ChestCavityUtil {
         getOrganCap(stack).organRemoved(createContext(data, index, stack));
     }
 
+    // TODO：运行时仅单轮 refresh，多个 refreshOnOrganChange 器官互相依赖时（A 依赖 B、B 依赖 A）属性可能不准，
+    //  需仿 initAttributeModifier 的快照收敛逻辑实现多轮迭代至属性结果一致
     /**
      * 触发所有其他器官的变化回调
      *

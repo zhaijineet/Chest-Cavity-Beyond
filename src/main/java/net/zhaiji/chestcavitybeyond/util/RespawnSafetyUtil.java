@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.util;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,17 +35,23 @@ public class RespawnSafetyUtil {
 
         List<Integer> emptySlots = collectEmptySlots(data);
         int emptyIndex = 0;
+        NonNullList<ItemStack> organs = data.getOrgans();
 
         for (Item organ : needed) {
+            ItemStack newStack = organ.getDefaultInstance();
             if (emptyIndex < emptySlots.size()) {
-                data.setStackInSlot(emptySlots.get(emptyIndex), organ.getDefaultInstance());
+                int slot = emptySlots.get(emptyIndex);
+                ItemStack oldStack = organs.get(slot);
+                organs.set(slot, newStack);
+                ChestCavityUtil.changeOrgan(data, slot, oldStack, newStack, false);
                 emptyIndex++;
             } else {
                 int replaceSlot = findReplaceableSlot(data);
                 if (replaceSlot == -1) break;
-                ItemStack replaced = data.getStackInSlot(replaceSlot).copy();
-                data.setStackInSlot(replaceSlot, organ.getDefaultInstance());
-                returnToPlayer(player, replaced);
+                ItemStack oldStack = organs.get(replaceSlot);
+                organs.set(replaceSlot, newStack);
+                ChestCavityUtil.changeOrgan(data, replaceSlot, oldStack, newStack, false);
+                returnToPlayer(player, oldStack.copy());
             }
         }
 

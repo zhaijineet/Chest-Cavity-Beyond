@@ -153,7 +153,11 @@ public class ChestCavityData extends ItemStackHandler {
     public void reset() {
         NonNullList<Item> organs = type.getOrgans();
         for (int i = 0; i < getSlots(); i++) {
-            setStackInSlot(i, organs.get(i).getDefaultInstance());
+            ItemStack oldStack = getStackInSlot(i);
+            ItemStack newStack = organs.get(i).getDefaultInstance();
+            stacks.set(i, newStack);
+            // 此处不发增量包
+            ChestCavityUtil.changeOrgan(this, i, oldStack, newStack, false);
         }
         initAttributeModifier();
         sync();
@@ -366,7 +370,7 @@ public class ChestCavityData extends ItemStackHandler {
                     ItemStack stack = getStackInSlot(i);
                     if (!stack.isEmpty()) {
                         excess.add(stack.copy());
-                        ChestCavityUtil.changeOrgan(this, i, stack, ItemStack.EMPTY);
+                        ChestCavityUtil.changeOrgan(this, i, stack, ItemStack.EMPTY, false);
                     }
                     stacks.set(i, ItemStack.EMPTY);
                 }
@@ -399,7 +403,6 @@ public class ChestCavityData extends ItemStackHandler {
                     ChestCavityUtil.openChestCavity(player, owner);
                 }
             }
-            // size 变化时同步新状态，其他同步字段（如扩容标记）由各自修改方法负责 sync
             sync();
         }
     }

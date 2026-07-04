@@ -10,10 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * 胸腔数据的网络同步处理器
- * <p>
- * 客户端已有 ChestCavityData 实例时复用（保留 owner 引用和 mixin 注入字段，避免破坏对象身份），
- * 首次同步时（previousValue 为 null）按需新建。默认同步给所有 tracking 玩家，供附属 mod 在客户端读取其他实体胸腔数据。
- * </p>
  */
 public class ChestCavityDataSyncHandler implements AttachmentSyncHandler<ChestCavityData> {
     public static final ChestCavityDataSyncHandler INSTANCE = new ChestCavityDataSyncHandler();
