@@ -510,6 +510,17 @@ public class CommonEventHandler {
     }
 
     /**
+     * 触发所有器官的受伤结算后回调
+     *
+     * @param event 实体受伤后事件
+     */
+    public static void handlerLivingDamageEvent$Post(LivingDamageEvent.Post event) {
+        LivingEntity entity = event.getEntity();
+        ChestCavityData data = ChestCavityUtil.getData(entity);
+        ChestCavityUtil.afterHurt(data, event);
+    }
+
+    /**
      * 显示因开胸而死亡的生物的死亡信息
      *
      * @param event 实体死亡事件

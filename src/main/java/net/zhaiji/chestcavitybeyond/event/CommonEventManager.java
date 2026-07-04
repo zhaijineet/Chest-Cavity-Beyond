@@ -37,6 +37,7 @@ public class CommonEventManager {
         gameBus.addListener(CommonEventHandler::handlerLivingIncomingDamageEvent);
         gameBus.addListener(CommonEventHandler::handlerLivingHealEvent);
         gameBus.addListener(CommonEventHandler::handlerLivingDamageEvent$Pre);
+        gameBus.addListener(CommonEventHandler::handlerLivingDamageEvent$Post);
         gameBus.addListener(CommonEventHandler::handlerLivingDeathEvent);
         gameBus.addListener(EventPriority.HIGH, CommonEventHandler::handlerLivingConversionEvent$Post$Clean);
         gameBus.addListener(EventPriority.LOW, CommonEventHandler::handlerLivingConversionEvent$Post);

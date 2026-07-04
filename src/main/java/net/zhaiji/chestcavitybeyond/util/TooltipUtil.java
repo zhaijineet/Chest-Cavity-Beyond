@@ -61,8 +61,10 @@ public class TooltipUtil {
         return decimalFormat;
     });
 
-    // 普通空格会导致自动换行时，此前缀被错误的分割为独自占据一行，改为使用\u00A0不换行空格
-    public static String DEFAULT_PREFIX = "\u00A0•\u00A0";
+    public static final String NON_BREAKING_SPACE = "\u00A0";
+
+    // 普通空格会导致自动换行时，此前缀被错误的分割为独自占据一行，改为使用不换行空格
+    public static String DEFAULT_PREFIX = NON_BREAKING_SPACE + "•" + NON_BREAKING_SPACE;
 
     /**
      * 默认的器官工具提示回调
@@ -570,7 +572,7 @@ public class TooltipUtil {
      * 公式操作符（不换行空格包裹）
      */
     public static MutableComponent formulaOperator(String operator) {
-        return Component.literal("\u00A0" + operator + "\u00A0");
+        return Component.literal(NON_BREAKING_SPACE + operator + NON_BREAKING_SPACE);
     }
 
     /**

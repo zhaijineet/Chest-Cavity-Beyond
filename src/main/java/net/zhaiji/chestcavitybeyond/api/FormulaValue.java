@@ -3,6 +3,7 @@ package net.zhaiji.chestcavitybeyond.api;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
 import java.util.function.Function;
 
@@ -34,7 +35,7 @@ public record FormulaValue(
         }
         return Component.empty()
             .append(value)
-            .append(Component.literal("\u00A0=\u00A0").withStyle(ChatFormatting.GRAY))
+            .append(TooltipUtil.formulaOperator("=").withStyle(ChatFormatting.GRAY))
             .append(formulaProvider.apply(slotContext).withStyle(ChatFormatting.GRAY));
     }
 }

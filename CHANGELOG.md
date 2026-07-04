@@ -13,6 +13,8 @@
 - 添加标签下不同种类器官数量统计的工具方法
 - 蜘蛛丝腺/羊驼肺GoalSkill添加entityFilter排除原生实体
 - Organ.EMPTY移至静态常量末尾保证初始化顺序
+- 新增器官受伤结算后回调`afterHurt`
+- 提取 `TooltipUtil.NON_BREAKING_SPACE` 常量
 
 ## 1.8.3 复活兜底与显示修正
 

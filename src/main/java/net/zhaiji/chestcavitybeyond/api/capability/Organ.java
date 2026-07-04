@@ -12,12 +12,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.zhaiji.chestcavitybeyond.api.AttributeEntry;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.OrganInteractContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
+import net.zhaiji.chestcavitybeyond.api.function.AfterHurtConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HealConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HurtConsumer;
@@ -59,6 +61,8 @@ public class Organ {
     };
     private static final IncomingDamageConsumer EMPTY_INCOMING_DAMAGE = (context, event) -> {
     };
+    private static final AfterHurtConsumer EMPTY_AFTER_HURT = (context, event) -> {
+    };
     private static final Consumer<ChestCavitySlotContext> EMPTY_CHEST_CAVITY_OPEN = context -> {
     };
     private static final Consumer<ChestCavitySlotContext> EMPTY_CHEST_CAVITY_CLOSE = context -> {
@@ -89,6 +93,7 @@ public class Organ {
     private final HurtConsumer hurtConsumer;
     private final HealConsumer healConsumer;
     private final IncomingDamageConsumer incomingDamageConsumer;
+    private final AfterHurtConsumer afterHurtConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityOpenConsumer;
     private final Consumer<ChestCavitySlotContext> chestCavityCloseConsumer;
     private final OrganInteractConsumer interactConsumer;
@@ -111,6 +116,7 @@ public class Organ {
         this.hurtConsumer = builder.hurtConsumer;
         this.healConsumer = builder.healConsumer;
         this.incomingDamageConsumer = builder.incomingDamageConsumer;
+        this.afterHurtConsumer = builder.afterHurtConsumer;
         this.chestCavityOpenConsumer = builder.chestCavityOpenConsumer;
         this.chestCavityCloseConsumer = builder.chestCavityCloseConsumer;
         this.interactConsumer = builder.interactConsumer;
@@ -134,6 +140,7 @@ public class Organ {
         this.hurtConsumer = EMPTY_HURT;
         this.healConsumer = EMPTY_HEAL;
         this.incomingDamageConsumer = EMPTY_INCOMING_DAMAGE;
+        this.afterHurtConsumer = EMPTY_AFTER_HURT;
         this.chestCavityOpenConsumer = EMPTY_CHEST_CAVITY_OPEN;
         this.chestCavityCloseConsumer = EMPTY_CHEST_CAVITY_CLOSE;
         this.interactConsumer = EMPTY_INTERACT;
@@ -284,6 +291,10 @@ public class Organ {
         hurtConsumer.accept(context, source, damageContainer);
     }
 
+    public void afterHurt(ChestCavitySlotContext context, LivingDamageEvent.Post event) {
+        afterHurtConsumer.accept(context, event);
+    }
+
     public void heal(ChestCavitySlotContext context, LivingHealEvent event) {
         healConsumer.accept(context, event);
     }
@@ -332,6 +343,7 @@ public class Organ {
         private HurtConsumer hurtConsumer = EMPTY_HURT;
         private HealConsumer healConsumer = EMPTY_HEAL;
         private IncomingDamageConsumer incomingDamageConsumer = EMPTY_INCOMING_DAMAGE;
+        private AfterHurtConsumer afterHurtConsumer = EMPTY_AFTER_HURT;
         private Consumer<ChestCavitySlotContext> chestCavityOpenConsumer = EMPTY_CHEST_CAVITY_OPEN;
         private Consumer<ChestCavitySlotContext> chestCavityCloseConsumer = EMPTY_CHEST_CAVITY_CLOSE;
         private OrganInteractConsumer interactConsumer = EMPTY_INTERACT;
@@ -361,6 +373,7 @@ public class Organ {
             hurtConsumer = organ.hurtConsumer;
             healConsumer = organ.healConsumer;
             incomingDamageConsumer = organ.incomingDamageConsumer;
+            afterHurtConsumer = organ.afterHurtConsumer;
             chestCavityOpenConsumer = organ.chestCavityOpenConsumer;
             chestCavityCloseConsumer = organ.chestCavityCloseConsumer;
             interactConsumer = organ.interactConsumer;
@@ -513,6 +526,11 @@ public class Organ {
 
         public T incomingDamage(IncomingDamageConsumer incomingDamageConsumer) {
             this.incomingDamageConsumer = Objects.requireNonNull(incomingDamageConsumer, "incomingDamageConsumer");
+            return self();
+        }
+
+        public T afterHurt(AfterHurtConsumer afterHurtConsumer) {
+            this.afterHurtConsumer = Objects.requireNonNull(afterHurtConsumer, "afterHurtConsumer");
             return self();
         }
 
