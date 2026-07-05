@@ -464,8 +464,8 @@ public class ChestCavityType {
     /**
      * 设置能否开胸
      */
-    public ChestCavityType setCanOpen(BiFunction<Player, LivingEntity, Boolean> unopenable) {
-        this.canOpen = unopenable;
+    public ChestCavityType setCanOpen(BiFunction<Player, LivingEntity, Boolean> canOpen) {
+        this.canOpen = canOpen;
         return this;
     }
 

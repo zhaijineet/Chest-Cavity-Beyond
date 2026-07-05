@@ -2,19 +2,20 @@
 
 本文档记录了 Chest Cavity Beyond 所有版本的更改。
 
-## 1.8.4 动态modifier器官变化刷新与初始化迭代至属性稳定
+## 1.8.4
 
 - 移除 `IOrgan` 接口，统一使用 `Organ` 类
-- `ChestCavitySlotContext` record 移除冗余的 `entity` 字段
-- 新增 API：`Organ.shouldRefreshOnOrganChange()` 与 Builder 的 `refreshOnOrganChange()` 配置，标记动态 modifier 依赖其他器官属性的器官
-- 标记的器官在其他器官变化时自动重新应用属性 modifier
-- 初始化时对标记器官进行多轮刷新，直到属性结果一致，解决链式依赖导致属性计算不准确的问题
-- 修正结晶化属性描述文案，明确恢复量随属性值提升
-- 添加标签下不同种类器官数量统计的工具方法
-- 蜘蛛丝腺/羊驼肺GoalSkill添加entityFilter排除原生实体
-- Organ.EMPTY移至静态常量末尾保证初始化顺序
-- 新增器官受伤结算后回调`afterHurt`
-- 提取 `TooltipUtil.NON_BREAKING_SPACE` 常量
+- `ChestCavitySlotContext` 和 `OrganChangeEvent` 移除冗余 `entity` 参数，改为从 data 获取
+- 新增器官动态刷新机制：标记的器官在其他器官变化时自动重算属性，初始化多轮迭代至属性稳定
+- 新增器官受伤结算后回调 `afterHurt`
+- 新增器官技能使用事件与技能冷却中事件
+- 胸腔数据同步迁移至 Attachment 框架，器官变更/技能槽位/呼吸健康标志均改为增量同步
+- 技能槽位选择随胸腔数据持久化，重进游戏后恢复
+- 统一宠物 AoE 友善过滤，修复同主宠物连锁反击
+- 新增配置项控制宠物是否反击玩家/其他宠物
+- 蜘蛛丝腺/羊驼肺自动技能排除对应原生实体
+- 新增标签下不同种类器官数量统计
+- 修正结晶化属性描述文案
 
 ## 1.8.3 复活兜底与显示修正
 
