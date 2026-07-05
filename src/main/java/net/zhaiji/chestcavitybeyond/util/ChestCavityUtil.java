@@ -162,12 +162,20 @@ public class ChestCavityUtil {
         // 递增变更计数，通知使用方重建缓存
         data.bumpOrganChangeCount();
         if (syncToClient) {
-            // 向所有追踪者同步该槽位的增量变化
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(
-                owner,
-                new SyncOrganSlotPacket(owner.getId(), index, newStack)
-            );
+            syncSlot(data, index, newStack);
         }
+    }
+
+    /**
+     * 向所有追踪者增量同步单个器官槽位
+     */
+    public static void syncSlot(ChestCavityData data, int index, ItemStack stack) {
+        LivingEntity owner = data.getOwner();
+        if (owner.level().isClientSide()) return;
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(
+            owner,
+            new SyncOrganSlotPacket(owner.getId(), index, stack)
+        );
     }
 
     /**

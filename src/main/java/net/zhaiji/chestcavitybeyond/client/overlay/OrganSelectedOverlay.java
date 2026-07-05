@@ -22,7 +22,7 @@ public class OrganSelectedOverlay {
         if (minecraft.options.hideGui) return;
         Player player = minecraft.player;
         ChestCavityData data = ChestCavityUtil.getData(player);
-        int selectedSlot = data.selectedSlot;
+        int selectedSlot = data.getSelectedSlot();
         if (selectedSlot < 0) return;
         ItemStack organ = data.getOrgans().get(selectedSlot);
         if (!ChestCavityUtil.getOrganCap(organ).hasSkill()) return;

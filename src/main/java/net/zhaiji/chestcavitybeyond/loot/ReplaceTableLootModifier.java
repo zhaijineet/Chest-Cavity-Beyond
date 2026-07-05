@@ -16,15 +16,7 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 import net.zhaiji.chestcavitybeyond.register.InitLootModifier;
 
 /**
- * 全局战利品修改器：用指定战利品表的产出<b>替换</b>当前产出列表。
- * <p>
- * 与 NeoForge 的 {@link AddTableLootModifier} 不同，
- * 本修改器会先清空已有产出再注入目标表的结果，适用于「只保留单个产出」的场景
- * （如考古可疑方块 {@code BrushableBlockEntity} 仅取产出列表的第 0 项）。
- * </p>
- * <p>
- * 掉落概率应通过 {@link LootItemRandomChanceCondition} 等条件控制：条件不满足时本修改器整体不执行，原产出保持不变。
- * </p>
+ * 全局战利品修改器：用指定战利品表的产出替换当前产出列表。
  */
 public class ReplaceTableLootModifier extends LootModifier {
     public static final MapCodec<ReplaceTableLootModifier> CODEC = RecordCodecBuilder.mapCodec(

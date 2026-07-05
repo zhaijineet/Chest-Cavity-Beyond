@@ -112,7 +112,7 @@ public class KeyMappings {
             }
         }
         if (USE_ORGAN_SKILL.isActiveAndMatches(key)) {
-            int selectedSlot = ChestCavityUtil.getData(Minecraft.getInstance().player).selectedSlot;
+            int selectedSlot = ChestCavityUtil.getData(Minecraft.getInstance().player).getSelectedSlot();
             if (selectedSlot != -1) {
                 PacketDistributor.sendToServer(new UseSkillPacket(selectedSlot));
             }

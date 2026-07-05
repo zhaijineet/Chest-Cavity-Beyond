@@ -22,7 +22,9 @@ public class ChestCavityDataSyncHandler implements AttachmentSyncHandler<ChestCa
         for (int i = 0; i < size.getSlots(); i++) {
             ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, organs.get(i));
         }
-        buf.writeInt(attachment.selectedSlot);
+        buf.writeInt(attachment.getSelectedSlot());
+        buf.writeBoolean(attachment.isNeedBreath());
+        buf.writeBoolean(attachment.isNeedHealth());
     }
 
     @Override
@@ -35,7 +37,9 @@ public class ChestCavityDataSyncHandler implements AttachmentSyncHandler<ChestCa
         for (int i = 0; i < size.getSlots(); i++) {
             organs.set(i, ItemStack.OPTIONAL_STREAM_CODEC.decode(buf));
         }
-        data.selectedSlot = buf.readInt();
+        data.setSelectedSlot(buf.readInt(), false);
+        data.setNeedBreath(buf.readBoolean());
+        data.setNeedHealth(buf.readBoolean());
         return data;
     }
 }

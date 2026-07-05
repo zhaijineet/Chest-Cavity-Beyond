@@ -14,11 +14,9 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
-import net.zhaiji.chestcavitybeyond.network.server.packet.SyncSelectedSlotPacket;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
 import java.util.ArrayList;
@@ -83,7 +81,7 @@ public class OrganSkillScreen extends Screen {
         }
 
         // 默认选中当前已选的技能
-        int selectedSlot = data.selectedSlot;
+        int selectedSlot = data.getSelectedSlot();
         if (selectedSlot >= 0 && selectedSlot < data.getSlots()) {
             ItemStack currentStack = data.getStackInSlot(selectedSlot);
             if (!currentStack.isEmpty() && ChestCavityUtil.getOrganCap(currentStack).hasSkill()) {
@@ -284,8 +282,7 @@ public class OrganSkillScreen extends Screen {
     public void changeSelectedSlot() {
         if (selected != -1) {
             int slot = indices.get(selected);
-            ChestCavityUtil.getData(minecraft.player).selectedSlot = slot;
-            PacketDistributor.sendToServer(new SyncSelectedSlotPacket(slot));
+            ChestCavityUtil.getData(minecraft.player).setSelectedSlot(slot);
         }
     }
 

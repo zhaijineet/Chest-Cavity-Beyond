@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
@@ -36,6 +37,8 @@ import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.DamageSourceManager;
 import net.zhaiji.chestcavitybeyond.manager.TaskManager;
 import net.zhaiji.chestcavitybeyond.menu.ChestCavityMenu;
+import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityFlagsPacket;
+import net.zhaiji.chestcavitybeyond.network.common.packet.SyncSelectedSlotPacket;
 import net.zhaiji.chestcavitybeyond.register.InitAttachmentType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
@@ -61,12 +64,9 @@ public class ChestCavityData extends ItemStackHandler {
     private final ItemCooldowns itemCooldowns = new ItemCooldowns();
 
     /**
-     * 选择使用技能的槽位索引
-     * <p>
-     * 此项仅用于序列化存储，具体使用请看{@code OrganSkillScreen}
-     * </p>
+     * 当前选择释放技能的器官槽位索引，-1 表示未选择
      */
-    public int selectedSlot = -1;
+    private int selectedSlot = -1;
 
     /**
      * 剩余氧气缓存
@@ -161,6 +161,48 @@ public class ChestCavityData extends ItemStackHandler {
         }
         initAttributeModifier();
         sync();
+    }
+
+    /**
+     * 获取选择的技能槽位索引
+     *
+     * @return 槽位索引，-1 表示未选择
+     */
+    public int getSelectedSlot() {
+        return selectedSlot;
+    }
+
+    /**
+     * 设置选择的技能槽位索引，默认触发网络同步
+     *
+     * @param selectedSlot 槽位索引，-1 表示未选择
+     */
+    public void setSelectedSlot(int selectedSlot) {
+        setSelectedSlot(selectedSlot, true);
+    }
+
+    /**
+     * 设置选择的技能槽位索引
+     *
+     * @param selectedSlot 槽位索引，-1 表示未选择
+     * @param sync         是否触发网络同步
+     */
+    public void setSelectedSlot(int selectedSlot, boolean sync) {
+        this.selectedSlot = selectedSlot;
+        if (sync) {
+            syncSelectedSlot();
+        }
+    }
+
+    /**
+     * 根据当前 side 双向同步当前选择的技能槽位
+     */
+    private void syncSelectedSlot() {
+        if (owner.level().isClientSide()) {
+            PacketDistributor.sendToServer(new SyncSelectedSlotPacket(selectedSlot));
+        } else if (owner instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, new SyncSelectedSlotPacket(selectedSlot));
+        }
     }
 
     /**
@@ -392,7 +434,7 @@ public class ChestCavityData extends ItemStackHandler {
             updateSize(newSize);
             // 缩小后 selectedSlot 可能指向已移除的槽位，重置为未选择
             if (selectedSlot >= newSlots) {
-                selectedSlot = -1;
+                setSelectedSlot(-1, false);
             }
             OrganAttributeUtil.updateScale(this);
 
@@ -432,11 +474,9 @@ public class ChestCavityData extends ItemStackHandler {
         return needBreath;
     }
 
-    /**
-     * 设置是否需要呼吸
-     */
     public void setNeedBreath(boolean needBreath) {
         this.needBreath = needBreath;
+        syncChestCavityFlags();
     }
 
     /**
@@ -446,11 +486,20 @@ public class ChestCavityData extends ItemStackHandler {
         return needHealth;
     }
 
-    /**
-     * 设置是否需要健康
-     */
     public void setNeedHealth(boolean needHealth) {
         this.needHealth = needHealth;
+        syncChestCavityFlags();
+    }
+
+    /**
+     * 向所有追踪者增量同步是否需要呼吸/健康
+     */
+    private void syncChestCavityFlags() {
+        if (owner.level().isClientSide()) return;
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(
+            owner,
+            new SyncChestCavityFlagsPacket(owner.getId(), needBreath, needHealth)
+        );
     }
 
     /**

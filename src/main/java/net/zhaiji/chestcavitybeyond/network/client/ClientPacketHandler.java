@@ -12,8 +12,10 @@ import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.network.client.packet.AddGuardianLaserRenderTaskPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.ChestOpenerMessagePacket;
+import net.zhaiji.chestcavitybeyond.network.client.packet.SyncChestCavityFlagsPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.SyncOrganSlotPacket;
 import net.zhaiji.chestcavitybeyond.network.client.packet.UnopenableChestCavityMessagePacket;
+import net.zhaiji.chestcavitybeyond.network.common.packet.SyncSelectedSlotPacket;
 import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
 public class ClientPacketHandler {
@@ -68,5 +70,24 @@ public class ClientPacketHandler {
                 data.getOrgans().set(slot, packet.stack());
             }
         }
+    }
+
+    /**
+     * 更新客户端胸腔数据的是否需要呼吸/健康
+     */
+    public static void handlerSyncChestCavityFlagsPacket(Player player, SyncChestCavityFlagsPacket packet) {
+        Level level = player.level();
+        if (level.getEntity(packet.entityId()) instanceof LivingEntity entity) {
+            ChestCavityData data = ChestCavityUtil.getData(entity);
+            data.setNeedBreath(packet.needBreath());
+            data.setNeedHealth(packet.needHealth());
+        }
+    }
+
+    /**
+     * 更新客户端胸腔数据的当前选择的技能槽位
+     */
+    public static void handlerSyncSelectedSlotPacket(Player player, SyncSelectedSlotPacket packet) {
+        ChestCavityUtil.getData(player).setSelectedSlot(packet.slot(), false);
     }
 }
