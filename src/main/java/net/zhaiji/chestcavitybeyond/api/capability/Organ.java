@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
@@ -19,6 +20,8 @@ import net.zhaiji.chestcavitybeyond.api.AttributeEntry;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.OrganInteractContext;
 import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
+import net.zhaiji.chestcavitybeyond.api.event.OrganSkillOnCooldownEvent;
+import net.zhaiji.chestcavitybeyond.api.event.OrganSkillUseEvent;
 import net.zhaiji.chestcavitybeyond.api.function.AfterHurtConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.AttackConsumer;
 import net.zhaiji.chestcavitybeyond.api.function.HealConsumer;
@@ -73,7 +76,7 @@ public class Organ {
     private static final OrganInteractConsumer EMPTY_INTERACT = (context, interactContext) -> {
     };
     /**
-     * 无行为的空器官单例，用于表示物品不具备器官能力
+     * 无行为的空器官单例，用于表示物品不具备器官能力，切记要放在空回调下方，防止初始化出问题（fuck idea的重新设置代码格式）
      */
     public static final Organ EMPTY = new Organ();
 
@@ -267,16 +270,32 @@ public class Organ {
     }
 
     public void organSkill(ChestCavitySlotContext context) {
-        if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) {
+        LivingEntity entity = context.entity();
+        if (entity == null) return;
+
+        if (OrganSkillUtil.hasCooldown(entity, context.stack())) {
             organSkillOnCooldownConsumer.accept(context);
+            NeoForge.EVENT_BUS.post(new OrganSkillOnCooldownEvent(context.data(), context.index(), context.stack()));
             return;
         }
-        if (organSkillFunction.apply(context)) {
-            int cooldown = cooldownTicksFunction.applyAsInt(context);
-            if (cooldown > 0) {
-                OrganSkillUtil.addCooldown(context.entity(), context.stack(), cooldown);
-            }
+
+        OrganSkillUseEvent.Pre preEvent = new OrganSkillUseEvent.Pre(context.data(), context.index(), context.stack());
+        NeoForge.EVENT_BUS.post(preEvent);
+        if (preEvent.isCanceled()) return;
+
+        boolean success = organSkillFunction.apply(context);
+
+        int cooldown = preEvent.resolveCooldownTicks(context, cooldownTicksFunction);
+        int appliedCooldown = 0;
+        if (success && cooldown > 0) {
+            OrganSkillUtil.addCooldown(entity, context.stack(), cooldown);
+            appliedCooldown = cooldown;
         }
+
+        // 技能执行后发布 Post 事件，携带最终应用的冷却值（失败恒为 0）
+        NeoForge.EVENT_BUS.post(
+            new OrganSkillUseEvent.Post(context.data(), context.index(), context.stack(), success, appliedCooldown)
+        );
     }
 
     public void incomingDamage(ChestCavitySlotContext context, LivingIncomingDamageEvent event) {

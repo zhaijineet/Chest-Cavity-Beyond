@@ -6,9 +6,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.NeoForge;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
+import net.zhaiji.chestcavitybeyond.api.event.OrganSkillUseEvent;
 import net.zhaiji.chestcavitybeyond.api.function.GoalSkillWeightFunction;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalCombatContext;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillIntent;
@@ -30,6 +32,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 /**
  * 统一 Goal 器官技能决策 Goal
@@ -273,23 +276,34 @@ public class UseOrganSkillGoal extends Goal {
 
         ChestCavitySlotContext slotContext = ChestCavityUtil.createContext(data, skillEntry.slot(), skillEntry.stack());
 
+        // 技能执行前发布 Pre 事件，可取消或覆盖冷却
+        OrganSkillUseEvent.Pre preEvent = new OrganSkillUseEvent.Pre(data, skillEntry.slot(), skillEntry.stack());
+        NeoForge.EVENT_BUS.post(preEvent);
+        if (preEvent.isCanceled()) return false;
+
         boolean success = metadata.getUseSkill().useSkill(combatContext, slotContext);
-        if (!success) return false;
+        if (!success) {
+            NeoForge.EVENT_BUS.post(new OrganSkillUseEvent.Post(data, skillEntry.slot(), skillEntry.stack(), false, 0));
+            return false;
+        }
 
         // 技能成功且有目标 → 刷新记忆，被动生物的 lastHurtByMob 过期后，靠持续攻击保持记忆不超时
         if (entityTarget != null && entityTarget != mob && entityTarget.isAlive() && !entityTarget.isRemoved()) {
             rememberedTarget = entityTarget;
             rememberedTargetTick = mob.tickCount;
         }
-        int cooldown;
-        if (metadata.getCooldownProvider() != null) {
-            cooldown = metadata.getCooldownProvider().applyAsInt(slotContext);
-        } else {
-            cooldown = ChestCavityUtil.getOrganCap(skillEntry.stack()).getCooldownTicks(slotContext);
-        }
+        // 合并 Pre 覆盖与 Goal 默认冷却回调
+        ToIntFunction<ChestCavitySlotContext> goalDefaultCooldown = metadata.getCooldownProvider() != null
+                                                                    ? metadata.getCooldownProvider()
+                                                                    : context -> ChestCavityUtil.getOrganCap(skillEntry.stack())
+                                                                        .getCooldownTicks(context);
+        int cooldown = preEvent.resolveCooldownTicks(slotContext, goalDefaultCooldown);
         if (cooldown > 0) {
             OrganSkillUtil.addCooldown(mob, skillEntry.stack(), cooldown);
         }
+        // 技能执行后发布 Post 事件，携带最终冷却值
+        NeoForge.EVENT_BUS.post(new OrganSkillUseEvent.Post(data, skillEntry.slot(), skillEntry.stack(), true, cooldown));
+
         // lastUsedIntent 只在成功时更新，避免失败的技能也触发重复惩罚
         lastUsedIntent = metadata.getIntent();
         return true;
@@ -385,7 +399,12 @@ public class UseOrganSkillGoal extends Goal {
         cachedChangeCount = data.getOrganChangeCount();
     }
 
-    private GoalCombatContext buildCombatContext(@Nullable LivingEntity target, @Nullable BlockPos blockTarget, double selfHealthPercent, int nearbyEnemyCount) {
+    private GoalCombatContext buildCombatContext(
+        @Nullable LivingEntity target,
+        @Nullable BlockPos blockTarget,
+        double selfHealthPercent,
+        int nearbyEnemyCount
+    ) {
         double distance = target != null ? mob.distanceTo(target) : -1;
         boolean hasLineOfSight = target != null && mob.getSensing().hasLineOfSight(target);
         double targetHealthPercent = target != null ? target.getHealth() / Math.max(0.01, target.getMaxHealth()) : 0;
@@ -409,12 +428,12 @@ public class UseOrganSkillGoal extends Goal {
             LivingEntity.class,
             searchBox,
             livingEntity -> livingEntity != mob && livingEntity.isAlive()
-                 && (
-                     livingEntity == mob.getTarget()
-                     || livingEntity == mob.getLastHurtByMob()
-                     || livingEntity == rememberedTarget
-                     || (livingEntity instanceof Mob m && m.getTarget() == mob)
-                 )
+                            && (
+                                livingEntity == mob.getTarget()
+                                || livingEntity == mob.getLastHurtByMob()
+                                || livingEntity == rememberedTarget
+                                || (livingEntity instanceof Mob m && m.getTarget() == mob)
+                            )
         ).size();
     }
 
@@ -470,8 +489,10 @@ public class UseOrganSkillGoal extends Goal {
                 // 血量越低惩罚越小（低血量时即使危险也该恢复）
                 return -15
                        + (1 - combatContext.selfHealthPercent()) * 200
-                       + (combatContext.nearbyEnemyCount() > 0 && combatContext.target() != null && combatContext.distanceToTarget() < 5
-                          ? -combatContext.selfHealthPercent() * 50 : 0)
+                       + (
+                           combatContext.nearbyEnemyCount() > 0 && combatContext.target() != null && combatContext.distanceToTarget() < 5
+                           ? -combatContext.selfHealthPercent() * 50 : 0
+                       )
                        + (combatContext.lastUsedIntent() == GoalSkillIntent.RECOVERY ? -50 : 0);
 
             case BLOCK_INTERACT:
