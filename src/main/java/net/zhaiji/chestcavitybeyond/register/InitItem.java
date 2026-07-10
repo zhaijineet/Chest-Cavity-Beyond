@@ -1431,7 +1431,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_HEART = ITEM.register(
         "elder_heart",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 2)
+            .addValueAttribute(InitAttribute.HEALTH, 3)
             .build()
     );
 
@@ -1439,9 +1439,9 @@ public class InitItem {
     public static final Supplier<Item> ELDER_LUNG = ITEM.register(
         "elder_lung",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 2)
-            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 2)
-            .addValueAttribute(InitAttribute.ENDURANCE, 2)
+            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 3)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 3)
+            .addValueAttribute(InitAttribute.ENDURANCE, 3)
             .build()
     );
 
@@ -1449,9 +1449,9 @@ public class InitItem {
     public static final Supplier<Item> ELDER_GILL = ITEM.register(
         "elder_gill",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.WATER_BREATH, 2)
-            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 2)
-            .addValueAttribute(InitAttribute.ENDURANCE, 2)
+            .addValueAttribute(InitAttribute.WATER_BREATH, 3)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 3)
+            .addValueAttribute(InitAttribute.ENDURANCE, 3)
             .build()
     );
 
@@ -1459,7 +1459,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_APPENDIX = ITEM.register(
         "elder_appendix",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.LUCK, 2)
+            .addValueAttribute(Attributes.LUCK, 3)
             .build()
     );
 
@@ -1467,7 +1467,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_LIVER = ITEM.register(
         "elder_liver",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DETOXIFICATION, 2)
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 3)
             .build()
     );
 
@@ -1475,7 +1475,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_SPLEEN = ITEM.register(
         "elder_spleen",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.METABOLISM, 2)
+            .addValueAttribute(InitAttribute.METABOLISM, 3)
             .build()
     );
 
@@ -1483,7 +1483,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_KIDNEY = ITEM.register(
         "elder_kidney",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.FILTRATION, 2)
+            .addValueAttribute(InitAttribute.FILTRATION, 3)
             .build()
     );
 
@@ -1491,7 +1491,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_STOMACH = ITEM.register(
         "elder_stomach",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DIGESTION, 2)
+            .addValueAttribute(InitAttribute.DIGESTION, 3)
             .build()
     );
 
@@ -1499,8 +1499,8 @@ public class InitItem {
     public static final Supplier<Item> ELDER_MUSCLE = ITEM.register(
         "elder_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 2)
-            .addValueAttribute(InitAttribute.SPEED, 2)
+            .addValueAttribute(InitAttribute.STRENGTH, 3)
+            .addValueAttribute(InitAttribute.SPEED, 3)
             .build()
     );
 
@@ -1508,8 +1508,8 @@ public class InitItem {
     public static final Supplier<Item> ELDER_FISH_MUSCLE = ITEM.register(
         "elder_fish_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 2)
-            .addValueAttribute(InitAttribute.SPEED, 1.25)
+            .addValueAttribute(InitAttribute.STRENGTH, 3)
+            .addValueAttribute(InitAttribute.SPEED, 1.5)
             .baseMultipliedAttribute(NeoForgeMod.SWIM_SPEED, 0.2)
             .build()
     );
@@ -1518,8 +1518,8 @@ public class InitItem {
     public static final Supplier<Item> ELDER_SPINE = ITEM.register(
         "elder_spine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 2)
-            .addValueAttribute(InitAttribute.DEFENSE, 1)
+            .addValueAttribute(InitAttribute.NERVES, 3)
+            .addValueAttribute(InitAttribute.DEFENSE, 2)
             .build()
     );
 
@@ -1527,7 +1527,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_RIB = ITEM.register(
         "elder_rib",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 2)
+            .addValueAttribute(InitAttribute.DEFENSE, 3)
             .build()
     );
 
@@ -1535,7 +1535,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_FISH_SPINE = ITEM.register(
         "elder_fish_spine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 2)
+            .addValueAttribute(InitAttribute.NERVES, 3)
             .build()
     );
 
@@ -1543,7 +1543,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_FISH_BONE = ITEM.register(
         "elder_fish_bone",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 1)
+            .addValueAttribute(InitAttribute.DEFENSE, 2)
             .build()
     );
 
@@ -1551,7 +1551,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_INTESTINE = ITEM.register(
         "elder_intestine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NUTRITION, 2)
+            .addValueAttribute(InitAttribute.NUTRITION, 3)
             .build()
     );
 
@@ -1559,7 +1559,7 @@ public class InitItem {
     public static final Supplier<Item> ELDER_FISH_INTESTINE = ITEM.register(
         "elder_fish_intestine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NUTRITION, 2.5)
+            .addValueAttribute(InitAttribute.NUTRITION, 4)
             .build()
     );
 
@@ -1575,8 +1575,8 @@ public class InitItem {
     public static final Supplier<Item> GUARDIAN_EYE = ITEM.register(
         "guardian_eye",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
-            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 1)
+            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 2)
+            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 2)
             .cooldown(5 * 20)
             .skill(PlayerSkillUtil::guardianLaser)
             .goalSkill(GoalSkillUtil.guardianEyeGoalSkill())
@@ -1587,8 +1587,8 @@ public class InitItem {
     public static final Supplier<Item> ELDER_GUARDIAN_EYE = ITEM.register(
         "elder_guardian_eye",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 2)
-            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 2)
+            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 4)
+            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 4)
             .cooldown(8 * 20)
             .skill(PlayerSkillUtil::elderGuardianLaser)
             .goalSkill(GoalSkillUtil.elderGuardianEyeGoalSkill())
