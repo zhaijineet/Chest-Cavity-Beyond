@@ -1,6 +1,5 @@
 package net.zhaiji.chestcavitybeyond.attachment;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -16,7 +15,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
@@ -28,7 +26,6 @@ import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
-import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.api.task.IChestCavityTask;
 import net.zhaiji.chestcavitybeyond.api.task.ISerializableTask;
@@ -668,51 +665,18 @@ public class ChestCavityData extends ItemStackHandler {
             OrganAttributeUtil.updateAttributeModifier(owner, bonus.attribute(), bonus.create(ChestCavityBeyond.of("type_default")));
         }
 
-        List<Integer> refreshSlots = new ArrayList<>();
+        // 应用所有器官的基础属性和补偿属性
         for (int i = 0; i < getSlots(); i++) {
             ItemStack stack = getStackInSlot(i);
             if (stack.isEmpty()) continue;
-            // 器官基础属性
             OrganAttributeUtil.updateOrganAttributeModifier(this, i, ItemStack.EMPTY, stack);
-            // 器官补偿属性
             for (AttributeBonus bonus : type.getAttributeBonuses(stack.getItem())) {
                 OrganAttributeUtil.updateAttributeModifier(owner, bonus.attribute(), bonus.create(ChestCavityUtil.getSlotId(i)));
             }
-            // 缓存需要迭代刷新的器官槽位
-            if (ChestCavityUtil.getOrganCap(stack).shouldRefreshOnOrganChange()) {
-                refreshSlots.add(i);
-            }
         }
 
-        // 动态 modifier 可能依赖其他器官已应用的属性值，链式依赖时需要多轮刷新直到属性结果一致
-        for (int round = 0; round < refreshSlots.size(); round++) {
-            // 快照本轮刷新前各动态槽位的计算结果
-            List<Multimap<Holder<Attribute>, AttributeModifier>> modifiersBeforeRound = new ArrayList<>();
-            for (int slotIndex : refreshSlots) {
-                ItemStack stack = getStackInSlot(slotIndex);
-                ChestCavitySlotContext context = ChestCavityUtil.createContext(this, slotIndex, stack);
-                modifiersBeforeRound.add(ChestCavityUtil.getAttributeModifiers(context));
-            }
-            // 对每个动态槽位执行完整的移除与应用，保证属性 key 变化时旧 modifier 不残留
-            for (int slotIndex : refreshSlots) {
-                ItemStack stack = getStackInSlot(slotIndex);
-                ChestCavitySlotContext context = ChestCavityUtil.createContext(this, slotIndex, stack);
-                OrganAttributeUtil.updateSlotOrganAttribute(context);
-            }
-            // 快照本轮刷新后的计算结果，若与本轮刷新前完全一致则视为收敛
-            boolean changed = false;
-            for (int j = 0; j < refreshSlots.size(); j++) {
-                int slotIndex = refreshSlots.get(j);
-                ItemStack stack = getStackInSlot(slotIndex);
-                ChestCavitySlotContext context = ChestCavityUtil.createContext(this, slotIndex, stack);
-                Multimap<Holder<Attribute>, AttributeModifier> modifiersAfterRefresh = ChestCavityUtil.getAttributeModifiers(context);
-                if (!modifiersBeforeRound.get(j).equals(modifiersAfterRefresh)) {
-                    changed = true;
-                    break;
-                }
-            }
-            if (!changed) break;
-        }
+        // 多轮刷新所有动态器官的 modifier 直到稳定
+        OrganAttributeUtil.refreshAllDynamicAttributes(this);
 
         OrganAttributeUtil.updateDefaultModifier(this);
         OrganAttributeUtil.updateScale(this);

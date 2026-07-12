@@ -155,6 +155,8 @@ public class ChestCavityUtil {
         OrganAttributeUtil.updateOrganAttributeModifier(data, index, oldStack, newStack);
         ChestCavityUtil.organRemoved(data, index, oldStack);
         ChestCavityUtil.organAdded(data, index, newStack);
+        // 多轮刷新所有动态器官的 modifier 直到稳定
+        OrganAttributeUtil.refreshAllDynamicAttributes(data);
         // 触发所有其他器官的变化回调
         triggerOtherOrganChange(data, index, oldStack, newStack);
         // 发布器官更换事件
@@ -202,8 +204,6 @@ public class ChestCavityUtil {
         getOrganCap(stack).organRemoved(createContext(data, index, stack));
     }
 
-    // TODO：运行时仅单轮 refresh，多个 refreshOnOrganChange 器官互相依赖时（A 依赖 B、B 依赖 A）属性可能不准，
-    //  需仿 initAttributeModifier 的快照收敛逻辑实现多轮迭代至属性结果一致
     /**
      * 触发所有其他器官的变化回调
      *

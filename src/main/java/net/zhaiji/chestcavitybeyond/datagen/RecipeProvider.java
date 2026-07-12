@@ -135,9 +135,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_rotten", has(ItemTagManager.ROTTEN))
                 .save(recipeOutput, ChestCavityBeyond.of("rotten"));
 
-        ItemStack stack = Items.IRON_NUGGET.getDefaultInstance();
-        stack.setCount(8);
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ItemTagManager.IRON), RecipeCategory.MISC, stack, 0.1F, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ItemTagManager.IRON), RecipeCategory.MISC, Items.IRON_INGOT, 0.1F, 200)
                 .unlockedBy("has_iron_organ", has(ItemTagManager.IRON))
                 .save(recipeOutput, ChestCavityBeyond.of("iron_organ"));
     }

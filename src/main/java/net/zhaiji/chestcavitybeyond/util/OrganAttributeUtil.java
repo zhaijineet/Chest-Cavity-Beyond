@@ -20,8 +20,10 @@ import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -126,6 +128,88 @@ public class OrganAttributeUtil {
     public static void updateSlotOrganAttribute(ChestCavitySlotContext context) {
         ItemStack organ = context.stack();
         updateOrganAttributeModifier(context.data(), context.index(), organ, organ);
+    }
+
+    /**
+     * 对所有声明了动态属性的器官做多轮刷新，直到 modifier 计算结果不再变化或超出最大刷新轮次。
+     *
+     * @param data 胸腔数据
+     */
+    public static void refreshAllDynamicAttributes(ChestCavityData data) {
+        List<Integer> refreshSlots = new ArrayList<>();
+        for (int i = 0; i < data.getSlots(); i++) {
+            ItemStack stack = data.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            if (ChestCavityUtil.getOrganCap(stack).shouldRefreshDynamicAttribute()) {
+                refreshSlots.add(i);
+            }
+        }
+
+        if (refreshSlots.isEmpty()) return;
+
+        for (int round = 0; round < refreshSlots.size(); round++) {
+            List<Multimap<Holder<Attribute>, AttributeModifier>> modifiersBeforeRound = new ArrayList<>();
+            for (int slotIndex : refreshSlots) {
+                ItemStack stack = data.getStackInSlot(slotIndex);
+                ChestCavitySlotContext context = ChestCavityUtil.createContext(data, slotIndex, stack);
+                modifiersBeforeRound.add(ChestCavityUtil.getAttributeModifiers(context));
+            }
+
+            for (int slotIndex : refreshSlots) {
+                ItemStack stack = data.getStackInSlot(slotIndex);
+                ChestCavitySlotContext context = ChestCavityUtil.createContext(data, slotIndex, stack);
+                updateSlotOrganAttribute(context);
+            }
+
+            boolean changed = false;
+            for (int j = 0; j < refreshSlots.size(); j++) {
+                int slotIndex = refreshSlots.get(j);
+                ItemStack stack = data.getStackInSlot(slotIndex);
+                ChestCavitySlotContext context = ChestCavityUtil.createContext(data, slotIndex, stack);
+                Multimap<Holder<Attribute>, AttributeModifier> after = ChestCavityUtil.getAttributeModifiers(context);
+                if (!modifiersApproximatelyEqual(modifiersBeforeRound.get(j), after)) {
+                    changed = true;
+                    break;
+                }
+            }
+
+            if (!changed) break;
+        }
+    }
+
+    /**
+     * 比较两个 modifier 集合是否近似相等
+     */
+    private static boolean modifierCollectionsApproximatelyEqual(
+        Collection<AttributeModifier> before,
+        Collection<AttributeModifier> after
+    ) {
+        if (before.size() != after.size()) return false;
+        Map<ResourceLocation, AttributeModifier> afterById = new HashMap<>();
+        for (AttributeModifier modifier : after) {
+            afterById.put(modifier.id(), modifier);
+        }
+        for (AttributeModifier beforeModifier : before) {
+            AttributeModifier afterModifier = afterById.get(beforeModifier.id());
+            if (afterModifier == null) return false;
+            if (beforeModifier.operation() != afterModifier.operation()) return false;
+            if (Math.abs(beforeModifier.amount() - afterModifier.amount()) > 1e-6) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 比较两个 modifier Multimap 是否近似相等
+     */
+    private static boolean modifiersApproximatelyEqual(
+        Multimap<Holder<Attribute>, AttributeModifier> before,
+        Multimap<Holder<Attribute>, AttributeModifier> after
+    ) {
+        if (!before.keySet().equals(after.keySet())) return false;
+        for (Holder<Attribute> key : before.keySet()) {
+            if (!modifierCollectionsApproximatelyEqual(before.get(key), after.get(key))) return false;
+        }
+        return true;
     }
 
     /**

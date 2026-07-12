@@ -27,6 +27,7 @@ import net.zhaiji.chestcavitybeyond.api.goal.GoalCombatContext;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillIntent;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillTargetResolver;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 
 public class GoalSkillUtil {
@@ -35,18 +36,18 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata enderAppendixGoalSkill() {
         return GoalSkillMetadata.defense((GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-            LivingEntity entity = slotContext.entity();
-            double ender = slotContext.data().getCurrentValue(InitAttribute.ENDER);
-            double healthPercent = entity.getHealth() / entity.getMaxHealth();
-            if (healthPercent < 0.3) {
-                return OrganSkillUtil.fleeTeleport(entity, combatContext.target(), ender);
-            } else if (combatContext.target() != null) {
-                return OrganSkillUtil.teleportBehind(entity, combatContext.target(), ender);
-            }
-            return OrganSkillUtil.randomTeleport(entity, ender);
-        })
-        .entityFilter(mob -> !(mob instanceof EnderMan))
-        .build();
+                LivingEntity entity = slotContext.entity();
+                double ender = slotContext.data().getCurrentValue(InitAttribute.ENDER);
+                double healthPercent = entity.getHealth() / entity.getMaxHealth();
+                if (healthPercent < 0.3) {
+                    return OrganSkillUtil.fleeTeleport(entity, combatContext.target(), ender);
+                } else if (combatContext.target() != null) {
+                    return OrganSkillUtil.teleportBehind(entity, combatContext.target(), ender);
+                }
+                return OrganSkillUtil.randomTeleport(entity, ender);
+            })
+            .entityFilter(mob -> !(mob instanceof EnderMan))
+            .build();
     }
 
     /**
@@ -60,8 +61,18 @@ public class GoalSkillUtil {
                     if (blockTarget == null) return false;
                     BlockState state = entity.level().getBlockState(blockTarget);
                     // 高草丛倍率2，矮草丛/草方块倍率1
-                    float amount = state.is(Blocks.TALL_GRASS) ? 2.0F : 1.0F;
-                    entity.heal(amount);
+                    float base = state.is(Blocks.TALL_GRASS) ? 2.0F : 1.0F;
+                    ChestCavityData data = slotContext.data();
+                    double digestionDifference = data.getDifferenceValue(InitAttribute.DIGESTION)
+                                                 + data.getDifferenceValue(InitAttribute.HERBIVOROUS_DIGESTION);
+                    double nutritionDifference = data.getDifferenceValue(InitAttribute.NUTRITION)
+                                                 + data.getDifferenceValue(InitAttribute.HERBIVOROUS_NUTRITION);
+                    // 正数时营养削弱参与，负数时保持原值以确保惩罚力度
+                    nutritionDifference = nutritionDifference > 0 ? nutritionDifference / 4 : nutritionDifference;
+                    float healAmount = (float) (
+                        base * MathUtil.getDirectScale(digestionDifference) * MathUtil.getDirectScale(nutritionDifference)
+                    );
+                    entity.heal(healAmount);
                     if (state.is(Blocks.GRASS_BLOCK)) {
                         // 草方块变为泥土，播放方块破坏粒子
                         entity.level().levelEvent(2001, blockTarget, Block.getId(state));
@@ -71,7 +82,11 @@ public class GoalSkillUtil {
                     }
                     return true;
                 }
-            ).canUse((mob, skillEntry) -> mob.getHealth() < mob.getMaxHealth())
+            ).canUse((mob, skillEntry) -> {
+                if (mob.getHealth() >= mob.getMaxHealth()) return false;
+                ChestCavityData data = ChestCavityUtil.getData(mob);
+                return data.getCurrentValue(InitAttribute.DIGESTION) > 0 || data.getCurrentValue(InitAttribute.HERBIVOROUS_DIGESTION) > 0;
+            })
             .blockTargetResolver(
                 (mob, skillEntry) -> GoalSkillTargetResolver.DEFAULT_BLOCK_RESOLVER.apply(
                     mob,
@@ -107,17 +122,17 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata silkGlandGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.silk(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target())
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof Spider))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.silk(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target())
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof Spider))
+            .build();
     }
 
     /**
@@ -125,17 +140,17 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata llamaLungGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.spit(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target())
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof Llama))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.spit(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target())
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof Llama))
+            .build();
     }
 
     /**
@@ -143,16 +158,16 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata activeBlazeRodGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
-                OrganSkillUtil.smallFireball(
-                    slotContext.data(),
-                    (int) slotContext.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL),
-                    combatContext.target()
-                )
-        )
-        .entityFilter(mob -> !(mob instanceof Blaze))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
+                    OrganSkillUtil.smallFireball(
+                        slotContext.data(),
+                        (int) slotContext.data().getCurrentValue(InitAttribute.VOMIT_FIREBALL),
+                        combatContext.target()
+                    )
+            )
+            .entityFilter(mob -> !(mob instanceof Blaze))
+            .build();
     }
 
     /**
@@ -160,17 +175,17 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata snowCoreGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.snowball(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target())
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof SnowGolem))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.snowball(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target())
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof SnowGolem))
+            .build();
     }
 
     /**
@@ -178,18 +193,18 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata ghastStomachGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.largeFireball(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target()),
-                    slotContext.data().getCurrentValue(InitAttribute.GHASTLY)
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof Ghast))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.largeFireball(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target()),
+                        slotContext.data().getCurrentValue(InitAttribute.GHASTLY)
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof Ghast))
+            .build();
     }
 
     /**
@@ -197,14 +212,14 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata shulkerSpleenGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            (mob, target, skillEntry) -> ChestCavityBeyondConfig.shulkerBulletDistance,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                OrganSkillUtil.shulkerBullet(slotContext.entity(), combatContext.target());
-                return true;
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof Shulker))
-        .build();
+                (mob, target, skillEntry) -> ChestCavityBeyondConfig.shulkerBulletDistance,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    OrganSkillUtil.shulkerBullet(slotContext.entity(), combatContext.target());
+                    return true;
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof Shulker))
+            .build();
     }
 
     /**
@@ -212,17 +227,17 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata dragonLungGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.dragonFireball(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target())
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof EnderDragon))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.dragonFireball(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target())
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof EnderDragon))
+            .build();
     }
 
     /**
@@ -257,13 +272,13 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata guardianEyeGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            (mob, target, skillEntry) -> ChestCavityBeyondConfig.guardianLaserDistance,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
-                OrganSkillUtil.guardianLaser(
-                    slotContext.entity(), combatContext.target(), false)
-        )
-        .entityFilter(mob -> !(mob instanceof Guardian))
-        .build();
+                (mob, target, skillEntry) -> ChestCavityBeyondConfig.guardianLaserDistance,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
+                    OrganSkillUtil.guardianLaser(
+                        slotContext.entity(), combatContext.target(), false)
+            )
+            .entityFilter(mob -> !(mob instanceof Guardian))
+            .build();
     }
 
     /**
@@ -271,13 +286,13 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata elderGuardianEyeGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            (mob, target, skillEntry) -> ChestCavityBeyondConfig.guardianLaserDistance,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
-                OrganSkillUtil.guardianLaser(
-                    slotContext.entity(), combatContext.target(), true)
-        )
-        .entityFilter(mob -> !(mob instanceof ElderGuardian))
-        .build();
+                (mob, target, skillEntry) -> ChestCavityBeyondConfig.guardianLaserDistance,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) ->
+                    OrganSkillUtil.guardianLaser(
+                        slotContext.entity(), combatContext.target(), true)
+            )
+            .entityFilter(mob -> !(mob instanceof ElderGuardian))
+            .build();
     }
 
     /**
@@ -285,12 +300,12 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata alchemistGlandGoalSkill() {
         return GoalSkillMetadata.recovery((GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-            slotContext.stack()
-                .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
-                .forEachEffect(slotContext.entity()::addEffect);
-            return true;
-        })
-        .build();
+                slotContext.stack()
+                    .getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
+                    .forEachEffect(slotContext.entity()::addEffect);
+                return true;
+            })
+            .build();
     }
 
     /**
@@ -298,17 +313,17 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata breezeCoreGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.windCharge(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target())
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof Breeze))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.windCharge(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target())
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof Breeze))
+            .build();
     }
 
     /**
@@ -316,16 +331,16 @@ public class GoalSkillUtil {
      */
     public static GoalSkillMetadata netherStarGoalSkill() {
         return GoalSkillMetadata.targetedAttack(
-            GoalSkillMetadata::defaultRange,
-            (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
-                LivingEntity entity = slotContext.entity();
-                return OrganSkillUtil.witherSkull(
-                    entity,
-                    OrganSkillUtil.directionTo(entity, combatContext.target())
-                );
-            }
-        )
-        .entityFilter(mob -> !(mob instanceof WitherBoss))
-        .build();
+                GoalSkillMetadata::defaultRange,
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    return OrganSkillUtil.witherSkull(
+                        entity,
+                        OrganSkillUtil.directionTo(entity, combatContext.target())
+                    );
+                }
+            )
+            .entityFilter(mob -> !(mob instanceof WitherBoss))
+            .build();
     }
 }

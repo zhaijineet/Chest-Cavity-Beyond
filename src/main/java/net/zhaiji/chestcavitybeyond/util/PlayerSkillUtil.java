@@ -30,7 +30,6 @@ import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitEffect;
 
 public class PlayerSkillUtil {
-
     /**
      * 末影阑尾——沿着视线方向传送
      */
@@ -215,8 +214,6 @@ public class PlayerSkillUtil {
         return OrganSkillUtil.witherSkull(entity, entity.getLookAngle().normalize());
     }
 
-    // ==================== Player 专用底层逻辑 ====================
-
     /**
      * 食草的基本食物属性
      */
@@ -313,14 +310,14 @@ public class PlayerSkillUtil {
         int amplifier = Math.max(0, (int) (furnacePower - 1));
         int maxDuration = ChestCavityBeyondConfig.furnacePowerMaxDuration;
         boolean isConsume = false;
+        boolean isConverted = false;
         MobEffectInstance effect = player.getEffect(InitEffect.FURNACE_POWER);
         if (effect != null) {
-            if (amplifier < effect.getAmplifier()) {
-                totalDuration += effect.getDuration() / (1 + effect.getAmplifier() - amplifier);
-                amplifier = effect.getAmplifier();
-            } else {
-                totalDuration += effect.getDuration();
-            }
+            totalDuration = Math.min(
+                effect.getDuration() * (effect.getAmplifier() + 1) / (amplifier + 1),
+                maxDuration
+            );
+            isConverted = effect.getAmplifier() > amplifier;
         }
         do {
             int duration = stack.getBurnTime(null);
@@ -339,16 +336,13 @@ public class PlayerSkillUtil {
                     player.drop(remaining, false);
                 }
             }
-
             // 更新stack，因为有可能为消耗后的剩余物品
             stack = player.getItemInHand(hand);
         } while (isCrouching && stack.getBurnTime(null) > 0);
-        if (isConsume) {
-            player.level().playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
-            player.removeEffect(InitEffect.FURNACE_POWER);
-            player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
-            return true;
-        }
-        return false;
+        if (!isConsume && !isConverted) return false;
+        player.level().playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
+        player.removeEffect(InitEffect.FURNACE_POWER);
+        player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
+        return true;
     }
 }

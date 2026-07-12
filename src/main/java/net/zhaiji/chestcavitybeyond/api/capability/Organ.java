@@ -87,7 +87,7 @@ public class Organ {
     private final Consumer<ChestCavitySlotContext> organAddedConsumer;
     private final Consumer<ChestCavitySlotContext> organRemovedConsumer;
     private final OtherOrganChangeConsumer otherOrganChangeConsumer;
-    private final boolean refreshOnOrganChange;
+    private final boolean refreshDynamicAttribute;
     private final boolean hasSkill;
     private final OrganSkillFunction organSkillFunction;
     private final ToIntFunction<ChestCavitySlotContext> cooldownTicksFunction;
@@ -110,7 +110,7 @@ public class Organ {
         this.organAddedConsumer = builder.organAddedConsumer;
         this.organRemovedConsumer = builder.organRemovedConsumer;
         this.otherOrganChangeConsumer = builder.otherOrganChangeConsumer;
-        this.refreshOnOrganChange = builder.refreshOnOrganChange;
+        this.refreshDynamicAttribute = builder.refreshDynamicAttribute;
         this.hasSkill = builder.hasSkill;
         this.organSkillFunction = builder.organSkillFunction;
         this.cooldownTicksFunction = builder.cooldownTicksFunction;
@@ -134,7 +134,7 @@ public class Organ {
         this.organAddedConsumer = EMPTY_CONSUMER;
         this.organRemovedConsumer = EMPTY_CONSUMER;
         this.otherOrganChangeConsumer = EMPTY_OTHER_ORGAN_CHANGE;
-        this.refreshOnOrganChange = false;
+        this.refreshDynamicAttribute = false;
         this.hasSkill = false;
         this.organSkillFunction = EMPTY_SKILL;
         this.cooldownTicksFunction = EMPTY_COOLDOWN;
@@ -254,15 +254,18 @@ public class Organ {
         organRemovedConsumer.accept(context);
     }
 
+    /**
+     * 其他器官变化时的回调（修改自身状态、触发效果等）
+     */
     public void otherOrganChange(ChestCavitySlotContext context, int changedIndex, ItemStack oldStack, ItemStack newStack) {
-        if (refreshOnOrganChange) {
-            OrganAttributeUtil.updateSlotOrganAttribute(context);
-        }
         otherOrganChangeConsumer.accept(context, changedIndex, oldStack, newStack);
     }
 
-    public boolean shouldRefreshOnOrganChange() {
-        return refreshOnOrganChange;
+    /**
+     * 本器官是否声明了动态属性，需要在其他器官变化时由框架重新计算 modifier
+     */
+    public boolean shouldRefreshDynamicAttribute() {
+        return refreshDynamicAttribute;
     }
 
     public boolean hasSkill() {
@@ -348,7 +351,7 @@ public class Organ {
     public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
         private final List<AttributeEntry> attributeEntries = new ArrayList<>();
         private OrganModifierConsumer organModifierConsumer = EMPTY_MODIFIER;
-        private boolean refreshOnOrganChange = false;
+        private boolean refreshDynamicAttribute = false;
         private OrganTooltipConsumer tooltipConsumer = null;
         private Consumer<ChestCavitySlotContext> organTickConsumer = EMPTY_CONSUMER;
         private Consumer<ChestCavitySlotContext> organAddedConsumer = EMPTY_CONSUMER;
@@ -378,7 +381,7 @@ public class Organ {
             attributeEntries.clear();
             attributeEntries.addAll(organ.attributeEntries);
             organModifierConsumer = organ.organModifierConsumer;
-            refreshOnOrganChange = organ.refreshOnOrganChange;
+            refreshDynamicAttribute = organ.refreshDynamicAttribute;
             tooltipConsumer = organ.tooltipConsumer;
             organTickConsumer = organ.organTickConsumer;
             organAddedConsumer = organ.organAddedConsumer;
@@ -422,13 +425,16 @@ public class Organ {
             return self();
         }
 
-        public T refreshOnOrganChange() {
-            this.refreshOnOrganChange = true;
+        /**
+         * 声明本器官的属性修饰符依赖其他器官（属性）的存在或状态而变化
+         */
+        public T refreshDynamicAttribute() {
+            this.refreshDynamicAttribute = true;
             return self();
         }
 
-        public T clearRefreshOnOrganChange() {
-            this.refreshOnOrganChange = false;
+        public T clearRefreshDynamicAttribute() {
+            this.refreshDynamicAttribute = false;
             return self();
         }
 
