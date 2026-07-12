@@ -310,22 +310,25 @@ public class PlayerSkillUtil {
         int amplifier = Math.max(0, (int) (furnacePower - 1));
         int maxDuration = ChestCavityBeyondConfig.furnacePowerMaxDuration;
         boolean isConsume = false;
-        boolean isConverted = false;
         MobEffectInstance effect = player.getEffect(InitEffect.FURNACE_POWER);
+        boolean isConversion = effect != null && effect.getAmplifier() > amplifier;
         if (effect != null) {
             totalDuration = Math.min(
                 effect.getDuration() * (effect.getAmplifier() + 1) / (amplifier + 1),
                 maxDuration
             );
-            isConverted = effect.getAmplifier() > amplifier;
         }
         do {
             int duration = stack.getBurnTime(null);
-            // 当已有effect的情况下，计算时间大于最大值，不进行任何更改
-            if (totalDuration + duration > maxDuration) {
+            int newDuration = totalDuration + duration;
+            // 降级转换首次消耗允许超过上限，但总时长不超过上限的1.5倍
+            if (isConversion && newDuration >= maxDuration) {
+                totalDuration = (int) Math.min(newDuration, maxDuration * 1.5);
+            } else if (newDuration > maxDuration) {
                 break;
+            } else {
+                totalDuration = newDuration;
             }
-            totalDuration += duration;
             ItemStack remaining = stack.getCraftingRemainingItem();
             stack.consume(1, player);
             isConsume = true;
@@ -338,10 +341,10 @@ public class PlayerSkillUtil {
             }
             // 更新stack，因为有可能为消耗后的剩余物品
             stack = player.getItemInHand(hand);
+            isConversion = false;
         } while (isCrouching && stack.getBurnTime(null) > 0);
-        if (!isConsume && !isConverted) return false;
+        if (!isConsume) return false;
         player.level().playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
-        player.removeEffect(InitEffect.FURNACE_POWER);
         player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
         return true;
     }
