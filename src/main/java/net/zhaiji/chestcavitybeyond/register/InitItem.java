@@ -1199,6 +1199,7 @@ public class InitItem {
         "snow_core",
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 0.25)
+            .addValueAttribute(InitAttribute.FROST_RESISTANCE, 5)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .skill(PlayerSkillUtil::snowball)
             .goalSkill(GoalSkillUtil.snowCoreGoalSkill())

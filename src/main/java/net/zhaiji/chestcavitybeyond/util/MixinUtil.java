@@ -295,7 +295,8 @@ public class MixinUtil {
      * @return 修改后的消耗值
      */
     public static float modifyExhaustion(float value, ChestCavityData data) {
-        return (float) (value * MathUtil.getInverseScale(data.getDifferenceValue(InitAttribute.ENDURANCE)));
+        double enduranceDifference = data.getDifferenceValue(InitAttribute.ENDURANCE);
+        return (float) (value * MathUtil.getSquareRootInverseScale(enduranceDifference));
     }
 
     /**
@@ -358,7 +359,7 @@ public class MixinUtil {
                 }
             } else {
                 double capacity = data.getDifferenceValue(InitAttribute.BREATH_CAPACITY);
-                consumer *= MathUtil.getInverseScale(capacity);
+                consumer *= MathUtil.getSquareRootInverseScale(capacity);
                 // 此处缓存负数氧气为了和上面缓存的氧气匹配
                 consumer -= data.oxygenRemainder;
                 data.oxygenRemainder = -consumer % 1;

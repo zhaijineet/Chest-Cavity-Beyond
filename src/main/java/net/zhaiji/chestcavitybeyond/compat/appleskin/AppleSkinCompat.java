@@ -90,7 +90,7 @@ public class AppleSkinCompat {
     ) {
         if (!Float.isFinite(exhaustionLevel) || !Float.isFinite(saturationLevel)) return 0;
 
-        double enduranceScale = MathUtil.getInverseScale(chestCavityData.getDifferenceValue(InitAttribute.ENDURANCE));
+        double enduranceScale = MathUtil.getSquareRootInverseScale(chestCavityData.getDifferenceValue(InitAttribute.ENDURANCE));
 
         float health = 0;
         float maximumExhaustion = 4.0F;

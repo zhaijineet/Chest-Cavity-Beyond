@@ -77,6 +77,41 @@ public class MathUtil {
     }
 
     /**
+     * 平方根反比缩放
+     *
+     * <pre>
+     *  input | output
+     * -------|---------
+     *   4.0  | 0.333
+     *   3.5  | 0.348
+     *   3.0  | 0.366
+     *   2.5  | 0.387
+     *   2.0  | 0.414
+     *   1.5  | 0.449
+     *   1.0  | 0.500
+     *   0.5  | 0.586
+     *   0.0  | 1.000
+     *  -0.5  | 1.203
+     *  -1.0  | 1.693
+     *  -1.5  | 2.374
+     *  -2.0  | 3.197
+     *  -2.5  | 4.132
+     *  -3.0  | 5.159
+     *  -3.5  | 6.264
+     *  -4.0  | 7.438
+     * </pre>
+     *
+     * @param input 输入值
+     * @return 缩放因子
+     */
+    public static double getSquareRootInverseScale(double input) {
+        if (input >= 0) {
+            return 1 / (1 + Math.sqrt(input));
+        }
+        return getInverseScale(input);
+    }
+
+    /**
      * 对数缩放
      *
      * <pre>

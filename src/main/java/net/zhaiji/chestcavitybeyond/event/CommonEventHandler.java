@@ -350,17 +350,23 @@ public class CommonEventHandler {
         double withered = data.getDifferenceValue(InitAttribute.WITHERED);
         if (detoxification == 0 && withered == 0) return;
         MobEffectInstance instance = event.getEffectInstance();
-        if (instance instanceof IMobEffectInstance mobEffectInstance && mobEffectInstance.isHarmful()) {
-            double scale = 1;
-            scale *= MathUtil.getInverseScale(detoxification);
-            if (instance.is(MobEffects.WITHER)) {
-                scale *= MathUtil.getInverseScale(withered);
-            }
-            double finalScale = scale;
-            // int duration = instance.mapDuration(oldDuration -> (int) (oldDuration * finalScale));
-            // if (duration <= 20) event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
-            mobEffectInstance.setDuration(oldDuration -> (int) (oldDuration * finalScale), event.getEntity());
+        if (!(instance instanceof IMobEffectInstance mobEffectInstance)
+            || !mobEffectInstance.isHarmful()
+            || instance.getEffect().value().isInstantenous()) {
+            return;
         }
+        double witheredDurationScale = instance.is(MobEffects.WITHER)
+                                       ? MathUtil.getSquareRootInverseScale(withered)
+                                       : 1;
+        double durationScale = MathUtil.getSquareRootInverseScale(detoxification) * witheredDurationScale;
+        int originalDuration = instance.getDuration();
+        int reducedDuration = instance.mapDuration(duration -> (int) (duration * durationScale));
+        if (reducedDuration == originalDuration) return;
+        if (reducedDuration < originalDuration && reducedDuration <= ChestCavityBeyondConfig.detoxificationImmunityDurationThreshold) {
+            event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
+            return;
+        }
+        mobEffectInstance.setDuration(duration -> reducedDuration, event.getEntity());
     }
 
     /**

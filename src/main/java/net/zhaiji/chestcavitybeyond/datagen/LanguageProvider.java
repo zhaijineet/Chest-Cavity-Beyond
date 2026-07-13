@@ -556,7 +556,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.DETOXIFICATION,
-            "Reduces duration of harmful potion effects"
+            "Reduces duration of harmful potion effects",
+            "Immune when reduced duration ≤ %s ticks"
         );
         addAttributeDescription(
             InitAttribute.FILTRATION,
@@ -701,7 +702,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.EXPLOSIVE, "Explosion Power %s");
         addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "Interval %ss");
         addAttributeValueEffect(InitAttribute.IRON_REPAIR, "Iron Heal %s");
-        addAttributeValueEffect(InitAttribute.WITHERED, "Wither for %ss, Effect Lv%s");
+        addAttributeValueEffect(InitAttribute.WITHERED, "Wither for %ss, Effect Lv%s, Wither Duration %s%%");
         addAttributeValueEffect(InitAttribute.GHASTLY, "Fireball Power %s");
         addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "Near End Crystals: restores %s health per second");
         addAttributeValueEffect(InitAttribute.LAUNCH, "Knockup Force %s");
@@ -1316,7 +1317,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         );
         addAttributeDescription(
             InitAttribute.DETOXIFICATION,
-            "缩短受到的有害药水效果持续时间"
+            "缩短受到的有害药水效果持续时间",
+            "缩减后时长≤%stick时免疫"
         );
         addAttributeDescription(
             InitAttribute.FILTRATION,
@@ -1461,7 +1463,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.EXPLOSIVE, "爆炸威力 %s");
         addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "触发间隔 %s秒");
         addAttributeValueEffect(InitAttribute.IRON_REPAIR, "铁锭回复 %s");
-        addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续%s秒，效果等级Lv%s");
+        addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续%s秒，效果等级Lv%s，凋零持续时间%s%%");
         addAttributeValueEffect(InitAttribute.GHASTLY, "火球威力 %s");
         addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "靠近末影水晶时每秒回复%s点生命值");
         addAttributeValueEffect(InitAttribute.LAUNCH, "击飞力度 %s");

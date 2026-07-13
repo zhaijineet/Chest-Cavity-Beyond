@@ -86,9 +86,9 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.ENDURANCE, 30, entity -> {
-                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.ENDURANCE);
-                double scale = MathUtil.getInverseScale(diff);
-                double percent = scale * 100;
+                double enduranceDifference = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.ENDURANCE);
+                double enduranceScale = MathUtil.getSquareRootInverseScale(enduranceDifference);
+                double percent = enduranceScale * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.ENDURANCE),
                     TooltipUtil.formatAttributeValue(percent)
@@ -155,7 +155,7 @@ public class AttributeDisplayManager {
         register(
             InitAttribute.BREATH_CAPACITY, 20, entity -> {
                 double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.BREATH_CAPACITY);
-                double scale = MathUtil.getInverseScale(diff);
+                double scale = MathUtil.getSquareRootInverseScale(diff);
                 double percent = scale * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.BREATH_CAPACITY),
@@ -189,17 +189,28 @@ public class AttributeDisplayManager {
                 );
             }
         );
-        register(
-            InitAttribute.DETOXIFICATION, 20, entity -> {
-                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.DETOXIFICATION);
-                double scale = MathUtil.getInverseScale(diff);
+        register(AttributeDisplay.builder(InitAttribute.DETOXIFICATION)
+            .priority(20)
+            .descriptionOverride(() -> {
+                MutableComponent hover = Component.empty();
+                hover.append(Component.translatable("attribute.chestcavitybeyond.detoxification.description.0"));
+                hover.append(Component.literal("\n"));
+                hover.append(Component.translatable(
+                    "attribute.chestcavitybeyond.detoxification.description.1",
+                    TooltipUtil.formatAttributeValue(ChestCavityBeyondConfig.detoxificationImmunityDurationThreshold)
+                ));
+                return hover;
+            })
+            .valueEffect(entity -> {
+                double detoxificationDifference = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.DETOXIFICATION);
+                double scale = MathUtil.getSquareRootInverseScale(detoxificationDifference);
                 double percent = scale * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.DETOXIFICATION),
                     TooltipUtil.formatAttributeValue(percent)
                 );
-            }
-        );
+            })
+            .build());
         register(
             InitAttribute.FILTRATION, 20, entity -> {
                 double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.FILTRATION);
@@ -430,10 +441,14 @@ public class AttributeDisplayManager {
                     duration += 200;
                     amplifier++;
                 }
+                double durationPercent = MathUtil.getSquareRootInverseScale(
+                    data.getDifferenceValue(InitAttribute.WITHERED)
+                ) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.WITHERED),
                     TooltipUtil.formatAttributeValue(duration / 20.0),
-                    amplifier + 1
+                    amplifier + 1,
+                    TooltipUtil.formatAttributeValue(durationPercent)
                 );
             }
         );

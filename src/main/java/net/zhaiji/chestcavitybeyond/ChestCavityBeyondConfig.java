@@ -5,6 +5,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ChestCavityBeyondConfig {
     public static int filtrationPeriod;
+    public static int detoxificationImmunityDurationThreshold;
     public static int minChestOpenMaxHealth;
     public static double chestOpenBaseHealthRatio;
     public static int guardianLaserDistance;
@@ -43,6 +44,18 @@ public class ChestCavityBeyondConfig {
                     60,
                     20,
                     600
+            );
+
+    private static final ModConfigSpec.IntValue DETOXIFICATION_IMMUNITY_DURATION_THRESHOLD = BUILDER
+            .comment(
+                    "解毒或凋零化缩短后的有害效果持续时间不超过此值时直接免疫（tick，0 = 仅免疫缩短到0 tick的效果）",
+                    "Immunize harmful effects reduced by detoxification or withered when their duration is at or below this value (ticks, 0 = only effects reduced to 0 ticks)"
+            )
+            .defineInRange(
+                    "detoxificationImmunityDurationThreshold",
+                    10,
+                    0,
+                    Integer.MAX_VALUE
             );
 
     private static final ModConfigSpec.IntValue MIN_CHEST_OPEN_MAX_HEALTH = BUILDER
@@ -286,6 +299,7 @@ public class ChestCavityBeyondConfig {
     public static void handlerModConfigEvent(ModConfigEvent event) {
         if (event.getConfig().getSpec() == SPEC) {
             filtrationPeriod = FILTRATION_PERIOD.get();
+            detoxificationImmunityDurationThreshold = DETOXIFICATION_IMMUNITY_DURATION_THRESHOLD.get();
             minChestOpenMaxHealth = MIN_CHEST_OPEN_MAX_HEALTH.get();
             chestOpenBaseHealthRatio = CHEST_OPEN_BASE_HEALTH_RATIO.get();
             guardianLaserDistance = GUARDIAN_LASER_DISTANCE.get();
