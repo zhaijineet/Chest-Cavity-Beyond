@@ -3,6 +3,7 @@
   "package": "net.zhaiji.chestcavitybeyond.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "AnvilMenuMixin",
     "AreaEffectCloudMixin",
     "BlazeMixin",
     "BlazeMixin$BlazeAttackGoalMixin",

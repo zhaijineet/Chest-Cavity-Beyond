@@ -34,13 +34,13 @@ import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ChestCavityTypeManager {
-    public static final Map<ResourceLocation, ChestCavityType> CHEST_CAVITY_TYPE_REGISTRY = new HashMap<>();
+    public static final Map<ResourceLocation, ChestCavityType> CHEST_CAVITY_TYPE_REGISTRY = new LinkedHashMap<>();
 
-    public static final Map<EntityType<? extends LivingEntity>, ChestCavityType> ENTITY_CHEST_CAVITY_TYPE_MAP = new HashMap<>();
+    public static final Map<EntityType<? extends LivingEntity>, ChestCavityType> ENTITY_CHEST_CAVITY_TYPE_MAP = new LinkedHashMap<>();
 
     public static final ChestCavityType HUMAN = register(ChestCavityBeyond.of("human"))
         .setFirstRow(0, InitItem.MUSCLE.get())

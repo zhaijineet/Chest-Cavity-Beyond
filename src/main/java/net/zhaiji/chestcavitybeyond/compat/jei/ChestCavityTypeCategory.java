@@ -1,5 +1,6 @@
 package net.zhaiji.chestcavitybeyond.compat.jei;
 
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -14,10 +15,10 @@ import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -57,11 +58,32 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
                 ChestCavityBeyond.MOD_ID,
                 "textures/gui/jei/jei_chest_cavity_" + rows + ".png"
             );
-            backgrounds[i] = guiHelper.drawableBuilder(texture, 0, 0, ChestCavityPageScrollWidget.BG_WIDTH, ChestCavityPageScrollWidget.BG_HEIGHTS[i])
+            backgrounds[i] = guiHelper.drawableBuilder(
+                    texture,
+                    0,
+                    0,
+                    ChestCavityPageScrollWidget.BG_WIDTH,
+                    ChestCavityPageScrollWidget.BG_HEIGHTS[i]
+                )
                 .setTextureSize(256, 256)
                 .build();
         }
         slotBackground = guiHelper.getSlotDrawable();
+    }
+
+    /**
+     * 解析实体的展示物品：优先取实体自身的拾取结果（如盔甲架），其次刷怪蛋，玩家等无对应物品的返回空
+     *
+     * @param entityType 实体类型
+     * @return 用于 JEI slot 的物品栈
+     */
+    private static ItemStack resolveEntityItemStack(EntityType<?> entityType) {
+        return JeiEntityModelCache.getOrCreate(entityType)
+            .map(LivingEntity::getPickResult)
+            .orElseGet(() -> {
+                SpawnEggItem spawnEgg = SpawnEggItem.byId(entityType);
+                return spawnEgg != null ? spawnEgg.getDefaultInstance() : ItemStack.EMPTY;
+            });
     }
 
     @Override
@@ -100,26 +122,17 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
         List<EntityType<?>> entities = display.getEntities();
         for (int i = 0; i < entities.size(); i++) {
             EntityType<?> entityType = entities.get(i);
-            int row = i / ChestCavityPageScrollWidget.GRID_COLS;
-            int col = i % ChestCavityPageScrollWidget.GRID_COLS;
 
-            int slotX = ChestCavityPageScrollWidget.BG_OFFSET_X + ChestCavityPageScrollWidget.FIRST_SLOT_INNER_X + col * ChestCavityPageScrollWidget.SLOT_SIZE;
-            int slotY = entityStartY + row * ChestCavityPageScrollWidget.SLOT_SIZE;
+            int row = i / ChestCavityPageScrollWidget.ENTITY_COLS;
+            int column = i % ChestCavityPageScrollWidget.ENTITY_COLS;
+            int slotX = ChestCavityPageScrollWidget.ENTITY_AREA_X + column * ChestCavityPageScrollWidget.ENTITY_CELL_SIZE;
+            int slotY = entityStartY + row * ChestCavityPageScrollWidget.ENTITY_CELL_SIZE;
 
-            IRecipeSlotBuilder slotBuilder;
-            SpawnEggItem spawnEgg = SpawnEggItem.byId(entityType);
-            if (spawnEgg != null) {
-                slotBuilder = builder.addOutputSlot(slotX, slotY)
-                    .addItemStack(spawnEgg.getDefaultInstance());
-            } else {
-                ItemStack barrierStack = Items.BARRIER.getDefaultInstance();
-                barrierStack.set(
-                    DataComponents.CUSTOM_NAME,
-                    entityType.getDescription().copy().withStyle(style -> style.withItalic(false))
-                );
-                slotBuilder = builder.addOutputSlot(slotX, slotY).addItemStack(barrierStack);
-            }
-            slotBuilder.setSlotName(ENTITY_SLOT_PREFIX + i);
+            builder.addOutputSlot(slotX, slotY)
+                .addItemStack(resolveEntityItemStack(entityType))
+                .addRichTooltipCallback((slotView, tooltip) -> tooltip.add(entityType.getDescription()))
+                .setCustomRenderer(VanillaTypes.ITEM_STACK, EmptyEntityRenderer.INSTANCE)
+                .setSlotName(ENTITY_SLOT_PREFIX + i);
         }
     }
 
@@ -153,10 +166,22 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
     }
 
     @Override
-    public void draw(ChestCavityTypeDisplay display, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(
+        ChestCavityTypeDisplay display,
+        IRecipeSlotsView recipeSlotsView,
+        GuiGraphics guiGraphics,
+        double mouseX,
+        double mouseY
+    ) {
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, ChestCavityTypeDisplay display, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public void getTooltip(
+        ITooltipBuilder tooltip,
+        ChestCavityTypeDisplay display,
+        IRecipeSlotsView recipeSlotsView,
+        double mouseX,
+        double mouseY
+    ) {
     }
 }
