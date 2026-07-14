@@ -27,11 +27,11 @@ public class EmptyEntityRenderer implements IIngredientRenderer<ItemStack> {
 
     @Override
     public int getWidth() {
-        return ChestCavityPageScrollWidget.ENTITY_CELL_SIZE;
+        return ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
     }
 
     @Override
     public int getHeight() {
-        return ChestCavityPageScrollWidget.ENTITY_CELL_SIZE;
+        return ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
     }
 }

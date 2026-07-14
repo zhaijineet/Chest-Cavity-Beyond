@@ -37,7 +37,6 @@ import java.util.List;
  * 整个页面由 {@link ChestCavityPageScrollWidget} 统一管理，支持全页面滚动。
  */
 public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityTypeDisplay> {
-
     private static final String ENTITY_SLOT_PREFIX = "entity_";
 
     private final IDrawable[] backgrounds;
@@ -78,7 +77,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
      * @return 用于 JEI slot 的物品栈
      */
     private static ItemStack resolveEntityItemStack(EntityType<?> entityType) {
-        return JeiEntityModelCache.getOrCreate(entityType)
+        return JeiEntityCache.getOrCreate(entityType)
             .map(LivingEntity::getPickResult)
             .orElseGet(() -> {
                 SpawnEggItem spawnEgg = SpawnEggItem.byId(entityType);
@@ -103,7 +102,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
                     int slotY = ChestCavityPageScrollWidget.FIRST_SLOT_Y + row * ChestCavityPageScrollWidget.SLOT_SIZE;
                     IRecipeSlotBuilder slotBuilder = builder.addOutputSlot(slotX, slotY)
                         .addItemStack(organ.getDefaultInstance());
-                    List<AttributeBonus> bonuses = display.getType().getAttributeBonuses(organ);
+                    List<AttributeBonus> bonuses = display.type().getAttributeBonuses(organ);
                     if (!bonuses.isEmpty()) {
                         slotBuilder.addRichTooltipCallback((slotView, tooltip) -> {
                             tooltip.add(Component.translatable("jei." + ChestCavityBeyond.MOD_ID + ".type_bonus_header")
@@ -119,14 +118,14 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
         int bgHeight = ChestCavityPageScrollWidget.getBgHeight(rows);
         int entityStartY = bgHeight + ChestCavityPageScrollWidget.ENTITY_GAP;
 
-        List<EntityType<?>> entities = display.getEntities();
+        List<EntityType<?>> entities = display.entities();
         for (int i = 0; i < entities.size(); i++) {
             EntityType<?> entityType = entities.get(i);
 
             int row = i / ChestCavityPageScrollWidget.ENTITY_COLS;
             int column = i % ChestCavityPageScrollWidget.ENTITY_COLS;
-            int slotX = ChestCavityPageScrollWidget.ENTITY_AREA_X + column * ChestCavityPageScrollWidget.ENTITY_CELL_SIZE;
-            int slotY = entityStartY + row * ChestCavityPageScrollWidget.ENTITY_CELL_SIZE;
+            int slotX = ChestCavityPageScrollWidget.ENTITY_AREA_X + column * ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
+            int slotY = entityStartY + row * ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
 
             builder.addOutputSlot(slotX, slotY)
                 .addItemStack(resolveEntityItemStack(entityType))

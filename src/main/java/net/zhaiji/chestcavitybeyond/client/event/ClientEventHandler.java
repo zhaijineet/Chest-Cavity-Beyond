@@ -103,7 +103,7 @@ public class ClientEventHandler {
         if (organ == Organ.EMPTY) return;
 
         // JEI 胸腔类型页面专用逻辑
-        if (CompatManager.JEI_LOADED && JeiCompat.handleTooltip(
+        if (CompatManager.JEI_LOADED && JeiCompat.handlerTooltip(
             organ,
             event.getItemStack(),
             event.getContext(),

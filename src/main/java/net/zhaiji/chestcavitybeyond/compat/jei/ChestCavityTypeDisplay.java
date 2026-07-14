@@ -10,22 +10,12 @@ import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import java.util.List;
 
 /**
- * JEI 显示数据类，表示一个胸腔类型的完整信息。
+ * JEI 显示数据类，表示一个胸腔类型的完整信息
  * <p>
- * 包含胸腔类型的注册名、器官布局、是否需要呼吸/健康、以及附加的实体列表。
+ * 包含胸腔类型的注册名、器官布局、是否需要呼吸/健康、以及附加的实体列表
  * </p>
  */
-public class ChestCavityTypeDisplay {
-    private final ResourceLocation typeId;
-    private final ChestCavityType type;
-    private final List<EntityType<?>> entities;
-
-    public ChestCavityTypeDisplay(ResourceLocation typeId, ChestCavityType type, List<EntityType<?>> entities) {
-        this.typeId = typeId;
-        this.type = type;
-        this.entities = entities;
-    }
-
+public record ChestCavityTypeDisplay(ResourceLocation typeId, ChestCavityType type, List<EntityType<?>> entities) {
     /**
      * 获取胸腔类型的翻译键
      *
@@ -44,18 +34,6 @@ public class ChestCavityTypeDisplay {
      */
     public static Component getTranslatedName(ResourceLocation typeId) {
         return Component.translatable(getTranslationKey(typeId));
-    }
-
-    public ResourceLocation getTypeId() {
-        return typeId;
-    }
-
-    public ChestCavityType getType() {
-        return type;
-    }
-
-    public List<EntityType<?>> getEntities() {
-        return entities;
     }
 
     public NonNullList<Item> getOrgans() {

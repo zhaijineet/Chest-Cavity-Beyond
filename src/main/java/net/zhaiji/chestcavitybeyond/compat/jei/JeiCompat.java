@@ -27,23 +27,23 @@ public class JeiCompat {
     }
 
     /**
-     * 尝试为 JEI 胸腔类型页面处理 tooltip，不在 JEI 页面悬停时返回 false。
+     * 尝试为 JEI 胸腔页面处理 tooltip，不在 JEI 页面悬停时返回 false。
      */
-    public static boolean handleTooltip(
+    public static boolean handlerTooltip(
         Organ organ,
         ItemStack stack,
         Item.TooltipContext context,
         List<Component> tooltip,
         TooltipFlag flags
     ) {
-        return ChestCavityPageScrollWidget.handleJeiTooltip(organ, stack, context, tooltip, flags);
+        return JeiOrganTooltipCache.handlerTooltip(organ, stack, context, tooltip, flags);
     }
 
     /**
-     * 世界卸载时清理 JEI 虚拟实体缓存与 tooltip 缓存，避免引用旧世界的幽灵实体。
+     * 世界卸载时清理虚拟实体缓存与 tooltip 缓存，避免引用旧世界的幽灵实体。
      */
     private static void handleLevelEventUnload(LevelEvent.Unload event) {
-        JeiEntityModelCache.clear();
-        ChestCavityPageScrollWidget.invalidate();
+        JeiEntityCache.clear();
+        JeiOrganTooltipCache.clear();
     }
 }

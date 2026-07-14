@@ -15,28 +15,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
-import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
-import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
-import net.zhaiji.chestcavitybeyond.api.capability.Organ;
-import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.List;
@@ -53,30 +40,30 @@ import java.util.Optional;
  */
 public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiInputHandler {
     // 布局常量
-    static final int SLOT_SIZE = 18;
-    static final int GRID_COLS = 9;
-    static final int BG_WIDTH = 179;
+    public static final int SLOT_SIZE = 18;
+    public static final int GRID_COLS = 9;
+    public static final int BG_WIDTH = 179;
     // 3~6排
-    static final int[] BG_HEIGHTS = {
+    public static final int[] BG_HEIGHTS = {
         87,
         105,
         123,
         141
     };
-    static final int ENTITY_GAP = 4;
+    public static final int ENTITY_GAP = 4;
 
     // 背景图内slot格起始偏移
-    static final int FIRST_SLOT_INNER_X = 8;
-    static final int FIRST_SLOT_Y = 18;
+    public static final int FIRST_SLOT_INNER_X = 8;
+    public static final int FIRST_SLOT_Y = 18;
     // 可见区域
-    static final int VISIBLE_HEIGHT = 127;
-    static final int WIDGET_WIDTH = 213;
-    static final int BG_OFFSET_X = (WIDGET_WIDTH - BG_WIDTH) / 2;
+    public static final int VISIBLE_HEIGHT = 127;
+    public static final int WIDGET_WIDTH = 213;
+    public static final int BG_OFFSET_X = (WIDGET_WIDTH - BG_WIDTH) / 2;
     // 实体模型区域：5列 × 35px，居中于背景宽度
-    static final int ENTITY_CELL_SIZE = 35;
-    static final int ENTITY_COLS = 5;
-    static final int ENTITY_AREA_X = BG_OFFSET_X + (BG_WIDTH - ENTITY_COLS * ENTITY_CELL_SIZE) / 2;
-    static final int ENTITY_RENDER_MARGIN = 2;
+    public static final int ENTITY_SLOT_SIZE = 35;
+    public static final int ENTITY_COLS = 5;
+    public static final int ENTITY_RENDER_MARGIN = 2;
+    public static final int ENTITY_AREA_X = BG_OFFSET_X + (BG_WIDTH - ENTITY_COLS * ENTITY_SLOT_SIZE) / 2;
     private static final int ATTR_ICON_X = BG_OFFSET_X + 143;
     private static final int HEALTH_ICON_X = BG_OFFSET_X + 152;
     private static final int BREATH_ICON_X = BG_OFFSET_X + 161;
@@ -100,17 +87,6 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
     // 滚动翻页追踪
     private static final int CONTINUOUS_SCROLL_PAGE_TICKS = 8;
     private static final int SCROLL_INTERRUPT_TICKS = 2;
-
-    // JEI 胸腔页面 tooltip 拦截的静态悬停状态
-    // 由 getSlotUnderMouse 记录、drawWidget 刷新时间戳、handleJeiTooltip 读取
-    private static @Nullable ChestCavityTypeDisplay currentHoveredDisplay;
-    private static int currentHoveredOrganIndex = -1;
-    private static @Nullable ChestCavityType cachedTooltipType;
-    private static @Nullable ChestCavityData cachedTooltipData;
-    /**
-     * widget 最近一次渲染的游戏刻，用于校验悬停状态是否仍然有效
-     */
-    private static long lastActiveTick = Long.MIN_VALUE;
 
     private final ChestCavityTypeDisplay display;
     private final IDrawable[] backgrounds;
@@ -150,7 +126,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         bgHeight = getBgHeight(organRows);
 
         int entityRows = entitySlots.isEmpty() ? 0 : (int) Math.ceil((double) entitySlots.size() / ENTITY_COLS);
-        int entityAreaHeight = entityRows > 0 ? ENTITY_GAP + entityRows * ENTITY_CELL_SIZE : 0;
+        int entityAreaHeight = entityRows > 0 ? ENTITY_GAP + entityRows * ENTITY_SLOT_SIZE : 0;
         totalContentHeight = bgHeight + entityAreaHeight;
         hiddenAmount = Math.max(totalContentHeight - VISIBLE_HEIGHT, 0);
 
@@ -179,97 +155,6 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         return BG_HEIGHTS[3];
     }
 
-    /**
-     * 尝试为 JEI 胸腔类型页面处理 tooltip，如果当前不在 JEI 胸腔页面悬停则返回 false。
-     * <p>
-     * 静态悬停状态由 {@link #getSlotUnderMouse} 记录、{@link #drawWidget} 按 tick 刷新有效性。
-     *
-     * @param organ     物品对应的器官
-     * @param stack     触发 tooltip 的物品栈
-     * @param context   物品 tooltip 上下文
-     * @param tooltip   tooltip 列表
-     * @param flags     tooltip 标志
-     * @return true 表示已由 JEI 页面接管，调用方应跳过默认 tooltip 逻辑
-     */
-    public static boolean handleJeiTooltip(
-        Organ organ,
-        ItemStack stack,
-        Item.TooltipContext context,
-        List<Component> tooltip,
-        TooltipFlag flags
-    ) {
-        if (currentHoveredDisplay == null) return false;
-        Level level = Minecraft.getInstance().level;
-        if (level == null) return false;
-        // JEI 页面关闭后悬停状态不再被刷新，超过阈值视为失效
-        if (level.getGameTime() - lastActiveTick > 3) {
-            currentHoveredDisplay = null;
-            currentHoveredOrganIndex = -1;
-            return false;
-        }
-        NonNullList<Item> organs = currentHoveredDisplay.getOrgans();
-        if (currentHoveredOrganIndex < 0 || currentHoveredOrganIndex >= organs.size()) return false;
-        if (organs.get(currentHoveredOrganIndex) != stack.getItem()) return false;
-        ChestCavityData data = getOrCreateCachedData(currentHoveredDisplay);
-        TooltipsKeyContext keyContext = new TooltipsKeyContext(Screen.hasShiftDown(), Screen.hasControlDown());
-        organ.organTooltip(
-            ChestCavityUtil.createContext(data, currentHoveredOrganIndex, stack),
-            keyContext,
-            context,
-            tooltip,
-            flags
-        );
-        return true;
-    }
-
-    /**
-     * 获取或创建指定胸腔类型页面的虚拟胸腔数据，用于 JEI tooltip 计算。
-     * <p>
-     * 优先复用 {@link JeiEntityModelCache} 中已缓存的虚拟实体（渲染与 tooltip 共用同一实例），
-     * 避免重复创建。无对应实体（如纯人类胸腔）时回退到本地玩家实例。
-     * </p>
-     *
-     * @param display JEI 胸腔类型显示数据
-     * @return 初始化完成的胸腔数据
-     */
-    private static ChestCavityData getOrCreateCachedData(ChestCavityTypeDisplay display) {
-        ChestCavityType type = display.getType();
-        if (cachedTooltipType == type && cachedTooltipData != null) return cachedTooltipData;
-        cachedTooltipType = null;
-        cachedTooltipData = null;
-
-        LivingEntity livingEntity = null;
-        for (EntityType<?> entityType : display.getEntities()) {
-            Optional<LivingEntity> cached = JeiEntityModelCache.getOrCreate(entityType);
-            if (cached.isPresent()) {
-                livingEntity = cached.get();
-                break;
-            }
-        }
-        // 无对应实体时回退到本地玩家（默认人类胸腔），保证 tooltip 始终有有效数据源
-        if (livingEntity == null) {
-            Player player = Minecraft.getInstance().player;
-            if (player != null) {
-                livingEntity = player;
-            }
-        }
-        if (livingEntity == null) return null;
-
-        ChestCavityData data = ChestCavityUtil.getData(livingEntity);
-        data.init();
-        cachedTooltipType = type;
-        cachedTooltipData = data;
-        return data;
-    }
-
-    /**
-     * 清空 tooltip 缓存的虚拟数据，在世界卸载等场景调用。
-     */
-    public static void invalidate() {
-        cachedTooltipType = null;
-        cachedTooltipData = null;
-    }
-
     @Override
     public ScreenPosition getPosition() {
         return new ScreenPosition(0, 0);
@@ -277,10 +162,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        Level level = Minecraft.getInstance().level;
-        if (level != null) {
-            lastActiveTick = level.getGameTime();
-        }
+        JeiOrganTooltipCache.updateActiveTick();
         int scrollPixels = Math.round(hiddenAmount * scrollOffsetY);
 
         // 绘制滚动条
@@ -305,13 +187,13 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         }
 
         // 绘制标题
-        Component title = ChestCavityTypeDisplay.getTranslatedName(display.getTypeId());
+        Component title = ChestCavityTypeDisplay.getTranslatedName(display.typeId());
         Minecraft minecraft = Minecraft.getInstance();
         guiGraphics.drawString(minecraft.font, title, BG_OFFSET_X + FIRST_SLOT_INNER_X + 1, 5 - scrollPixels, 0x404040, false);
 
         // 绘制属性图标
         int iconY = ICON_Y - scrollPixels;
-        List<AttributeBonus> typeBonuses = display.getType().getTypeDefaultBonuses();
+        List<AttributeBonus> typeBonuses = display.type().getTypeDefaultBonuses();
         if (!typeBonuses.isEmpty()) {
             guiGraphics.blit(ICON_TEXTURE, ATTR_ICON_X, iconY, 14, 0, ICON_SIZE, ICON_SIZE, ICON_TEX_WIDTH, ICON_TEX_HEIGHT);
         }
@@ -343,32 +225,41 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
             int contentY = entitySlotPositions[i * 2 + 1];
             int visibleY = contentY - scrollPixels;
 
-            if (visibleY + ENTITY_CELL_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
+            if (visibleY + ENTITY_SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
                 IRecipeSlotDrawable slot = entitySlots.get(i);
                 slot.setPosition(contentX, visibleY);
-                EntityType<?> entityType = display.getEntities().get(i);
-                Optional<LivingEntity> cached = JeiEntityModelCache.getOrCreate(entityType);
+                EntityType<?> entityType = display.entities().get(i);
+                Optional<LivingEntity> cached = JeiEntityCache.getOrCreate(entityType);
                 if (cached.isPresent()) {
-                    JeiEntityModelCache.renderEntityInCell(cached.get(), contentX, visibleY, guiGraphics, mouseX, mouseY);
+                    JeiEntitySlotRenderer.render(
+                        cached.get(),
+                        contentX,
+                        visibleY,
+                        ENTITY_SLOT_SIZE,
+                        ENTITY_RENDER_MARGIN,
+                        guiGraphics,
+                        mouseX,
+                        mouseY
+                    );
                 } else {
                     // 回退：实体创建失败，居中绘制 slot 背景并在其上显示实体名称
-                    int offsetX = contentX + (ENTITY_CELL_SIZE - SLOT_SIZE) / 2 - 1;
-                    int offsetY = visibleY + (ENTITY_CELL_SIZE - SLOT_SIZE) / 2 - 1;
+                    int offsetX = contentX + (ENTITY_SLOT_SIZE - SLOT_SIZE) / 2 - 1;
+                    int offsetY = visibleY + (ENTITY_SLOT_SIZE - SLOT_SIZE) / 2 - 1;
                     slotBackground.draw(guiGraphics, offsetX, offsetY);
                     Component entityName = entityType.getDescription();
                     int textWidth = minecraft.font.width(entityName);
-                    int textX = contentX + (ENTITY_CELL_SIZE - textWidth) / 2;
-                    int textY = visibleY + (ENTITY_CELL_SIZE - minecraft.font.lineHeight) / 2;
+                    int textX = contentX + (ENTITY_SLOT_SIZE - textWidth) / 2;
+                    int textY = visibleY + (ENTITY_SLOT_SIZE - minecraft.font.lineHeight) / 2;
                     guiGraphics.drawString(minecraft.font, entityName, textX, textY, 0xFFFFFF, false);
                 }
                 if (slot.getDisplayedIngredient().isEmpty()
-                    && mouseX >= contentX && mouseX < contentX + ENTITY_CELL_SIZE
-                    && mouseY >= visibleY && mouseY < visibleY + ENTITY_CELL_SIZE) {
+                    && mouseX >= contentX && mouseX < contentX + ENTITY_SLOT_SIZE
+                    && mouseY >= visibleY && mouseY < visibleY + ENTITY_SLOT_SIZE) {
                     guiGraphics.fill(
                         contentX,
                         visibleY,
-                        contentX + ENTITY_CELL_SIZE,
-                        visibleY + ENTITY_CELL_SIZE,
+                        contentX + ENTITY_SLOT_SIZE,
+                        visibleY + ENTITY_SLOT_SIZE,
                         0x80FFFFFF
                     );
                 }
@@ -387,7 +278,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         String modId = ChestCavityBeyond.MOD_ID;
 
         // 属性加成方块区域检测
-        List<AttributeBonus> typeBonuses = display.getType().getTypeDefaultBonuses();
+        List<AttributeBonus> typeBonuses = display.type().getTypeDefaultBonuses();
         if (!typeBonuses.isEmpty()
             && mouseX >= ATTR_ICON_X && mouseX < ATTR_ICON_X + ICON_SIZE
             && contentMouseY >= ICON_Y && contentMouseY < ICON_Y + ICON_SIZE) {
@@ -419,11 +310,11 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         }
 
         for (int i = 0; i < entitySlots.size(); i++) {
-            int cellX = entitySlotPositions[i * 2];
-            int cellY = entitySlotPositions[i * 2 + 1];
-            if (mouseX >= cellX && mouseX < cellX + ENTITY_CELL_SIZE
-                && contentMouseY >= cellY && contentMouseY < cellY + ENTITY_CELL_SIZE) {
-                tooltip.add(display.getEntities().get(i).getDescription());
+            int slotX = entitySlotPositions[i * 2];
+            int slotY = entitySlotPositions[i * 2 + 1];
+            if (mouseX >= slotX && mouseX < slotX + ENTITY_SLOT_SIZE
+                && contentMouseY >= slotY && contentMouseY < slotY + ENTITY_SLOT_SIZE) {
+                tooltip.add(display.entities().get(i).getDescription());
                 break;
             }
         }
@@ -431,9 +322,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
     @Override
     public void tick() {
-        if (hiddenAmount <= 0) {
-            return;
-        }
+        if (hiddenAmount <= 0) return;
 
         if (hadScrollThisTick) {
             idleTicks = 0;
@@ -460,9 +349,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
     }
 
     private void drawScrollbar(GuiGraphics guiGraphics) {
-        if (hiddenAmount <= 0) {
-            return;
-        }
+        if (hiddenAmount <= 0) return;
 
         int scrollbarBgX = SCROLLBAR_X + SCROLLBAR_PADDING;
         int scrollbarBgWidth = SCROLLBAR_WIDTH - SCROLLBAR_PADDING * 2;
@@ -497,35 +384,31 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
             if (visibleY + SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
                 IRecipeSlotDrawable slot = organSlots.get(i);
                 if (slot.isMouseOver(mouseX, mouseY)) {
-                    currentHoveredOrganIndex = i;
-                    currentHoveredDisplay = this.display;
+                    JeiOrganTooltipCache.setHover(i, display);
                     return Optional.of(new RecipeSlotUnderMouse(slot, getPosition()));
                 }
             }
         }
 
-        // 实体格子（按 35×35 区域判断，覆盖 slot 默认的 16×16）
+        // 实体槽位（按 35×35 区域判断，覆盖 slot 默认的 16×16）
         for (int i = 0; i < entitySlots.size(); i++) {
             int contentX = entitySlotPositions[i * 2];
             int contentY = entitySlotPositions[i * 2 + 1];
             int visibleY = contentY - scrollPixels;
-            if (visibleY + ENTITY_CELL_SIZE > 0 && visibleY < VISIBLE_HEIGHT
-                && mouseX >= contentX && mouseX < contentX + ENTITY_CELL_SIZE
-                && mouseY >= visibleY && mouseY < visibleY + ENTITY_CELL_SIZE) {
+            if (visibleY + ENTITY_SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT
+                && mouseX >= contentX && mouseX < contentX + ENTITY_SLOT_SIZE
+                && mouseY >= visibleY && mouseY < visibleY + ENTITY_SLOT_SIZE) {
                 IRecipeSlotDrawable slot = entitySlots.get(i);
                 if (slot.getDisplayedIngredient().isPresent()) {
-                    currentHoveredOrganIndex = -1;
-                    currentHoveredDisplay = this.display;
+                    JeiOrganTooltipCache.clearHover();
                     return Optional.of(new RecipeSlotUnderMouse(slot, getPosition()));
                 }
-                currentHoveredOrganIndex = -1;
-                currentHoveredDisplay = null;
+                JeiOrganTooltipCache.clearHover();
                 return Optional.empty();
             }
         }
 
-        currentHoveredOrganIndex = -1;
-        currentHoveredDisplay = null;
+        JeiOrganTooltipCache.clearHover();
 
         return Optional.empty();
     }
@@ -542,18 +425,13 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
             return false;
         }
 
-        if (!userInput.isSimulate()) {
-            dragOriginY = -1;
-        }
+        if (!userInput.isSimulate()) dragOriginY = -1;
 
-        if (mouseX < SCROLLBAR_X || mouseX > SCROLLBAR_X + SCROLLBAR_WIDTH
-            || mouseY < 0 || mouseY > VISIBLE_HEIGHT) {
+        if (mouseX < SCROLLBAR_X || mouseX > SCROLLBAR_X + SCROLLBAR_WIDTH || mouseY < 0 || mouseY > VISIBLE_HEIGHT) {
             return false;
         }
 
-        if (hiddenAmount <= 0) {
-            return false;
-        }
+        if (hiddenAmount <= 0) return false;
 
         if (userInput.isSimulate()) {
             int totalSpace = VISIBLE_HEIGHT - 2;
@@ -587,8 +465,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
                 boolean atBottom = scrollOffsetY >= 1.0F;
                 boolean atTop = scrollOffsetY <= 0.0F;
                 if ((atBottom && direction == -1) || (atTop && direction == 1)) {
-                    if (idleTicks > SCROLL_INTERRUPT_TICKS
-                        || continuousScrollTicks >= CONTINUOUS_SCROLL_PAGE_TICKS) {
+                    if (idleTicks > SCROLL_INTERRUPT_TICKS || continuousScrollTicks >= CONTINUOUS_SCROLL_PAGE_TICKS) {
                         resetScrollTracking();
                         return false;
                     }
@@ -615,12 +492,8 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
     @Override
     public boolean handleMouseDragged(double mouseX, double mouseY, InputConstants.Key mouseKey, double dragX, double dragY) {
-        if (dragOriginY < 0 || mouseKey.getValue() != InputConstants.MOUSE_BUTTON_LEFT) {
-            return false;
-        }
-        if (hiddenAmount <= 0) {
-            return false;
-        }
+        if (dragOriginY < 0 || mouseKey.getValue() != InputConstants.MOUSE_BUTTON_LEFT) return false;
+        if (hiddenAmount <= 0) return false;
 
         int totalSpace = VISIBLE_HEIGHT - 2;
         int scrollMarkerHeight = getScrollMarkerHeight();
@@ -638,5 +511,4 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         idleTicks = 0;
         hadScrollThisTick = false;
     }
-
 }
