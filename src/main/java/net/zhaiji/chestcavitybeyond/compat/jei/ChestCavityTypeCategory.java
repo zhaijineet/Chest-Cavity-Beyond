@@ -3,17 +3,16 @@ package net.zhaiji.chestcavitybeyond.compat.jei;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
-import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,12 +36,17 @@ import java.util.List;
  * 整个页面由 {@link ChestCavityPageScrollWidget} 统一管理，支持全页面滚动。
  */
 public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityTypeDisplay> {
+    private static final String ORGAN_SLOT_PREFIX = "organ_";
     private static final String ENTITY_SLOT_PREFIX = "entity_";
 
     private final IDrawable[] backgrounds;
     private final IDrawableStatic slotBackground;
+    private final IIngredientRenderer<ItemStack> itemStackRenderer;
 
-    public ChestCavityTypeCategory(IGuiHelper guiHelper) {
+    public ChestCavityTypeCategory(
+        IGuiHelper guiHelper,
+        IIngredientRenderer<ItemStack> itemStackRenderer
+    ) {
         super(
             ChestCavityJeiPlugin.CHEST_CAVITY_TYPE,
             Component.translatable("jei." + ChestCavityBeyond.MOD_ID + ".chest_cavity_type"),
@@ -68,6 +72,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
                 .build();
         }
         slotBackground = guiHelper.getSlotDrawable();
+        this.itemStackRenderer = itemStackRenderer;
     }
 
     /**
@@ -93,15 +98,20 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
         int rows = slots / ChestCavityPageScrollWidget.GRID_COLS;
 
         for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < ChestCavityPageScrollWidget.GRID_COLS; col++) {
-                int index = row * ChestCavityPageScrollWidget.GRID_COLS + col;
+            for (int column = 0; column < ChestCavityPageScrollWidget.GRID_COLS; column++) {
+                int index = row * ChestCavityPageScrollWidget.GRID_COLS + column;
                 if (index >= slots) break;
                 Item organ = organs.get(index);
                 if (organ != Items.AIR) {
-                    int slotX = ChestCavityPageScrollWidget.BG_OFFSET_X + ChestCavityPageScrollWidget.FIRST_SLOT_INNER_X + col * ChestCavityPageScrollWidget.SLOT_SIZE;
+                    int slotX = ChestCavityPageScrollWidget.BG_OFFSET_X + ChestCavityPageScrollWidget.FIRST_SLOT_INNER_X + column * ChestCavityPageScrollWidget.SLOT_SIZE;
                     int slotY = ChestCavityPageScrollWidget.FIRST_SLOT_Y + row * ChestCavityPageScrollWidget.SLOT_SIZE;
                     IRecipeSlotBuilder slotBuilder = builder.addOutputSlot(slotX, slotY)
-                        .addItemStack(organ.getDefaultInstance());
+                        .addItemStack(organ.getDefaultInstance())
+                        .setCustomRenderer(
+                            VanillaTypes.ITEM_STACK,
+                            new JeiOrganSlotRenderer(itemStackRenderer, display, index)
+                        )
+                        .setSlotName(ORGAN_SLOT_PREFIX + index);
                     List<AttributeBonus> bonuses = display.type().getAttributeBonuses(organ);
                     if (!bonuses.isEmpty()) {
                         slotBuilder.addRichTooltipCallback((slotView, tooltip) -> {
@@ -127,60 +137,49 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
             int slotX = ChestCavityPageScrollWidget.ENTITY_AREA_X + column * ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
             int slotY = entityStartY + row * ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
 
-            builder.addOutputSlot(slotX, slotY)
-                .addItemStack(resolveEntityItemStack(entityType))
-                .addRichTooltipCallback((slotView, tooltip) -> tooltip.add(entityType.getDescription()))
-                .setCustomRenderer(VanillaTypes.ITEM_STACK, EmptyEntityRenderer.INSTANCE)
+            JeiEntityIngredient entityIngredient = new JeiEntityIngredient(entityType);
+            builder.addSlot(RecipeIngredientRole.INPUT, slotX, slotY)
+                .addIngredient(JeiEntityIngredient.TYPE, entityIngredient)
+                .setCustomRenderer(JeiEntityIngredient.TYPE, JeiEntityRecipeSlotRenderer.INSTANCE)
                 .setSlotName(ENTITY_SLOT_PREFIX + i);
+            builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT)
+                .addIngredient(JeiEntityIngredient.TYPE, entityIngredient);
+
+            ItemStack entityItemStack = resolveEntityItemStack(entityType);
+            if (!entityItemStack.isEmpty()) {
+                builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(entityItemStack);
+            }
         }
     }
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, ChestCavityTypeDisplay display, IFocusGroup focuses) {
-        // 按名称前缀将slot分为器官和实体两组
-        List<IRecipeSlotDrawable> organSlots = new ArrayList<>();
-        List<IRecipeSlotDrawable> entitySlots = new ArrayList<>();
+        List<ChestCavityPageScrollWidget.IndexedSlot> organSlots = new ArrayList<>();
+        List<ChestCavityPageScrollWidget.IndexedSlot> entitySlots = new ArrayList<>();
         List<IRecipeSlotDrawable> allSlots = new ArrayList<>();
 
         for (IRecipeSlotDrawable slot : builder.getRecipeSlots().getSlots()) {
-            boolean isEntity = slot.getSlotName()
-                .map(name -> name.startsWith(ENTITY_SLOT_PREFIX))
-                .orElse(false);
-            if (isEntity) {
-                entitySlots.add(slot);
+            String slotName = slot.getSlotName().orElseThrow();
+            if (slotName.startsWith(ENTITY_SLOT_PREFIX)) {
+                int entityIndex = Integer.parseInt(slotName.substring(ENTITY_SLOT_PREFIX.length()));
+                entitySlots.add(new ChestCavityPageScrollWidget.IndexedSlot(slot, entityIndex));
             } else {
-                organSlots.add(slot);
+                int organIndex = Integer.parseInt(slotName.substring(ORGAN_SLOT_PREFIX.length()));
+                organSlots.add(new ChestCavityPageScrollWidget.IndexedSlot(slot, organIndex));
             }
             allSlots.add(slot);
         }
 
-        // 创建全页面滚动widget
         ChestCavityPageScrollWidget widget = new ChestCavityPageScrollWidget(
             display, backgrounds, slotBackground, organSlots, entitySlots
         );
 
-        // widget接管所有slot的管理，并处理滚动输入
         builder.addSlottedWidget(widget, allSlots);
         builder.addInputHandler(widget);
     }
 
     @Override
-    public void draw(
-        ChestCavityTypeDisplay display,
-        IRecipeSlotsView recipeSlotsView,
-        GuiGraphics guiGraphics,
-        double mouseX,
-        double mouseY
-    ) {
-    }
-
-    @Override
-    public void getTooltip(
-        ITooltipBuilder tooltip,
-        ChestCavityTypeDisplay display,
-        IRecipeSlotsView recipeSlotsView,
-        double mouseX,
-        double mouseY
-    ) {
+    public ResourceLocation getRegistryName(ChestCavityTypeDisplay display) {
+        return display.typeId();
     }
 }

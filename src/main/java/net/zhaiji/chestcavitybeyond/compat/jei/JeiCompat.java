@@ -1,33 +1,25 @@
 package net.zhaiji.chestcavitybeyond.compat.jei;
 
+import mezz.jei.api.runtime.IRecipesGui;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.event.level.LevelEvent;
+import net.zhaiji.chestcavitybeyond.api.TooltipsKeyContext;
 import net.zhaiji.chestcavitybeyond.api.capability.Organ;
+import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
+import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 
 import java.util.List;
 
 /**
- * JEI 兼容入口，仅当 JEI 加载时初始化，避免主类直接依赖 JEI 类。
+ * JEI 兼容入口，仅当 JEI 加载时调用
  */
 public class JeiCompat {
-    public static void init(IEventBus modBus, IEventBus gameBus) {
-        modBusListener(modBus);
-        gameBusListener(gameBus);
-    }
-
-    public static void modBusListener(IEventBus modBus) {
-    }
-
-    public static void gameBusListener(IEventBus gameBus) {
-        gameBus.addListener(JeiCompat::handleLevelEventUnload);
-    }
-
     /**
-     * 尝试为 JEI 胸腔页面处理 tooltip，不在 JEI 页面悬停时返回 false。
+     * 尝试为 JEI 胸腔页面处理 tooltip，不在 JEI 页面悬停时返回 false
      */
     public static boolean handlerTooltip(
         Organ organ,
@@ -36,14 +28,20 @@ public class JeiCompat {
         List<Component> tooltip,
         TooltipFlag flags
     ) {
-        return JeiOrganTooltipCache.handlerTooltip(organ, stack, context, tooltip, flags);
-    }
-
-    /**
-     * 世界卸载时清理虚拟实体缓存与 tooltip 缓存，避免引用旧世界的幽灵实体。
-     */
-    private static void handleLevelEventUnload(LevelEvent.Unload event) {
-        JeiEntityCache.clear();
-        JeiOrganTooltipCache.clear();
+        Minecraft minecraft = Minecraft.getInstance();
+        if (!minecraft.isSameThread() || !(minecraft.screen instanceof IRecipesGui)) return false;
+        return JeiOrganTooltipContext.consume(
+            stack,
+            target -> {
+                ChestCavityData data = JeiChestCavityPreviewCache.get(target.display());
+                organ.organTooltip(
+                    ChestCavityUtil.createContext(data, target.organIndex(), stack),
+                    new TooltipsKeyContext(Screen.hasShiftDown(), Screen.hasControlDown()),
+                    context,
+                    tooltip,
+                    flags
+                );
+            }
+        );
     }
 }

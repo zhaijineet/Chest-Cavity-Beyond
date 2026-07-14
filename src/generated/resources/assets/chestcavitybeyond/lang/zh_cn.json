@@ -379,8 +379,6 @@
   "jei.chestcavitybeyond.need_health": "需要健康",
   "jei.chestcavitybeyond.no_breath": "不需要呼吸",
   "jei.chestcavitybeyond.no_health": "不需要健康",
-  "jei.chestcavitybeyond.no_spawn_egg": "%s（无刷怪蛋）",
-  "jei.chestcavitybeyond.no_type_default_bonus": "无自带属性加成",
   "jei.chestcavitybeyond.type_bonus_header": "胸腔类型额外加成：",
   "jei.chestcavitybeyond.type_default_bonus_header": "自带属性加成：",
   "key.chestcavitybeyond.categories": "胸腔",

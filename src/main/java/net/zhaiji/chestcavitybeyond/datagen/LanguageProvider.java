@@ -13,7 +13,6 @@ import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.client.key.KeyMappings;
-import net.zhaiji.chestcavitybeyond.compat.jei.ChestCavityTypeDisplay;
 import net.zhaiji.chestcavitybeyond.manager.AttributeDisplayManager;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
@@ -731,10 +730,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("jei." + ChestCavityBeyond.MOD_ID + ".no_breath", "No Breathing Needed");
         add("jei." + ChestCavityBeyond.MOD_ID + ".need_health", "Needs Health");
         add("jei." + ChestCavityBeyond.MOD_ID + ".no_health", "No Health Needed");
-        add("jei." + ChestCavityBeyond.MOD_ID + ".no_spawn_egg", "%s (No Spawn Egg)");
         add("jei." + ChestCavityBeyond.MOD_ID + ".type_bonus_header", "Chest Cavity Type Bonus:");
         add("jei." + ChestCavityBeyond.MOD_ID + ".type_default_bonus_header", "Type Default Bonus:");
-        add("jei." + ChestCavityBeyond.MOD_ID + ".no_type_default_bonus", "No Type Default Bonus");
 
         addChestCavityTypeName(ChestCavityTypeManager.HUMAN, "Human");
         addChestCavityTypeName(ChestCavityTypeManager.ANIMAL, "Animal");
@@ -1475,10 +1472,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("jei." + ChestCavityBeyond.MOD_ID + ".no_breath", "不需要呼吸");
         add("jei." + ChestCavityBeyond.MOD_ID + ".need_health", "需要健康");
         add("jei." + ChestCavityBeyond.MOD_ID + ".no_health", "不需要健康");
-        add("jei." + ChestCavityBeyond.MOD_ID + ".no_spawn_egg", "%s（无刷怪蛋）");
         add("jei." + ChestCavityBeyond.MOD_ID + ".type_bonus_header", "胸腔类型额外加成：");
         add("jei." + ChestCavityBeyond.MOD_ID + ".type_default_bonus_header", "自带属性加成：");
-        add("jei." + ChestCavityBeyond.MOD_ID + ".no_type_default_bonus", "无自带属性加成");
 
         addChestCavityTypeName(ChestCavityTypeManager.HUMAN, "人类");
         addChestCavityTypeName(ChestCavityTypeManager.ANIMAL, "动物");
@@ -1596,7 +1591,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
     }
 
     private void addChestCavityTypeName(ChestCavityType type, String name) {
-        add(ChestCavityTypeDisplay.getTranslationKey(type.getId()), name);
+        add(ChestCavityType.getTranslationKey(type.getId()), name);
     }
 
     @Override

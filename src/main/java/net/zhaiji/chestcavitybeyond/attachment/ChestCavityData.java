@@ -117,14 +117,32 @@ public class ChestCavityData extends ItemStackHandler {
         // TODO: 此处槽位是硬编码54，但大概率不会改？先写个TODO后续再优化
         super(54);
         if (attachmentHolder instanceof LivingEntity entity) {
-            owner = entity;
-            type = ChestCavityTypeManager.getType(entity);
-            size = type.getSize();
-            needBreath = type.getNeedBreath();
-            needHealth = type.getNeedHealth();
-            filtrationPeriod = ChestCavityBeyondConfig.filtrationPeriod;
-            filtrationTickOffset = entity.level().getRandom().nextInt(filtrationPeriod);
+            initializeOwner(entity, ChestCavityTypeManager.getType(entity));
         }
+    }
+
+    private ChestCavityData(LivingEntity owner, ChestCavityType type) {
+        super(54);
+        initializeOwner(owner, type);
+    }
+
+    private void initializeOwner(LivingEntity owner, ChestCavityType type) {
+        this.owner = owner;
+        this.type = type;
+        size = type.getSize();
+        needBreath = type.getNeedBreath();
+        needHealth = type.getNeedHealth();
+        filtrationPeriod = ChestCavityBeyondConfig.filtrationPeriod;
+        filtrationTickOffset = owner.level().getRandom().nextInt(filtrationPeriod);
+    }
+
+    /**
+     * 创建只用于预览完整默认布局的胸腔数据
+     */
+    public static ChestCavityData createPreview(LivingEntity owner, ChestCavityType type) {
+        ChestCavityData data = new ChestCavityData(owner, type);
+        data.fillDefaultOrgans(false);
+        return data;
     }
 
     /**
@@ -132,16 +150,22 @@ public class ChestCavityData extends ItemStackHandler {
      */
     public void init() {
         if (init) return;
+        fillDefaultOrgans(true);
+        // 首次填充器官后需同步，覆盖 getData 创建默认 attachment 时的空状态
+        sync();
+    }
+
+    private void fillDefaultOrgans(boolean triggerAddedEvent) {
         stacks.clear();
         NonNullList<Item> organs = type.getOrgans();
         for (int i = 0; i < getSlots(); i++) {
             stacks.set(i, organs.get(i).getDefaultInstance());
-            ChestCavityUtil.organAdded(this, i, stacks.get(i));
+            if (triggerAddedEvent) {
+                ChestCavityUtil.organAdded(this, i, stacks.get(i));
+            }
         }
         initAttributeModifier();
         init = true;
-        // 首次填充器官后需同步，覆盖 getData 创建默认 attachment 时的空状态
-        sync();
     }
 
     /**

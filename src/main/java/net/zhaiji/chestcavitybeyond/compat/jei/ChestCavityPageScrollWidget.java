@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
+import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 import org.joml.Matrix4f;
 
@@ -91,16 +91,12 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
     private final ChestCavityTypeDisplay display;
     private final IDrawable[] backgrounds;
     private final IDrawableStatic slotBackground;
-    private final List<IRecipeSlotDrawable> organSlots;
-    private final List<IRecipeSlotDrawable> entitySlots;
+    private final List<IndexedSlot> organSlots;
+    private final List<IndexedSlot> entitySlots;
     private final int organRows;
     private final int bgHeight;
     private final int totalContentHeight;
     private final int hiddenAmount;
-    // 保存每个slot的原始内容坐标位置
-    // organSlotPositions[i*2]=contentX, organSlotPositions[i*2+1]=contentY
-    private final int[] organSlotPositions;
-    private final int[] entitySlotPositions;
     // 滚动状态
     private float scrollOffsetY = 0;
     private double dragOriginY = -1;
@@ -113,8 +109,8 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         ChestCavityTypeDisplay display,
         IDrawable[] backgrounds,
         IDrawableStatic slotBackground,
-        List<IRecipeSlotDrawable> organSlots,
-        List<IRecipeSlotDrawable> entitySlots
+        List<IndexedSlot> organSlots,
+        List<IndexedSlot> entitySlots
     ) {
         this.display = display;
         this.backgrounds = backgrounds;
@@ -129,22 +125,9 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         int entityAreaHeight = entityRows > 0 ? ENTITY_GAP + entityRows * ENTITY_SLOT_SIZE : 0;
         totalContentHeight = bgHeight + entityAreaHeight;
         hiddenAmount = Math.max(totalContentHeight - VISIBLE_HEIGHT, 0);
+    }
 
-        // 保存slot原始位置
-        organSlotPositions = new int[organSlots.size() * 2];
-        for (int i = 0; i < organSlots.size(); i++) {
-            @SuppressWarnings("removal")
-            Rect2i rect = organSlots.get(i).getRect();
-            organSlotPositions[i * 2] = rect.getX();
-            organSlotPositions[i * 2 + 1] = rect.getY();
-        }
-        entitySlotPositions = new int[entitySlots.size() * 2];
-        for (int i = 0; i < entitySlots.size(); i++) {
-            @SuppressWarnings("removal")
-            Rect2i rect = entitySlots.get(i).getRect();
-            entitySlotPositions[i * 2] = rect.getX();
-            entitySlotPositions[i * 2 + 1] = rect.getY();
-        }
+    public record IndexedSlot(IRecipeSlotDrawable drawable, int index) {
     }
 
     static int getBgHeight(int rows) {
@@ -162,7 +145,6 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        JeiOrganTooltipCache.updateActiveTick();
         int scrollPixels = Math.round(hiddenAmount * scrollOffsetY);
 
         // 绘制滚动条
@@ -187,7 +169,7 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         }
 
         // 绘制标题
-        Component title = ChestCavityTypeDisplay.getTranslatedName(display.typeId());
+        Component title = Component.translatable(ChestCavityType.getTranslationKey(display.typeId()));
         Minecraft minecraft = Minecraft.getInstance();
         guiGraphics.drawString(minecraft.font, title, BG_OFFSET_X + FIRST_SLOT_INNER_X + 1, 5 - scrollPixels, 0x404040, false);
 
@@ -207,28 +189,34 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
         guiGraphics.blit(ICON_TEXTURE, HEALTH_ICON_X, iconY, 7, healthV, ICON_SIZE, ICON_SIZE, ICON_TEX_WIDTH, ICON_TEX_HEIGHT);
 
         // 绘制器官网格slots
-        for (int i = 0; i < organSlots.size(); i++) {
-            int contentX = organSlotPositions[i * 2];
-            int contentY = organSlotPositions[i * 2 + 1];
+        for (IndexedSlot indexedSlot : organSlots) {
+            int organIndex = indexedSlot.index();
+            int column = organIndex % GRID_COLS;
+            int row = organIndex / GRID_COLS;
+            int contentX = BG_OFFSET_X + FIRST_SLOT_INNER_X + column * SLOT_SIZE;
+            int contentY = FIRST_SLOT_Y + row * SLOT_SIZE;
             int visibleY = contentY - scrollPixels;
 
             if (visibleY + SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
-                IRecipeSlotDrawable slot = organSlots.get(i);
+                IRecipeSlotDrawable slot = indexedSlot.drawable();
                 slot.setPosition(contentX, visibleY);
                 slot.draw(guiGraphics);
             }
         }
 
         // 绘制实体模型
-        for (int i = 0; i < entitySlots.size(); i++) {
-            int contentX = entitySlotPositions[i * 2];
-            int contentY = entitySlotPositions[i * 2 + 1];
+        for (IndexedSlot indexedSlot : entitySlots) {
+            int entityIndex = indexedSlot.index();
+            int column = entityIndex % ENTITY_COLS;
+            int row = entityIndex / ENTITY_COLS;
+            int contentX = ENTITY_AREA_X + column * ENTITY_SLOT_SIZE;
+            int contentY = bgHeight + ENTITY_GAP + row * ENTITY_SLOT_SIZE;
             int visibleY = contentY - scrollPixels;
 
             if (visibleY + ENTITY_SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
-                IRecipeSlotDrawable slot = entitySlots.get(i);
+                IRecipeSlotDrawable slot = indexedSlot.drawable();
                 slot.setPosition(contentX, visibleY);
-                EntityType<?> entityType = display.entities().get(i);
+                EntityType<?> entityType = display.entities().get(entityIndex);
                 Optional<LivingEntity> cached = JeiEntityCache.getOrCreate(entityType);
                 if (cached.isPresent()) {
                     JeiEntitySlotRenderer.render(
@@ -251,17 +239,6 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
                     int textX = contentX + (ENTITY_SLOT_SIZE - textWidth) / 2;
                     int textY = visibleY + (ENTITY_SLOT_SIZE - minecraft.font.lineHeight) / 2;
                     guiGraphics.drawString(minecraft.font, entityName, textX, textY, 0xFFFFFF, false);
-                }
-                if (slot.getDisplayedIngredient().isEmpty()
-                    && mouseX >= contentX && mouseX < contentX + ENTITY_SLOT_SIZE
-                    && mouseY >= visibleY && mouseY < visibleY + ENTITY_SLOT_SIZE) {
-                    guiGraphics.fill(
-                        contentX,
-                        visibleY,
-                        contentX + ENTITY_SLOT_SIZE,
-                        visibleY + ENTITY_SLOT_SIZE,
-                        0x80FFFFFF
-                    );
                 }
             }
         }
@@ -307,16 +284,6 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
                          ? "jei." + modId + ".need_health"
                          : "jei." + modId + ".no_health";
             tooltip.add(Component.translatable(key));
-        }
-
-        for (int i = 0; i < entitySlots.size(); i++) {
-            int slotX = entitySlotPositions[i * 2];
-            int slotY = entitySlotPositions[i * 2 + 1];
-            if (mouseX >= slotX && mouseX < slotX + ENTITY_SLOT_SIZE
-                && contentMouseY >= slotY && contentMouseY < slotY + ENTITY_SLOT_SIZE) {
-                tooltip.add(display.entities().get(i).getDescription());
-                break;
-            }
         }
     }
 
@@ -375,40 +342,39 @@ public class ChestCavityPageScrollWidget implements ISlottedRecipeWidget, IJeiIn
 
     @Override
     public Optional<RecipeSlotUnderMouse> getSlotUnderMouse(double mouseX, double mouseY) {
+        if (mouseX < 0 || mouseX >= WIDGET_WIDTH || mouseY < 0 || mouseY >= VISIBLE_HEIGHT) {
+            return Optional.empty();
+        }
+
         int scrollPixels = Math.round(hiddenAmount * scrollOffsetY);
 
         // 器官slot
-        for (int i = 0; i < organSlots.size(); i++) {
-            int contentY = organSlotPositions[i * 2 + 1];
+        for (IndexedSlot indexedSlot : organSlots) {
+            int row = indexedSlot.index() / GRID_COLS;
+            int contentY = FIRST_SLOT_Y + row * SLOT_SIZE;
             int visibleY = contentY - scrollPixels;
             if (visibleY + SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT) {
-                IRecipeSlotDrawable slot = organSlots.get(i);
+                IRecipeSlotDrawable slot = indexedSlot.drawable();
                 if (slot.isMouseOver(mouseX, mouseY)) {
-                    JeiOrganTooltipCache.setHover(i, display);
                     return Optional.of(new RecipeSlotUnderMouse(slot, getPosition()));
                 }
             }
         }
 
-        // 实体槽位（按 35×35 区域判断，覆盖 slot 默认的 16×16）
-        for (int i = 0; i < entitySlots.size(); i++) {
-            int contentX = entitySlotPositions[i * 2];
-            int contentY = entitySlotPositions[i * 2 + 1];
+        // 实体槽位（按 35×35 区域判断，覆盖 slot 默认区域）
+        for (IndexedSlot indexedSlot : entitySlots) {
+            int entityIndex = indexedSlot.index();
+            int column = entityIndex % ENTITY_COLS;
+            int row = entityIndex / ENTITY_COLS;
+            int contentX = ENTITY_AREA_X + column * ENTITY_SLOT_SIZE;
+            int contentY = bgHeight + ENTITY_GAP + row * ENTITY_SLOT_SIZE;
             int visibleY = contentY - scrollPixels;
             if (visibleY + ENTITY_SLOT_SIZE > 0 && visibleY < VISIBLE_HEIGHT
                 && mouseX >= contentX && mouseX < contentX + ENTITY_SLOT_SIZE
                 && mouseY >= visibleY && mouseY < visibleY + ENTITY_SLOT_SIZE) {
-                IRecipeSlotDrawable slot = entitySlots.get(i);
-                if (slot.getDisplayedIngredient().isPresent()) {
-                    JeiOrganTooltipCache.clearHover();
-                    return Optional.of(new RecipeSlotUnderMouse(slot, getPosition()));
-                }
-                JeiOrganTooltipCache.clearHover();
-                return Optional.empty();
+                return Optional.of(new RecipeSlotUnderMouse(indexedSlot.drawable(), getPosition()));
             }
         }
-
-        JeiOrganTooltipCache.clearHover();
 
         return Optional.empty();
     }

@@ -97,6 +97,13 @@ public class ChestCavityType {
     }
 
     /**
+     * 获取胸腔类型翻译键
+     */
+    public static String getTranslationKey(ResourceLocation typeId) {
+        return "chest_cavity_type." + typeId.getNamespace() + "." + typeId.getPath();
+    }
+
+    /**
      * 获取胸腔类型的注册名
      */
     public ResourceLocation getId() {

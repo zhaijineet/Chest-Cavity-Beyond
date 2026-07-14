@@ -1,7 +1,6 @@
 package net.zhaiji.chestcavitybeyond.compat.jei;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -16,26 +15,6 @@ import java.util.List;
  * </p>
  */
 public record ChestCavityTypeDisplay(ResourceLocation typeId, ChestCavityType type, List<EntityType<?>> entities) {
-    /**
-     * 获取胸腔类型的翻译键
-     *
-     * @param typeId 胸腔类型注册名
-     * @return 翻译键
-     */
-    public static String getTranslationKey(ResourceLocation typeId) {
-        return "chest_cavity_type." + typeId.getNamespace() + "." + typeId.getPath();
-    }
-
-    /**
-     * 获取胸腔类型的翻译组件
-     *
-     * @param typeId 胸腔类型注册名
-     * @return 国际化的胸腔类型名称
-     */
-    public static Component getTranslatedName(ResourceLocation typeId) {
-        return Component.translatable(getTranslationKey(typeId));
-    }
-
     public NonNullList<Item> getOrgans() {
         return type.getOrgans();
     }

@@ -2,7 +2,10 @@ package net.zhaiji.chestcavitybeyond.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -39,9 +42,24 @@ public class ChestCavityJeiPlugin implements IModPlugin {
     }
 
     @Override
+    public void registerIngredients(IModIngredientRegistration registration) {
+        registration.register(
+            JeiEntityIngredient.TYPE,
+            List.of(),
+            JeiEntityIngredientHelper.INSTANCE,
+            JeiEntityIngredientRenderer.INSTANCE,
+            JeiEntityIngredient.CODEC
+        );
+    }
+
+    @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        IJeiHelpers jeiHelpers = registration.getJeiHelpers();
         registration.addRecipeCategories(
-            new ChestCavityTypeCategory(registration.getJeiHelpers().getGuiHelper())
+            new ChestCavityTypeCategory(
+                jeiHelpers.getGuiHelper(),
+                jeiHelpers.getIngredientManager().getIngredientRenderer(VanillaTypes.ITEM_STACK)
+            )
         );
     }
 
@@ -80,5 +98,12 @@ public class ChestCavityJeiPlugin implements IModPlugin {
                     );
                 }
             });
+    }
+
+    @Override
+    public void onRuntimeUnavailable() {
+        JeiEntityCache.clear();
+        JeiChestCavityPreviewCache.clear();
+        JeiOrganTooltipContext.clear();
     }
 }
