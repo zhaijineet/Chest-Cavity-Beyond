@@ -8,7 +8,7 @@ import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
-import net.zhaiji.chestcavitybeyond.client.util.MixinClientUtil;
+import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,8 +31,8 @@ public class GuiMixin {
         at = @At("HEAD"),
         cancellable = true
     )
-    private void chestcavitybeyond$getPlayerInfos(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (!MixinClientUtil.isFoolOrHalloween()) return;
+    private void chestCavityBeyond$getPlayerInfos(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (!EasterEggManager.isFoolOrHalloween()) return;
         if (!this.minecraft.options.keyPlayerList.isDown()) {
             this.tabList.setVisible(false);
         } else {

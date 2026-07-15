@@ -11,7 +11,6 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -61,12 +60,5 @@ public class MixinClientUtil {
             );
             poseStack.popPose();
         }
-    }
-
-    public static boolean isFoolOrHalloween() {
-        LocalDate now = LocalDate.now();
-        int month = now.getMonthValue();
-        int day = now.getDayOfMonth();
-        return (month == 4 && day == 1) || (month == 10 && day == 31);
     }
 }

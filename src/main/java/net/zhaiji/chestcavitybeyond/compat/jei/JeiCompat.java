@@ -23,7 +23,7 @@ public class JeiCompat {
      */
     public static boolean handlerTooltip(
         Organ organ,
-        ItemStack stack,
+        ItemStack itemStack,
         Item.TooltipContext context,
         List<Component> tooltip,
         TooltipFlag flags
@@ -31,11 +31,11 @@ public class JeiCompat {
         Minecraft minecraft = Minecraft.getInstance();
         if (!minecraft.isSameThread() || !(minecraft.screen instanceof IRecipesGui)) return false;
         return JeiOrganTooltipContext.consume(
-            stack,
+            itemStack,
             target -> {
                 ChestCavityData data = JeiChestCavityPreviewCache.get(target.display());
                 organ.organTooltip(
-                    ChestCavityUtil.createContext(data, target.organIndex(), stack),
+                    ChestCavityUtil.createContext(data, target.organIndex(), itemStack),
                     new TooltipsKeyContext(Screen.hasShiftDown(), Screen.hasControlDown()),
                     context,
                     tooltip,

@@ -1,6 +1,7 @@
 package net.zhaiji.chestcavitybeyond.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IIngredientAcceptor;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
+import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 
@@ -42,6 +44,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
     private final IDrawable[] backgrounds;
     private final IDrawableStatic slotBackground;
     private final IIngredientRenderer<ItemStack> itemStackRenderer;
+    private final JeiEntityRecipeSlotRenderer entityRecipeSlotRenderer;
 
     public ChestCavityTypeCategory(
         IGuiHelper guiHelper,
@@ -73,6 +76,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
         }
         slotBackground = guiHelper.getSlotDrawable();
         this.itemStackRenderer = itemStackRenderer;
+        entityRecipeSlotRenderer = new JeiEntityRecipeSlotRenderer(slotBackground);
     }
 
     /**
@@ -96,6 +100,7 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
         NonNullList<Item> organs = display.getOrgans();
         int slots = display.getSlots();
         int rows = slots / ChestCavityPageScrollWidget.GRID_COLS;
+        IIngredientAcceptor<?> organInputs = builder.addInvisibleIngredients(RecipeIngredientRole.INPUT);
 
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < ChestCavityPageScrollWidget.GRID_COLS; column++) {
@@ -103,10 +108,12 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
                 if (index >= slots) break;
                 Item organ = organs.get(index);
                 if (organ != Items.AIR) {
-                    int slotX = ChestCavityPageScrollWidget.BG_OFFSET_X + ChestCavityPageScrollWidget.FIRST_SLOT_INNER_X + column * ChestCavityPageScrollWidget.SLOT_SIZE;
-                    int slotY = ChestCavityPageScrollWidget.FIRST_SLOT_Y + row * ChestCavityPageScrollWidget.SLOT_SIZE;
+                    int slotX = ChestCavityPageScrollWidget.getOrganSlotX(column);
+                    int slotY = ChestCavityPageScrollWidget.getOrganSlotY(row);
+                    ItemStack organStack = organ.getDefaultInstance();
+                    organInputs.addItemStack(organStack);
                     IRecipeSlotBuilder slotBuilder = builder.addOutputSlot(slotX, slotY)
-                        .addItemStack(organ.getDefaultInstance())
+                        .addItemStack(organStack)
                         .setCustomRenderer(
                             VanillaTypes.ITEM_STACK,
                             new JeiOrganSlotRenderer(itemStackRenderer, display, index)
@@ -125,28 +132,26 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
         }
 
         // 实体列表
-        int bgHeight = ChestCavityPageScrollWidget.getBgHeight(rows);
-        int entityStartY = bgHeight + ChestCavityPageScrollWidget.ENTITY_GAP;
-
         List<EntityType<?>> entities = display.entities();
         for (int i = 0; i < entities.size(); i++) {
             EntityType<?> entityType = entities.get(i);
 
             int row = i / ChestCavityPageScrollWidget.ENTITY_COLS;
             int column = i % ChestCavityPageScrollWidget.ENTITY_COLS;
-            int slotX = ChestCavityPageScrollWidget.ENTITY_AREA_X + column * ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
-            int slotY = entityStartY + row * ChestCavityPageScrollWidget.ENTITY_SLOT_SIZE;
+            int slotX = ChestCavityPageScrollWidget.getEntitySlotX(column);
+            int slotY = ChestCavityPageScrollWidget.getEntitySlotY(rows, row);
 
             JeiEntityIngredient entityIngredient = new JeiEntityIngredient(entityType);
             builder.addSlot(RecipeIngredientRole.INPUT, slotX, slotY)
                 .addIngredient(JeiEntityIngredient.TYPE, entityIngredient)
-                .setCustomRenderer(JeiEntityIngredient.TYPE, JeiEntityRecipeSlotRenderer.INSTANCE)
+                .setCustomRenderer(JeiEntityIngredient.TYPE, entityRecipeSlotRenderer)
                 .setSlotName(ENTITY_SLOT_PREFIX + i);
             builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT)
                 .addIngredient(JeiEntityIngredient.TYPE, entityIngredient);
 
             ItemStack entityItemStack = resolveEntityItemStack(entityType);
             if (!entityItemStack.isEmpty()) {
+                builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(entityItemStack);
                 builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(entityItemStack);
             }
         }
@@ -154,28 +159,38 @@ public class ChestCavityTypeCategory extends AbstractRecipeCategory<ChestCavityT
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, ChestCavityTypeDisplay display, IFocusGroup focuses) {
+        EasterEggManager.rollHerobrine();
         List<ChestCavityPageScrollWidget.IndexedSlot> organSlots = new ArrayList<>();
         List<ChestCavityPageScrollWidget.IndexedSlot> entitySlots = new ArrayList<>();
-        List<IRecipeSlotDrawable> allSlots = new ArrayList<>();
+        List<IRecipeSlotDrawable> managedSlots = new ArrayList<>();
 
         for (IRecipeSlotDrawable slot : builder.getRecipeSlots().getSlots()) {
-            String slotName = slot.getSlotName().orElseThrow();
+            String slotName = slot.getSlotName().orElse(null);
+            if (slotName == null) continue;
+
             if (slotName.startsWith(ENTITY_SLOT_PREFIX)) {
-                int entityIndex = Integer.parseInt(slotName.substring(ENTITY_SLOT_PREFIX.length()));
+                int entityIndex = parseSlotIndex(slotName, ENTITY_SLOT_PREFIX);
+                if (entityIndex < 0) continue;
                 entitySlots.add(new ChestCavityPageScrollWidget.IndexedSlot(slot, entityIndex));
-            } else {
-                int organIndex = Integer.parseInt(slotName.substring(ORGAN_SLOT_PREFIX.length()));
+                managedSlots.add(slot);
+            } else if (slotName.startsWith(ORGAN_SLOT_PREFIX)) {
+                int organIndex = parseSlotIndex(slotName, ORGAN_SLOT_PREFIX);
+                if (organIndex < 0) continue;
                 organSlots.add(new ChestCavityPageScrollWidget.IndexedSlot(slot, organIndex));
+                managedSlots.add(slot);
             }
-            allSlots.add(slot);
         }
 
         ChestCavityPageScrollWidget widget = new ChestCavityPageScrollWidget(
-            display, backgrounds, slotBackground, organSlots, entitySlots
+            display, backgrounds, organSlots, entitySlots, entityRecipeSlotRenderer
         );
 
-        builder.addSlottedWidget(widget, allSlots);
+        builder.addSlottedWidget(widget, managedSlots);
         builder.addInputHandler(widget);
+    }
+
+    private static int parseSlotIndex(String slotName, String prefix) {
+        return Integer.parseInt(slotName.substring(prefix.length()));
     }
 
     @Override

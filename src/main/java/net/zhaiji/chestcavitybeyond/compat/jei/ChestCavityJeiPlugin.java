@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
+import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
 import net.zhaiji.chestcavitybeyond.manager.ChestCavityTypeManager;
 import net.zhaiji.chestcavitybeyond.manager.ItemTagManager;
 
@@ -105,5 +106,6 @@ public class ChestCavityJeiPlugin implements IModPlugin {
         JeiEntityCache.clear();
         JeiChestCavityPreviewCache.clear();
         JeiOrganTooltipContext.clear();
+        EasterEggManager.clearHerobrinePlayerCache();
     }
 }

@@ -36,7 +36,9 @@ public class JeiOrganSlotRenderer implements IIngredientRenderer<ItemStack> {
     @Override
     public List<Component> getTooltip(ItemStack itemStack, TooltipFlag tooltipFlag) {
         JeiOrganTooltipContext.prepare(display, organIndex, itemStack);
-        return itemStackRenderer.getTooltip(itemStack, tooltipFlag);
+        List<Component> tooltip = itemStackRenderer.getTooltip(itemStack, tooltipFlag);
+        JeiOrganTooltipContext.clear();
+        return tooltip;
     }
 
     @Override

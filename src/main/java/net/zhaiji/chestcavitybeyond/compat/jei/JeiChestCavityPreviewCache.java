@@ -3,7 +3,6 @@ package net.zhaiji.chestcavitybeyond.compat.jei;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.RemotePlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
@@ -11,6 +10,7 @@ import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 缓存按胸腔类型构建的独立 JEI 预览数据
@@ -27,17 +27,16 @@ public class JeiChestCavityPreviewCache {
     }
 
     private static LivingEntity createOwner(ChestCavityTypeDisplay display) {
-        Minecraft minecraft = Minecraft.getInstance();
-        ClientLevel level = minecraft.level;
         for (EntityType<?> entityType : display.entities()) {
-            if (entityType == EntityType.PLAYER) return createRemotePlayer(minecraft, level);
-            Entity entity = entityType.create(level);
-            if (entity instanceof LivingEntity livingEntity) return livingEntity;
+            Optional<LivingEntity> cachedEntity = JeiEntityCache.getOrCreate(entityType);
+            if (cachedEntity.isPresent()) return cachedEntity.get();
         }
-        return createRemotePlayer(minecraft, level);
+        return createRemotePlayer();
     }
 
-    private static RemotePlayer createRemotePlayer(Minecraft minecraft, ClientLevel level) {
+    private static RemotePlayer createRemotePlayer() {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel level = minecraft.level;
         return new RemotePlayer(level, minecraft.player.getGameProfile());
     }
 

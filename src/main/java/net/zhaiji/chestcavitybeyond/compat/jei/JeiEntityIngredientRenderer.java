@@ -31,8 +31,12 @@ public final class JeiEntityIngredientRenderer implements IIngredientRenderer<Je
         ));
     }
 
+    public static List<Component> createTooltip(JeiEntityIngredient ingredient) {
+        return List.of(ingredient.entityType().getDescription());
+    }
+
     @Override
     public List<Component> getTooltip(JeiEntityIngredient ingredient, TooltipFlag tooltipFlag) {
-        return List.of(ingredient.entityType().getDescription());
+        return createTooltip(ingredient);
     }
 }
