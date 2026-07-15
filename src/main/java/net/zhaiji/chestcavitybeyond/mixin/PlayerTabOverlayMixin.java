@@ -2,7 +2,7 @@ package net.zhaiji.chestcavitybeyond.mixin;
 
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
+import net.zhaiji.chestcavitybeyond.client.manager.EasterEggManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

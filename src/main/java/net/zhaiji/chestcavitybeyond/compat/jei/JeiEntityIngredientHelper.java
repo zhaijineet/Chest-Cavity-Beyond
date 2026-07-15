@@ -38,8 +38,8 @@ public final class JeiEntityIngredientHelper implements IIngredientHelper<JeiEnt
         return createUid(ingredient);
     }
 
-    private static EntityIngredientUid createUid(JeiEntityIngredient ingredient) {
-        return new EntityIngredientUid(
+    private static JeiEntityIngredientUid createUid(JeiEntityIngredient ingredient) {
+        return new JeiEntityIngredientUid(
             JeiEntityIngredient.TYPE.getUid(),
             ingredient.entityTypeResourceLocation()
         );
@@ -61,8 +61,5 @@ public final class JeiEntityIngredientHelper implements IIngredientHelper<JeiEnt
             return "entity ingredient: null";
         }
         return "entity ingredient: " + ingredient.entityTypeResourceLocation();
-    }
-
-    private record EntityIngredientUid(String ingredientTypeUid, ResourceLocation entityTypeResourceLocation) {
     }
 }

@@ -920,6 +920,8 @@ public class ChestCavityTypeManager {
         .setFirstRow(6, InitItem.ELDER_GILL.get());
 
     public static final ChestCavityType ARMOR_STAND = register(ChestCavityBeyond.of("armor_stand"))
+        .setNeedBreath(false)
+        .setNeedHealth(false)
         .setFirstRow(3, Items.STICK)
         .setFirstRow(4, Items.STICK)
         .setFirstRow(5, Items.STICK)

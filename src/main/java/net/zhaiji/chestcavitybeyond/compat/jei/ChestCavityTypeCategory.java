@@ -25,7 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.AttributeBonus;
-import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
+import net.zhaiji.chestcavitybeyond.client.manager.EasterEggManager;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
 import net.zhaiji.chestcavitybeyond.util.TooltipUtil;
 

@@ -1,4 +1,4 @@
-package net.zhaiji.chestcavitybeyond.client.easter;
+package net.zhaiji.chestcavitybeyond.client.manager;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -314,12 +314,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Can pass through thin walls when close"
         );
 
-        addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "Eat grass");
+        addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "Can graze on grass blocks, short grass, or tall grass");
         addOrganActiveSkill(
             InitItem.HERBIVORE_RUMEN,
-            "Consume grass, short grass, or tall grass for food",
-            "Grass blocks turn into dirt",
-            "Tall grass restores more food level than short grass"
+            "Can graze on grass blocks, short grass, or tall grass",
+            "Players restore 2 food and 4 saturation",
+            "Creatures restore 1 health",
+            "Tall grass triggers one extra restoration",
+            "Grazed grass blocks turn into dirt"
         );
 
         addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "Explode");
@@ -1056,12 +1058,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "近距离时可穿墙传送"
         );
 
-        addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "吃草");
+        addOrganSimpleActiveSkill(InitItem.HERBIVORE_RUMEN, "可以啃食草方块、矮草丛或高草丛");
         addOrganActiveSkill(
             InitItem.HERBIVORE_RUMEN,
-            "食用草方块、矮草丛或高草丛",
-            "草方块会变成泥土",
-            "高草丛比矮草丛恢复更多饥饿值"
+            "可以啃食草方块、矮草丛或高草丛",
+            "玩家恢复2点饥饿值和4点饱和度",
+            "生物恢复1点生命值",
+            "高草丛额外触发一次恢复",
+            "啃过的草方块会变成泥土"
         );
 
         addOrganSimpleActiveSkill(InitItem.CREEPER_APPENDIX, "自爆");

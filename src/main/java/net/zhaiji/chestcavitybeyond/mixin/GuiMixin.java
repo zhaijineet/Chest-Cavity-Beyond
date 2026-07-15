@@ -8,7 +8,7 @@ import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
-import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
+import net.zhaiji.chestcavitybeyond.client.manager.EasterEggManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

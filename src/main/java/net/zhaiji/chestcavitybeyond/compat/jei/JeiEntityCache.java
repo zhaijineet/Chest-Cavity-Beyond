@@ -6,7 +6,7 @@ import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.zhaiji.chestcavitybeyond.client.easter.EasterEggManager;
+import net.zhaiji.chestcavitybeyond.client.manager.EasterEggManager;
 
 import java.util.HashMap;
 import java.util.Map;
