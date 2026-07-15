@@ -429,7 +429,7 @@ public class InitItem {
     public static final Supplier<Item> SALTWATER_HEART = ITEM.register(
         "saltwater_heart",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 1)
+            .addValueAttribute(InitAttribute.HEALTH, 2)
             .addValueAttribute(InitAttribute.WATER_BREATH, 0.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, -1)
             .build()
@@ -439,9 +439,9 @@ public class InitItem {
     public static final Supplier<Item> SALTWATER_LUNG = ITEM.register(
         "saltwater_lung",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 1)
-            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 1)
-            .addValueAttribute(InitAttribute.ENDURANCE, 1)
+            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 2)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 2)
+            .addValueAttribute(InitAttribute.ENDURANCE, 2)
             .addValueAttribute(InitAttribute.WATER_BREATH, 0.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, -1)
             .build()
@@ -451,8 +451,8 @@ public class InitItem {
     public static final Supplier<Item> SALTWATER_MUSCLE = ITEM.register(
         "saltwater_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 1)
-            .addValueAttribute(InitAttribute.SPEED, 1)
+            .addValueAttribute(InitAttribute.STRENGTH, 2)
+            .addValueAttribute(InitAttribute.SPEED, 2)
             .baseMultipliedAttribute(NeoForgeMod.SWIM_SPEED, 0.05)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, -0.5)
             .build()
@@ -462,7 +462,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_HEART = ITEM.register(
         "fireproof_heart",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 0.75)
+            .addValueAttribute(InitAttribute.HEALTH, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -471,9 +471,9 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_LUNG = ITEM.register(
         "fireproof_lung",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 0.75)
-            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 0.75)
-            .addValueAttribute(InitAttribute.ENDURANCE, 0.75)
+            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 1.5)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 1.5)
+            .addValueAttribute(InitAttribute.ENDURANCE, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -482,8 +482,8 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_SPINE = ITEM.register(
         "fireproof_spine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 0.75)
-            .addValueAttribute(InitAttribute.DEFENSE, 0.375)
+            .addValueAttribute(InitAttribute.NERVES, 1.5)
+            .addValueAttribute(InitAttribute.DEFENSE, 0.75)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -492,7 +492,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_STOMACH = ITEM.register(
         "fireproof_stomach",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DIGESTION, 0.75)
+            .addValueAttribute(InitAttribute.DIGESTION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -501,7 +501,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_INTESTINE = ITEM.register(
         "fireproof_intestine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NUTRITION, 0.75)
+            .addValueAttribute(InitAttribute.NUTRITION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -510,7 +510,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_KIDNEY = ITEM.register(
         "fireproof_kidney",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.FILTRATION, 0.75)
+            .addValueAttribute(InitAttribute.FILTRATION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -519,7 +519,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_SPLEEN = ITEM.register(
         "fireproof_spleen",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.METABOLISM, 0.75)
+            .addValueAttribute(InitAttribute.METABOLISM, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -528,7 +528,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_LIVER = ITEM.register(
         "fireproof_liver",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DETOXIFICATION, 0.75)
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -537,7 +537,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_APPENDIX = ITEM.register(
         "fireproof_appendix",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.LUCK, 0.75)
+            .addValueAttribute(Attributes.LUCK, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -546,7 +546,7 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_RIB = ITEM.register(
         "fireproof_rib",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 0.75)
+            .addValueAttribute(InitAttribute.DEFENSE, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -555,8 +555,8 @@ public class InitItem {
     public static final Supplier<Item> FIREPROOF_MUSCLE = ITEM.register(
         "fireproof_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 0.75)
-            .addValueAttribute(InitAttribute.SPEED, 0.75)
+            .addValueAttribute(InitAttribute.STRENGTH, 1.5)
+            .addValueAttribute(InitAttribute.SPEED, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .build()
     );
@@ -565,7 +565,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_HEART = ITEM.register(
         "ender_heart",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 1.25)
+            .addValueAttribute(InitAttribute.HEALTH, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 2)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .build()
@@ -575,9 +575,9 @@ public class InitItem {
     public static final Supplier<Item> ENDER_LUNG = ITEM.register(
         "ender_lung",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 1.25)
-            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 1.25)
-            .addValueAttribute(InitAttribute.ENDURANCE, 1.25)
+            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 1.75)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 1.75)
+            .addValueAttribute(InitAttribute.ENDURANCE, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 1)
             .build()
     );
@@ -586,8 +586,8 @@ public class InitItem {
     public static final Supplier<Item> ENDER_SPINE = ITEM.register(
         "ender_spine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 1.25)
-            .addValueAttribute(InitAttribute.DEFENSE, 0.625)
+            .addValueAttribute(InitAttribute.NERVES, 1.75)
+            .addValueAttribute(InitAttribute.DEFENSE, 0.875)
             .addValueAttribute(InitAttribute.PROJECTILE_DODGE, 1)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .build()
@@ -597,7 +597,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_STOMACH = ITEM.register(
         "ender_stomach",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DIGESTION, 1.25)
+            .addValueAttribute(InitAttribute.DIGESTION, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 1)
             .build()
     );
@@ -606,7 +606,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_INTESTINE = ITEM.register(
         "ender_intestine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NUTRITION, 1.25)
+            .addValueAttribute(InitAttribute.NUTRITION, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 1)
             .build()
     );
@@ -615,7 +615,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_KIDNEY = ITEM.register(
         "ender_kidney",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.FILTRATION, 1)
+            .addValueAttribute(InitAttribute.FILTRATION, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 1)
             .build()
     );
@@ -624,7 +624,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_SPLEEN = ITEM.register(
         "ender_spleen",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.METABOLISM, 1.25)
+            .addValueAttribute(InitAttribute.METABOLISM, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 1)
             .build()
     );
@@ -633,7 +633,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_LIVER = ITEM.register(
         "ender_liver",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DETOXIFICATION, 1)
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 1)
             .build()
     );
@@ -642,7 +642,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_APPENDIX = ITEM.register(
         "ender_appendix",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.LUCK, 1.25)
+            .addValueAttribute(Attributes.LUCK, 1.75)
             .addValueAttribute(InitAttribute.ENDER, 8)
             .cooldown(8 * 20)
             .skill(PlayerSkillUtil::teleport)
@@ -654,7 +654,7 @@ public class InitItem {
     public static final Supplier<Item> ENDER_RIB = ITEM.register(
         "ender_rib",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 1.25)
+            .addValueAttribute(InitAttribute.DEFENSE, 1.75)
             .build()
     );
 
@@ -662,8 +662,8 @@ public class InitItem {
     public static final Supplier<Item> ENDER_MUSCLE = ITEM.register(
         "ender_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 1.25)
-            .addValueAttribute(InitAttribute.SPEED, 1.25)
+            .addValueAttribute(InitAttribute.STRENGTH, 1.75)
+            .addValueAttribute(InitAttribute.SPEED, 1.75)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .build()
     );
@@ -672,8 +672,8 @@ public class InitItem {
     public static final Supplier<Item> BRUTE_MUSCLE = ITEM.register(
         "brute_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 1.25)
-            .addValueAttribute(InitAttribute.SPEED, 0.75)
+            .addValueAttribute(InitAttribute.STRENGTH, 2)
+            .addValueAttribute(InitAttribute.SPEED, 1)
             .build()
     );
 
@@ -681,8 +681,8 @@ public class InitItem {
     public static final Supplier<Item> SWIFT_MUSCLE = ITEM.register(
         "swift_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 0.75)
-            .addValueAttribute(InitAttribute.SPEED, 1.25)
+            .addValueAttribute(InitAttribute.STRENGTH, 1)
+            .addValueAttribute(InitAttribute.SPEED, 2)
             .build()
     );
 
@@ -690,8 +690,8 @@ public class InitItem {
     public static final Supplier<Item> LEAPING_MUSCLE = ITEM.register(
         "leaping_muscle",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.STRENGTH, 0.75)
-            .addValueAttribute(InitAttribute.SPEED, 0.75)
+            .addValueAttribute(InitAttribute.STRENGTH, 1)
+            .addValueAttribute(InitAttribute.SPEED, 1)
             .addValueAttribute(InitAttribute.LEAPING, 1)
             .build()
     );
@@ -794,7 +794,7 @@ public class InitItem {
     public static final Supplier<Item> CREEPER_APPENDIX = ITEM.register(
         "creeper_appendix",
         () -> Organ.builder()
-            .addValueAttribute(Attributes.LUCK, 0.75)
+            .addValueAttribute(Attributes.LUCK, 3)
             .addValueAttribute(InitAttribute.EXPLOSIVE, 1)
             .cooldown(20 * 20)
             .skill(PlayerSkillUtil::explosion)
@@ -806,6 +806,7 @@ public class InitItem {
     public static final Supplier<Item> CREEPER_LEAF = ITEM.register(
         "creeper_leaf",
         () -> Organ.builder()
+            .addValueAttribute(InitAttribute.STRENGTH, 0.25)
             .addValueAttribute(InitAttribute.SPEED, 1)
             .addValueAttribute(InitAttribute.PHOTOSYNTHESIS, 1)
             .build()
@@ -909,8 +910,8 @@ public class InitItem {
     public static final Supplier<Item> WITHERED_SPINE = ITEM.register(
         "withered_spine",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.NERVES, 0.5)
-            .addValueAttribute(InitAttribute.DEFENSE, 0.25)
+            .addValueAttribute(InitAttribute.NERVES, 1)
+            .addValueAttribute(InitAttribute.DEFENSE, 0.5)
             .addValueAttribute(InitAttribute.WITHERED, 1)
             .build()
     );
@@ -919,7 +920,7 @@ public class InitItem {
     public static final Supplier<Item> WITHERED_RIB = ITEM.register(
         "withered_rib",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 0.5)
+            .addValueAttribute(InitAttribute.DEFENSE, 1)
             .addValueAttribute(InitAttribute.WITHERED, 1)
             .build()
     );
@@ -929,7 +930,7 @@ public class InitItem {
         "writhing_soul_sand",
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.STRENGTH, 3)
-            .addValueAttribute(InitAttribute.SPEED, 1)
+            .addValueAttribute(InitAttribute.SPEED, 3)
             .addValueAttribute(InitAttribute.WITHERED, 1)
             .build()
     );
@@ -981,7 +982,7 @@ public class InitItem {
     public static final Supplier<Item> GOLEM_ARMOR_PLATE = ITEM.register(
         "golem_armor_plate",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DEFENSE, 1.25)
+            .addValueAttribute(InitAttribute.DEFENSE, 2)
             .addValueAttribute(InitAttribute.IRON_REPAIR, 1)
             .addValueAttribute(InitAttribute.METABOLISM, -0.5)
             .cooldown(20)
@@ -994,6 +995,8 @@ public class InitItem {
     public static final Supplier<Item> SILK_GLAND = ITEM.register(
         "silk_gland",
         () -> Organ.builder()
+            .addValueAttribute(Attributes.ENTITY_INTERACTION_RANGE, 1)
+            .addValueAttribute(Attributes.BLOCK_INTERACTION_RANGE, 1)
             .cooldown(4 * 20)
             .skill(PlayerSkillUtil::silk)
             .goalSkill(GoalSkillUtil.silkGlandGoalSkill())
@@ -1032,6 +1035,7 @@ public class InitItem {
                     }
                 }
             )
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 1)
             .attack((context, target, source, damageContainer) -> {
                 if (OrganSkillUtil.hasCooldown(context.entity(), context.stack())) return;
                 if (context.entity() == target) return;
@@ -1164,8 +1168,8 @@ public class InitItem {
     public static final Supplier<Item> BLAZE_CORE = ITEM.register(
         "blaze_core",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 1)
-            .addValueAttribute(InitAttribute.NERVES, 0.25)
+            .addValueAttribute(InitAttribute.HEALTH, 2)
+            .addValueAttribute(InitAttribute.NERVES, 1)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 3)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 3)
             .build()
@@ -1185,6 +1189,7 @@ public class InitItem {
     public static final Supplier<Item> ACTIVE_BLAZE_ROD = ITEM.register(
         "active_blaze_rod",
         () -> Organ.builder()
+            .addValueAttribute(InitAttribute.STRENGTH, 2)
             .addValueAttribute(InitAttribute.VOMIT_FIREBALL, 1)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 3)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 3)
@@ -1198,7 +1203,7 @@ public class InitItem {
     public static final Supplier<Item> SNOW_CORE = ITEM.register(
         "snow_core",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 0.25)
+            .addValueAttribute(InitAttribute.HEALTH, 1)
             .addValueAttribute(InitAttribute.FROST_RESISTANCE, 5)
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .skill(PlayerSkillUtil::snowball)
@@ -1210,7 +1215,7 @@ public class InitItem {
     public static final Supplier<Item> GHAST_STOMACH = ITEM.register(
         "ghast_stomach",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.DIGESTION, 0.5)
+            .addValueAttribute(InitAttribute.DIGESTION, 4)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
             .addValueAttribute(InitAttribute.GHASTLY, 1)
             .cooldown(15 * 20)
@@ -1245,7 +1250,7 @@ public class InitItem {
     public static final Supplier<Item> BREEZE_CORE = ITEM.register(
         "breeze_core",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.HEALTH, 0.75)
+            .addValueAttribute(InitAttribute.HEALTH, 2)
             .cooldown(8 * 20)
             .skill(PlayerSkillUtil::windCharge)
             .goalSkill(GoalSkillUtil.breezeCoreGoalSkill())
@@ -1256,7 +1261,7 @@ public class InitItem {
     public static final Supplier<Item> ACTIVE_BREEZE_ROD = ITEM.register(
         "active_breeze_rod",
         () -> Organ.builder()
-            .addValueAttribute(InitAttribute.SPEED, 1)
+            .addValueAttribute(InitAttribute.SPEED, 2)
             .addValueAttribute(InitAttribute.LEAPING, 1)
             .build()
     );
@@ -1411,7 +1416,7 @@ public class InitItem {
         "sculk_muscle",
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.STRENGTH, 4)
-            .addValueAttribute(InitAttribute.SPEED, 1)
+            .addValueAttribute(InitAttribute.SPEED, 2)
             .build()
     );
 

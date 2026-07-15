@@ -433,9 +433,9 @@ public class ChestCavityData extends ItemStackHandler {
                     ItemStack stack = getStackInSlot(i);
                     if (!stack.isEmpty()) {
                         excess.add(stack.copy());
+                        stacks.set(i, ItemStack.EMPTY);
                         ChestCavityUtil.changeOrgan(this, i, stack, ItemStack.EMPTY, false);
                     }
-                    stacks.set(i, ItemStack.EMPTY);
                 }
                 // 尝试放入玩家背包
                 if (owner instanceof Player player) {

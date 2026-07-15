@@ -53,7 +53,7 @@ public class ChestCavityBeyondConfig {
             )
             .defineInRange(
                     "detoxificationImmunityDurationThreshold",
-                    10,
+                    20,
                     0,
                     Integer.MAX_VALUE
             );

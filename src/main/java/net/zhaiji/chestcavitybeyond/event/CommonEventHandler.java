@@ -101,7 +101,7 @@ public class CommonEventHandler {
     public static void handlerFMLCommonSetupEvent(FMLCommonSetupEvent event) {
         // 下界之星器官注册
         Organ.builder(Items.NETHER_STAR)
-            .addValueAttribute(InitAttribute.HEALTH, 2.5)
+            .addValueAttribute(InitAttribute.HEALTH, 4.5)
             .skill(PlayerSkillUtil::witherSkull)
             .cooldown(20 * 3)
             .goalSkill(GoalSkillUtil.netherStarGoalSkill())

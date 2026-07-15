@@ -48,8 +48,9 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstance {
 
     @Unique
     private void chestCavityBeyond$syncEffect(@Nullable LivingEntity entity) {
-        if (entity != null) {
-            ((ILivingEntity) entity).chestCavityBeyond$onEffectUpdated((MobEffectInstance) (Object) this, true, null);
+        MobEffectInstance mobEffectInstance = (MobEffectInstance) (Object) this;
+        if (entity != null && entity.getEffect(getEffect()) == mobEffectInstance) {
+            ((ILivingEntity) entity).chestCavityBeyond$onEffectUpdated(mobEffectInstance, true, null);
         }
     }
 }
