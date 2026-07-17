@@ -127,12 +127,8 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.PILLAGER, ChestCavityTypeManager.HUMAN);
         ChestCavityTypeManager.registerEntity(EntityType.WITCH, ChestCavityTypeManager.HUMAN);
         // 食草生物1型
-        ChestCavityTypeManager.registerEntity(EntityType.HORSE, ChestCavityTypeManager.HERBIVORE1);
         ChestCavityTypeManager.registerEntity(EntityType.DONKEY, ChestCavityTypeManager.HERBIVORE1);
         ChestCavityTypeManager.registerEntity(EntityType.MULE, ChestCavityTypeManager.HERBIVORE1);
-        ChestCavityTypeManager.registerEntity(EntityType.GOAT, ChestCavityTypeManager.HERBIVORE1);
-        // 食草生物2型
-        ChestCavityTypeManager.registerEntity(EntityType.SNIFFER, ChestCavityTypeManager.HERBIVORE2);
         // 食草生物3型
         ChestCavityTypeManager.registerEntity(EntityType.COW, ChestCavityTypeManager.HERBIVORE3);
         ChestCavityTypeManager.registerEntity(EntityType.MOOSHROOM, ChestCavityTypeManager.HERBIVORE3);
@@ -144,15 +140,22 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.PIG, ChestCavityTypeManager.ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.CAMEL, ChestCavityTypeManager.ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.PANDA, ChestCavityTypeManager.ANIMAL);
-        ChestCavityTypeManager.registerEntity(EntityType.POLAR_BEAR, ChestCavityTypeManager.ANIMAL);
-        ChestCavityTypeManager.registerEntity(EntityType.HOGLIN, ChestCavityTypeManager.ANIMAL);
+        // 力量型动物
+        ChestCavityTypeManager.registerEntity(EntityType.POLAR_BEAR, ChestCavityTypeManager.BRUTE_ANIMAL);
+        ChestCavityTypeManager.registerEntity(EntityType.SNIFFER, ChestCavityTypeManager.BRUTE_ANIMAL);
+        // 疣猪兽
+        ChestCavityTypeManager.registerEntity(EntityType.HOGLIN, ChestCavityTypeManager.HOGLIN);
+        // 速度型动物
+        ChestCavityTypeManager.registerEntity(EntityType.HORSE, ChestCavityTypeManager.SWIFT_ANIMAL);
+        ChestCavityTypeManager.registerEntity(EntityType.CAT, ChestCavityTypeManager.SWIFT_ANIMAL);
+        ChestCavityTypeManager.registerEntity(EntityType.OCELOT, ChestCavityTypeManager.SWIFT_ANIMAL);
+        // 弹跳型动物
+        ChestCavityTypeManager.registerEntity(EntityType.GOAT, ChestCavityTypeManager.LEAPING_ANIMAL);
         // 海龟
         ChestCavityTypeManager.registerEntity(EntityType.TURTLE, ChestCavityTypeManager.TURTLE);
         // 兔子
         ChestCavityTypeManager.registerEntity(EntityType.RABBIT, ChestCavityTypeManager.RABBIT);
         // 小型食肉动物
-        ChestCavityTypeManager.registerEntity(EntityType.CAT, ChestCavityTypeManager.SMALL_CARNIVORE);
-        ChestCavityTypeManager.registerEntity(EntityType.OCELOT, ChestCavityTypeManager.SMALL_CARNIVORE);
         ChestCavityTypeManager.registerEntity(EntityType.FOX, ChestCavityTypeManager.SMALL_CARNIVORE);
         // 羊驼
         ChestCavityTypeManager.registerEntity(EntityType.LLAMA, ChestCavityTypeManager.LLAMA);

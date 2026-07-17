@@ -15,6 +15,7 @@ import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -1069,8 +1070,8 @@ public class ChestCavityTypeManager {
             if (entity instanceof PolarBear || entity instanceof Sniffer) {
                 return registerEntity(entityType, BRUTE_ANIMAL);
             }
-            // 速度型动物（猫/豹猫，Animal 子类，需在动物检测之前）
-            if (entity instanceof Cat || entity instanceof Ocelot) {
+            // 速度型动物（猫/豹猫/马，Animal 子类，需在动物检测之前）
+            if (entity instanceof Cat || entity instanceof Ocelot || entity instanceof Horse) {
                 return registerEntity(entityType, SWIFT_ANIMAL);
             }
             // 山羊（Animal 子类，需在动物检测之前）
