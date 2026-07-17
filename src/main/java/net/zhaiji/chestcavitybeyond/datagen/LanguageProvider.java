@@ -742,6 +742,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE3, "Multi-stomached Herbivore");
         addChestCavityTypeName(ChestCavityTypeManager.LLAMA, "Llama");
         addChestCavityTypeName(ChestCavityTypeManager.CARNIVORE, "Carnivore");
+        addChestCavityTypeName(ChestCavityTypeManager.BRUTE_ANIMAL, "Brute Animal");
+        addChestCavityTypeName(ChestCavityTypeManager.HOGLIN, "Hoglin");
+        addChestCavityTypeName(ChestCavityTypeManager.SWIFT_ANIMAL, "Swift Animal");
+        addChestCavityTypeName(ChestCavityTypeManager.LEAPING_ANIMAL, "Leaping Animal");
         addChestCavityTypeName(ChestCavityTypeManager.SHULKER, "Shulker");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_ANIMAL, "Small Animal");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_HERBIVORE, "Small Herbivore");
@@ -1486,6 +1490,10 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE3, "多胃食草动物");
         addChestCavityTypeName(ChestCavityTypeManager.LLAMA, "羊驼");
         addChestCavityTypeName(ChestCavityTypeManager.CARNIVORE, "食肉动物");
+        addChestCavityTypeName(ChestCavityTypeManager.BRUTE_ANIMAL, "力量型动物");
+        addChestCavityTypeName(ChestCavityTypeManager.HOGLIN, "疣猪兽");
+        addChestCavityTypeName(ChestCavityTypeManager.SWIFT_ANIMAL, "速度型动物");
+        addChestCavityTypeName(ChestCavityTypeManager.LEAPING_ANIMAL, "弹跳型动物");
         addChestCavityTypeName(ChestCavityTypeManager.SHULKER, "潜影贝");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_ANIMAL, "小型动物");
         addChestCavityTypeName(ChestCavityTypeManager.SMALL_HERBIVORE, "小型食草动物");

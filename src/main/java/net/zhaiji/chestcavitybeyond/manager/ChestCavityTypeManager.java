@@ -8,10 +8,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Ocelot;
+import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -22,6 +27,7 @@ import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.WitherSkeleton;
@@ -154,6 +160,43 @@ public class ChestCavityTypeManager {
         .setThirdRow(4, InitItem.CARNIVORE_STOMACH.get())
         .setThirdRow(5, InitItem.CARNIVORE_INTESTINE.get())
         .setThirdRow(6, InitItem.CARNIVORE_INTESTINE.get());
+
+    public static final ChestCavityType BRUTE_ANIMAL = register(ChestCavityBeyond.of("brute_animal"))
+        .copyWith(ANIMAL)
+        .setFirstRow(0, InitItem.BRUTE_MUSCLE.get())
+        .setFirstRow(8, InitItem.BRUTE_MUSCLE.get())
+        .setSecondRow(0, InitItem.BRUTE_MUSCLE.get())
+        .setSecondRow(8, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(0, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(1, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(7, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(8, InitItem.BRUTE_MUSCLE.get());
+
+    public static final ChestCavityType HOGLIN = register(ChestCavityBeyond.of("hoglin"))
+        .copyWith(BRUTE_ANIMAL)
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BRUTE_MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get());
+
+    public static final ChestCavityType SWIFT_ANIMAL = register(ChestCavityBeyond.of("swift_animal"))
+        .copyWith(ANIMAL)
+        .setFirstRow(0, InitItem.SWIFT_MUSCLE.get())
+        .setFirstRow(8, InitItem.SWIFT_MUSCLE.get())
+        .setSecondRow(0, InitItem.SWIFT_MUSCLE.get())
+        .setSecondRow(8, InitItem.SWIFT_MUSCLE.get())
+        .setThirdRow(0, InitItem.SWIFT_MUSCLE.get())
+        .setThirdRow(1, InitItem.SWIFT_MUSCLE.get())
+        .setThirdRow(7, InitItem.SWIFT_MUSCLE.get())
+        .setThirdRow(8, InitItem.SWIFT_MUSCLE.get());
+
+    public static final ChestCavityType LEAPING_ANIMAL = register(ChestCavityBeyond.of("leaping_animal"))
+        .copyWith(ANIMAL)
+        .setFirstRow(0, InitItem.LEAPING_MUSCLE.get())
+        .setFirstRow(8, InitItem.LEAPING_MUSCLE.get())
+        .setSecondRow(0, InitItem.LEAPING_MUSCLE.get())
+        .setSecondRow(8, InitItem.LEAPING_MUSCLE.get())
+        .setThirdRow(0, InitItem.LEAPING_MUSCLE.get())
+        .setThirdRow(1, InitItem.LEAPING_MUSCLE.get())
+        .setThirdRow(7, InitItem.LEAPING_MUSCLE.get())
+        .setThirdRow(8, InitItem.LEAPING_MUSCLE.get());
 
     public static final ChestCavityType SHULKER = register(ChestCavityBeyond.of("shulker"))
         .copyWith(ANIMAL)
@@ -1017,6 +1060,22 @@ public class ChestCavityTypeManager {
             // 羊驼（Animal 子类，需在动物检测之前）
             if (entity instanceof Llama) {
                 return registerEntity(entityType, LLAMA);
+            }
+            // 疣猪兽（Animal 子类，需在动物检测之前）
+            if (entity instanceof Hoglin) {
+                return registerEntity(entityType, HOGLIN);
+            }
+            // 力量型动物（北极熊/嗅探兽，Animal 子类，需在动物检测之前）
+            if (entity instanceof PolarBear || entity instanceof Sniffer) {
+                return registerEntity(entityType, BRUTE_ANIMAL);
+            }
+            // 速度型动物（猫/豹猫，Animal 子类，需在动物检测之前）
+            if (entity instanceof Cat || entity instanceof Ocelot) {
+                return registerEntity(entityType, SWIFT_ANIMAL);
+            }
+            // 山羊（Animal 子类，需在动物检测之前）
+            if (entity instanceof Goat) {
+                return registerEntity(entityType, LEAPING_ANIMAL);
             }
             // 鱼类（AbstractFish 子类，含蝌蚪等）
             if (entity instanceof AbstractFish) {

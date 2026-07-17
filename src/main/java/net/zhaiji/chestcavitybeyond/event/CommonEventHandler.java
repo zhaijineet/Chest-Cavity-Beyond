@@ -345,6 +345,7 @@ public class CommonEventHandler {
      * @param event 效果能否适用事件
      */
     public static void handlerMobEffectEvent$Applicable(MobEffectEvent.Applicable event) {
+        if (event.getEntity().level().isClientSide()) return;
         ChestCavityData data = ChestCavityUtil.getData(event.getEntity());
         double detoxification = data.getDifferenceValue(InitAttribute.DETOXIFICATION);
         double withered = data.getDifferenceValue(InitAttribute.WITHERED);
