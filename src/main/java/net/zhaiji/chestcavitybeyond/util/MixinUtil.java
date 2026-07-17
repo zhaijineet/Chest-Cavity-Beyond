@@ -337,14 +337,14 @@ public class MixinUtil {
                 double diffWaterBreath = currWaterBreath - defWaterBreath;
                 double diffRecovery = currRecovery - defRecovery;
                 double factor;
-                if (isAir && defWaterBreath > 0) {
-                    // 是水生生物且在空气中，检测默认水下呼吸和当前呼吸回复的差值
-                    factor = (currRecovery - defWaterBreath);
-                } else if (!isAir && defRecovery > 0) {
-                    // 是陆生生物且在水中，检测默认默认呼吸回复和当前水下呼吸的差值
-                    factor = (currWaterBreath - defRecovery);
+                if (isAir && defWaterBreath > 0 && defRecovery <= 0) {
+                    // 纯水生（默认无空气呼吸）在空气中呼吸，跨界效率取决于空气呼吸能力与水下呼吸需求的对比
+                    factor = currRecovery - defWaterBreath;
+                } else if (!isAir && defRecovery > 0 && defWaterBreath <= 0) {
+                    // 纯陆生（默认无水下呼吸）在水中呼吸（药水/器官修改），跨界效率取决于水下呼吸能力与空气呼吸需求的对比
+                    factor = currWaterBreath - defRecovery;
                 } else {
-                    // 陆上用呼吸效率，水中用水下呼吸
+                    // 两栖型或同环境原生呼吸：与自身默认值对比
                     factor = isAir ? diffRecovery : diffWaterBreath;
                 }
                 if (factor != 0) {
