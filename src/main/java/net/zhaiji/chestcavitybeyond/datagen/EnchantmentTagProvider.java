@@ -18,7 +18,7 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(EnchantmentTags.NON_TREASURE)
+        tag(EnchantmentTags.IN_ENCHANTING_TABLE)
                 .add(
                         InitEnchantment.TELEOPERATION,
                         InitEnchantment.ADVANCED_SURGERY,
@@ -30,13 +30,5 @@ public class EnchantmentTagProvider extends EnchantmentTagsProvider {
                 );
         tag(EnchantmentTags.TREASURE)
                 .add(InitEnchantment.PRIMAL_REVERSION);
-//        tag(EnchantmentTags.TRADEABLE)
-//                .add(
-//                        InitEnchantment.TELEOPERATION,
-//                        InitEnchantment.ADVANCED_SURGERY,
-//                        InitEnchantment.SAFE_SURGERY,
-//                        InitEnchantment.PRUDENT_SURGERY
-//                        InitEnchantment.HYDRAULIC_CLAMP
-//                );
     }
 }

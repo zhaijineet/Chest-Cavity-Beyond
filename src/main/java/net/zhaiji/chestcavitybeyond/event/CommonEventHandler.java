@@ -135,7 +135,7 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.SHEEP, ChestCavityTypeManager.HERBIVORE3);
         // 食肉动物
         ChestCavityTypeManager.registerEntity(EntityType.WOLF, ChestCavityTypeManager.CARNIVORE);
-        ChestCavityTypeManager.registerEntity(EntityType.RAVAGER, ChestCavityTypeManager.CARNIVORE);
+        ChestCavityTypeManager.registerEntity(EntityType.RAVAGER, ChestCavityTypeManager.RAVAGER);
         // 动物
         ChestCavityTypeManager.registerEntity(EntityType.PIG, ChestCavityTypeManager.ANIMAL);
         ChestCavityTypeManager.registerEntity(EntityType.CAMEL, ChestCavityTypeManager.ANIMAL);

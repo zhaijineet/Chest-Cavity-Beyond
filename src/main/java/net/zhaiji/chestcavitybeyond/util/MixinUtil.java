@@ -310,6 +310,13 @@ public class MixinUtil {
      * @param refillAirAmount  默认回复的氧气量
      */
     public static void onLivingBreathe(LivingEntity entity, int consumeAirAmount, int refillAirAmount) {
+        // TODO 待定：是否修复恶魂等生物在熔岩中溺死的问题，尚未决定，但我个人认为不应该修复，先写个TODO记录一下，别忘记了
+        //   背景：熔岩等不可溺水流体被当作水下环境，导致这些生物在熔岩中溺死
+        //   当前 isAir 仅判断空气流体，熔岩(canDrown=false)落入下方器官逻辑，无 WATER_BREATH 即溺水
+        //   修复方法：在下方判断后补一道防线——非水流体若 canDrownInFluidType 返回 false 则视为可呼吸
+        //   注意不能直接对水用 canDrownInFluidType：它对水返回 !canBreatheUnderwater()，
+        //   会让守卫者等水生生物被取走鳃后仍不溺水，破坏器官呼吸设计
+        //   正确条件：getEyeInFluidType() != NeoForgeMod.WATER_TYPE.value() && !canDrownInFluidType(getEyeInFluidType())
         boolean isAir = entity.getEyeInFluidType().isAir() || entity.level()
             .getBlockState(BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ()))
             .is(Blocks.BUBBLE_COLUMN);

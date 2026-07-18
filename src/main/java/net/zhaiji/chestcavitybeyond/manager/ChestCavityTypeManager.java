@@ -12,8 +12,11 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.animal.horse.Llama;
@@ -28,8 +31,11 @@ import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
@@ -161,6 +167,17 @@ public class ChestCavityTypeManager {
         .setThirdRow(4, InitItem.CARNIVORE_STOMACH.get())
         .setThirdRow(5, InitItem.CARNIVORE_INTESTINE.get())
         .setThirdRow(6, InitItem.CARNIVORE_INTESTINE.get());
+
+    public static final ChestCavityType RAVAGER = register(ChestCavityBeyond.of("ravager"))
+        .copyWith(CARNIVORE)
+        .setFirstRow(0, InitItem.BRUTE_MUSCLE.get())
+        .setFirstRow(8, InitItem.BRUTE_MUSCLE.get())
+        .setSecondRow(0, InitItem.BRUTE_MUSCLE.get())
+        .setSecondRow(8, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(0, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(1, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(7, InitItem.BRUTE_MUSCLE.get())
+        .setThirdRow(8, InitItem.BRUTE_MUSCLE.get());
 
     public static final ChestCavityType BRUTE_ANIMAL = register(ChestCavityBeyond.of("brute_animal"))
         .copyWith(ANIMAL)
@@ -1010,6 +1027,10 @@ public class ChestCavityTypeManager {
             if (entity instanceof Spider) {
                 return registerEntity(entityType, SPIDER);
             }
+            // 节肢生物
+            if (entityType.is(EntityTypeTags.ARTHROPOD)) {
+                return registerEntity(entityType, ARTHROPOD);
+            }
             // 亡灵
             if (entity instanceof Zombie || entityType.is(EntityTypeTags.UNDEAD)) {
                 return registerEntity(entityType, UNDEAD);
@@ -1021,6 +1042,10 @@ public class ChestCavityTypeManager {
             // 烈焰人
             if (entity instanceof Blaze) {
                 return registerEntity(entityType, BLAZE);
+            }
+            // 劫掠兽
+            if (entity instanceof Ravager) {
+                return registerEntity(entityType, RAVAGER);
             }
             // 末影人
             if (entity instanceof EnderMan) {
@@ -1054,6 +1079,14 @@ public class ChestCavityTypeManager {
             if (entity instanceof Breeze) {
                 return registerEntity(entityType, BREEZE);
             }
+            // 岩浆怪（Slime 子类，需在史莱姆检测之前）
+            if (entity instanceof MagmaCube) {
+                return registerEntity(entityType, MAGMA_CUBE);
+            }
+            // 史莱姆
+            if (entity instanceof Slime) {
+                return registerEntity(entityType, SLIME);
+            }
             // 监守者
             if (entity instanceof Warden) {
                 return registerEntity(entityType, WARDEN);
@@ -1077,6 +1110,18 @@ public class ChestCavityTypeManager {
             // 山羊（Animal 子类，需在动物检测之前）
             if (entity instanceof Goat) {
                 return registerEntity(entityType, LEAPING_ANIMAL);
+            }
+            // 海龟（Animal 子类，需在动物检测之前）
+            if (entity instanceof Turtle) {
+                return registerEntity(entityType, TURTLE);
+            }
+            // 青蛙（Animal 子类，需在动物检测之前）
+            if (entity instanceof Frog) {
+                return registerEntity(entityType, FROG);
+            }
+            // 兔子（Animal 子类，需在动物检测之前）
+            if (entity instanceof Rabbit) {
+                return registerEntity(entityType, RABBIT);
             }
             // 鱼类（AbstractFish 子类，含蝌蚪等）
             if (entity instanceof AbstractFish) {

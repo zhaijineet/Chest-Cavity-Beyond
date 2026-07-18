@@ -2,11 +2,16 @@ package net.zhaiji.chestcavitybeyond.client.event;
 
 import net.neoforged.bus.api.IEventBus;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondClientConfig;
+import net.zhaiji.chestcavitybeyond.compat.CompatManager;
+import net.zhaiji.chestcavitybeyond.compat.jei.JeiCompat;
 
 public class ClientEventManager {
     public static void init(IEventBus modBus, IEventBus gameBus) {
         ClientEventManager.modBusListener(modBus);
         ClientEventManager.gameBusListener(gameBus);
+        if (CompatManager.JEI_LOADED) {
+            JeiCompat.init(modBus, gameBus);
+        }
     }
 
     public static void modBusListener(IEventBus modBus) {
