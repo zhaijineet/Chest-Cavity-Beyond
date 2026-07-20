@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.AttributeDisplay;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
@@ -477,6 +478,79 @@ public class AttributeDisplayManager {
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.CRYSTALLIZATION),
                     TooltipUtil.formatAttributeValue(healPerSec)
+                );
+            }
+        );
+        register(
+            InitAttribute.LAVA_SWIM_SPEED, 0, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.LAVA_SWIM_SPEED);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.LAVA_SWIM_SPEED),
+                    TooltipUtil.formatAttributeValue(curr)
+                );
+            }
+        );
+        register(
+            InitAttribute.WATER_WEAKNESS, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.WATER_WEAKNESS);
+                double reductionPercent = 100 - 100 / (1 + diff * 0.1);
+                return Component.translatable(
+                    getValueEffectKey(InitAttribute.WATER_WEAKNESS),
+                    TooltipUtil.formatAttributeValue(reductionPercent)
+                );
+            }
+        );
+
+        register(
+            NeoForgeMod.SWIM_SPEED, 0, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(NeoForgeMod.SWIM_SPEED);
+                double bonusPercent = (curr - 1) * 100;
+                return Component.translatable(
+                    getValueEffectKey(NeoForgeMod.SWIM_SPEED),
+                    TooltipUtil.formatAttributeValue(bonusPercent)
+                );
+            }
+        );
+        register(Attributes.LUCK);
+        register(
+            Attributes.KNOCKBACK_RESISTANCE, 0, entity -> {
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(Attributes.KNOCKBACK_RESISTANCE);
+                return Component.translatable(
+                    getValueEffectKey(Attributes.KNOCKBACK_RESISTANCE),
+                    TooltipUtil.formatAttributeValue(curr * 100)
+                );
+            }
+        );
+        register(
+            Attributes.GRAVITY, 0, entity -> {
+                ChestCavityData gravityData = ChestCavityUtil.getData(entity);
+                double curr = gravityData.getCurrentValue(Attributes.GRAVITY);
+                if (curr <= 0) {
+                    return Component.translatable(getValueEffectKey(Attributes.GRAVITY) + ".flight");
+                }
+                double def = gravityData.getDefaultValue(Attributes.GRAVITY);
+                double percent = def != 0 ? (curr - def) / def * 100 : 0;
+                return Component.translatable(
+                    getValueEffectKey(Attributes.GRAVITY),
+                    TooltipUtil.formatAttributeValue(percent)
+                );
+            }
+        );
+        register(
+            Attributes.ENTITY_INTERACTION_RANGE, 0, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(Attributes.ENTITY_INTERACTION_RANGE);
+                return Component.translatable(
+                    getValueEffectKey(Attributes.ENTITY_INTERACTION_RANGE),
+                    TooltipUtil.formatAttributeValue(diff)
+                );
+            }
+        );
+        register(
+            Attributes.BLOCK_INTERACTION_RANGE, 0, entity -> {
+                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(Attributes.BLOCK_INTERACTION_RANGE);
+                return Component.translatable(
+                    getValueEffectKey(Attributes.BLOCK_INTERACTION_RANGE),
+                    TooltipUtil.formatAttributeValue(diff)
                 );
             }
         );

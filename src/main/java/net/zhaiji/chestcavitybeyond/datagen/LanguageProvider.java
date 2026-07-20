@@ -7,8 +7,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyond;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySize;
 import net.zhaiji.chestcavitybeyond.api.ChestCavityType;
@@ -137,6 +139,18 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.FIREPROOF_APPENDIX, "Fireproof Appendix");
         addItem(InitItem.FIREPROOF_RIB, "Fireproof Rib");
         addItem(InitItem.FIREPROOF_MUSCLE, "Fireproof Muscle");
+
+        addItem(InitItem.BASALT_HEART, "Basalt Heart");
+        addItem(InitItem.BASALT_LUNG, "Basalt Lung");
+        addItem(InitItem.BASALT_SPINE, "Basalt Spine");
+        addItem(InitItem.BASALT_STOMACH, "Basalt Stomach");
+        addItem(InitItem.BASALT_INTESTINE, "Basalt Intestine");
+        addItem(InitItem.BASALT_KIDNEY, "Basalt Kidney");
+        addItem(InitItem.BASALT_SPLEEN, "Basalt Spleen");
+        addItem(InitItem.BASALT_LIVER, "Basalt Liver");
+        addItem(InitItem.BASALT_APPENDIX, "Basalt Appendix");
+        addItem(InitItem.BASALT_RIB, "Basalt Rib");
+        addItem(InitItem.BASALT_MUSCLE, "Basalt Muscle");
 
         addItem(InitItem.ENDER_HEART, "Ender Heart");
         addItem(InitItem.ENDER_LUNG, "Ender Lung");
@@ -293,6 +307,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.VOMIT_FIREBALL, "Vomit Fireball");
         addAttribute(InitAttribute.GHASTLY, "Ghastly");
         addAttribute(InitAttribute.CRYSTALLIZATION, "Crystallization");
+        addAttribute(InitAttribute.LAVA_SWIM_SPEED, "Lava Swim-Speed");
+        addAttribute(InitAttribute.WATER_WEAKNESS, "Water Weakness");
 
         addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
@@ -674,6 +690,14 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Only takes effect near End Crystals",
             "Continuously restores health; players additionally restore food and saturation, scaling with Crystallization value"
         );
+        addAttributeDescription(
+            InitAttribute.LAVA_SWIM_SPEED,
+            "Increases horizontal and vertical movement speed in lava"
+        );
+        addAttributeDescription(
+            InitAttribute.WATER_WEAKNESS,
+            "Reduces mining speed and attack damage while in water"
+        );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "Max Health %s");
         addAttributeValueEffect(InitAttribute.NERVES, "Attack Speed %s%% | Move Speed %s%%");
@@ -709,6 +733,27 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeValueEffect(InitAttribute.LAUNCH, "Knockup Force %s");
         addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "Fireball Count %s");
         addAttributeValueEffect(InitAttribute.FURNACE_POWER, "Restores 1 food + 1 saturation every %ss, Effect Lv%s, Max %ss");
+        addAttributeValueEffect(InitAttribute.LAVA_SWIM_SPEED, "Lava movement force %sx");
+        addAttributeValueEffect(InitAttribute.WATER_WEAKNESS, "Mining speed/Attack damage reduction %s%% in water");
+
+        addAttributeDescription(NeoForgeMod.SWIM_SPEED, "Increases movement speed in water");
+        addAttributeValueEffect(NeoForgeMod.SWIM_SPEED, "Swim Speed +%s%%");
+
+        addAttributeDescription(Attributes.LUCK, "Affects loot table rolls and quality");
+        addAttributeValueEffect(Attributes.LUCK, "Luck %s");
+
+        addAttributeDescription(Attributes.KNOCKBACK_RESISTANCE, "Reduces knockback taken");
+        addAttributeValueEffect(Attributes.KNOCKBACK_RESISTANCE, "Knockback Resistance %s%%");
+
+        addAttributeDescription(Attributes.GRAVITY, "Affects falling acceleration", "At 0 or below, enables free flight and nullifies fall damage");
+        addAttributeValueEffect(Attributes.GRAVITY, "Gravity %s%%");
+        add(AttributeDisplayManager.getValueEffectKey(Attributes.GRAVITY) + ".flight", "Zero gravity, free flight enabled");
+
+        addAttributeDescription(Attributes.ENTITY_INTERACTION_RANGE, "Increases entity interaction distance");
+        addAttributeValueEffect(Attributes.ENTITY_INTERACTION_RANGE, "Entity Reach +%s");
+
+        addAttributeDescription(Attributes.BLOCK_INTERACTION_RANGE, "Increases block interaction distance");
+        addAttributeValueEffect(Attributes.BLOCK_INTERACTION_RANGE, "Block Reach +%s");
 
         add(ItemTagManager.ORGANS, "Organs");
         add(ItemTagManager.HEART, "Hearts");
@@ -756,6 +801,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.SLIME, "Slime");
         addChestCavityTypeName(ChestCavityTypeManager.MAGMA_CUBE, "Magma Cube");
         addChestCavityTypeName(ChestCavityTypeManager.FIREPROOF, "Fireproof");
+        addChestCavityTypeName(ChestCavityTypeManager.BASALT, "Basalt");
         addChestCavityTypeName(ChestCavityTypeManager.GHAST, "Ghast");
         addChestCavityTypeName(ChestCavityTypeManager.ENDER, "Ender");
         addChestCavityTypeName(ChestCavityTypeManager.ENDER_DRAGON, "Ender Dragon");
@@ -885,6 +931,18 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.FIREPROOF_APPENDIX, "抗火生物阑尾");
         addItem(InitItem.FIREPROOF_RIB, "抗火生物肋骨");
         addItem(InitItem.FIREPROOF_MUSCLE, "抗火生物肌肉");
+
+        addItem(InitItem.BASALT_HEART, "玄武岩心脏");
+        addItem(InitItem.BASALT_LUNG, "玄武岩肺脏");
+        addItem(InitItem.BASALT_SPINE, "玄武岩脊柱");
+        addItem(InitItem.BASALT_STOMACH, "玄武岩胃");
+        addItem(InitItem.BASALT_INTESTINE, "玄武岩肠子");
+        addItem(InitItem.BASALT_KIDNEY, "玄武岩肾脏");
+        addItem(InitItem.BASALT_SPLEEN, "玄武岩脾脏");
+        addItem(InitItem.BASALT_LIVER, "玄武岩肝脏");
+        addItem(InitItem.BASALT_APPENDIX, "玄武岩阑尾");
+        addItem(InitItem.BASALT_RIB, "玄武岩肋骨");
+        addItem(InitItem.BASALT_MUSCLE, "玄武岩肌肉");
 
         addItem(InitItem.ENDER_HEART, "末影心脏");
         addItem(InitItem.ENDER_LUNG, "末影肺脏");
@@ -1041,6 +1099,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.VOMIT_FIREBALL, "呕火");
         addAttribute(InitAttribute.GHASTLY, "可怖");
         addAttribute(InitAttribute.CRYSTALLIZATION, "结晶化");
+        addAttribute(InitAttribute.LAVA_SWIM_SPEED, "熔岩游泳速度");
+        addAttribute(InitAttribute.WATER_WEAKNESS, "水虚弱");
 
         addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 
@@ -1267,7 +1327,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("commands.chestcavitybeyond.resetorgans.success.single", "已将%s的胸腔器官重置为默认");
         add("commands.chestcavitybeyond.resetorgans.success.multiple", "已将%s个实体的胸腔器官重置为默认");
 
-        add("commands.chestcavitybeyond.attributes.header", "—— %s的分析报告 ——");
+        add("commands.chestcavitybeyond.attributes.header", "——%s的分析报告——");
         add("commands.chestcavitybeyond.attributes.no_description", "暂无详细描述");
         add("commands.chestcavitybeyond.attributes.failed.not_player", "属性查询指令只能由玩家执行");
 
@@ -1342,15 +1402,15 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             InitAttribute.FIRE_RESISTANCE,
             "减少受到的火焰伤害",
             "伤害越高，减伤比例越低",
-            "≥ %s 时免疫热方块（岩浆块/营火）伤害",
-            "≥ %s 时免疫火焰/燃烧伤害，并清除着火状态",
-            "≥ %s 时免疫岩浆伤害"
+            "≥%s时免疫热方块（岩浆块/营火）伤害",
+            "≥%s时免疫火焰/燃烧伤害，并清除着火状态",
+            "≥%s时免疫岩浆伤害"
         );
         addAttributeDescription(
             InitAttribute.FROST_RESISTANCE,
             "减少受到的冰冻伤害",
             "伤害越高，减伤比例越低",
-            "≥ %s 时免疫冰冻伤害，并清除冰冻进度"
+            "≥%s时免疫冰冻伤害，并清除冰冻进度"
         );
         addAttributeDescription(
             InitAttribute.WATER_ALLERGY,
@@ -1439,41 +1499,70 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "需要靠近末影水晶才能生效",
             "持续恢复生命值，玩家额外恢复饥饿值与饱和度，恢复量随结晶化属性值提升"
         );
+        addAttributeDescription(
+            InitAttribute.LAVA_SWIM_SPEED,
+            "提升在熔岩中的水平与垂直移动速度"
+        );
+        addAttributeDescription(
+            InitAttribute.WATER_WEAKNESS,
+            "在水中时降低挖掘速度和攻击伤害"
+        );
 
-        addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值 %s");
-        addAttributeValueEffect(InitAttribute.NERVES, "攻击速度 %s%% | 移动速度 %s%%");
+        addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值%s");
+        addAttributeValueEffect(InitAttribute.NERVES, "攻击速度%s%% | 移动速度%s%%");
         addAttributeValueEffect(InitAttribute.DEFENSE, "减伤比例 ~%s%%（以10点伤害计）");
-        addAttributeValueEffect(InitAttribute.ENDURANCE, "饥饿值消耗 %s%%");
-        addAttributeValueEffect(InitAttribute.STRENGTH, "近战伤害 %s%%");
-        addAttributeValueEffect(InitAttribute.SPEED, "移动速度 %s%%");
-        addAttributeValueEffect(InitAttribute.DIGESTION, "食物饥饿值 %s%%");
-        addAttributeValueEffect(InitAttribute.NUTRITION, "食物饱和度 %s%%");
-        addAttributeValueEffect(InitAttribute.METABOLISM, "回血速率 %s%%");
-        addAttributeValueEffect(InitAttribute.BREATH_CAPACITY, "氧气消耗 %s%%");
-        addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "空气回复 %s%%");
-        addAttributeValueEffect(InitAttribute.WATER_BREATH, "水中回复 %s%%");
-        addAttributeValueEffect(InitAttribute.DETOXIFICATION, "有害效果持续时间 %s%%");
+        addAttributeValueEffect(InitAttribute.ENDURANCE, "饥饿值消耗%s%%");
+        addAttributeValueEffect(InitAttribute.STRENGTH, "近战伤害%s%%");
+        addAttributeValueEffect(InitAttribute.SPEED, "移动速度%s%%");
+        addAttributeValueEffect(InitAttribute.DIGESTION, "食物饥饿值%s%%");
+        addAttributeValueEffect(InitAttribute.NUTRITION, "食物饱和度%s%%");
+        addAttributeValueEffect(InitAttribute.METABOLISM, "回血速率%s%%");
+        addAttributeValueEffect(InitAttribute.BREATH_CAPACITY, "氧气消耗%s%%");
+        addAttributeValueEffect(InitAttribute.BREATH_RECOVERY, "空气回复%s%%");
+        addAttributeValueEffect(InitAttribute.WATER_BREATH, "水中回复%s%%");
+        addAttributeValueEffect(InitAttribute.DETOXIFICATION, "有害效果持续时间%s%%");
         addAttributeValueEffect(InitAttribute.FILTRATION, "中毒效果Lv%s，持续%s秒");
         add(AttributeDisplayManager.getValueEffectKey(InitAttribute.FILTRATION) + ".safe", "血液过滤正常，无中毒风险");
-        addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "肉类饥饿值 %s%%");
-        addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "肉类饱和度 %s%%");
-        addAttributeValueEffect(InitAttribute.HERBIVOROUS_DIGESTION, "植物饥饿值 %s%%");
-        addAttributeValueEffect(InitAttribute.HERBIVOROUS_NUTRITION, "植物饱和度 %s%%");
-        addAttributeValueEffect(InitAttribute.SCAVENGER_DIGESTION, "腐肉饥饿值 %s%%");
-        addAttributeValueEffect(InitAttribute.SCAVENGER_NUTRITION, "腐肉饱和度 %s%%");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_DIGESTION, "肉类饥饿值%s%%");
+        addAttributeValueEffect(InitAttribute.CARNIVOROUS_NUTRITION, "肉类饱和度%s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_DIGESTION, "植物饥饿值%s%%");
+        addAttributeValueEffect(InitAttribute.HERBIVOROUS_NUTRITION, "植物饱和度%s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_DIGESTION, "腐肉饥饿值%s%%");
+        addAttributeValueEffect(InitAttribute.SCAVENGER_NUTRITION, "腐肉饱和度%s%%");
         addAttributeValueEffect(InitAttribute.FIRE_RESISTANCE, "火焰减伤比例 ~%s%%（以10点伤害计）");
         addAttributeValueEffect(InitAttribute.FROST_RESISTANCE, "冰霜减伤比例 ~%s%%（以10点伤害计）");
-        addAttributeValueEffect(InitAttribute.ENDER, "传送范围 %s");
-        addAttributeValueEffect(InitAttribute.LEAPING, "跳跃高度 %s");
-        addAttributeValueEffect(InitAttribute.EXPLOSIVE, "爆炸威力 %s");
-        addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "触发间隔 %s秒");
-        addAttributeValueEffect(InitAttribute.IRON_REPAIR, "铁锭回复 %s");
+        addAttributeValueEffect(InitAttribute.ENDER, "传送范围%s");
+        addAttributeValueEffect(InitAttribute.LEAPING, "跳跃高度%s");
+        addAttributeValueEffect(InitAttribute.EXPLOSIVE, "爆炸威力%s");
+        addAttributeValueEffect(InitAttribute.PHOTOSYNTHESIS, "触发间隔%s秒");
+        addAttributeValueEffect(InitAttribute.IRON_REPAIR, "铁锭回复%s");
         addAttributeValueEffect(InitAttribute.WITHERED, "凋零持续%s秒，效果等级Lv%s，凋零持续时间%s%%");
-        addAttributeValueEffect(InitAttribute.GHASTLY, "火球威力 %s");
+        addAttributeValueEffect(InitAttribute.GHASTLY, "火球威力%s");
         addAttributeValueEffect(InitAttribute.CRYSTALLIZATION, "靠近末影水晶时每秒回复%s点生命值");
-        addAttributeValueEffect(InitAttribute.LAUNCH, "击飞力度 %s");
-        addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "火球数量 %s");
+        addAttributeValueEffect(InitAttribute.LAUNCH, "击飞力度%s");
+        addAttributeValueEffect(InitAttribute.VOMIT_FIREBALL, "火球数量%s");
         addAttributeValueEffect(InitAttribute.FURNACE_POWER, "每%s秒恢复1饥饿值+1饱和度，效果等级Lv%s，最大持续%s秒");
+        addAttributeValueEffect(InitAttribute.LAVA_SWIM_SPEED, "熔岩移动力%s倍");
+        addAttributeValueEffect(InitAttribute.WATER_WEAKNESS, "水中挖掘速度/攻击伤害降低%s%%");
+
+        addAttributeDescription(NeoForgeMod.SWIM_SPEED, "提升在水中的移动速度");
+        addAttributeValueEffect(NeoForgeMod.SWIM_SPEED, "游泳速度+%s%%");
+
+        addAttributeDescription(Attributes.LUCK, "影响战利品表的掉落与品质");
+        addAttributeValueEffect(Attributes.LUCK, "幸运%s");
+
+        addAttributeDescription(Attributes.KNOCKBACK_RESISTANCE, "减少受到的击退效果");
+        addAttributeValueEffect(Attributes.KNOCKBACK_RESISTANCE, "击退抗性%s%%");
+
+        addAttributeDescription(Attributes.GRAVITY, "影响下落速度", "降至0及以下时可自由飞行且免疫坠落伤害");
+        addAttributeValueEffect(Attributes.GRAVITY, "重力%s%%");
+        add(AttributeDisplayManager.getValueEffectKey(Attributes.GRAVITY) + ".flight", "无重力，可自由飞行");
+
+        addAttributeDescription(Attributes.ENTITY_INTERACTION_RANGE, "增加可交互的实体距离");
+        addAttributeValueEffect(Attributes.ENTITY_INTERACTION_RANGE, "实体交互距离+%s");
+
+        addAttributeDescription(Attributes.BLOCK_INTERACTION_RANGE, "增加可交互的方块距离");
+        addAttributeValueEffect(Attributes.BLOCK_INTERACTION_RANGE, "方块交互距离+%s");
 
         add("jei." + ChestCavityBeyond.MOD_ID + ".chest_cavity_type", "胸腔类型");
         add("jei." + ChestCavityBeyond.MOD_ID + ".need_breath", "需要呼吸");
@@ -1504,6 +1593,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.SLIME, "史莱姆");
         addChestCavityTypeName(ChestCavityTypeManager.MAGMA_CUBE, "岩浆怪");
         addChestCavityTypeName(ChestCavityTypeManager.FIREPROOF, "抗火生物");
+        addChestCavityTypeName(ChestCavityTypeManager.BASALT, "玄武岩生物");
         addChestCavityTypeName(ChestCavityTypeManager.GHAST, "恶魂");
         addChestCavityTypeName(ChestCavityTypeManager.ENDER, "末影");
         addChestCavityTypeName(ChestCavityTypeManager.ENDER_DRAGON, "末影龙");

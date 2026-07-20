@@ -379,6 +379,36 @@ public class ChestCavityTypeManager {
         .setThirdRow(7, InitItem.FIREPROOF_MUSCLE.get())
         .setThirdRow(8, InitItem.FIREPROOF_MUSCLE.get());
 
+    public static final ChestCavityType BASALT = register(ChestCavityBeyond.of("basalt"))
+        .setFirstRow(0, InitItem.BASALT_MUSCLE.get())
+        .setFirstRow(1, InitItem.BASALT_RIB.get())
+        .setFirstRow(2, InitItem.BASALT_APPENDIX.get())
+        .setFirstRow(3, InitItem.BASALT_LUNG.get())
+        .setFirstRow(4, InitItem.BASALT_HEART.get())
+        .setFirstRow(5, InitItem.BASALT_LUNG.get())
+        .setFirstRow(7, InitItem.BASALT_RIB.get())
+        .setFirstRow(8, InitItem.BASALT_MUSCLE.get())
+
+        .setSecondRow(0, InitItem.BASALT_MUSCLE.get())
+        .setSecondRow(1, InitItem.BASALT_RIB.get())
+        .setSecondRow(2, InitItem.BASALT_SPLEEN.get())
+        .setSecondRow(3, InitItem.BASALT_KIDNEY.get())
+        .setSecondRow(4, InitItem.BASALT_SPINE.get())
+        .setSecondRow(5, InitItem.BASALT_KIDNEY.get())
+        .setSecondRow(6, InitItem.BASALT_LIVER.get())
+        .setSecondRow(7, InitItem.BASALT_RIB.get())
+        .setSecondRow(8, InitItem.BASALT_MUSCLE.get())
+
+        .setThirdRow(0, InitItem.BASALT_MUSCLE.get())
+        .setThirdRow(1, InitItem.BASALT_MUSCLE.get())
+        .setThirdRow(2, InitItem.BASALT_INTESTINE.get())
+        .setThirdRow(3, InitItem.BASALT_INTESTINE.get())
+        .setThirdRow(4, InitItem.BASALT_STOMACH.get())
+        .setThirdRow(5, InitItem.BASALT_INTESTINE.get())
+        .setThirdRow(6, InitItem.BASALT_INTESTINE.get())
+        .setThirdRow(7, InitItem.BASALT_MUSCLE.get())
+        .setThirdRow(8, InitItem.BASALT_MUSCLE.get());
+
     public static final ChestCavityType GHAST = register(ChestCavityBeyond.of("ghast"))
         .copyWith(FIREPROOF)
         .setFirstRow(1, InitItem.GAS_SAC.get())

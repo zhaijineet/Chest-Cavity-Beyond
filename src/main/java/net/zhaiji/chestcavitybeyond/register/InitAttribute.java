@@ -81,15 +81,27 @@ public class InitAttribute {
     public static final Holder<Attribute> GHASTLY = registerRangedAttribute("ghastly");
     // 结晶化
     public static final Holder<Attribute> CRYSTALLIZATION = registerRangedAttribute("crystallization");
+    // 熔岩游泳速度
+    public static final Holder<Attribute> LAVA_SWIM_SPEED = registerRangedAttribute("lava_swim_speed", 1, 0, Integer.MAX_VALUE);
+    // 水虚弱
+    public static final Holder<Attribute> WATER_WEAKNESS = registerRangedAttribute("water_weakness");
 
     public static Holder<Attribute> registerRangedAttribute(String name) {
+        return registerRangedAttribute(name, 0);
+    }
+
+    public static Holder<Attribute> registerRangedAttribute(String name, double defaultValue) {
+        return registerRangedAttribute(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    public static Holder<Attribute> registerRangedAttribute(String name, double defaultValue, double minValue, double maxValue) {
         return ATTRIBUTE.register(
                 name,
                 () -> new RangedAttribute(
                         "attribute." + "chestcavitybeyond." + name,
-                        0,
-                        Integer.MIN_VALUE,
-                        Integer.MAX_VALUE
+                        defaultValue,
+                        minValue,
+                        maxValue
                 ).setSyncable(true)
         );
     }

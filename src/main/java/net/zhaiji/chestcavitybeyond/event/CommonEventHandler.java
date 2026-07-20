@@ -169,9 +169,10 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.ARMADILLO, ChestCavityTypeManager.SMALL_ANIMAL);
         // 美西螈
         ChestCavityTypeManager.registerEntity(EntityType.AXOLOTL, ChestCavityTypeManager.AQUATIC);
+        // 玄武岩生物
+        ChestCavityTypeManager.registerEntity(EntityType.PIGLIN_BRUTE, ChestCavityTypeManager.BASALT);
         // 抗火生物
         ChestCavityTypeManager.registerEntity(EntityType.PIGLIN, ChestCavityTypeManager.FIREPROOF);
-        ChestCavityTypeManager.registerEntity(EntityType.PIGLIN_BRUTE, ChestCavityTypeManager.FIREPROOF);
         ChestCavityTypeManager.registerEntity(EntityType.STRIDER, ChestCavityTypeManager.FIREPROOF);
         // 水生生物
         ChestCavityTypeManager.registerEntity(EntityType.SQUID, ChestCavityTypeManager.AQUATIC);
@@ -504,6 +505,10 @@ public class CommonEventHandler {
                 }
                 entity.addEffect(new MobEffectInstance(MobEffects.WITHER, duration, amplifier), attacker);
             }
+            double waterWeakness = attackerData.getDifferenceValue(InitAttribute.WATER_WEAKNESS);
+            if (waterWeakness > 0 && attacker.isInWater()) {
+                damage /= (1 + waterWeakness * 0.1);
+            }
         }
 
         // 当以上伤害类型都未检测通过时，应用防御减伤
@@ -602,6 +607,12 @@ public class CommonEventHandler {
             double factor = 1 + MathUtil.getLog10Scale(nerves);
             double value = nerves > 0 ? factor : 1 / factor;
             event.setNewSpeed((float) (event.getOriginalSpeed() * value));
+        }
+        if (event.getEntity().isInWater()) {
+            double waterWeakness = data.getDifferenceValue(InitAttribute.WATER_WEAKNESS);
+            if (waterWeakness > 0) {
+                event.setNewSpeed((float) (event.getNewSpeed() / (1 + waterWeakness * 0.1)));
+            }
         }
     }
 

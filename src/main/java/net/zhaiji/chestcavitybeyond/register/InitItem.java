@@ -453,7 +453,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.STRENGTH, 2)
             .addValueAttribute(InitAttribute.SPEED, 2)
-            .baseMultipliedAttribute(NeoForgeMod.SWIM_SPEED, 0.05)
+            .baseMultipliedAttribute(NeoForgeMod.SWIM_SPEED, 0.1)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, -0.5)
             .build()
     );
@@ -558,6 +558,131 @@ public class InitItem {
             .addValueAttribute(InitAttribute.STRENGTH, 1.5)
             .addValueAttribute(InitAttribute.SPEED, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .build()
+    );
+
+    // 玄武岩心脏
+    public static final Supplier<Item> BASALT_HEART = ITEM.register(
+        "basalt_heart",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.HEALTH, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩肺脏
+    public static final Supplier<Item> BASALT_LUNG = ITEM.register(
+        "basalt_lung",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.BREATH_RECOVERY, 2)
+            .addValueAttribute(InitAttribute.BREATH_CAPACITY, 2)
+            .addValueAttribute(InitAttribute.ENDURANCE, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩脊柱
+    public static final Supplier<Item> BASALT_SPINE = ITEM.register(
+        "basalt_spine",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.NERVES, 2)
+            .addValueAttribute(InitAttribute.DEFENSE, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩胃
+    public static final Supplier<Item> BASALT_STOMACH = ITEM.register(
+        "basalt_stomach",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.DIGESTION, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩肠子
+    public static final Supplier<Item> BASALT_INTESTINE = ITEM.register(
+        "basalt_intestine",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.NUTRITION, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩肾脏
+    public static final Supplier<Item> BASALT_KIDNEY = ITEM.register(
+        "basalt_kidney",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.FILTRATION, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩脾脏
+    public static final Supplier<Item> BASALT_SPLEEN = ITEM.register(
+        "basalt_spleen",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.METABOLISM, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩肝脏
+    public static final Supplier<Item> BASALT_LIVER = ITEM.register(
+        "basalt_liver",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩阑尾
+    public static final Supplier<Item> BASALT_APPENDIX = ITEM.register(
+        "basalt_appendix",
+        () -> Organ.builder()
+            .addValueAttribute(Attributes.LUCK, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩肋骨
+    public static final Supplier<Item> BASALT_RIB = ITEM.register(
+        "basalt_rib",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.DEFENSE, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
+            .build()
+    );
+
+    // 玄武岩肌肉
+    public static final Supplier<Item> BASALT_MUSCLE = ITEM.register(
+        "basalt_muscle",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.STRENGTH, 2)
+            .addValueAttribute(InitAttribute.SPEED, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.1)
+            .addValueAttribute(InitAttribute.WATER_WEAKNESS, 1)
             .build()
     );
 

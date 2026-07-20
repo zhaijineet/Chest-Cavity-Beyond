@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -42,6 +43,30 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
     protected abstract void onEffectUpdated(MobEffectInstance effectInstance, boolean forced, @Nullable Entity entity);
 
     /**
+     * 将 this 安全转换为 LivingEntity 供外部方法使用
+     */
+    @Unique
+    public LivingEntity chestCavityBeyond$self() {
+        return (LivingEntity) (Object) this;
+    }
+
+    /**
+     * 根据熔岩游泳速度属性提升熔岩中的移动速度，对齐水中 SWIM_SPEED 的应用方式
+     */
+    @ModifyArg(
+        method = "travel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V",
+            ordinal = 1
+        ),
+        index = 0
+    )
+    public float chestCavityBeyond$travel(float original) {
+        return (float) (original * chestCavityBeyond$self().getAttributeValue(InitAttribute.LAVA_SWIM_SPEED));
+    }
+
+    /**
      * 根据属性返回生物是否水过敏
      */
     @ModifyExpressionValue(
@@ -52,7 +77,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         )
     )
     public boolean chestCavityBeyond$aiStep(boolean original) {
-        return OrganAttributeUtil.isWaterAllergy((LivingEntity) (Object) this);
+        return OrganAttributeUtil.isWaterAllergy(chestCavityBeyond$self());
     }
 
     /**
@@ -67,7 +92,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         )
     )
     public void chestCavityBeyond$hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        MixinUtil.applyLaunchEffect((LivingEntity) (Object) this, source);
+        MixinUtil.applyLaunchEffect(chestCavityBeyond$self(), source);
     }
 
 
@@ -120,7 +145,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
     )
     public void chestCavityBeyond$refreshDirtyAttributes(CallbackInfo ci) {
         if (dirtyDerivedAttributes.isEmpty()) return;
-        ChestCavityData data = ChestCavityUtil.getData((LivingEntity) (Object) this);
+        ChestCavityData data = ChestCavityUtil.getData(chestCavityBeyond$self());
         for (Holder<Attribute> attr : dirtyDerivedAttributes) {
             OrganAttributeUtil.updateDerivedAttribute(data, attr);
         }
