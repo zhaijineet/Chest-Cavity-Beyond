@@ -2,6 +2,7 @@ package net.zhaiji.chestcavitybeyond.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,7 +18,11 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
@@ -32,10 +37,7 @@ import net.zhaiji.chestcavitybeyond.register.InitAttribute;
 import java.util.List;
 
 /**
- * Mixin 业务逻辑工具类
- * <p>
  * 从各 Mixin 中提取的业务逻辑，便于测试和维护
- * </p>
  */
 public class MixinUtil {
     /**
@@ -408,7 +410,7 @@ public class MixinUtil {
                 }
             }
         }
-        if (!isAir && !entity.level().isClientSide && entity.isPassenger() && entity.getVehicle() != null && !entity.getVehicle()
+        if (!isAir && !entity.level().isClientSide() && entity.isPassenger() && entity.getVehicle() != null && !entity.getVehicle()
             .canBeRiddenUnderFluidType(entity.getEyeInFluidType(), entity)) {
             entity.stopRiding();
         }
@@ -485,5 +487,48 @@ public class MixinUtil {
             return ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.WATER_ALLERGY) > 0 ? 3 : 0;
         }
         return 0;
+    }
+
+    /**
+     * 根据熔岩游泳速度属性，缩放原版 moveRelative 的输入参数
+     */
+    public static float applyLavaSwimSpeed(LivingEntity entity, float original) {
+        return (float) (original * entity.getAttributeValue(InitAttribute.LAVA_SWIM_SPEED));
+    }
+
+    public static boolean hasLavaWalkActive(LivingEntity entity) {
+        return !entity.isShiftKeyDown() && entity.getAttributeValue(InitAttribute.LAVA_WALK) > 0;
+    }
+
+    /**
+     * 判断实体是否应该站在指定流体表面（仅熔岩生效，需有激活的熔岩行者能力）
+     */
+    public static boolean canStandOnLava(FluidState fluidState, LivingEntity entity) {
+        return fluidState.is(FluidTags.LAVA) && hasLavaWalkActive(entity);
+    }
+
+    /**
+     * 对拥有熔岩行者属性的实体施加熔岩浮力，对齐原版炽足兽的 floatStrider 逻辑
+     */
+    public static void floatOnLava(LivingEntity entity) {
+        if (entity.isInLava() && hasLavaWalkActive(entity)) {
+            if (CollisionContext.of(entity).isAbove(LiquidBlock.STABLE_SHAPE, entity.blockPosition(), true)
+                && !entity.level().getFluidState(entity.blockPosition().above()).is(FluidTags.LAVA)) {
+                entity.setOnGround(true);
+            } else {
+                entity.setDeltaMovement(entity.getDeltaMovement().scale(0.5).add(0.0, 0.05, 0.0));
+            }
+        }
+    }
+
+    public static boolean handleLavaFall(LivingEntity entity, BlockState state) {
+        if (hasLavaWalkActive(entity)) {
+            entity.checkInsideBlocks();
+            if (state.getFluidState().is(FluidTags.LAVA)) {
+                entity.resetFallDistance();
+                return true;
+            }
+        }
+        return false;
     }
 }

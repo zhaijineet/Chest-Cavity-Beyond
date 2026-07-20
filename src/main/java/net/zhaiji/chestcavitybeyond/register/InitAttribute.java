@@ -85,6 +85,8 @@ public class InitAttribute {
     public static final Holder<Attribute> LAVA_SWIM_SPEED = registerRangedAttribute("lava_swim_speed", 1, 0, Integer.MAX_VALUE);
     // 水虚弱
     public static final Holder<Attribute> WATER_WEAKNESS = registerRangedAttribute("water_weakness");
+    // 熔岩行者
+    public static final Holder<Attribute> LAVA_WALK = registerRangedAttribute("lava_walk");
 
     public static Holder<Attribute> registerRangedAttribute(String name) {
         return registerRangedAttribute(name, 0);

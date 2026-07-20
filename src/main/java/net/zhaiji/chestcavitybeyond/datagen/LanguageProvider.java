@@ -271,6 +271,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.GUARDIAN_EYE, "Guardian Eye");
         addItem(InitItem.ELDER_GUARDIAN_EYE, "Elder Guardian Eye");
+        addItem(InitItem.STRIDER_KIDNEY, "Strider Kidney");
 
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
@@ -309,6 +310,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.CRYSTALLIZATION, "Crystallization");
         addAttribute(InitAttribute.LAVA_SWIM_SPEED, "Lava Swim-Speed");
         addAttribute(InitAttribute.WATER_WEAKNESS, "Water Weakness");
+        addAttribute(InitAttribute.LAVA_WALK, "Lava Walking");
 
         addEffect(InitEffect.FURNACE_POWER::value, "Furnace Powered");
 
@@ -698,6 +700,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             InitAttribute.WATER_WEAKNESS,
             "Reduces mining speed and attack damage while in water"
         );
+        addAttributeDescription(
+            InitAttribute.LAVA_WALK,
+            "Allows walking on lava surface",
+            "Disabled while sneaking"
+        );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "Max Health %s");
         addAttributeValueEffect(InitAttribute.NERVES, "Attack Speed %s%% | Move Speed %s%%");
@@ -1063,6 +1070,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
         addItem(InitItem.GUARDIAN_EYE, "守卫者之眼");
         addItem(InitItem.ELDER_GUARDIAN_EYE, "远古守卫者之眼");
+        addItem(InitItem.STRIDER_KIDNEY, "炽足兽肾脏");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
@@ -1101,6 +1109,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttribute(InitAttribute.CRYSTALLIZATION, "结晶化");
         addAttribute(InitAttribute.LAVA_SWIM_SPEED, "熔岩游泳速度");
         addAttribute(InitAttribute.WATER_WEAKNESS, "水虚弱");
+        addAttribute(InitAttribute.LAVA_WALK, "熔岩行者");
 
         addEffect(InitEffect.FURNACE_POWER::value, "熔炉之力");
 
@@ -1506,6 +1515,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeDescription(
             InitAttribute.WATER_WEAKNESS,
             "在水中时降低挖掘速度和攻击伤害"
+        );
+        addAttributeDescription(
+            InitAttribute.LAVA_WALK,
+            "允许在熔岩表面行走",
+            "潜行时失效"
         );
 
         addAttributeValueEffect(InitAttribute.HEALTH, "最大生命值%s");

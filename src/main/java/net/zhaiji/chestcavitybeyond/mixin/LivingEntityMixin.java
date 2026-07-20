@@ -3,6 +3,7 @@ package net.zhaiji.chestcavitybeyond.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,6 +12,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.mixinapi.ILivingEntity;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
@@ -63,7 +66,67 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         index = 0
     )
     public float chestCavityBeyond$travel(float original) {
-        return (float) (original * chestCavityBeyond$self().getAttributeValue(InitAttribute.LAVA_SWIM_SPEED));
+        return MixinUtil.applyLavaSwimSpeed(chestCavityBeyond$self(), original);
+    }
+
+    /**
+     * 拥有熔岩行者属性且非潜行时，允许实体站在熔岩表面
+     */
+    @Inject(
+        method = "canStandOnFluid(Lnet/minecraft/world/level/material/FluidState;)Z",
+        at = @At("RETURN"),
+        cancellable = true
+    )
+    public void chestCavityBeyond$canStandOnFluid(FluidState fluidState, CallbackInfoReturnable<Boolean> cir) {
+        if (MixinUtil.canStandOnLava(fluidState, chestCavityBeyond$self())) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    /**
+     * 对拥有熔岩行者属性的实体，完整执行原版 Strider.checkFallDamage 的等价逻辑（checkInsideBlocks + 熔岩坠落重置）
+     */
+    @Inject(
+        method = "checkFallDamage",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void chestCavityBeyond$checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos, CallbackInfo ci) {
+        if (MixinUtil.handleLavaFall(chestCavityBeyond$self(), state)) {
+            ci.cancel();
+        }
+    }
+
+    /**
+     * 拥有熔岩行者属性且非潜行时，在熔岩中提供浮力，对齐原版炽足兽的 floatStrider 逻辑
+     */
+    @Inject(
+        method = "aiStep",
+        at = @At("RETURN")
+    )
+    public void chestCavityBeyond$aiStep$floatOnLava(CallbackInfo ci) {
+        MixinUtil.floatOnLava(chestCavityBeyond$self());
+    }
+
+    /**
+     * 控制熔岩分支的进入条件，分两种情况：
+     * onGround 时强制返回 true 阻止进入熔岩分支，避免原版"熔岩中撞墙向上游"机制误触发 dY=0.3 弹跳；
+     * 非 onGround 时强制返回 false 使熔岩分支正常执行，LAVA_SWIM_SPEED 属性正常应用
+     */
+    @ModifyExpressionValue(
+        method = "travel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;canStandOnFluid(Lnet/minecraft/world/level/material/FluidState;)Z",
+            ordinal = 1
+        )
+    )
+    public boolean chestCavityBeyond$travel$canStandOnFluid(boolean original) {
+        LivingEntity self = chestCavityBeyond$self();
+        if (MixinUtil.hasLavaWalkActive(self)) {
+            return self.onGround();
+        }
+        return original;
     }
 
     /**

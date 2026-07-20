@@ -323,9 +323,9 @@ public class AttributeDisplayManager {
                 return hover;
             })
             .valueEffect(entity -> {
-                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.FIRE_RESISTANCE);
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FIRE_RESISTANCE);
                 // 以10点伤害为例计算减伤比例
-                double scale = MathUtil.getAttenuationScale(10, diff);
+                double scale = MathUtil.getAttenuationScale(10, curr);
                 double damageReduction = (1 - scale) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.FIRE_RESISTANCE),
@@ -345,8 +345,8 @@ public class AttributeDisplayManager {
                 return hover;
             })
             .valueEffect(entity -> {
-                double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.FROST_RESISTANCE);
-                double scale = MathUtil.getAttenuationScale(10, diff);
+                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FROST_RESISTANCE);
+                double scale = MathUtil.getAttenuationScale(10, curr);
                 double damageReduction = (1 - scale) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.FROST_RESISTANCE),
@@ -490,6 +490,9 @@ public class AttributeDisplayManager {
                 );
             }
         );
+        register(AttributeDisplay.builder(InitAttribute.LAVA_WALK)
+            .hideWhen(HIDE_WHEN_NOT_POSITIVE)
+            .build());
         register(
             InitAttribute.WATER_WEAKNESS, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
                 double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.WATER_WEAKNESS);

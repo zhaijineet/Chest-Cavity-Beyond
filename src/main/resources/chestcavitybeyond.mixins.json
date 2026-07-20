@@ -35,6 +35,7 @@
     "SnowballMixin",
     "SnowGolemMixin",
     "SonicBoomMixin",
+    "StriderMixin",
     "WaterAllergyManager",
     "WaterAnimalMixin",
     "WitherBossMixin",

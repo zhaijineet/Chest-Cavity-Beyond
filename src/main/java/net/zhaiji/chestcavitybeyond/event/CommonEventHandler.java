@@ -173,7 +173,7 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.PIGLIN_BRUTE, ChestCavityTypeManager.BASALT);
         // 抗火生物
         ChestCavityTypeManager.registerEntity(EntityType.PIGLIN, ChestCavityTypeManager.FIREPROOF);
-        ChestCavityTypeManager.registerEntity(EntityType.STRIDER, ChestCavityTypeManager.FIREPROOF);
+        ChestCavityTypeManager.registerEntity(EntityType.STRIDER, ChestCavityTypeManager.STRIDER);
         // 水生生物
         ChestCavityTypeManager.registerEntity(EntityType.SQUID, ChestCavityTypeManager.AQUATIC);
         ChestCavityTypeManager.registerEntity(EntityType.GLOW_SQUID, ChestCavityTypeManager.AQUATIC);
@@ -400,7 +400,7 @@ public class CommonEventHandler {
         if (event.isCanceled()) return;
         // 阶梯式火焰免疫
         if (source.is(DamageTypeTags.IS_FIRE)) {
-            double fireResistance = data.getDifferenceValue(InitAttribute.FIRE_RESISTANCE);
+            double fireResistance = data.getCurrentValue(InitAttribute.FIRE_RESISTANCE);
             if (OrganAttributeUtil.isFireImmune(fireResistance, source)) {
                 if (fireResistance >= ChestCavityBeyondConfig.fireImmunityFire) {
                     entity.clearFire();
@@ -411,7 +411,7 @@ public class CommonEventHandler {
         }
         // 冰霜免疫
         if (source.is(DamageTypeTags.IS_FREEZING)) {
-            double frostResistance = data.getDifferenceValue(InitAttribute.FROST_RESISTANCE);
+            double frostResistance = data.getCurrentValue(InitAttribute.FROST_RESISTANCE);
             if (OrganAttributeUtil.isFrostImmune(frostResistance, source)) {
                 entity.setTicksFrozen(0);
                 event.setCanceled(true);
@@ -467,14 +467,14 @@ public class CommonEventHandler {
         boolean flag = false;
         // 应用火焰伤害修改
         if (source.is(DamageTypeTags.IS_FIRE)) {
-            double fireResistance = data.getDifferenceValue(InitAttribute.FIRE_RESISTANCE);
+            double fireResistance = data.getCurrentValue(InitAttribute.FIRE_RESISTANCE);
             damage *= MathUtil.getAttenuationScale(damage, fireResistance);
             flag = true;
         }
 
         // 应用冰霜伤害修改
         if (source.is(DamageTypeTags.IS_FREEZING)) {
-            double frostResistance = data.getDifferenceValue(InitAttribute.FROST_RESISTANCE);
+            double frostResistance = data.getCurrentValue(InitAttribute.FROST_RESISTANCE);
             damage *= MathUtil.getAttenuationScale(damage, frostResistance);
             flag = true;
         }

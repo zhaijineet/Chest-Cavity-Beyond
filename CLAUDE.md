@@ -23,3 +23,4 @@ JEI源码：E:\Mod Project\JustEnoughItems
 5. **@Inject**：`method` 带完整签名（泛型/重载必需），`at` 明确，需要提前返回时 `cancellable = true`；参数表完整匹配原方法 + CallbackInfo / CallbackInfoReturnable；回调参数命名用 `ci` / `cir`
 6. **注册**：`modid.mixins.json` 的 `mixins` 数组按字母序插入；客户端专用进 `client` 数组
 7. **命名一致性**：注入方法可见性首选 `public`（对齐 ChesedMiniRayMixin / LivingEntityMixin / PlayerMixin）；static 原方法对应 static 注入，且 static 注入方法必须用 `private`
+8. **注解多行格式**：@Inject / @ModifyArg / @ModifyExpressionValue 等注入注解的参数必须使用多行格式，每个参数独占一行，禁止单行压缩写法

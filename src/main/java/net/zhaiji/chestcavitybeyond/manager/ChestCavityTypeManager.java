@@ -409,6 +409,11 @@ public class ChestCavityTypeManager {
         .setThirdRow(7, InitItem.BASALT_MUSCLE.get())
         .setThirdRow(8, InitItem.BASALT_MUSCLE.get());
 
+    public static final ChestCavityType STRIDER = register(ChestCavityBeyond.of("strider"))
+        .copyWith(FIREPROOF)
+        .setSecondRow(3, InitItem.STRIDER_KIDNEY.get())
+        .setSecondRow(5, InitItem.STRIDER_KIDNEY.get());
+
     public static final ChestCavityType GHAST = register(ChestCavityBeyond.of("ghast"))
         .copyWith(FIREPROOF)
         .setFirstRow(1, InitItem.GAS_SAC.get())

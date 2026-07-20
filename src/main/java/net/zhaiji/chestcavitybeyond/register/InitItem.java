@@ -1725,4 +1725,15 @@ public class InitItem {
             .goalSkill(GoalSkillUtil.elderGuardianEyeGoalSkill())
             .build()
     );
+
+    // 炽足兽肾脏
+    public static final Supplier<Item> STRIDER_KIDNEY = ITEM.register(
+        "strider_kidney",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.FILTRATION, 2)
+            .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .addValueAttribute(InitAttribute.LAVA_WALK, 1)
+            .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
+            .build()
+    );
 }

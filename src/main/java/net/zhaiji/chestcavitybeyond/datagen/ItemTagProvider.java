@@ -161,7 +161,8 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                         InitItem.ENDER_KIDNEY.get(),
                         InitItem.ROTTEN_KIDNEY.get(),
                         InitItem.DRAGON_KIDNEY.get(),
-                        InitItem.ELDER_KIDNEY.get()
+                        InitItem.ELDER_KIDNEY.get(),
+                        InitItem.STRIDER_KIDNEY.get()
                 );
 
         // 脊柱

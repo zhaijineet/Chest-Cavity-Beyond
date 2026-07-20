@@ -450,7 +450,7 @@ public class OrganAttributeUtil {
      * </ul>
      * </p>
      *
-     * @param fireResistance 火焰抗性差异值
+     * @param fireResistance 火焰抗性当前值
      * @param source         伤害源
      * @return 是否完全免疫
      */
@@ -473,7 +473,7 @@ public class OrganAttributeUtil {
     /**
      * 判断冰霜抗性是否足以完全免疫当前冻结伤害
      *
-     * @param frostResistance 冰霜抗性差异值
+     * @param frostResistance 冰霜抗性当前值
      * @param source          伤害源
      * @return 是否完全免疫
      */
