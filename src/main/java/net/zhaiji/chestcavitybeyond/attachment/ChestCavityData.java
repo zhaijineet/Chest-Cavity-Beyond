@@ -929,11 +929,7 @@ public class ChestCavityData extends ItemStackHandler {
      * @return 当前属性值
      */
     public double getCurrentValue(Holder<Attribute> attribute) {
-        AttributeInstance instance = owner.getAttribute(attribute);
-        if (instance != null) {
-            return instance.getValue();
-        }
-        return 0;
+        return owner.getAttributeValue(attribute);
     }
 
     /**

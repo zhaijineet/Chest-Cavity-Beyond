@@ -8,7 +8,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -26,6 +25,6 @@ public abstract class EnderDragonMixin extends Mob {
     )
     public boolean chestCavityBeyond$checkCrystals(boolean original) {
         // 没有结晶属性禁止回血
-        return original && ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.CRYSTALLIZATION) > 0;
+        return original && getAttributeValue(InitAttribute.CRYSTALLIZATION) > 0;
     }
 }

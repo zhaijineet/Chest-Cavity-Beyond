@@ -8,7 +8,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.event.CommonEventHandler;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import net.zhaiji.chestcavitybeyond.util.TeleportUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +31,7 @@ public abstract class EnderManMixin extends Monster {
             cancellable = true
     )
     public void chestCavityBeyond$teleport(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(TeleportUtil.randomTeleport(this, ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER)));
+        cir.setReturnValue(TeleportUtil.randomTeleport(this, getAttributeValue(InitAttribute.ENDER)));
     }
 
     /**
@@ -46,7 +45,7 @@ public abstract class EnderManMixin extends Monster {
             )
     )
     public boolean chestCavityBeyond$customServerAiStep(boolean original) {
-        return original && ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER) > 0;
+        return original && getAttributeValue(InitAttribute.ENDER) > 0;
     }
 
     /**
@@ -75,7 +74,7 @@ public abstract class EnderManMixin extends Monster {
                 )
         )
         public boolean chestCavityBeyond$tick(boolean original) {
-            return original && ChestCavityUtil.getData(enderman).getCurrentValue(InitAttribute.ENDER) > 0;
+            return original && enderman.getAttributeValue(InitAttribute.ENDER) > 0;
         }
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
@@ -25,9 +26,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDrownEvent;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.mixinapi.IFoodData;
@@ -450,9 +453,9 @@ public class MixinUtil {
      */
     public static void applyLaunchEffect(LivingEntity target, DamageSource source) {
         if (source.getDirectEntity() instanceof LivingEntity attacker) {
-            double launch = ChestCavityUtil.getData(attacker).getCurrentValue(InitAttribute.LAUNCH);
+            double launch = attacker.getAttributeValue(InitAttribute.LAUNCH);
             if (launch > 0) {
-                double knockbackResistance = ChestCavityUtil.getData(target).getCurrentValue(Attributes.KNOCKBACK_RESISTANCE) / 8;
+                double knockbackResistance = target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) / 8;
                 double yAdd = Math.max(0.0, 1 - knockbackResistance);
                 target.setDeltaMovement(target.getDeltaMovement().add(0.0, 0.04 * launch * yAdd, 0.0));
             }
@@ -470,7 +473,7 @@ public class MixinUtil {
      * @return 是否应该添加效果
      */
     public static boolean shouldAddEatEffect(LivingEntity entity, MobEffectInstance effectInstance) {
-        if (ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.SCAVENGER_DIGESTION) > 0) {
+        if (entity.getAttributeValue(InitAttribute.SCAVENGER_DIGESTION) > 0) {
             return effectInstance.getEffect() != MobEffects.POISON && effectInstance.getEffect() != MobEffects.HUNGER;
         }
         return true;
@@ -484,7 +487,7 @@ public class MixinUtil {
      */
     public static int getSnowballDamage(EntityHitResult result) {
         if (result.getEntity() instanceof LivingEntity entity) {
-            return ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.WATER_ALLERGY) > 0 ? 3 : 0;
+            return entity.getAttributeValue(InitAttribute.WATER_ALLERGY) > 0 ? 3 : 0;
         }
         return 0;
     }
@@ -494,6 +497,29 @@ public class MixinUtil {
      */
     public static float applyLavaSwimSpeed(LivingEntity entity, float original) {
         return (float) (original * entity.getAttributeValue(InitAttribute.LAVA_SWIM_SPEED));
+    }
+
+    /**
+     * 判断实体的火焰抗性是否达到免疫熔岩的阈值
+     */
+    public static boolean isLavaImmune(LivingEntity entity) {
+        return entity.getAttributeValue(InitAttribute.FIRE_RESISTANCE) >= ChestCavityBeyondConfig.fireImmunityLava;
+    }
+
+    /**
+     * 返回熔岩中水平移动的衰减系数，疾跑时 0.6（对齐水），非疾跑保持原版 0.5
+     */
+    public static float getLavaHorizontalDecay(LivingEntity entity) {
+        return entity.isSprinting() ? 0.6F : 0.5F;
+    }
+
+    /**
+     * 按 LAVA_SWIM_SPEED 属性值减缓熔岩额外的下沉重力
+     */
+    public static double modifyLavaExtraGravity(LivingEntity entity, double original) {
+        if (!isLavaImmune(entity)) return original;
+        double lavaSwimSpeed = entity.getAttributeValue(InitAttribute.LAVA_SWIM_SPEED);
+        return lavaSwimSpeed > 1 ? original / lavaSwimSpeed : original;
     }
 
     public static boolean hasLavaWalkActive(LivingEntity entity) {
@@ -530,5 +556,60 @@ public class MixinUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 熔岩中跳跃时按 LAVA_SWIM_SPEED 的平方根增强向上脉冲，替代原版固定 0.04
+     *
+     * @return 是否已处理（调用方应 cancel 原方法）
+     */
+    public static boolean applyLavaJumpImpulse(LivingEntity entity, FluidType type) {
+        if (type == NeoForgeMod.LAVA_TYPE.value()) {
+            entity.setDeltaMovement(entity.getDeltaMovement()
+                .add(0.0, 0.04 * Math.sqrt(entity.getAttributeValue(InitAttribute.LAVA_SWIM_SPEED)), 0.0));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 熔岩中下沉时按 LAVA_SWIM_SPEED 的平方根增强向下脉冲，替代原版固定 -0.04
+     *
+     * @return 是否已处理（调用方应 cancel 原方法）
+     */
+    public static boolean applyLavaSinkImpulse(LivingEntity entity, FluidType type) {
+        if (type == NeoForgeMod.LAVA_TYPE.value()) {
+            entity.setDeltaMovement(entity.getDeltaMovement()
+                .add(0.0, -0.04 * Math.sqrt(entity.getAttributeValue(InitAttribute.LAVA_SWIM_SPEED)), 0.0));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 免疫熔岩伤害时覆盖原版 canSwim(false)，允许在熔岩中游泳（含游泳姿态与下沉）；
+     * 熔岩行走激活时返回 false，使其不进入游泳判定以保留疾跑能力
+     *
+     * @param originalReturnValue 原版 canSwimInFluidType 的返回值
+     * @return 是否应强制返回 true
+     */
+    public static boolean canSwimInLava(LivingEntity entity, FluidType type, boolean originalReturnValue) {
+        if (originalReturnValue || type != NeoForgeMod.LAVA_TYPE.value() || hasLavaWalkActive(entity)) return false;
+        return isLavaImmune(entity);
+    }
+
+    /**
+     * 免疫熔岩伤害时清除熔岩迷雾，统一由 FIRE_RESISTANCE 属性阈值判定
+     */
+    public static boolean shouldClearLavaFog(Entity entity) {
+        if (entity instanceof LivingEntity livingEntity) return isLavaImmune(livingEntity);
+        return false;
+    }
+
+    /**
+     * 免疫火焰伤害时隐藏屏幕火焰覆盖层，统一由 FIRE_RESISTANCE 属性阈值判定
+     */
+    public static boolean shouldHideFireOverlay(Player player) {
+        return player.getAttributeValue(InitAttribute.FIRE_RESISTANCE) >= ChestCavityBeyondConfig.fireImmunityFire;
     }
 }

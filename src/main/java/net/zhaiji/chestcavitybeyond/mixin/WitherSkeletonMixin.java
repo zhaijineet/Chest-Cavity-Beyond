@@ -9,7 +9,6 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.event.CommonEventHandler;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -45,7 +44,7 @@ public class WitherSkeletonMixin extends Monster {
             cancellable = true
     )
     public void chestCavityBeyond$doHurtTarget(MobEffectInstance potioneffect, CallbackInfoReturnable<Boolean> cir) {
-        if (ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.WITHERED) <= 0) {
+        if (getAttributeValue(InitAttribute.WITHERED) <= 0) {
             cir.setReturnValue(super.canBeAffected(potioneffect));
         }
     }

@@ -323,7 +323,7 @@ public class AttributeDisplayManager {
                 return hover;
             })
             .valueEffect(entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FIRE_RESISTANCE);
+                double curr = entity.getAttributeValue(InitAttribute.FIRE_RESISTANCE);
                 // 以10点伤害为例计算减伤比例
                 double scale = MathUtil.getAttenuationScale(10, curr);
                 double damageReduction = (1 - scale) * 100;
@@ -345,7 +345,7 @@ public class AttributeDisplayManager {
                 return hover;
             })
             .valueEffect(entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FROST_RESISTANCE);
+                double curr = entity.getAttributeValue(InitAttribute.FROST_RESISTANCE);
                 double scale = MathUtil.getAttenuationScale(10, curr);
                 double damageReduction = (1 - scale) * 100;
                 return Component.translatable(
@@ -357,7 +357,7 @@ public class AttributeDisplayManager {
         register(InitAttribute.WATER_ALLERGY);
         register(
             InitAttribute.ENDER, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.ENDER);
+                double curr = entity.getAttributeValue(InitAttribute.ENDER);
                 double distance = MathUtil.getDirectScale(curr);
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.ENDER),
@@ -380,7 +380,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.EXPLOSIVE, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.EXPLOSIVE);
+                double curr = entity.getAttributeValue(InitAttribute.EXPLOSIVE);
                 double power = 3 * curr;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.EXPLOSIVE),
@@ -390,7 +390,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.PHOTOSYNTHESIS, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.PHOTOSYNTHESIS);
+                double curr = entity.getAttributeValue(InitAttribute.PHOTOSYNTHESIS);
                 double interval = 800 / curr / 20.0;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.PHOTOSYNTHESIS),
@@ -400,7 +400,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.LAUNCH, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.LAUNCH);
+                double curr = entity.getAttributeValue(InitAttribute.LAUNCH);
                 double force = 0.04 * curr;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.LAUNCH),
@@ -410,7 +410,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.IRON_REPAIR, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.IRON_REPAIR);
+                double curr = entity.getAttributeValue(InitAttribute.IRON_REPAIR);
                 double healAmount = 2.5 * curr;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.IRON_REPAIR),
@@ -420,7 +420,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.FURNACE_POWER, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.FURNACE_POWER);
+                double curr = entity.getAttributeValue(InitAttribute.FURNACE_POWER);
                 int amplifier = Math.max(0, (int) (curr - 1));
                 double maxDuration = ChestCavityBeyondConfig.furnacePowerMaxDuration / 20.0;
                 double interval = 200.0 / (amplifier + 1) / 20.0;
@@ -455,7 +455,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.VOMIT_FIREBALL, 0, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.VOMIT_FIREBALL);
+                double curr = entity.getAttributeValue(InitAttribute.VOMIT_FIREBALL);
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.VOMIT_FIREBALL),
                     TooltipUtil.formatAttributeValue(curr)
@@ -464,7 +464,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.GHASTLY, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.GHASTLY);
+                double curr = entity.getAttributeValue(InitAttribute.GHASTLY);
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.GHASTLY),
                     TooltipUtil.formatAttributeValue(curr)
@@ -473,7 +473,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.CRYSTALLIZATION, 0, HIDE_WHEN_NOT_POSITIVE, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.CRYSTALLIZATION);
+                double curr = entity.getAttributeValue(InitAttribute.CRYSTALLIZATION);
                 double healPerSec = curr * 2.0 / 5;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.CRYSTALLIZATION),
@@ -483,7 +483,7 @@ public class AttributeDisplayManager {
         );
         register(
             InitAttribute.LAVA_SWIM_SPEED, 0, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.LAVA_SWIM_SPEED);
+                double curr = entity.getAttributeValue(InitAttribute.LAVA_SWIM_SPEED);
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.LAVA_SWIM_SPEED),
                     TooltipUtil.formatAttributeValue(curr)
@@ -506,7 +506,7 @@ public class AttributeDisplayManager {
 
         register(
             NeoForgeMod.SWIM_SPEED, 0, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(NeoForgeMod.SWIM_SPEED);
+                double curr = entity.getAttributeValue(NeoForgeMod.SWIM_SPEED);
                 double bonusPercent = (curr - 1) * 100;
                 return Component.translatable(
                     getValueEffectKey(NeoForgeMod.SWIM_SPEED),
@@ -517,7 +517,7 @@ public class AttributeDisplayManager {
         register(Attributes.LUCK);
         register(
             Attributes.KNOCKBACK_RESISTANCE, 0, entity -> {
-                double curr = ChestCavityUtil.getData(entity).getCurrentValue(Attributes.KNOCKBACK_RESISTANCE);
+                double curr = entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
                 return Component.translatable(
                     getValueEffectKey(Attributes.KNOCKBACK_RESISTANCE),
                     TooltipUtil.formatAttributeValue(curr * 100)

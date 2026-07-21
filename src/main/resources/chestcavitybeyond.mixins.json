@@ -22,6 +22,7 @@
     "GuardianMixin",
     "GuardianMixin$GuardianAttackGoalMixin",
     "GuardianMixin$GuardianAttackSelectorMixin",
+    "ILivingEntityExtensionMixin",
     "IronGolemMixin",
     "LargeFireballMixin",
     "LivingBreatheEventMixin",
@@ -54,8 +55,10 @@
   },
   "client": [
     "EndCrystalRendererMixin",
+    "FogRendererMixin",
     "GuiMixin",
     "LocalPlayerMixin",
-    "PlayerTabOverlayMixin"
+    "PlayerTabOverlayMixin",
+    "ScreenEffectRendererMixin"
   ]
 }

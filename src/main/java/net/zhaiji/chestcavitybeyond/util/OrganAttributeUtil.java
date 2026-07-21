@@ -325,7 +325,7 @@ public class OrganAttributeUtil {
      * @return 是否水过敏
      */
     public static boolean isWaterAllergy(LivingEntity entity) {
-        return ChestCavityUtil.getData(entity).getCurrentValue(InitAttribute.WATER_ALLERGY) > 0;
+        return entity.getAttributeValue(InitAttribute.WATER_ALLERGY) > 0;
     }
 
     /**

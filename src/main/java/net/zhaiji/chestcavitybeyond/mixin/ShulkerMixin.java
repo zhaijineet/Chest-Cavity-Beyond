@@ -34,7 +34,7 @@ public abstract class ShulkerMixin extends AbstractGolem {
     )
     public boolean chestCavityBeyond$tick(boolean original) {
         // 由于最终值要取反，所以此处需要判断小于等于0
-        return original || ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER) <= 0;
+        return original || getAttributeValue(InitAttribute.ENDER) <= 0;
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class ShulkerMixin extends AbstractGolem {
             )
     )
     public boolean chestCavityBeyond$teleportSomewhere(boolean original) {
-        return original && ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.ENDER) > 0;
+        return original && getAttributeValue(InitAttribute.ENDER) > 0;
     }
 
     @Mixin(Shulker.ShulkerAttackGoal.class)

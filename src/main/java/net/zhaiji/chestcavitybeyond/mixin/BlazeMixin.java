@@ -9,7 +9,6 @@ import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,7 +37,7 @@ public abstract class BlazeMixin extends Monster {
         )
         public boolean chestCavityBeyond$tick(boolean original) {
             // 根据呕火属性，更改烈焰人可以发射的火球数量
-            return attackStep <= 1 + Math.ceil(ChestCavityUtil.getData(blaze).getCurrentValue(InitAttribute.VOMIT_FIREBALL));
+            return attackStep <= 1 + Math.ceil(blaze.getAttributeValue(InitAttribute.VOMIT_FIREBALL));
         }
     }
 }

@@ -9,7 +9,6 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
-import net.zhaiji.chestcavitybeyond.util.ChestCavityUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -31,7 +30,7 @@ public abstract class IronGolemMixin extends AbstractGolem {
             )
     )
     public boolean chestCavityBeyond$mobInteract(boolean original) {
-        return original && ChestCavityUtil.getData(this).getCurrentValue(InitAttribute.IRON_REPAIR) > 0;
+        return original && getAttributeValue(InitAttribute.IRON_REPAIR) > 0;
     }
 
     /**
@@ -45,7 +44,7 @@ public abstract class IronGolemMixin extends AbstractGolem {
             )
     )
     public void chestCavityBeyond$modifyHeal(IronGolem instance, float v) {
-        instance.heal((float) (2.5 * ChestCavityUtil.getData(instance).getCurrentValue(InitAttribute.IRON_REPAIR)));
+        instance.heal((float) (2.5 * instance.getAttributeValue(InitAttribute.IRON_REPAIR)));
     }
 
 

@@ -14,6 +14,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.extensions.ILivingEntityExtension;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.mixinapi.ILivingEntity;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
@@ -27,14 +29,16 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements ILivingEntity {
+public abstract class LivingEntityMixin extends Entity implements ILivingEntity, ILivingEntityExtension {
     @Unique
     private final Set<Holder<Attribute>> dirtyDerivedAttributes = new HashSet<>();
 
@@ -44,14 +48,6 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
 
     @Shadow
     protected abstract void onEffectUpdated(MobEffectInstance effectInstance, boolean forced, @Nullable Entity entity);
-
-    /**
-     * 将 this 安全转换为 LivingEntity 供外部方法使用
-     */
-    @Unique
-    public LivingEntity chestCavityBeyond$self() {
-        return (LivingEntity) (Object) this;
-    }
 
     /**
      * 根据熔岩游泳速度属性提升熔岩中的移动速度，对齐水中 SWIM_SPEED 的应用方式
@@ -66,7 +62,56 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         index = 0
     )
     public float chestCavityBeyond$travel(float original) {
-        return MixinUtil.applyLavaSwimSpeed(chestCavityBeyond$self(), original);
+        return MixinUtil.applyLavaSwimSpeed(self(), original);
+    }
+
+    /**
+     * 浅熔岩水平衰减对齐水的疾跑机制：疾跑时提升水平衰减，垂直衰减保持 0.8 不变
+     */
+    @ModifyArgs(
+        method = "travel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/phys/Vec3;multiply(DDD)Lnet/minecraft/world/phys/Vec3;",
+            ordinal = 1
+        )
+    )
+    public void chestCavityBeyond$travel$multiply(Args args) {
+        double decay = MixinUtil.getLavaHorizontalDecay(self());
+        args.set(0, decay);
+        args.set(2, decay);
+    }
+
+    /**
+     * 深熔岩水平衰减对齐浅熔岩疾跑机制，垂直衰减保持原版 0.5 不变
+     */
+    @WrapOperation(
+        method = "travel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/phys/Vec3;scale(D)Lnet/minecraft/world/phys/Vec3;",
+            ordinal = 0
+        )
+    )
+    public Vec3 chestCavityBeyond$travel$scale(Vec3 instance, double scaleFactor, Operation<Vec3> original) {
+        double decay = MixinUtil.getLavaHorizontalDecay(self());
+        return instance.multiply(decay, 0.5F, decay);
+    }
+
+    /**
+     * 按 LAVA_SWIM_SPEED 属性值减缓熔岩额外的下沉重力，对齐水（水无额外重力）
+     */
+    @ModifyArg(
+        method = "travel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/phys/Vec3;add(DDD)Lnet/minecraft/world/phys/Vec3;",
+            ordinal = 0
+        ),
+        index = 1
+    )
+    public double chestCavityBeyond$travel$add(double original) {
+        return MixinUtil.modifyLavaExtraGravity(self(), original);
     }
 
     /**
@@ -78,7 +123,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         cancellable = true
     )
     public void chestCavityBeyond$canStandOnFluid(FluidState fluidState, CallbackInfoReturnable<Boolean> cir) {
-        if (MixinUtil.canStandOnLava(fluidState, chestCavityBeyond$self())) {
+        if (MixinUtil.canStandOnLava(fluidState, self())) {
             cir.setReturnValue(true);
         }
     }
@@ -92,7 +137,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         cancellable = true
     )
     public void chestCavityBeyond$checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos, CallbackInfo ci) {
-        if (MixinUtil.handleLavaFall(chestCavityBeyond$self(), state)) {
+        if (MixinUtil.handleLavaFall(self(), state)) {
             ci.cancel();
         }
     }
@@ -105,7 +150,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         at = @At("RETURN")
     )
     public void chestCavityBeyond$aiStep$floatOnLava(CallbackInfo ci) {
-        MixinUtil.floatOnLava(chestCavityBeyond$self());
+        MixinUtil.floatOnLava(self());
     }
 
     /**
@@ -122,7 +167,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         )
     )
     public boolean chestCavityBeyond$travel$canStandOnFluid(boolean original) {
-        LivingEntity self = chestCavityBeyond$self();
+        LivingEntity self = self();
         if (MixinUtil.hasLavaWalkActive(self)) {
             return self.onGround();
         }
@@ -140,7 +185,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         )
     )
     public boolean chestCavityBeyond$aiStep(boolean original) {
-        return OrganAttributeUtil.isWaterAllergy(chestCavityBeyond$self());
+        return OrganAttributeUtil.isWaterAllergy(self());
     }
 
     /**
@@ -155,7 +200,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
         )
     )
     public void chestCavityBeyond$hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        MixinUtil.applyLaunchEffect(chestCavityBeyond$self(), source);
+        MixinUtil.applyLaunchEffect(self(), source);
     }
 
 
@@ -208,7 +253,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntity 
     )
     public void chestCavityBeyond$refreshDirtyAttributes(CallbackInfo ci) {
         if (dirtyDerivedAttributes.isEmpty()) return;
-        ChestCavityData data = ChestCavityUtil.getData(chestCavityBeyond$self());
+        ChestCavityData data = ChestCavityUtil.getData(self());
         for (Holder<Attribute> attr : dirtyDerivedAttributes) {
             OrganAttributeUtil.updateDerivedAttribute(data, attr);
         }
