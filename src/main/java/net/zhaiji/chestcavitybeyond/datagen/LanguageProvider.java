@@ -273,6 +273,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.GUARDIAN_EYE, "Guardian Eye");
         addItem(InitItem.ELDER_GUARDIAN_EYE, "Elder Guardian Eye");
         addItem(InitItem.STRIDER_KIDNEY, "Strider Kidney");
+        addItem(InitItem.SYMBIOTIC_INTESTINE, "Symbiotic Intestine");
+        addItem(InitItem.BEWITCHED_LIVER, "Bewitched Liver");
 
         addAttribute(InitAttribute.HEALTH, "Health");
         addAttribute(InitAttribute.NERVES, "Nerves");
@@ -465,6 +467,19 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Charge and fire a laser beam at target in sight",
             "Deals 4 magic damage plus 6 attack damage",
             "Target must remain in range during charging"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.SYMBIOTIC_INTESTINE, "Consume flowers to gain suspicious stew effects");
+        addOrganActiveSkill(
+            InitItem.SYMBIOTIC_INTESTINE,
+            "Consume held flower or flower block in sight",
+            "Gain the corresponding suspicious stew potion effect"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.BEWITCHED_LIVER, "Remove all potion effects");
+        addOrganActiveSkill(
+            InitItem.BEWITCHED_LIVER,
+            "Remove all potion effects from self"
         );
 
         addEnchantment(
@@ -793,10 +808,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("jei." + ChestCavityBeyond.MOD_ID + ".type_default_bonus_header", "Type Default Bonus:");
 
         addChestCavityTypeName(ChestCavityTypeManager.HUMAN, "Human");
+        addChestCavityTypeName(ChestCavityTypeManager.WITCH, "Witch");
         addChestCavityTypeName(ChestCavityTypeManager.ANIMAL, "Animal");
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE1, "Herbivore");
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE2, "Ruminant Herbivore");
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE3, "Multi-stomached Herbivore");
+        addChestCavityTypeName(ChestCavityTypeManager.MOOSHROOM, "Mooshroom");
         addChestCavityTypeName(ChestCavityTypeManager.LLAMA, "Llama");
         addChestCavityTypeName(ChestCavityTypeManager.CARNIVORE, "Carnivore");
         addChestCavityTypeName(ChestCavityTypeManager.BRUTE_ANIMAL, "Brute Animal");
@@ -1158,6 +1175,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addItem(InitItem.GUARDIAN_EYE, "守卫者之眼");
         addItem(InitItem.ELDER_GUARDIAN_EYE, "远古守卫者之眼");
         addItem(InitItem.STRIDER_KIDNEY, "炽足兽肾脏");
+        addItem(InitItem.SYMBIOTIC_INTESTINE, "共生肠道");
+        addItem(InitItem.BEWITCHED_LIVER, "巫蛊之肝");
 
         addAttribute(InitAttribute.HEALTH, "健康");
         addAttribute(InitAttribute.NERVES, "神经效率");
@@ -1350,6 +1369,19 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "对视线中的目标充能并发射光线",
             "造成4点魔法伤害加6点攻击伤害",
             "充能期间目标需保持在范围内"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.SYMBIOTIC_INTESTINE, "食用花朵获得迷之炖菜效果");
+        addOrganActiveSkill(
+            InitItem.SYMBIOTIC_INTESTINE,
+            "食用手持花朵或视线指向的花朵方块",
+            "获得对应花朵的迷之炖菜药水效果"
+        );
+
+        addOrganSimpleActiveSkill(InitItem.BEWITCHED_LIVER, "清除自身所有药水效果");
+        addOrganActiveSkill(
+            InitItem.BEWITCHED_LIVER,
+            "清除自身所有药水效果"
         );
 
         add(ItemTagManager.ORGANS, "器官");
@@ -1674,10 +1706,12 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("jei." + ChestCavityBeyond.MOD_ID + ".type_default_bonus_header", "自带属性加成：");
 
         addChestCavityTypeName(ChestCavityTypeManager.HUMAN, "人类");
+        addChestCavityTypeName(ChestCavityTypeManager.WITCH, "女巫");
         addChestCavityTypeName(ChestCavityTypeManager.ANIMAL, "动物");
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE1, "食草动物");
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE2, "反刍食草动物");
         addChestCavityTypeName(ChestCavityTypeManager.HERBIVORE3, "多胃食草动物");
+        addChestCavityTypeName(ChestCavityTypeManager.MOOSHROOM, "哞菇");
         addChestCavityTypeName(ChestCavityTypeManager.LLAMA, "羊驼");
         addChestCavityTypeName(ChestCavityTypeManager.CARNIVORE, "食肉动物");
         addChestCavityTypeName(ChestCavityTypeManager.BRUTE_ANIMAL, "力量型动物");

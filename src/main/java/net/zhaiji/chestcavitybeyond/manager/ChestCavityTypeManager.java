@@ -95,7 +95,13 @@ public class ChestCavityTypeManager {
         .addConversion(ChestCavityBeyond.of("undead"), InitItem.INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
         .addConversion(ChestCavityBeyond.of("undead"), InitItem.KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
         .addConversion(ChestCavityBeyond.of("undead"), InitItem.SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
-        .addConversion(ChestCavityBeyond.of("undead"), InitItem.LIVER.get(), InitItem.ROTTEN_LIVER.get());
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.LIVER.get(), InitItem.ROTTEN_LIVER.get())
+        // HUMAN → WITCH 器官转换映射（用于村民雷击变女巫）
+        .addConversion(ChestCavityBeyond.of("witch"), InitItem.LIVER.get(), InitItem.BEWITCHED_LIVER.get());
+
+    public static final ChestCavityType WITCH = register(ChestCavityBeyond.of("witch"))
+        .copyWith(HUMAN)
+        .setSecondRow(6, InitItem.BEWITCHED_LIVER.get());
 
     public static final ChestCavityType ANIMAL = register(ChestCavityBeyond.of("animal"))
         .setFirstRow(0, InitItem.ANIMAL_MUSCLE.get())
@@ -154,6 +160,13 @@ public class ChestCavityTypeManager {
     public static final ChestCavityType HERBIVORE3 = register(ChestCavityBeyond.of("herbivore3"))
         .copyWith(HERBIVORE2)
         .setThirdRow(3, InitItem.HERBIVORE_RUMEN.get());
+
+    public static final ChestCavityType MOOSHROOM = register(ChestCavityBeyond.of("mooshroom"))
+        .copyWith(HERBIVORE3)
+        .setThirdRow(2, InitItem.SYMBIOTIC_INTESTINE.get())
+        .setThirdRow(6, InitItem.SYMBIOTIC_INTESTINE.get())
+        // MOOSHROOM → HERBIVORE3 器官转换映射（用于哞菇剪蘑菇变牛）
+        .addConversion(ChestCavityBeyond.of("herbivore3"), InitItem.SYMBIOTIC_INTESTINE.get(), InitItem.HERBIVORE_INTESTINE.get());
 
     public static final ChestCavityType LLAMA = register(ChestCavityBeyond.of("llama"))
         .copyWith(HERBIVORE1)
@@ -377,7 +390,19 @@ public class ChestCavityTypeManager {
         .setThirdRow(5, InitItem.FIREPROOF_INTESTINE.get())
         .setThirdRow(6, InitItem.FIREPROOF_INTESTINE.get())
         .setThirdRow(7, InitItem.FIREPROOF_MUSCLE.get())
-        .setThirdRow(8, InitItem.FIREPROOF_MUSCLE.get());
+        .setThirdRow(8, InitItem.FIREPROOF_MUSCLE.get())
+        // FIREPROOF → UNDEAD 器官转换映射（用于猪灵僵尸化为僵尸猪灵）
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_RIB.get(), InitItem.ROTTEN_RIB.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_HEART.get(), InitItem.ROTTEN_HEART.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_LUNG.get(), InitItem.ROTTEN_LUNG.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_SPINE.get(), InitItem.ROTTEN_SPINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.FIREPROOF_LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
     public static final ChestCavityType BASALT = register(ChestCavityBeyond.of("basalt"))
         .setFirstRow(0, InitItem.BASALT_MUSCLE.get())
@@ -407,7 +432,19 @@ public class ChestCavityTypeManager {
         .setThirdRow(5, InitItem.BASALT_INTESTINE.get())
         .setThirdRow(6, InitItem.BASALT_INTESTINE.get())
         .setThirdRow(7, InitItem.BASALT_MUSCLE.get())
-        .setThirdRow(8, InitItem.BASALT_MUSCLE.get());
+        .setThirdRow(8, InitItem.BASALT_MUSCLE.get())
+        // BASALT → UNDEAD 器官转换映射（用于猪灵蛮兵僵尸化为僵尸猪灵）
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_MUSCLE.get(), InitItem.ROTTEN_MUSCLE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_RIB.get(), InitItem.ROTTEN_RIB.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_APPENDIX.get(), InitItem.ROTTEN_APPENDIX.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_HEART.get(), InitItem.ROTTEN_HEART.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_LUNG.get(), InitItem.ROTTEN_LUNG.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_SPINE.get(), InitItem.ROTTEN_SPINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_STOMACH.get(), InitItem.ROTTEN_STOMACH.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_INTESTINE.get(), InitItem.ROTTEN_INTESTINE.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_KIDNEY.get(), InitItem.ROTTEN_KIDNEY.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_SPLEEN.get(), InitItem.ROTTEN_SPLEEN.get())
+        .addConversion(ChestCavityBeyond.of("undead"), InitItem.BASALT_LIVER.get(), InitItem.ROTTEN_LIVER.get());
 
     public static final ChestCavityType STRIDER = register(ChestCavityBeyond.of("strider"))
         .copyWith(FIREPROOF)

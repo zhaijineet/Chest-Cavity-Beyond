@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -14,10 +15,12 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -346,6 +349,71 @@ public class PlayerSkillUtil {
         if (!isConsume) return false;
         player.level().playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS);
         player.addEffect(new MobEffectInstance(InitEffect.FURNACE_POWER, totalDuration, amplifier));
+        return true;
+    }
+
+    /**
+     * 共生肠道——食用花朵获得迷之炖菜效果
+     */
+    public static boolean flowerFermentation(ChestCavitySlotContext context) {
+        LivingEntity entity = context.entity();
+        if (!(entity instanceof Player player)) return false;
+
+        // 优先检测手持花朵
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        ItemStack stack = player.getItemInHand(hand);
+        SuspiciousEffectHolder holder = SuspiciousEffectHolder.tryGet(stack.getItem());
+        if (holder == null) {
+            hand = InteractionHand.OFF_HAND;
+            stack = player.getItemInHand(hand);
+            holder = SuspiciousEffectHolder.tryGet(stack.getItem());
+        }
+
+        if (holder != null) {
+            applyFlowerEffects(player, holder);
+            if (!player.getAbilities().instabuild) {
+                stack.consume(1, player);
+            }
+            return true;
+        }
+
+        // 无手持花朵时检测视线方向的花朵方块
+        Vec3 from = player.getEyePosition();
+        Vec3 to = from.add(player.getLookAngle().normalize().scale(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)));
+        ClipContext clipContext = new ClipContext(
+            from,
+            to,
+            ClipContext.Block.OUTLINE,
+            ClipContext.Fluid.NONE,
+            CollisionContext.empty()
+        );
+        BlockHitResult hitResult = player.level().clip(clipContext);
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = hitResult.getBlockPos();
+            BlockState state = player.level().getBlockState(pos);
+            if (state.is(BlockTags.SMALL_FLOWERS) && state.getBlock() instanceof SuspiciousEffectHolder blockHolder) {
+                applyFlowerEffects(player, blockHolder);
+                player.level().destroyBlock(pos, false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void applyFlowerEffects(LivingEntity entity, SuspiciousEffectHolder holder) {
+        for (SuspiciousStewEffects.Entry entry : holder.getSuspiciousEffects().effects()) {
+            entity.addEffect(entry.createEffectInstance());
+        }
+        entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EAT, entity.getSoundSource(), 1.0F, 1.0F);
+    }
+
+    /**
+     * 巫蛊之肝——移除自身所有药水效果
+     */
+    public static boolean purgeEffects(ChestCavitySlotContext context) {
+        LivingEntity entity = context.entity();
+        if (entity.getActiveEffects().isEmpty()) return false;
+        entity.removeAllEffects();
         return true;
     }
 }

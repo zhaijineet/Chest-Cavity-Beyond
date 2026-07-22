@@ -96,7 +96,7 @@ public class CommonEventHandler {
      * <p>
      * 在此阶段注册为已有物品添加器官能力，并触发器官注册事件供外部模组使用。
      *
-     * @param event FMLCommonSetupEvent
+     * @param event FML常规设置事件
      */
     public static void handlerFMLCommonSetupEvent(FMLCommonSetupEvent event) {
         // 下界之星器官注册
@@ -125,16 +125,19 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.EVOKER, ChestCavityTypeManager.HUMAN);
         ChestCavityTypeManager.registerEntity(EntityType.VINDICATOR, ChestCavityTypeManager.HUMAN);
         ChestCavityTypeManager.registerEntity(EntityType.PILLAGER, ChestCavityTypeManager.HUMAN);
-        ChestCavityTypeManager.registerEntity(EntityType.WITCH, ChestCavityTypeManager.HUMAN);
+        // 女巫
+        ChestCavityTypeManager.registerEntity(EntityType.WITCH, ChestCavityTypeManager.WITCH);
         // 食草生物1型
         ChestCavityTypeManager.registerEntity(EntityType.DONKEY, ChestCavityTypeManager.HERBIVORE1);
         ChestCavityTypeManager.registerEntity(EntityType.MULE, ChestCavityTypeManager.HERBIVORE1);
         // 食草生物3型
         ChestCavityTypeManager.registerEntity(EntityType.COW, ChestCavityTypeManager.HERBIVORE3);
-        ChestCavityTypeManager.registerEntity(EntityType.MOOSHROOM, ChestCavityTypeManager.HERBIVORE3);
         ChestCavityTypeManager.registerEntity(EntityType.SHEEP, ChestCavityTypeManager.HERBIVORE3);
+        // 哞菇
+        ChestCavityTypeManager.registerEntity(EntityType.MOOSHROOM, ChestCavityTypeManager.MOOSHROOM);
         // 食肉动物
         ChestCavityTypeManager.registerEntity(EntityType.WOLF, ChestCavityTypeManager.CARNIVORE);
+        // 劫掠兽
         ChestCavityTypeManager.registerEntity(EntityType.RAVAGER, ChestCavityTypeManager.RAVAGER);
         // 动物
         ChestCavityTypeManager.registerEntity(EntityType.PIG, ChestCavityTypeManager.ANIMAL);
@@ -169,10 +172,11 @@ public class CommonEventHandler {
         ChestCavityTypeManager.registerEntity(EntityType.ARMADILLO, ChestCavityTypeManager.SMALL_ANIMAL);
         // 美西螈
         ChestCavityTypeManager.registerEntity(EntityType.AXOLOTL, ChestCavityTypeManager.AQUATIC);
-        // 玄武岩生物
-        ChestCavityTypeManager.registerEntity(EntityType.PIGLIN_BRUTE, ChestCavityTypeManager.BASALT);
         // 抗火生物
         ChestCavityTypeManager.registerEntity(EntityType.PIGLIN, ChestCavityTypeManager.FIREPROOF);
+        // 玄武岩生物
+        ChestCavityTypeManager.registerEntity(EntityType.PIGLIN_BRUTE, ChestCavityTypeManager.BASALT);
+        // 炽足兽
         ChestCavityTypeManager.registerEntity(EntityType.STRIDER, ChestCavityTypeManager.STRIDER);
         // 水生生物
         ChestCavityTypeManager.registerEntity(EntityType.SQUID, ChestCavityTypeManager.AQUATIC);

@@ -2,6 +2,8 @@ package net.zhaiji.chestcavitybeyond.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.horse.Llama;
@@ -18,8 +20,10 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zhaiji.chestcavitybeyond.ChestCavityBeyondConfig;
 import net.zhaiji.chestcavitybeyond.api.ChestCavitySlotContext;
@@ -29,6 +33,8 @@ import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillMetadata;
 import net.zhaiji.chestcavitybeyond.api.goal.GoalSkillTargetResolver;
 import net.zhaiji.chestcavitybeyond.attachment.ChestCavityData;
 import net.zhaiji.chestcavitybeyond.register.InitAttribute;
+
+import java.util.Collection;
 
 public class GoalSkillUtil {
     /**
@@ -341,6 +347,59 @@ public class GoalSkillUtil {
                 }
             )
             .entityFilter(mob -> !(mob instanceof WitherBoss))
+            .build();
+    }
+
+    /**
+     * 共生肠道——搜索并食用附近花朵
+     */
+    public static GoalSkillMetadata symbioticIntestineGoalSkill() {
+        return GoalSkillMetadata.blockInteract(
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    BlockPos blockTarget = combatContext.blockTarget();
+                    if (blockTarget == null) return false;
+                    BlockState state = entity.level().getBlockState(blockTarget);
+                    if (!(state.getBlock() instanceof SuspiciousEffectHolder holder)) return false;
+                    for (SuspiciousStewEffects.Entry entry : holder.getSuspiciousEffects().effects()) {
+                        entity.addEffect(entry.createEffectInstance());
+                    }
+                    entity.level().destroyBlock(blockTarget, false);
+                    return true;
+                }
+            )
+            .blockTargetResolver(
+                (mob, skillEntry) -> GoalSkillTargetResolver.DEFAULT_BLOCK_RESOLVER.apply(
+                    mob,
+                    state -> state.is(BlockTags.SMALL_FLOWERS) && state.getBlock() instanceof SuspiciousEffectHolder
+                )
+            )
+            .build();
+    }
+
+    /**
+     * 巫蛊之肝——有害效果占比高时清除所有药水效果
+     */
+    public static GoalSkillMetadata bewitchedLiverGoalSkill() {
+        return GoalSkillMetadata.recovery(
+                (GoalCombatContext combatContext, ChestCavitySlotContext slotContext) -> {
+                    LivingEntity entity = slotContext.entity();
+                    if (entity.getActiveEffects().isEmpty()) return false;
+                    entity.removeAllEffects();
+                    return true;
+                }
+            )
+            .canUse((mob, skillEntry) ->
+                mob.getActiveEffects().stream().anyMatch(effect -> !effect.getEffect().value().isBeneficial())
+            )
+            .weightOverride((mob, combatContext, skillEntry) -> {
+                Collection<MobEffectInstance> effects = mob.getActiveEffects();
+                if (effects.isEmpty()) return 0;
+                long harmfulCount = effects.stream()
+                    .filter(effect -> !effect.getEffect().value().isBeneficial())
+                    .count();
+                return (double) (harmfulCount * 100) / effects.size();
+            })
             .build();
     }
 }

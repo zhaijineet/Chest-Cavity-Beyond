@@ -1736,4 +1736,27 @@ public class InitItem {
             .addValueAttribute(InitAttribute.WATER_ALLERGY, 1)
             .build()
     );
+
+    // 共生肠道
+    public static final Supplier<Item> SYMBIOTIC_INTESTINE = ITEM.register(
+        "symbiotic_intestine",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.CARNIVOROUS_NUTRITION, 0.5)
+            .addValueAttribute(InitAttribute.HERBIVOROUS_NUTRITION, 2.5)
+            .cooldown(20)
+            .skill(PlayerSkillUtil::flowerFermentation)
+            .goalSkill(GoalSkillUtil.symbioticIntestineGoalSkill())
+            .build()
+    );
+
+    // 巫蛊之肝
+    public static final Supplier<Item> BEWITCHED_LIVER = ITEM.register(
+        "bewitched_liver",
+        () -> Organ.builder()
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 2)
+            .cooldown(10 * 20)
+            .skill(PlayerSkillUtil::purgeEffects)
+            .goalSkill(GoalSkillUtil.bewitchedLiverGoalSkill())
+            .build()
+    );
 }
