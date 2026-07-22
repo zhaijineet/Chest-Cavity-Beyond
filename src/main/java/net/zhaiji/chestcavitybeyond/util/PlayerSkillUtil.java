@@ -89,7 +89,7 @@ public class PlayerSkillUtil {
     public static boolean silk(ChestCavitySlotContext context) {
         LivingEntity entity = context.entity();
         if (entity instanceof Player player) {
-            boolean instabuild = player.getAbilities().instabuild;
+            boolean instabuild = player.hasInfiniteMaterials();
             if (player.getFoodData().getFoodLevel() <= 0 && !instabuild) return false;
             if (!instabuild) {
                 player.getFoodData().addExhaustion(4);
@@ -360,6 +360,7 @@ public class PlayerSkillUtil {
         if (!(entity instanceof Player player)) return false;
 
         // 优先检测手持花朵
+        Level level = player.level();
         InteractionHand hand = InteractionHand.MAIN_HAND;
         ItemStack stack = player.getItemInHand(hand);
         SuspiciousEffectHolder holder = SuspiciousEffectHolder.tryGet(stack.getItem());
@@ -370,41 +371,42 @@ public class PlayerSkillUtil {
         }
 
         if (holder != null) {
-            applyFlowerEffects(player, holder);
-            if (!player.getAbilities().instabuild) {
+            if (!player.hasInfiniteMaterials()) {
                 stack.consume(1, player);
             }
-            return true;
-        }
-
-        // 无手持花朵时检测视线方向的花朵方块
-        Vec3 from = player.getEyePosition();
-        Vec3 to = from.add(player.getLookAngle().normalize().scale(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)));
-        ClipContext clipContext = new ClipContext(
-            from,
-            to,
-            ClipContext.Block.OUTLINE,
-            ClipContext.Fluid.NONE,
-            CollisionContext.empty()
-        );
-        BlockHitResult hitResult = player.level().clip(clipContext);
-        if (hitResult.getType() == HitResult.Type.BLOCK) {
-            BlockPos pos = hitResult.getBlockPos();
-            BlockState state = player.level().getBlockState(pos);
-            if (state.is(BlockTags.SMALL_FLOWERS) && state.getBlock() instanceof SuspiciousEffectHolder blockHolder) {
-                applyFlowerEffects(player, blockHolder);
-                player.level().destroyBlock(pos, false);
-                return true;
+        } else {
+            // 无手持花朵时检测视线方向的花朵方块
+            Vec3 from = player.getEyePosition();
+            Vec3 to = from.add(player.getLookAngle().normalize().scale(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE)));
+            ClipContext clipContext = new ClipContext(
+                from,
+                to,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                CollisionContext.empty()
+            );
+            BlockHitResult hitResult = level.clip(clipContext);
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+                BlockPos pos = hitResult.getBlockPos();
+                if (level.getBlockState(pos).getBlock() instanceof SuspiciousEffectHolder blockHolder) {
+                    holder = blockHolder;
+                    level.destroyBlock(pos, false);
+                }
             }
         }
-        return false;
-    }
-
-    private static void applyFlowerEffects(LivingEntity entity, SuspiciousEffectHolder holder) {
-        for (SuspiciousStewEffects.Entry entry : holder.getSuspiciousEffects().effects()) {
-            entity.addEffect(entry.createEffectInstance());
+        if (holder != null) {
+            for (SuspiciousStewEffects.Entry entry : holder.getSuspiciousEffects().effects()) {
+                player.addEffect(entry.createEffectInstance());
+            }
+            level.playSound(
+                null,
+                player.blockPosition(),
+                SoundEvents.GENERIC_EAT,
+                player.getSoundSource()
+            );
+            return true;
         }
-        entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EAT, entity.getSoundSource(), 1.0F, 1.0F);
+        return false;
     }
 
     /**

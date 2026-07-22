@@ -372,7 +372,7 @@ public class OrganAttributeUtil {
     public static void updateStrength(ChestCavityData data) {
         LivingEntity entity = data.getOwner();
         double strength = data.getDifferenceValue(InitAttribute.STRENGTH);
-        double factor = MathUtil.getLog10Scale(strength);
+        double factor = MathUtil.getLog10Scale(strength) / 4;
         updateAttributeModifier(
             entity,
             Attributes.ATTACK_DAMAGE,
@@ -386,7 +386,7 @@ public class OrganAttributeUtil {
     public static void updateSpeed(ChestCavityData data) {
         LivingEntity entity = data.getOwner();
         double speed = data.getDifferenceValue(InitAttribute.SPEED);
-        double factor = MathUtil.getLog10Scale(speed) / 2;
+        double factor = MathUtil.getLog10Scale(speed) / 4;
         if (speed == 0) {
             factor = 0;
         }

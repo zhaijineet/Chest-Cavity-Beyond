@@ -99,7 +99,7 @@ public class AttributeDisplayManager {
         register(
             InitAttribute.STRENGTH, 30, entity -> {
                 double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.STRENGTH);
-                double factor = MathUtil.getLog10Scale(diff);
+                double factor = MathUtil.getLog10Scale(diff) / 4;
                 double damagePercent = (1 + (diff >= 0 ? factor : -factor)) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.STRENGTH),
@@ -110,7 +110,7 @@ public class AttributeDisplayManager {
         register(
             InitAttribute.SPEED, 30, entity -> {
                 double diff = ChestCavityUtil.getData(entity).getDifferenceValue(InitAttribute.SPEED);
-                double factor = MathUtil.getLog10Scale(diff) / 2;
+                double factor = MathUtil.getLog10Scale(diff) / 4;
                 double speedPercent = (1 + (diff >= 0 ? factor : -factor)) * 100;
                 return Component.translatable(
                     getValueEffectKey(InitAttribute.SPEED),

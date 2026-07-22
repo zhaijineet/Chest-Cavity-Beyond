@@ -28,7 +28,7 @@ public class OrganInteractUtil {
 
         if (!entity.level().isClientSide()) {
             entity.heal((float) (2.5 * ironRepair));
-            if (!player.getAbilities().instabuild) {
+            if (!player.hasInfiniteMaterials()) {
                 heldItem.consume(1, player);
             }
             Level level = entity.level();

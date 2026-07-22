@@ -464,6 +464,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.HEALTH, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -475,6 +476,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.BREATH_CAPACITY, 1.5)
             .addValueAttribute(InitAttribute.ENDURANCE, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -485,6 +487,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.NERVES, 1.5)
             .addValueAttribute(InitAttribute.DEFENSE, 0.75)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -494,6 +497,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.DIGESTION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -503,6 +507,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.NUTRITION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -512,6 +517,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.FILTRATION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -521,6 +527,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.METABOLISM, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -530,6 +537,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.DETOXIFICATION, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -539,6 +547,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(Attributes.LUCK, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -548,6 +557,7 @@ public class InitItem {
         () -> Organ.builder()
             .addValueAttribute(InitAttribute.DEFENSE, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -558,6 +568,7 @@ public class InitItem {
             .addValueAttribute(InitAttribute.STRENGTH, 1.5)
             .addValueAttribute(InitAttribute.SPEED, 1.5)
             .addValueAttribute(InitAttribute.FIRE_RESISTANCE, 1)
+            .baseMultipliedAttribute(InitAttribute.LAVA_SWIM_SPEED, 0.05)
             .build()
     );
 
@@ -1203,6 +1214,7 @@ public class InitItem {
                     }
                 }
             )
+            .addValueAttribute(InitAttribute.DETOXIFICATION, 2)
             .cooldown(context -> {
                 PotionContents contents = context.stack().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
                 int maxDuration = 0;
