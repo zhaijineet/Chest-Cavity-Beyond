@@ -8,7 +8,7 @@
 
 注释应当写在需要被注释的代码行的上方，不允许写在同行
 
-NeoForge源码： E:Mod Project\neoforge-21.1.219-merged
+NeoForge源码： E:Mod Project\neoforge-21.1.230-merged
 JEI源码：E:\Mod Project\JustEnoughItems
 苹果皮源码：E:\Mod Project\AppleSkin
 

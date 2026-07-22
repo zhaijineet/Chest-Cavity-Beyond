@@ -24,6 +24,7 @@ import net.zhaiji.chestcavitybeyond.register.InitDamageType;
 import net.zhaiji.chestcavitybeyond.register.InitEffect;
 import net.zhaiji.chestcavitybeyond.register.InitEnchantment;
 import net.zhaiji.chestcavitybeyond.register.InitItem;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -596,7 +597,7 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "Reduces fire damage taken",
             "The higher the damage, the lower the damage reduction ratio",
             "Immune to hot blocks (magma/campfire) at ≥ %s",
-            "Immune to fire/burning at ≥ %s, also clears fire status",
+            "Immune to fire damage at ≥ %s, also clears fire status",
             "Immune to lava at ≥ %s"
         );
         addAttributeDescription(
@@ -752,7 +753,11 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addAttributeDescription(Attributes.KNOCKBACK_RESISTANCE, "Reduces knockback taken");
         addAttributeValueEffect(Attributes.KNOCKBACK_RESISTANCE, "Knockback Resistance %s%%");
 
-        addAttributeDescription(Attributes.GRAVITY, "Affects falling acceleration", "At 0 or below, enables free flight and nullifies fall damage");
+        addAttributeDescription(
+            Attributes.GRAVITY,
+            "Affects falling acceleration",
+            "At 0 or below, enables free flight and nullifies fall damage"
+        );
         addAttributeValueEffect(Attributes.GRAVITY, "Gravity %s%%");
         add(AttributeDisplayManager.getValueEffectKey(Attributes.GRAVITY) + ".flight", "Zero gravity, free flight enabled");
 
@@ -836,6 +841,88 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.GUARDIAN, "Guardian");
         addChestCavityTypeName(ChestCavityTypeManager.ELDER_GUARDIAN, "Elder Guardian");
         addChestCavityTypeName(ChestCavityTypeManager.ARMOR_STAND, "Armor Stand");
+
+        addConfig("title", "Chest Cavity Beyond Configuration");
+        addConfig("Organ", "Organ System", "Organ system mechanics");
+        addConfig("ChestOpener", "Chest Opener", "Chest opening mechanics");
+        addConfig("SkillParameters", "Skill Parameters", "Organ skill numerical parameters");
+        addConfig("Immunity", "Immunity", "Fire and frost immunity thresholds");
+        addConfig("MobSkill", "Mob Skill", "Mob AI organ skill settings");
+        addConfig("filtrationPeriod", "Filtration Period", "Filtration period of organ system (ticks)");
+        addConfig(
+            "detoxificationImmunityDurationThreshold",
+            "Detox Immunity Threshold",
+            "Immunize harmful effects reduced by detoxification or withered when their duration is at or below this value (ticks, 0 = only effects reduced to 0 ticks)"
+        );
+        addConfig(
+            "minChestOpenMaxHealth",
+            "Direct Open Health Threshold",
+            "Target max health at or below this value can be opened directly without reducing current health"
+        );
+        addConfig(
+            "chestOpenBaseHealthRatio",
+            "Open Base Health Ratio",
+            "When target max health exceeds direct-open threshold, target current health must be below this ratio of max health to open (0.3 = ≤30%, each Advanced Surgery level adds +10%)"
+        );
+        addConfig("guardianLaserDistance", "Guardian Laser Distance", "Effective distance of guardian laser skill");
+        addConfig("randomTeleportAttempts", "Teleport Attempts", "Attempt loops for enderman teleport skill");
+        addConfig("furnacePowerMaxDuration", "Furnace Power Max Duration", "Maximum duration of furnace power effect (ticks)");
+        addConfig("shulkerBulletDistance", "Shulker Bullet Distance", "Detection distance of shulker bullet skill");
+        addConfig("sonicBoomDistance", "Sonic Boom Distance", "Distance of warden sonic boom skill");
+        addConfig(
+            "crystalEffectSearchRange",
+            "Crystal Effect Search Range",
+            "Search range of end crystal for has crystallization entities"
+        );
+        addConfig(
+            "enableChestCavityScaleSideEffect",
+            "Chest Cavity Scale Side Effect",
+            "Enable entity scale side effect when chest cavity size increases (each extra row adds 0.25 scale)"
+        );
+        addConfig(
+            "chestplateBlocksChestOpener",
+            "Chestplate Blocks Opener",
+            "Whether chestplate blocks the chest opener from opening the chest cavity (creative mode is not affected)"
+        );
+        addConfig(
+            "fireImmunityHotFloor",
+            "Fire Immunity - Hot Block",
+            "Fire resistance threshold: immune to hot block (magma block/campfire) damage"
+        );
+        addConfig("fireImmunityFire", "Fire Immunity - Fire", "Fire resistance threshold: immune to fire damage, and clear fire status");
+        addConfig("fireImmunityLava", "Fire Immunity - Lava", "Fire resistance threshold: immune to lava damage");
+        addConfig(
+            "frostImmunity",
+            "Frost Immunity Threshold",
+            "Frost resistance threshold: immune to freezing damage, and clear frozen ticks"
+        );
+        addConfig("enableMobGoalSkill", "Enable Mob Organ Skill", "Enable non-player entities to automatically use organ skills");
+        addConfig(
+            "goalSkillEvalInterval",
+            "Skill Eval Interval",
+            "Goal organ skill evaluation interval (ticks), higher = better performance but slower reaction\nNote: odd values are rounded up to even (e.g. 3→4) due to Mob AI dual-tick, minimum effective value is 2"
+        );
+        addConfig("goalSkillEnemyDetectRange", "Skill Enemy Detect Range", "Enemy detection range for Goal organ skill (blocks)");
+        addConfig(
+            "goalSkillTargetMemoryTicks",
+            "Skill Target Memory",
+            "Goal organ skill target memory duration (ticks), how long the mob keeps attacking after losing target (0 = disabled, 300 = 15s)"
+        );
+        addConfig(
+            "mobSkillRetaliatePlayer",
+            "Retaliate vs Player",
+            "Whether pet-type mobs' (wolves/cats, i.e. ownable entities) organ skills retaliate against players who dealt damage\nfalse = no, default protects against accidental player damage (only affects OwnableEntity, not monsters)"
+        );
+        addConfig(
+            "mobSkillRetaliateOtherPet",
+            "Retaliate vs Other Pet",
+            "Whether pet-type mobs' organ skills retaliate against other pets with different owners\nfalse = no, default prevents pet mutual damage (only affects OwnableEntity, not monsters)"
+        );
+        addConfig(
+            "detailedTooltips",
+            "Detailed Tooltips",
+            "Default mode shows detailed descriptions. When disabled, hold SHIFT to view details."
+        );
     }
 
     public void Chinese() {
@@ -1412,8 +1499,8 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
             "减少受到的火焰伤害",
             "伤害越高，减伤比例越低",
             "≥%s时免疫热方块（岩浆块/营火）伤害",
-            "≥%s时免疫火焰/燃烧伤害，并清除着火状态",
-            "≥%s时免疫岩浆伤害"
+            "≥%s时免疫火焰伤害，并清除着火状态",
+            "≥%s时免疫熔岩伤害"
         );
         addAttributeDescription(
             InitAttribute.FROST_RESISTANCE,
@@ -1635,6 +1722,60 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         addChestCavityTypeName(ChestCavityTypeManager.GUARDIAN, "守卫者");
         addChestCavityTypeName(ChestCavityTypeManager.ELDER_GUARDIAN, "远古守卫者");
         addChestCavityTypeName(ChestCavityTypeManager.ARMOR_STAND, "盔甲架");
+
+        addConfig("title", "胸腔扩展配置");
+        addConfig("Organ", "器官系统", "器官系统机制");
+        addConfig("ChestOpener", "开胸器", "开胸机制");
+        addConfig("SkillParameters", "技能参数", "器官技能数值参数");
+        addConfig("Immunity", "免疫阈值", "火焰与冰霜免疫阈值");
+        addConfig("MobSkill", "生物技能", "生物AI器官技能设置");
+        addConfig("filtrationPeriod", "器官过滤周期", "器官过滤系统的周期（tick）");
+        addConfig(
+            "detoxificationImmunityDurationThreshold",
+            "解毒免疫阈值",
+            "解毒或凋零化缩短后的有害效果持续时间不超过此值时直接免疫（tick，0 = 仅免疫缩短到0 tick的效果）"
+        );
+        addConfig("minChestOpenMaxHealth", "直接开胸生命阈值", "目标最大生命值不超过此值时可直接开胸，无需削减当前生命值");
+        addConfig(
+            "chestOpenBaseHealthRatio",
+            "开胸基础生命比例",
+            "超出直接开胸阈值时，目标当前生命值需低于最大生命值的该比例才能开胸（0.3 = 目标生命需≤30%，每级高级手术附魔额外+10%）"
+        );
+        addConfig("guardianLaserDistance", "守卫者激光距离", "守卫者激光技能的有效距离");
+        addConfig("randomTeleportAttempts", "末影传送尝试次数", "末影传送技能的尝试循环次数");
+        addConfig("furnacePowerMaxDuration", "熔炉之力最大持续", "熔炉之力效果的最大持续时间（tick）");
+        addConfig("shulkerBulletDistance", "潜影贝子弹距离", "潜影贝子弹技能的检测距离");
+        addConfig("sonicBoomDistance", "音爆距离", "监守者音爆技能的距离");
+        addConfig("crystalEffectSearchRange", "水晶效果搜索范围", "末影水晶对拥有结晶实体的搜索范围");
+        addConfig("enableChestCavityScaleSideEffect", "胸腔尺寸副作用", "是否启用胸腔容量增大时的实体尺寸副作用（每增加一排scale增加0.25）");
+        addConfig("chestplateBlocksChestOpener", "胸甲阻挡开胸", "胸甲是否阻挡开胸器打开胸腔（创造模式不受影响）");
+        addConfig("fireImmunityHotFloor", "火焰免疫-热方块", "火焰抗性阈值：免疫热方块（岩浆块/营火）伤害");
+        addConfig("fireImmunityFire", "火焰免疫-火焰", "火焰抗性阈值：免疫火焰伤害，并清除着火状态");
+        addConfig("fireImmunityLava", "火焰免疫-熔岩", "火焰抗性阈值：免疫熔岩伤害");
+        addConfig("frostImmunity", "冰霜免疫阈值", "冰霜抗性阈值：免疫冰冻伤害，并清除冰冻进度");
+        addConfig("enableMobGoalSkill", "启用生物器官技能", "是否启用非玩家实体自动使用器官技能");
+        addConfig(
+            "goalSkillEvalInterval",
+            "技能评估间隔",
+            "Goal器官技能评估间隔（tick），值越大性能越好但反应越慢\n注意：因MobAI的双tick机制，奇数会自动向上取偶（如 3→4），最小有效值为 2"
+        );
+        addConfig("goalSkillEnemyDetectRange", "技能敌人检测范围", "Goal器官技能的敌人检测范围（格）");
+        addConfig(
+            "goalSkillTargetMemoryTicks",
+            "技能目标记忆时长",
+            "Goal器官技能的目标记忆时长（tick），目标丢失后仍继续攻击的保持时间（0 = 禁用记忆，300 = 15秒）"
+        );
+        addConfig(
+            "mobSkillRetaliatePlayer",
+            "技能反击玩家",
+            "宠物型Mob（狼/猫等有主生物）的器官技能是否反击造成伤害的玩家\nfalse = 不反击，默认保护玩家误伤场景（仅影响OwnableEntity，不影响怪物）"
+        );
+        addConfig(
+            "mobSkillRetaliateOtherPet",
+            "技能反击其他宠物",
+            "宠物型Mob（狼/猫等有主生物）的器官技能是否反击造成伤害的其他宠物（不同主人）\nfalse = 不反击，默认防止宠物互伤（仅影响OwnableEntity，不影响怪物）"
+        );
+        addConfig("detailedTooltips", "默认详细描述", "默认显示详细描述。关闭时按住Shift查看详细描述。");
     }
 
     private void addAttribute(Holder<Attribute> attribute, String value) {
@@ -1708,6 +1849,20 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
 
     private void addChestCavityTypeName(ChestCavityType type, String name) {
         add(ChestCavityType.getTranslationKey(type.getId()), name);
+    }
+
+    /**
+     * 添加 ConfigurationScreen 配置项或 section 的名称与可选 tooltip
+     */
+    private void addConfig(String key, String name, @Nullable String tooltip) {
+        add(ChestCavityBeyond.MOD_ID + ".configuration." + key, name);
+        if (tooltip != null) {
+            add(ChestCavityBeyond.MOD_ID + ".configuration." + key + ".tooltip", tooltip);
+        }
+    }
+
+    private void addConfig(String key, String name) {
+        addConfig(key, name, null);
     }
 
     @Override

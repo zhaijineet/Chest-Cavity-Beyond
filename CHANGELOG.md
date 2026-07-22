@@ -17,6 +17,10 @@
 - 熔岩中跳跃与下沉受熔岩游泳速度加成
 - 熔岩中疾跑水平衰减对齐水中机制，免疫时按熔岩游泳速度减缓额外下沉重力
 - 重构属性读取，统一使用原版 getAttributeValue，移除 ChestCavityData 属性中转
+- 接入NeoForge ConfigurationScreen，模组列表可直接打开配置界面
+- 配置项按功能分组（Organ、ChestOpener、SkillParameters、Immunity、MobSkill）
+- 新增配置项与分组的中英文本地化
+- 配置注释精简为纯英文，移除冗余双语注释
 
 ## 1.8.12 新增劫掠兽胸腔类型与JEI缓存修复
 

@@ -445,8 +445,8 @@ public class OrganAttributeUtil {
      * 阶梯式免疫：
      * <ul>
      *   <li>≥ fireImmunityHotFloor：免疫热方块（岩浆块/营火）伤害</li>
-     *   <li>≥ fireImmunityFire：免疫火焰/燃烧伤害</li>
-     *   <li>≥ fireImmunityLava：免疫岩浆伤害</li>
+     *   <li>≥ fireImmunityFire：免疫火焰伤害</li>
+     *   <li>≥ fireImmunityLava：免疫熔岩伤害</li>
      * </ul>
      * </p>
      *
@@ -458,7 +458,7 @@ public class OrganAttributeUtil {
         if (!source.is(DamageTypeTags.IS_FIRE) || fireResistance < ChestCavityBeyondConfig.fireImmunityHotFloor) {
             return false;
         }
-        // 岩浆 → 需要 ≥ fireImmunityLava
+        // 熔岩 → 需要 ≥ fireImmunityLava
         if (source.is(DamageTypes.LAVA)) {
             return fireResistance >= ChestCavityBeyondConfig.fireImmunityLava;
         }
