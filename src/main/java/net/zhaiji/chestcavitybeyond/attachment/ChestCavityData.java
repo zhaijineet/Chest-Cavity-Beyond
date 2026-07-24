@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 public class ChestCavityData extends ItemStackHandler {
@@ -133,7 +134,7 @@ public class ChestCavityData extends ItemStackHandler {
         needBreath = type.getNeedBreath();
         needHealth = type.getNeedHealth();
         filtrationPeriod = ChestCavityBeyondConfig.filtrationPeriod;
-        filtrationTickOffset = owner.level().getRandom().nextInt(filtrationPeriod);
+        filtrationTickOffset = ThreadLocalRandom.current().nextInt(filtrationPeriod);
     }
 
     /**

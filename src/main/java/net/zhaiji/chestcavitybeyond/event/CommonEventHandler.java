@@ -1,6 +1,8 @@
 package net.zhaiji.chestcavitybeyond.event;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -266,24 +268,34 @@ public class CommonEventHandler {
      * @param event 实体加入维度事件
      */
     public static void handlerEntityJoinLevelEvent(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof LivingEntity entity)) return;
+        if (!(event.getLevel() instanceof ServerLevel serverLevel) || !(event.getEntity() instanceof LivingEntity entity)) return;
 
-        if (!event.loadedFromDisk()) {
+        boolean loadedFromDisk = event.loadedFromDisk();
+        Runnable initialize = () -> {
+            if (entity.isRemoved() || entity.level() != serverLevel) return;
+
             ChestCavityData data = entity.getData(InitAttachmentType.CHEST_CAVITY);
-            data.init();
-        }
-        // Goal 注入对所有 Mob 执行（含从存档加载的，因 goalSelector 不序列化）
-        if (entity instanceof Mob mob) {
-            UseOrganSkillGoal skillGoal = mob.goalSelector.getAvailableGoals().stream()
-                .filter(wrapped -> wrapped.getGoal() instanceof UseOrganSkillGoal)
-                .map(wrapped -> (UseOrganSkillGoal) wrapped.getGoal())
-                .findFirst()
-                .orElse(null);
-            if (skillGoal == null) {
-                skillGoal = new UseOrganSkillGoal(mob);
-                mob.goalSelector.addGoal(3, skillGoal);
+            if (!loadedFromDisk) data.init();
+            // Goal 注入对所有 Mob 执行（含从存档加载的，因 goalSelector 不序列化）
+            if (entity instanceof Mob mob) {
+                UseOrganSkillGoal skillGoal = mob.goalSelector.getAvailableGoals().stream()
+                    .filter(wrapped -> wrapped.getGoal() instanceof UseOrganSkillGoal)
+                    .map(wrapped -> (UseOrganSkillGoal) wrapped.getGoal())
+                    .findFirst()
+                    .orElse(null);
+                if (skillGoal == null) {
+                    skillGoal = new UseOrganSkillGoal(mob);
+                    mob.goalSelector.addGoal(3, skillGoal);
+                }
+                data.setSkillGoal(skillGoal);
             }
-            ChestCavityUtil.getData(mob).setSkillGoal(skillGoal);
+        };
+
+        MinecraftServer server = serverLevel.getServer();
+        if (server.isSameThread()) {
+            initialize.run();
+        } else {
+            server.execute(initialize);
         }
     }
 

@@ -1069,7 +1069,7 @@ public class ChestCavityTypeManager {
      * @param entity 实体
      * @return 胸腔类型
      */
-    public static ChestCavityType getType(LivingEntity entity) {
+    public static synchronized ChestCavityType getType(LivingEntity entity) {
         ChestCavityType type = ENTITY_CHEST_CAVITY_TYPE_MAP.get(entity.getType());
         if (type == null) {
             EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
@@ -1237,7 +1237,7 @@ public class ChestCavityTypeManager {
      * @param chestCavityType 胸腔类型
      * @return 胸腔类型
      */
-    public static ChestCavityType registerEntity(EntityType<? extends LivingEntity> entityType, ChestCavityType chestCavityType) {
+    public static synchronized ChestCavityType registerEntity(EntityType<? extends LivingEntity> entityType, ChestCavityType chestCavityType) {
         ENTITY_CHEST_CAVITY_TYPE_MAP.put(entityType, chestCavityType.builder(entityType));
         return chestCavityType;
     }
